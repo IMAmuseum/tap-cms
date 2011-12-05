@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the TAP Features feature.
+ */
+
+include_once('tap_features.features.inc');
