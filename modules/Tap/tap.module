@@ -1,5 +1,27 @@
 <?php
 
+function tap_menu() {
+
+  $items['tourml/tour/%node'] = array(
+    'page callback' => 'tap_tourml_export',
+    'page arguments' => array('node', 2),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+    'file' => 'tap.tourml.inc',
+  );
+  $items['node/%node/tourml'] = array(
+    'title' => 'TourML',
+    'page callback' => 'tap_tourml_view',
+    'page arguments' => array('node', 1),
+    'access arguments' => array('access content'),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'tap.tourml.inc',
+  );
+
+  return $items;
+}
+
+
 function tap_block_info() {
   $blocks['addstop'] = array(
     'info' => t('Add Stop'),
