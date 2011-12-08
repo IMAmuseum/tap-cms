@@ -1,0 +1,35 @@
+<?php
+
+function tap_block_info() {
+  $blocks['addstop'] = array(
+    'info' => t('Add Stop'),
+  );
+  return $blocks;
+}
+
+function tap_block_view($delta = '') {
+  switch ($delta) {
+    case 'addstop':
+      $block['subject'] = t('Add Stop');
+      $block['content'] = tap_block_contents($delta);
+      break;
+  }
+  return $block;
+}
+
+function tap_block_contents($delta) {
+  switch ($delta) {
+    case 'addstop':
+
+      $options = array();
+//    $options = (arg(0) == 'node' && is_numeric(arg(1))) ? array('query' => 'destination='.$_GET['q']) : array();
+      $links = array(
+        l('Image Stop', 'node/add/tour-image-stop', $options),
+        l('Video Stop', 'node/add/tour-video-stop', $options),
+        l('Audio Stop', 'node/add/tour-audio-stop', $options),
+        l('Stop Group', 'node/add/tour-stop-group', $options),
+      );
+      return array('#markup' => theme('item_list', array('items' => $links)));
+  }
+}
+
