@@ -28,9 +28,9 @@ function tap_tourml_view($type, $object, $name = NULL) {
 }
 
 function tap_get_stops($tourML, $nid) {
-  $result = db_query('SELECT r.entity_id FROM {field_data_field_tour_reference} r WHERE r.entity_id = :nid', array(':nid' => $nid));
-  foreach ($result as $node) {
-    tap_get_stop_tourml($tourML, node_load($node));    
+  $result = db_query('SELECT n.entity_id FROM {field_data_field_tour_reference} n WHERE n.field_tour_reference_nid = :nid', array(':nid' => $nid));
+  foreach ($result as $record) {
+    tap_get_stop_tourml($tourML, node_load($record->entity_id));    
   }
 }
 
