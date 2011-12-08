@@ -12,7 +12,7 @@ function tap_tourml_export($type, $object, $name = NULL) {
   $tour->appendChild($tourML->createElement('Description', $object->body['und'][0]['value']));
   $tourML->appendChild($tour);
   $tourML->formatOutput = true;
-  print '<pre class="SYNTAXHIGHLIGHTER-OPTIONS">' . $tourML->saveXML() . '</pre>';
+  print '<pre class="brush: xml">' . $tourML->saveXML() . '</pre>';
   exit();
 }
 
@@ -37,7 +37,7 @@ function tap_tourml_view($type, $object, $name = NULL) {
   }
 
   $tourML->formatOutput = true;
-  $output = '<pre class="SYNTAXHIGHLIGHTER-OPTIONS">' . check_plain($tourML->saveXML()) . '</pre>';
+  $output = '<pre class="brush: xml">' . check_plain($tourML->saveXML()) . '</pre>';
   return $output;
 }
 
@@ -56,7 +56,7 @@ function tap_get_stop_tourml($tourML, $object, $tour = NULL) {
       $image->setAttribute('code', $object->field_code['und'][0]['value']);
       $image->appendChild($tourML->createElement('Title',$object->title));
       $image->appendChild($tourML->createElement('Description', $object->body['und'][0]['value']));
-      $image->appendChild($tourML->createElement('Source', $object->field_tour_image['und'][0]['uri']));
+      $image->appendChild($tourML->createElement('Source', file_create_url($object->field_tour_image['und'][0]['uri'])));
       if ($tour) {
         $tour->appendChild($image);
       } else {
@@ -69,7 +69,7 @@ function tap_get_stop_tourml($tourML, $object, $tour = NULL) {
       $video->setAttribute('code', $object->field_code['und'][0]['value']);
       $video->appendChild($tourML->createElement('Title',$object->title));
       $video->appendChild($tourML->createElement('Description', $object->body['und'][0]['value']));
-      $video->appendChild($tourML->createElement('Source', $object->field_tour_video['und'][0]['uri']));
+      $video->appendChild($tourML->createElement('Source', file_create_url($object->field_tour_video['und'][0]['uri'])));
       if ($tour) {
         $tour->appendChild($video);
       } else {
@@ -82,7 +82,7 @@ function tap_get_stop_tourml($tourML, $object, $tour = NULL) {
       $audio->setAttribute('code', $object->field_code['und'][0]['value']);
       $audio->appendChild($tourML->createElement('Title',$object->title));
       $audio->appendChild($tourML->createElement('Description', $object->body['und'][0]['value']));
-      $audio->appendChild($tourML->createElement('Source', $object->field_tour_audio['und'][0]['uri']));
+      $audio->appendChild($tourML->createElement('Source', file_create_url($object->field_tour_audio['und'][0]['uri'])));
       if ($tour) {
         $tour->appendChild($audio);
       } else {
