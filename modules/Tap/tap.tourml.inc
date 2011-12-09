@@ -16,6 +16,10 @@ function tap_tourml_export($type, $object, $name = NULL) {
   exit();
 }
 
+function tap_tourml_view($node, $view_mode) {
+
+    return render(node_view($node, $view_mode));
+/*
 function tap_tourml_view($type, $object, $name = NULL) {
   $tourML = new DOMDocument();
 
@@ -38,7 +42,9 @@ function tap_tourml_view($type, $object, $name = NULL) {
 
   $tourML->formatOutput = true;
   $output = '<pre class="brush: xml">' . check_plain($tourML->saveXML()) . '</pre>';
+    
   return $output;
+*/
 }
 
 function tap_get_stops($tourML, $tour, $nid) {

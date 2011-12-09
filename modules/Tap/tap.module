@@ -9,10 +9,20 @@ function tap_menu() {
     'type' => MENU_CALLBACK,
     'file' => 'tap.tourml.inc',
   );
-  $items['node/%node/tourml'] = array(
-    'title' => 'TourML',
+
+  $items['node/%node/tourml_xml'] = array(
+    'title' => 'TourML XML',
     'page callback' => 'tap_tourml_view',
-    'page arguments' => array('node', 1),
+    'page arguments' => array(1, 2),
+    'access arguments' => array('access content'),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'tap.tourml.inc',
+  );
+
+  $items['node/%node/tourml_bundle'] = array(
+    'title' => 'TourML Bundle',
+    'page callback' => 'tap_tourml_view',
+    'page arguments' => array(1, 2),
     'access arguments' => array('access content'),
     'type' => MENU_LOCAL_TASK,
     'file' => 'tap.tourml.inc',
@@ -34,6 +44,20 @@ function tap_entity_info_alter(&$entity_info) {
         'label'             => t('TourML Bundle'),
         'custom settings'   => TRUE,
     );
+}
+
+/**
+ * Implements hook_node_view()
+ */
+function tap_node_view($node, $view_mode, $langcode) {
+    switch($view_mode) {
+        case 'tourml_xml':
+        case 'tourml_bundle':
+            foreach (element_children($node->content) as $key) {
+                _tap_tourml_field_formatter($node->content[$key], $view_mode);
+            }
+            break;
+    }
 }
 
 function tap_block_info() {
@@ -69,3 +93,19 @@ function tap_block_contents($delta) {
   }
 }
 
+
+/*****************************
+ * Helper functions
+ ****************************/
+
+/**
+ * Prepares a field to be formatted for a tourml export
+ *
+ * @param $field: a themable field array from $node->content
+ * @param $type: The type of formatter to use (tour_xml/tour_bundle/etc)
+ */
+function _tap_tourml_field_formatter(&$field, $type) {
+    if ($field['#theme'] == 'field') {
+        $field['#formatter'] = $field['#field_type']  . '_' . $type;
+    }
+}
