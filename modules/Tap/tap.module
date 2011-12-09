@@ -1,5 +1,12 @@
 <?php
 
+/************************************
+ * Drupal Hooks
+ */
+
+/**
+ * Implements hook_menu()
+ */
 function tap_menu() {
 
   $items['tourml/tour/%node'] = array(
@@ -12,7 +19,7 @@ function tap_menu() {
 
   $items['node/%node/tourml_xml'] = array(
     'title' => 'TourML XML',
-    'page callback' => 'tap_tourml_view',
+    'page callback' => 'node_view',
     'page arguments' => array(1, 2),
     'access arguments' => array('access content'),
     'type' => MENU_LOCAL_TASK,
@@ -21,7 +28,7 @@ function tap_menu() {
 
   $items['node/%node/tourml_bundle'] = array(
     'title' => 'TourML Bundle',
-    'page callback' => 'tap_tourml_view',
+    'page callback' => 'node_view',
     'page arguments' => array(1, 2),
     'access arguments' => array('access content'),
     'type' => MENU_LOCAL_TASK,
@@ -30,6 +37,10 @@ function tap_menu() {
 
   return $items;
 }
+
+/******************************
+ * Entities 
+ */
 
 /**
  * Implements hook_entity_info_alter()
@@ -46,6 +57,10 @@ function tap_entity_info_alter(&$entity_info) {
     );
 }
 
+/******************************
+ * Nodes 
+ */
+
 /**
  * Implements hook_node_view()
  */
@@ -54,12 +69,49 @@ function tap_node_view($node, $view_mode, $langcode) {
         case 'tourml_xml':
         case 'tourml_bundle':
             foreach (element_children($node->content) as $key) {
-                _tap_tourml_field_formatter($node->content[$key], $view_mode);
+                if ($node->content[$key]['#theme'] == 'field') {
+                    $node->content[$key]['#formatter'] = $node->content[$key]['#field_type']  . '_' . $view_mode;
+                }
             }
             break;
     }
 }
 
+/******************************
+ * Fields 
+ */
+
+/**
+ * Implements hook_field_formatter_info()
+ */
+function tap_field_formatter_info() {
+    $formatters = array(
+       'text_tourml_xml' => array(
+            'label'         => t('Text TourML XML'),
+            'field types'   => array('text', 'text_long', 'text_summary'),
+        ),
+        'file_tourml_xml' => array(
+            'label'         => t('File TourML XML'),
+            'field types'   => array('file'),
+        ),
+    );
+    return $formatters;
+}
+
+/**
+ * Implements hook_field_formatter_view()
+ */
+function tap_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+    dpm($instance);
+}
+
+/******************************
+ * Blocks
+ */
+
+/**
+ * Implements hook_block_info()
+ */
 function tap_block_info() {
   $blocks['addstop'] = array(
     'info' => t('Add Stop'),
@@ -67,6 +119,9 @@ function tap_block_info() {
   return $blocks;
 }
 
+/**
+ * Implements hook_block_view()
+ */
 function tap_block_view($delta = '') {
   switch ($delta) {
     case 'addstop':
@@ -97,15 +152,3 @@ function tap_block_contents($delta) {
 /*****************************
  * Helper functions
  ****************************/
-
-/**
- * Prepares a field to be formatted for a tourml export
- *
- * @param $field: a themable field array from $node->content
- * @param $type: The type of formatter to use (tour_xml/tour_bundle/etc)
- */
-function _tap_tourml_field_formatter(&$field, $type) {
-    if ($field['#theme'] == 'field') {
-        $field['#formatter'] = $field['#field_type']  . '_' . $type;
-    }
-}
