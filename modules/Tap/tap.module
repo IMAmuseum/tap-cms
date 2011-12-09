@@ -21,6 +21,20 @@ function tap_menu() {
   return $items;
 }
 
+/**
+ * Implements hook_entity_info_alter()
+ */
+function tap_entity_info_alter(&$entity_info) {
+    $entity_info['node']['view modes']['tourml_xml'] = array(
+        'label'             => t('TourML XML'),
+        'custom settings'   => TRUE,
+    ); 
+
+    $entity_info['node']['view modes']['tourml_bundle'] = array(
+        'label'             => t('TourML Bundle'),
+        'custom settings'   => TRUE,
+    );
+}
 
 function tap_block_info() {
   $blocks['addstop'] = array(
