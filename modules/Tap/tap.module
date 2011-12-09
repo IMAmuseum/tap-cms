@@ -57,24 +57,30 @@ function tap_entity_info_alter(&$entity_info) {
     );
 }
 
-/******************************
- * Nodes 
- */
-
-/**
- * Implements hook_node_view()
- */
-function tap_node_view($node, $view_mode, $langcode) {
-    switch($view_mode) {
-        case 'tourml_xml':
-        case 'tourml_bundle':
-            foreach (element_children($node->content) as $key) {
-                if ($node->content[$key]['#theme'] == 'field') {
-                    $node->content[$key]['#formatter'] = $node->content[$key]['#field_type']  . '_' . $view_mode;
-                }
-            }
-            break;
-    }
+function tap_theme() {
+    return array(
+        'text_tourml_xml' => array(
+            'variables' => array(
+                'items' => array(),
+            ),
+            'file'  => 'tap.templates.inc',
+            'template'  => 'templates/text-tourml-xml',
+        ),
+        'file_tourml_xml' => array(
+            'variables' => array(
+                'items' => array(),
+            ),
+            'file'  => 'tap.templates.inc',
+            'template'  => 'templates/file-tourml-xml',
+        ),
+        'node_reference_tourml_xml' => array(
+            'variables' => array(
+                'items' => array(),
+            ),
+            'file'  => 'tap.templates.inc',
+            'template'  => 'templates/node-reference-tourml-xml',
+        ),
+    );
 }
 
 /******************************
@@ -89,20 +95,42 @@ function tap_field_formatter_info() {
        'text_tourml_xml' => array(
             'label'         => t('Text TourML XML'),
             'field types'   => array('text', 'text_long', 'text_summary'),
+            'module'        => 'tap',
         ),
         'file_tourml_xml' => array(
             'label'         => t('File TourML XML'),
             'field types'   => array('file'),
+            'module'        => 'tap',
+        ),
+        'node_reference_tourml_xml' => array(
+            'label'         => t('Node Reference TourML XML'),
+            'field types'   => array('node_reference'),
+            'module'        => 'tap',
         ),
     );
     return $formatters;
 }
 
 /**
+ * Implements hook_field_display_alter()
+ */
+function tap_field_display_alter(&$display, $context) {
+    switch($context['view_mode']) {
+        case 'tourml_xml':
+        case 'tourml_bundle':
+            // Override the field formatter with our tap formatter
+            $display['type']    = $display['module'] . '_' . $context['view_mode'];
+            $display['module']  = 'tap';
+            break;
+    }
+}
+
+/**
  * Implements hook_field_formatter_view()
  */
 function tap_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
-    dpm($instance);
+    $element['#theme'] = $display['type'];
+    return $element;
 }
 
 /******************************
