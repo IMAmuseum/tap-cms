@@ -50,35 +50,30 @@ function tap_entity_info_alter(&$entity_info) {
         'label'             => t('TourML XML'),
         'custom settings'   => TRUE,
     ); 
-
-    $entity_info['node']['view modes']['tourml_bundle'] = array(
-        'label'             => t('TourML Bundle'),
-        'custom settings'   => TRUE,
-    );
 }
 
 function tap_theme() {
     return array(
-        'text_tourml_xml' => array(
+        'tap_tourml_description_text_with_summary' => array(
             'variables' => array(
                 'items' => array(),
             ),
             'file'  => 'tap.templates.inc',
-            'template'  => 'templates/text-tourml-xml',
+            'template'  => 'templates/tap-tourml-description-text-with-summary',
         ),
-        'file_tourml_xml' => array(
+        'tap_tourml_property_text' => array(
             'variables' => array(
                 'items' => array(),
             ),
             'file'  => 'tap.templates.inc',
-            'template'  => 'templates/file-tourml-xml',
+            'template'  => 'templates/tap-tourml-property-text',
         ),
-        'node_reference_tourml_xml' => array(
+        'tap_tourml_asset_file' => array(
             'variables' => array(
                 'items' => array(),
             ),
             'file'  => 'tap.templates.inc',
-            'template'  => 'templates/node-reference-tourml-xml',
+            'template'  => 'templates/tap-tourml-asset-file',
         ),
     );
 }
@@ -92,23 +87,53 @@ function tap_theme() {
  */
 function tap_field_formatter_info() {
     $formatters = array(
-       'text_tourml_xml' => array(
-            'label'         => t('Text TourML XML'),
-            'field types'   => array('text', 'text_long', 'text_summary'),
+        'tap_tourml_connection' => array(
+            'label'         => t('TourML Connection'),
+            'field types'   => array(),
             'module'        => 'tap',
         ),
-        'file_tourml_xml' => array(
-            'label'         => t('File TourML XML'),
-            'field types'   => array('file'),
+        'tap_tourml_property' => array(
+            'label'         => t('TourML Property'),
+            'field types'   => array(),
             'module'        => 'tap',
         ),
-        'node_reference_tourml_xml' => array(
-            'label'         => t('Node Reference TourML XML'),
-            'field types'   => array('node_reference'),
+        'tap_tourml_asset' => array(
+            'label'         => t('TourML Asset'),
+            'field types'   => array(),
+            'module'        => 'tap',
+        ),
+        'tap_tourml_title' => array(
+            'label'         => t('TourML Title'),
+            'field types'   => array(),
+            'module'        => 'tap',
+        ),
+        'tap_tourml_description' => array(
+            'label'         => t('TourML Description'),
+            'field types'   => array(),
             'module'        => 'tap',
         ),
     );
     return $formatters;
+}
+
+function tap_field_formatter_info_alter(&$info)
+{
+    $types = array();
+    $usableFormatters = array();
+    foreach($info as $name => $formatter)
+    {
+        $types = array_merge($types, $formatter['field types']);
+        if (strpos($name, 'tap_tourml_') !== false) 
+        {
+            $usableFormatters[] = $name;
+        }
+    }
+    $types = array_values(array_unique($types));
+ 
+    foreach($usableFormatters as $name)
+    {
+        $info[$name]['field types'] = $types;
+    }
 }
 
 /**
@@ -117,9 +142,13 @@ function tap_field_formatter_info() {
 function tap_field_display_alter(&$display, $context) {
     switch($context['view_mode']) {
         case 'tourml_xml':
-        case 'tourml_bundle':
             // Override the field formatter with our tap formatter
-            $display['type']    = $display['module'] . '_' . $context['view_mode'];
+            if (strpos($display['type'], 'tap_tourml_') !== false)
+            {
+                $display['type'] = $display['type'] . '_' . $context['field']['type'];
+            } else {
+                $display['type'] = 'hidden';
+            }
             $display['module']  = 'tap';
             break;
     }
