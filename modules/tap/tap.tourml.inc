@@ -93,5 +93,93 @@ function tap_get_stop_tourml($tourML, $object, $tour = NULL) {
   }
 }
 
+function tap_tourml_render($node)
+{
+    $stops = array();
+    if ($node->type === 'tour')
+    {
+        //TODO: get all stops
+    } else {
+        $stops = array($node);
+    }
+    
+    $tourData = array(
+        'stops' => array(),
+        'assets' => array(),
+        'connections' => array()
+    );
+    
+    foreach($stops as $stop)
+    {
+        $renderedStop = tap_tourml_process_stop($stop);
+        $tourData['stops'][] = $renderedStop['tourml'];
+        $tourData['assets'] += $renderedStop['assets'];
+        $tourData['connections'] += $renderedStop['connections'];
+    }
+    
+    return theme("tap_tourml_tour", $tourData);
+}
 
+function tap_tourml_process_stop($node)
+{
+    node_build_content($node, 'tourml_xml');
+    
+    $output = array();
+    
+    $assets = array();
+    $properties = array();
+    $hasTitleField = false;
+    $stopItems = array();
+    $ConnectionPriority = 0;
+    $connections = array();
+    foreach($node->content as $fieldName => $field)
+    {
+        if (isset($field['#formatter']) && strpos($field['#formatter'], 'tap_tourml') !== false) 
+        {
+            switch($field['#formatter'])
+            {
+                case 'tap_tourml_property':
+                    $properties[] = drupal_render($field);
+                    break;
+                
+                case 'tap_tourml_asset':
+                    $assets += $field['#items'];
+                    array_push($stopItems, drupal_render($field));
+                    break;
+                
+                case 'tap_tourml_title':
+                    $hasTitleField = true;
+                    array_push($stopItems, drupal_render($field));
+                    break;
+                
+                case 'tap_tourml_connection':
+                    foreach($field['#items'] as $k => $v)
+                    {
+                        $field['#items'][$k]['priority'] = ++$ConnectionPriority;
+                        $field['#items'][$k]['srcId'] = $node->nid;
+                    }
+                    array_push($connections, drupal_render($field));
+                    break;
+                case 'tap_tourml_description':
+                    array_push($stopItems, drupal_render($field));
+                    break;
+            }
+        }
+    }
+    
+    if (count($properties))
+    {
+        array_push($stopItems, theme("tap_tourml_property_set", array("properties" => $properties)));
+    }
+    
+    if (!$hasTitleField)
+    {
+        array_push($stopItems, theme("tap_tourml_title_text", array("items" => array(array("value" => $node->title)))));
+    }
 
+    $output['tourml'] = theme("tap_tourml_stop", array("id" => $node->nid, "items" => $stopItems));
+    $output['assets'] = $assets;
+    $output['connections'] = $connections;
+    
+    return $output;
+}

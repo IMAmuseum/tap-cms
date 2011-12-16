@@ -19,23 +19,30 @@ function tap_menu() {
 
   $items['node/%node/tourml_xml'] = array(
     'title' => 'TourML XML',
-    'page callback' => 'node_view',
-    'page arguments' => array(1, 2),
+    'page callback' => 'tap_tourml_preview',
+    'page arguments' => array(1),
     'access arguments' => array('access content'),
     'type' => MENU_LOCAL_TASK,
     'file' => 'tap.tourml.inc',
   );
+  
+    $items['node/%node/tourml'] = array(
+        'title' => 'TourML',
+        'page callback' => 'tap_tourml_render',
+        'page arguments' => array(1),
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+        'file' => 'tap.tourml.inc',
+    );
 
-  $items['node/%node/tourml_bundle'] = array(
-    'title' => 'TourML Bundle',
-    'page callback' => 'node_view',
-    'page arguments' => array(1, 2),
-    'access arguments' => array('access content'),
-    'type' => MENU_LOCAL_TASK,
-    'file' => 'tap.tourml.inc',
-  );
+    return $items;
+}
 
-  return $items;
+function tap_tourml_preview($node)
+{
+    $tourml = tap_tourml_render($node);
+
+    return '<pre class="brush: xml">' . $tourml . '</pre>';
 }
 
 /******************************
@@ -54,6 +61,38 @@ function tap_entity_info_alter(&$entity_info) {
 
 function tap_theme() {
     return array(
+        'tap_tourml_tour' => array(
+            'variables' => array(
+                'id' => 0,
+                'stops' => array(),
+                'assets' => array(),
+                'connections' => array(),
+            ),
+            'file'  => 'tap.templates.inc',
+            'template'  => 'templates/tap-tourml-tour',
+        ),        
+        'tap_tourml_stop' => array(
+            'variables' => array(
+                'id' => 0,
+                'items' => array(),
+            ),
+            'file'  => 'tap.templates.inc',
+            'template'  => 'templates/tap-tourml-stop',
+        ),
+        'tap_tourml_property_set' => array(
+            'variables' => array(
+                'properties' => array(),
+            ),
+            'file'  => 'tap.templates.inc',
+            'template'  => 'templates/tap-tourml-property-set',
+        ),
+        'tap_tourml_title_text' => array(
+            'variables' => array(
+                'items' => array(),
+            ),
+            'file'  => 'tap.templates.inc',
+            'template'  => 'templates/tap-tourml-title-text',
+        ),
         'tap_tourml_description_text_with_summary' => array(
             'variables' => array(
                 'items' => array(),
@@ -74,6 +113,13 @@ function tap_theme() {
             ),
             'file'  => 'tap.templates.inc',
             'template'  => 'templates/tap-tourml-asset-file',
+        ),
+        'tap_tourml_connection_node_reference' => array(
+            'variables' => array(
+                'items' => array(),
+            ),
+            'file'  => 'tap.templates.inc',
+            'template'  => 'templates/tap-tourml-connection-node-reference',
         ),
     );
 }
@@ -145,7 +191,7 @@ function tap_field_display_alter(&$display, $context) {
             // Override the field formatter with our tap formatter
             if (strpos($display['type'], 'tap_tourml_') !== false)
             {
-                $display['type'] = $display['type'] . '_' . $context['field']['type'];
+                //$display['type'] = $display['type'] . '_' . $context['field']['type'];
             } else {
                 $display['type'] = 'hidden';
             }
@@ -158,7 +204,7 @@ function tap_field_display_alter(&$display, $context) {
  * Implements hook_field_formatter_view()
  */
 function tap_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
-    $element['#theme'] = $display['type'];
+    $element['#theme'] = $display['type'] . '_' . $field['type'];
     return $element;
 }
 
