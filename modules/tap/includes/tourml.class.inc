@@ -19,17 +19,22 @@ class TourML {
         node_build_content($node, 'tourml_xml');
         $stop['id']         = $node->nid;
         $stop['items'][]    = theme('tap_tourml_title_text', array('items' => array(array('value' => $node->title)))); //TODO: needs discussion
+
+        // Loop thru renderable fields
         foreach(element_children($node->content) as $field_name) {
             $field =& $node->content[$field_name];
 
             if (isset($field['#formatter']) && strpos($field['#formatter'], 'tap_tourml') !== false)
             {
+                // Determine how a field should be rendered
                 switch($field['#formatter'])
                 {
                     case 'tap_tourml_property':
+                        // Build an array of rendered properties that can be added to a propertySet later
                         $properties[] = drupal_render($field);
                         break;
                     case 'tap_tourml_asset':
+                        // Build an array of assets that will be rendered after all stops
                         foreach($field['#items'] as $item) {
                             if (!isset($this->assets[$item['fid']])) {
                                 $this->assets[$item['fid']] = $item;
@@ -54,6 +59,7 @@ class TourML {
             }
         }
 
+        // Render properties for a stop
         $stop['items'][]    = theme('tap_tourml_property_set', array('properties' => $properties));
         $this->stops[]      = theme('tap_tourml_stop', $stop);
     }
