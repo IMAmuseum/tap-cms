@@ -119,55 +119,6 @@ function tap_features_field_group_info() {
   $field_group = new stdClass;
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
   $field_group->api_version = 1;
-  $field_group->identifier = 'group_assets|node|tour_stop_group|form';
-  $field_group->group_name = 'group_assets';
-  $field_group->entity_type = 'node';
-  $field_group->bundle = 'tour_stop_group';
-  $field_group->mode = 'form';
-  $field_group->parent_name = '';
-  $field_group->data = array(
-    'label' => 'Assets',
-    'weight' => '6',
-    'children' => array(),
-    'format_type' => 'tab',
-    'format_settings' => array(
-      'formatter' => 'closed',
-      'instance_settings' => array(
-        'description' => '',
-        'classes' => '',
-        'required_fields' => 1,
-      ),
-    ),
-  );
-  $export['group_assets|node|tour_stop_group|form'] = $field_group;
-
-  $field_group = new stdClass;
-  $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
-  $field_group->api_version = 1;
-  $field_group->identifier = 'group_assets|node|tour_stop_group|tourml_xml';
-  $field_group->group_name = 'group_assets';
-  $field_group->entity_type = 'node';
-  $field_group->bundle = 'tour_stop_group';
-  $field_group->mode = 'tourml_xml';
-  $field_group->parent_name = '';
-  $field_group->data = array(
-    'label' => 'Assets',
-    'weight' => '4',
-    'children' => array(),
-    'format_type' => 'fieldset',
-    'format_settings' => array(
-      'formatter' => 'collapsible',
-      'instance_settings' => array(
-        'description' => '',
-        'classes' => '',
-      ),
-    ),
-  );
-  $export['group_assets|node|tour_stop_group|tourml_xml'] = $field_group;
-
-  $field_group = new stdClass;
-  $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
-  $field_group->api_version = 1;
   $field_group->identifier = 'group_assets|node|tour_video_stop|form';
   $field_group->group_name = 'group_assets';
   $field_group->entity_type = 'node';
