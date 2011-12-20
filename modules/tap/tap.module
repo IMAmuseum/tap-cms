@@ -63,10 +63,8 @@ function tap_theme() {
     return array(
         'tap_tourml_tour' => array(
             'variables' => array(
-                'id' => 0,
-                'stops' => array(),
-                'assets' => array(),
-                'connections' => array(),
+                'id'    => 0,
+                'tour'  => '',
             ),
             'file'  => 'tap.templates.inc',
             'template'  => 'templates/tap-tourml-tour',
@@ -106,6 +104,13 @@ function tap_theme() {
             ),
             'file'  => 'tap.templates.inc',
             'template'  => 'templates/tap-tourml-property-text',
+        ),
+        'tap_tourml_asset' => array(
+            'varibales' => array(
+                'asset' => array(),
+            ),
+            'file'  => 'tap.templates.inc',
+            'template'  => 'templates/tap-tourml-asset',
         ),
         'tap_tourml_asset_file' => array(
             'variables' => array(
