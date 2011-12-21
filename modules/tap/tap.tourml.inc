@@ -96,45 +96,9 @@ function tap_get_stop_tourml($tourML, $object, $tour = NULL) {
 function tap_tourml_render($node)
 {
     module_load_include('inc', 'tap', 'includes/tourml.class');
-    $tourml = new TourML;
-    $stops = array();
-    if ($node->type === 'tour')
-    {
-        // Find all referenced nodes to this tour
-        $results = db_select('field_data_field_tour_reference', 'ref')
-            ->fields('ref', array('entity_id'))
-            ->condition('field_tour_reference_nid', $node->nid)
-            ->execute()
-            ->fetchAll();
-        // Build an array of stop nodes
-        foreach($results as $result) {
-            $stops[] = node_load($result->entity_id);
-        }
-    } else {
-        $stops = array($node);
-    }
-
-    $tourml->processStops($stops);
-
-    return theme('tap_tourml_tour', array('tour' => $tourml));
     
-/*
-    $tourData = array(
-        'stops' => array(),
-        'assets' => array(),
-        'connections' => array()
-    );
-    
-    foreach($stops as $stop)
-    {
-        $renderedStop = tap_tourml_process_stop($stop);
-        $tourData['stops'][] = $renderedStop['tourml'];
-        $tourData['assets'] += $renderedStop['assets'];
-        $tourData['connections'] += $renderedStop['connections'];
-    }
-    
-    return theme("tap_tourml_tour", $tourData);
-*/
+    $tourml = new TourML($node->nid);
+    return $tourml->getTourML();
 }
 
 function tap_tourml_process_stop($node)
