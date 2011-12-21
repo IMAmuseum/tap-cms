@@ -9,56 +9,23 @@
  */
 function tap_menu() {
 
-  $items['tourml/tour/%node'] = array(
-    'page callback' => 'tap_tourml_export',
-    'page arguments' => array('node', 2),
-    'access arguments' => array('access content'),
-    'type' => MENU_CALLBACK,
-    'file' => 'tap.tourml.inc',
-  );
-
-  $items['node/%node/tourml_xml'] = array(
-    'title' => 'TourML XML',
-    'page callback' => 'tap_tourml_preview',
-    'page arguments' => array(1),
-    'access arguments' => array('access content'),
-    'type' => MENU_LOCAL_TASK,
-    'file' => 'tap.tourml.inc',
-  );
+    $items['node/%node/tourml_xml'] = array(
+        'title'             => 'TourML XML',
+        'page callback'     => 'tap_tourml_preview',
+        'page arguments'    => array(1),
+        'access arguments'  => array('access content'),
+        'type'              => MENU_LOCAL_TASK,
+    );
   
     $items['node/%node/tourml'] = array(
-        'title' => 'TourML',
-        'page callback' => 'tap_tourml_render',
-        'page arguments' => array(1),
-        'access arguments' => array('access content'),
-        'type' => MENU_CALLBACK,
-        'file' => 'tap.tourml.inc',
+        'title'             => 'TourML',
+        'page callback'     => 'tap_tourml_render',
+        'page arguments'    => array(1),
+        'access arguments'  => array('access content'),
+        'type'              => MENU_CALLBACK,
     );
 
     return $items;
-}
-
-function tap_tourml_preview($node)
-{
-    $tourml = tap_tourml_render($node);
-    
-    //pretty up the output
-    $doc = new DOMDocument();
-    $doc->formatOutput = true;
-    $doc->preserveWhiteSpace = false;
-    $doc->loadXML($tourml);
-    
-//    //TODO: trying out validation, this needs some work and probably moved into the TourML class
-//    if ($doc->schemaValidate("https://raw.github.com/IMAmuseum/tourml/master/TourML.xsd"))
-//    {
-//        drupal_set_message("TourML is valid", 'status');
-//    } else {
-//        drupal_set_message("TourML does not validate", 'warning');
-//    }
-    
-    $tourml = $doc->saveXML();
-
-    return '<pre class="brush: xml">' . $tourml . '</pre>';
 }
 
 /******************************
@@ -276,3 +243,50 @@ function tap_block_contents($delta) {
 /*****************************
  * Helper functions
  ****************************/
+
+/**
+ * @param $node
+ * A node object
+ * @return
+ * Returns a rendered TourML string
+ */
+function tap_tourml_render($node)
+{
+    module_load_include('inc', 'tap', 'includes/tourml.class');
+
+    $tourml = new TourML($node->nid);
+    return $tourml->getTourML();
+}
+
+/**
+ * @param $node
+ * A node object
+ * @return
+ * Returns a rendered TourML page 
+ */
+function tap_tourml_preview($node)
+{
+    $tourml = tap_tourml_render($node);
+    
+    //pretty up the output
+    $doc = new DOMDocument();
+    $doc->formatOutput = true;
+    $doc->preserveWhiteSpace = false;
+    $doc->loadXML($tourml);
+    
+//    //TODO: trying out validation, this needs some work and probably moved into the TourML class
+//    if ($doc->schemaValidate("https://raw.github.com/IMAmuseum/tourml/master/TourML.xsd"))
+//    {
+//        drupal_set_message("TourML is valid", 'status');
+//    } else {
+//        drupal_set_message("TourML does not validate", 'warning');
+//    }
+
+    $tourml = $doc->saveXML();
+
+    return '<pre class="brush: xml">' . htmlentities($tourml) . '</pre>';
+}
+
+function _anti_field($text) {
+    return str_replace('field_', '', $text);
+}

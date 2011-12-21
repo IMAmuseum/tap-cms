@@ -82,7 +82,7 @@ class TourML {
                 // available deep into the theme layer and we might
                 // need it later
                 foreach($field['#items'] as $k => $item) {
-                    $field['#items'][$k]['id'] = $field['#field_name'];
+                    $field['#items'][$k]['id'] = _anti_field($field['#field_name']);
                 }
 
                 // Determine how a field should be rendered
