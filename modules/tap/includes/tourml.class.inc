@@ -5,6 +5,7 @@ class TourML {
     public $stops       = array();
     public $connections = array();
     public $nid         = null;
+    public $tourml      = null;
 
     public function __construct($nid)
     {
@@ -20,7 +21,8 @@ class TourML {
         // Stops have been rendered, now render assets
         $this->processAssets();
 
-        return theme('tap_tourml_tour', array('tour' => $this));
+        $this->tourml = theme('tap_tourml_tour', array('tour' => $this));
+        return $this->tourml;
     }
     
     protected function loadStopNodes()
@@ -135,5 +137,18 @@ class TourML {
         
         //Render the stop
         $this->stops[] = theme('tap_tourml_stop', $stop);
+    }
+
+    public function validate() {
+        if (empty($this->tourml)) {
+            $this->getTourML();
+        }        
+        //TODO: trying out validation, this needs some work and probably moved into the TourML class
+        if ($doc->schemaValidate("https://raw.github.com/IMAmuseum/tourml/master/TourML.xsd"))
+        {
+            drupal_set_message("TourML is valid", 'status');
+        } else {
+            drupal_set_message("TourML does not validate", 'warning');
+        }
     }
 }
