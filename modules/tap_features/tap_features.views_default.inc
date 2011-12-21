@@ -182,11 +182,10 @@ function tap_features_views_default_views() {
   $handler->display->display_options['fields']['delete_node']['hide_empty'] = 0;
   $handler->display->display_options['fields']['delete_node']['empty_zero'] = 0;
   $handler->display->display_options['fields']['delete_node']['hide_alter_empty'] = 1;
-  /* Sort criterion: Content: Post date */
-  $handler->display->display_options['sorts']['created']['id'] = 'created';
-  $handler->display->display_options['sorts']['created']['table'] = 'node';
-  $handler->display->display_options['sorts']['created']['field'] = 'created';
-  $handler->display->display_options['sorts']['created']['order'] = 'DESC';
+  /* Sort criterion: Content: Code (field_code) */
+  $handler->display->display_options['sorts']['field_code_value']['id'] = 'field_code_value';
+  $handler->display->display_options['sorts']['field_code_value']['table'] = 'field_data_field_code';
+  $handler->display->display_options['sorts']['field_code_value']['field'] = 'field_code_value';
   /* Contextual filter: Content: Tour Reference (field_tour_reference) */
   $handler->display->display_options['arguments']['field_tour_reference_nid']['id'] = 'field_tour_reference_nid';
   $handler->display->display_options['arguments']['field_tour_reference_nid']['table'] = 'field_data_field_tour_reference';
