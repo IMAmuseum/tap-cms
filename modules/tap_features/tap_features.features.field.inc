@@ -81,10 +81,116 @@ function tap_features_field_default_fields() {
           'type' => 'hidden',
           'weight' => 0,
         ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_copyright',
+          'weight' => '1',
+        ),
       ),
       'entity_type' => 'file',
       'field_name' => 'field_copyright',
       'label' => 'Copyright',
+      'required' => 0,
+      'settings' => array(
+        'text_processing' => '0',
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'text',
+        'settings' => array(
+          'size' => '60',
+        ),
+        'type' => 'text_textfield',
+        'weight' => '1',
+      ),
+    ),
+  );
+
+  // Exported field: 'file-application-field_credit_line'
+  $fields['file-application-field_credit_line'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_credit_line',
+      'foreign keys' => array(
+        'format' => array(
+          'columns' => array(
+            'format' => 'format',
+          ),
+          'table' => 'filter_format',
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'module' => 'text',
+      'settings' => array(
+        'max_length' => '255',
+      ),
+      'translatable' => '0',
+      'type' => 'text',
+    ),
+    'field_instance' => array(
+      'bundle' => 'application',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'text',
+          'settings' => array(),
+          'type' => 'text_default',
+          'weight' => 4,
+        ),
+        'media_large' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'media_link' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'media_original' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'media_preview' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'media_small' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_credit_line',
+          'weight' => '2',
+        ),
+      ),
+      'entity_type' => 'file',
+      'field_name' => 'field_credit_line',
+      'label' => 'Credit Line',
       'required' => 0,
       'settings' => array(
         'text_processing' => '0',
@@ -179,6 +285,13 @@ function tap_features_field_default_fields() {
           'type' => 'hidden',
           'weight' => 0,
         ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_expiration',
+          'weight' => '4',
+        ),
       ),
       'entity_type' => 'file',
       'field_name' => 'field_expiration',
@@ -205,7 +318,7 @@ function tap_features_field_default_fields() {
           'year_range' => '-3:+3',
         ),
         'type' => 'date_select',
-        'weight' => '6',
+        'weight' => '4',
       ),
     ),
   );
@@ -281,6 +394,13 @@ function tap_features_field_default_fields() {
           'type' => 'hidden',
           'weight' => 0,
         ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_machine_rights',
+          'weight' => '3',
+        ),
       ),
       'entity_type' => 'file',
       'field_name' => 'field_machine_rights',
@@ -297,7 +417,7 @@ function tap_features_field_default_fields() {
           'size' => '60',
         ),
         'type' => 'text_textfield',
-        'weight' => '4',
+        'weight' => '3',
       ),
     ),
   );
@@ -363,6 +483,13 @@ function tap_features_field_default_fields() {
           'type' => 'hidden',
           'weight' => 0,
         ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tourml_asset',
+          'weight' => '5',
+        ),
       ),
       'entity_type' => 'file',
       'field_name' => 'field_watermark',
@@ -389,7 +516,7 @@ function tap_features_field_default_fields() {
           'progress_indicator' => 'throbber',
         ),
         'type' => 'media_generic',
-        'weight' => '8',
+        'weight' => '5',
       ),
     ),
   );
@@ -430,10 +557,10 @@ function tap_features_field_default_fields() {
       'display' => array(
         'default' => array(
           'label' => 'above',
-          'module' => 'text',
+          'module' => 'tap',
           'settings' => array(),
-          'type' => 'text_default',
-          'weight' => 0,
+          'type' => 'tap_tour_copyright',
+          'weight' => '1',
         ),
         'media_large' => array(
           'label' => 'above',
@@ -465,10 +592,116 @@ function tap_features_field_default_fields() {
           'type' => 'hidden',
           'weight' => 0,
         ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_copyright',
+          'weight' => '0',
+        ),
       ),
       'entity_type' => 'file',
       'field_name' => 'field_copyright',
       'label' => 'Copyright',
+      'required' => 0,
+      'settings' => array(
+        'text_processing' => '0',
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'text',
+        'settings' => array(
+          'size' => '60',
+        ),
+        'type' => 'text_textfield',
+        'weight' => '1',
+      ),
+    ),
+  );
+
+  // Exported field: 'file-audio-field_credit_line'
+  $fields['file-audio-field_credit_line'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_credit_line',
+      'foreign keys' => array(
+        'format' => array(
+          'columns' => array(
+            'format' => 'format',
+          ),
+          'table' => 'filter_format',
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'module' => 'text',
+      'settings' => array(
+        'max_length' => '255',
+      ),
+      'translatable' => '0',
+      'type' => 'text',
+    ),
+    'field_instance' => array(
+      'bundle' => 'audio',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_credit_line',
+          'weight' => '2',
+        ),
+        'media_large' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'media_link' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'media_original' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'media_preview' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'media_small' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_credit_line',
+          'weight' => '1',
+        ),
+      ),
+      'entity_type' => 'file',
+      'field_name' => 'field_credit_line',
+      'label' => 'Credit Line',
       'required' => 0,
       'settings' => array(
         'text_processing' => '0',
@@ -521,17 +754,10 @@ function tap_features_field_default_fields() {
       'display' => array(
         'default' => array(
           'label' => 'above',
-          'module' => 'date',
-          'settings' => array(
-            'format_type' => 'long',
-            'fromto' => 'both',
-            'multiple_from' => '',
-            'multiple_number' => '',
-            'multiple_to' => '',
-            'show_repeat_rule' => 'show',
-          ),
-          'type' => 'date_default',
-          'weight' => 2,
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_expiration',
+          'weight' => '4',
         ),
         'media_large' => array(
           'label' => 'above',
@@ -563,6 +789,13 @@ function tap_features_field_default_fields() {
           'type' => 'hidden',
           'weight' => 0,
         ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_expiration',
+          'weight' => '3',
+        ),
       ),
       'entity_type' => 'file',
       'field_name' => 'field_expiration',
@@ -589,7 +822,7 @@ function tap_features_field_default_fields() {
           'year_range' => '-3:+3',
         ),
         'type' => 'date_select',
-        'weight' => '6',
+        'weight' => '4',
       ),
     ),
   );
@@ -630,10 +863,10 @@ function tap_features_field_default_fields() {
       'display' => array(
         'default' => array(
           'label' => 'above',
-          'module' => 'text',
+          'module' => 'tap',
           'settings' => array(),
-          'type' => 'text_default',
-          'weight' => 1,
+          'type' => 'tap_tour_machine_rights',
+          'weight' => '3',
         ),
         'media_large' => array(
           'label' => 'above',
@@ -665,6 +898,13 @@ function tap_features_field_default_fields() {
           'type' => 'hidden',
           'weight' => 0,
         ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_machine_rights',
+          'weight' => '2',
+        ),
       ),
       'entity_type' => 'file',
       'field_name' => 'field_machine_rights',
@@ -681,7 +921,7 @@ function tap_features_field_default_fields() {
           'size' => '60',
         ),
         'type' => 'text_textfield',
-        'weight' => '4',
+        'weight' => '3',
       ),
     ),
   );
@@ -712,10 +952,10 @@ function tap_features_field_default_fields() {
       'display' => array(
         'default' => array(
           'label' => 'above',
-          'module' => NULL,
+          'module' => 'tap',
           'settings' => array(),
-          'type' => 'media_large',
-          'weight' => 3,
+          'type' => 'tap_tourml_asset',
+          'weight' => '5',
         ),
         'media_large' => array(
           'label' => 'above',
@@ -747,6 +987,13 @@ function tap_features_field_default_fields() {
           'type' => 'hidden',
           'weight' => 0,
         ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tourml_asset',
+          'weight' => '4',
+        ),
       ),
       'entity_type' => 'file',
       'field_name' => 'field_watermark',
@@ -773,7 +1020,7 @@ function tap_features_field_default_fields() {
           'progress_indicator' => 'throbber',
         ),
         'type' => 'media_generic',
-        'weight' => '8',
+        'weight' => '5',
       ),
     ),
   );
@@ -814,10 +1061,10 @@ function tap_features_field_default_fields() {
       'display' => array(
         'default' => array(
           'label' => 'above',
-          'module' => 'text',
+          'module' => 'tap',
           'settings' => array(),
-          'type' => 'text_default',
-          'weight' => 0,
+          'type' => 'tap_tour_copyright',
+          'weight' => '0',
         ),
         'media_large' => array(
           'label' => 'above',
@@ -849,10 +1096,116 @@ function tap_features_field_default_fields() {
           'type' => 'hidden',
           'weight' => 0,
         ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_copyright',
+          'weight' => '0',
+        ),
       ),
       'entity_type' => 'file',
       'field_name' => 'field_copyright',
       'label' => 'Copyright',
+      'required' => 0,
+      'settings' => array(
+        'text_processing' => '0',
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'text',
+        'settings' => array(
+          'size' => '60',
+        ),
+        'type' => 'text_textfield',
+        'weight' => '1',
+      ),
+    ),
+  );
+
+  // Exported field: 'file-default-field_credit_line'
+  $fields['file-default-field_credit_line'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_credit_line',
+      'foreign keys' => array(
+        'format' => array(
+          'columns' => array(
+            'format' => 'format',
+          ),
+          'table' => 'filter_format',
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'module' => 'text',
+      'settings' => array(
+        'max_length' => '255',
+      ),
+      'translatable' => '0',
+      'type' => 'text',
+    ),
+    'field_instance' => array(
+      'bundle' => 'default',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_credit_line',
+          'weight' => '4',
+        ),
+        'media_large' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'media_link' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'media_original' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'media_preview' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'media_small' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_credit_line',
+          'weight' => '1',
+        ),
+      ),
+      'entity_type' => 'file',
+      'field_name' => 'field_credit_line',
+      'label' => 'Credit Line',
       'required' => 0,
       'settings' => array(
         'text_processing' => '0',
@@ -905,17 +1258,10 @@ function tap_features_field_default_fields() {
       'display' => array(
         'default' => array(
           'label' => 'above',
-          'module' => 'date',
-          'settings' => array(
-            'format_type' => 'long',
-            'fromto' => 'both',
-            'multiple_from' => '',
-            'multiple_number' => '',
-            'multiple_to' => '',
-            'show_repeat_rule' => 'show',
-          ),
-          'type' => 'date_default',
-          'weight' => 2,
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_expiration',
+          'weight' => '2',
         ),
         'media_large' => array(
           'label' => 'above',
@@ -947,6 +1293,13 @@ function tap_features_field_default_fields() {
           'type' => 'hidden',
           'weight' => 0,
         ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_expiration',
+          'weight' => '3',
+        ),
       ),
       'entity_type' => 'file',
       'field_name' => 'field_expiration',
@@ -973,7 +1326,7 @@ function tap_features_field_default_fields() {
           'year_range' => '-3:+3',
         ),
         'type' => 'date_select',
-        'weight' => '6',
+        'weight' => '4',
       ),
     ),
   );
@@ -1014,10 +1367,10 @@ function tap_features_field_default_fields() {
       'display' => array(
         'default' => array(
           'label' => 'above',
-          'module' => 'text',
+          'module' => 'tap',
           'settings' => array(),
-          'type' => 'text_default',
-          'weight' => 1,
+          'type' => 'tap_tour_machine_rights',
+          'weight' => '1',
         ),
         'media_large' => array(
           'label' => 'above',
@@ -1049,6 +1402,13 @@ function tap_features_field_default_fields() {
           'type' => 'hidden',
           'weight' => 0,
         ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_machine_rights',
+          'weight' => '2',
+        ),
       ),
       'entity_type' => 'file',
       'field_name' => 'field_machine_rights',
@@ -1065,7 +1425,7 @@ function tap_features_field_default_fields() {
           'size' => '60',
         ),
         'type' => 'text_textfield',
-        'weight' => '4',
+        'weight' => '3',
       ),
     ),
   );
@@ -1096,10 +1456,10 @@ function tap_features_field_default_fields() {
       'display' => array(
         'default' => array(
           'label' => 'above',
-          'module' => NULL,
+          'module' => 'tap',
           'settings' => array(),
-          'type' => 'media_large',
-          'weight' => 3,
+          'type' => 'tap_tourml_asset',
+          'weight' => '3',
         ),
         'media_large' => array(
           'label' => 'above',
@@ -1131,6 +1491,13 @@ function tap_features_field_default_fields() {
           'type' => 'hidden',
           'weight' => 0,
         ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tourml_asset',
+          'weight' => '4',
+        ),
       ),
       'entity_type' => 'file',
       'field_name' => 'field_watermark',
@@ -1157,7 +1524,7 @@ function tap_features_field_default_fields() {
           'progress_indicator' => 'throbber',
         ),
         'type' => 'media_generic',
-        'weight' => '8',
+        'weight' => '5',
       ),
     ),
   );
@@ -1198,10 +1565,10 @@ function tap_features_field_default_fields() {
       'display' => array(
         'default' => array(
           'label' => 'above',
-          'module' => 'text',
+          'module' => 'tap',
           'settings' => array(),
-          'type' => 'text_default',
-          'weight' => 0,
+          'type' => 'tap_tour_copyright',
+          'weight' => '1',
         ),
         'media_large' => array(
           'label' => 'above',
@@ -1233,6 +1600,13 @@ function tap_features_field_default_fields() {
           'type' => 'hidden',
           'weight' => 0,
         ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_copyright',
+          'weight' => '1',
+        ),
       ),
       'entity_type' => 'file',
       'field_name' => 'field_copyright',
@@ -1250,6 +1624,105 @@ function tap_features_field_default_fields() {
         ),
         'type' => 'text_textfield',
         'weight' => '1',
+      ),
+    ),
+  );
+
+  // Exported field: 'file-image-field_credit_line'
+  $fields['file-image-field_credit_line'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_credit_line',
+      'foreign keys' => array(
+        'format' => array(
+          'columns' => array(
+            'format' => 'format',
+          ),
+          'table' => 'filter_format',
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'module' => 'text',
+      'settings' => array(
+        'max_length' => '255',
+      ),
+      'translatable' => '0',
+      'type' => 'text',
+    ),
+    'field_instance' => array(
+      'bundle' => 'image',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_credit_line',
+          'weight' => '2',
+        ),
+        'media_large' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'media_link' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'media_original' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'media_preview' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'media_small' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_credit_line',
+          'weight' => '0',
+        ),
+      ),
+      'entity_type' => 'file',
+      'field_name' => 'field_credit_line',
+      'label' => 'Credit Line',
+      'required' => 0,
+      'settings' => array(
+        'text_processing' => '0',
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'text',
+        'settings' => array(
+          'size' => '60',
+        ),
+        'type' => 'text_textfield',
+        'weight' => '2',
       ),
     ),
   );
@@ -1289,17 +1762,10 @@ function tap_features_field_default_fields() {
       'display' => array(
         'default' => array(
           'label' => 'above',
-          'module' => 'date',
-          'settings' => array(
-            'format_type' => 'long',
-            'fromto' => 'both',
-            'multiple_from' => '',
-            'multiple_number' => '',
-            'multiple_to' => '',
-            'show_repeat_rule' => 'show',
-          ),
-          'type' => 'date_default',
-          'weight' => 2,
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_expiration',
+          'weight' => '4',
         ),
         'media_large' => array(
           'label' => 'above',
@@ -1331,6 +1797,13 @@ function tap_features_field_default_fields() {
           'type' => 'hidden',
           'weight' => 0,
         ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_expiration',
+          'weight' => '3',
+        ),
       ),
       'entity_type' => 'file',
       'field_name' => 'field_expiration',
@@ -1357,7 +1830,7 @@ function tap_features_field_default_fields() {
           'year_range' => '-3:+3',
         ),
         'type' => 'date_select',
-        'weight' => '3',
+        'weight' => '4',
       ),
     ),
   );
@@ -1398,10 +1871,10 @@ function tap_features_field_default_fields() {
       'display' => array(
         'default' => array(
           'label' => 'above',
-          'module' => 'text',
+          'module' => 'tap',
           'settings' => array(),
-          'type' => 'text_default',
-          'weight' => 1,
+          'type' => 'tap_tour_machine_rights',
+          'weight' => '3',
         ),
         'media_large' => array(
           'label' => 'above',
@@ -1433,6 +1906,13 @@ function tap_features_field_default_fields() {
           'type' => 'hidden',
           'weight' => 0,
         ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_machine_rights',
+          'weight' => '2',
+        ),
       ),
       'entity_type' => 'file',
       'field_name' => 'field_machine_rights',
@@ -1449,7 +1929,7 @@ function tap_features_field_default_fields() {
           'size' => '60',
         ),
         'type' => 'text_textfield',
-        'weight' => '2',
+        'weight' => '3',
       ),
     ),
   );
@@ -1480,10 +1960,10 @@ function tap_features_field_default_fields() {
       'display' => array(
         'default' => array(
           'label' => 'above',
-          'module' => NULL,
+          'module' => 'tap',
           'settings' => array(),
-          'type' => 'media_large',
-          'weight' => 3,
+          'type' => 'tap_tourml_asset',
+          'weight' => '5',
         ),
         'media_large' => array(
           'label' => 'above',
@@ -1515,6 +1995,13 @@ function tap_features_field_default_fields() {
           'type' => 'hidden',
           'weight' => 0,
         ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tourml_asset',
+          'weight' => '4',
+        ),
       ),
       'entity_type' => 'file',
       'field_name' => 'field_watermark',
@@ -1541,7 +2028,7 @@ function tap_features_field_default_fields() {
           'progress_indicator' => 'throbber',
         ),
         'type' => 'media_generic',
-        'weight' => '4',
+        'weight' => '5',
       ),
     ),
   );
@@ -1582,10 +2069,10 @@ function tap_features_field_default_fields() {
       'display' => array(
         'default' => array(
           'label' => 'above',
-          'module' => 'text',
+          'module' => 'tap',
           'settings' => array(),
-          'type' => 'text_default',
-          'weight' => 0,
+          'type' => 'tap_tour_copyright',
+          'weight' => '0',
         ),
         'media_large' => array(
           'label' => 'above',
@@ -1617,10 +2104,116 @@ function tap_features_field_default_fields() {
           'type' => 'hidden',
           'weight' => 0,
         ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_copyright',
+          'weight' => '0',
+        ),
       ),
       'entity_type' => 'file',
       'field_name' => 'field_copyright',
       'label' => 'Copyright',
+      'required' => 0,
+      'settings' => array(
+        'text_processing' => '0',
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'text',
+        'settings' => array(
+          'size' => '60',
+        ),
+        'type' => 'text_textfield',
+        'weight' => '1',
+      ),
+    ),
+  );
+
+  // Exported field: 'file-text-field_credit_line'
+  $fields['file-text-field_credit_line'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_credit_line',
+      'foreign keys' => array(
+        'format' => array(
+          'columns' => array(
+            'format' => 'format',
+          ),
+          'table' => 'filter_format',
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'module' => 'text',
+      'settings' => array(
+        'max_length' => '255',
+      ),
+      'translatable' => '0',
+      'type' => 'text',
+    ),
+    'field_instance' => array(
+      'bundle' => 'text',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_credit_line',
+          'weight' => '1',
+        ),
+        'media_large' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'media_link' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'media_original' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'media_preview' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'media_small' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_credit_line',
+          'weight' => '1',
+        ),
+      ),
+      'entity_type' => 'file',
+      'field_name' => 'field_credit_line',
+      'label' => 'Credit Line',
       'required' => 0,
       'settings' => array(
         'text_processing' => '0',
@@ -1673,17 +2266,10 @@ function tap_features_field_default_fields() {
       'display' => array(
         'default' => array(
           'label' => 'above',
-          'module' => 'date',
-          'settings' => array(
-            'format_type' => 'long',
-            'fromto' => 'both',
-            'multiple_from' => '',
-            'multiple_number' => '',
-            'multiple_to' => '',
-            'show_repeat_rule' => 'show',
-          ),
-          'type' => 'date_default',
-          'weight' => 2,
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_expiration',
+          'weight' => '3',
         ),
         'media_large' => array(
           'label' => 'above',
@@ -1715,6 +2301,13 @@ function tap_features_field_default_fields() {
           'type' => 'hidden',
           'weight' => 0,
         ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_expiration',
+          'weight' => '3',
+        ),
       ),
       'entity_type' => 'file',
       'field_name' => 'field_expiration',
@@ -1741,7 +2334,7 @@ function tap_features_field_default_fields() {
           'year_range' => '-3:+3',
         ),
         'type' => 'date_select',
-        'weight' => '6',
+        'weight' => '4',
       ),
     ),
   );
@@ -1782,10 +2375,10 @@ function tap_features_field_default_fields() {
       'display' => array(
         'default' => array(
           'label' => 'above',
-          'module' => 'text',
+          'module' => 'tap',
           'settings' => array(),
-          'type' => 'text_default',
-          'weight' => 1,
+          'type' => 'tap_tour_machine_rights',
+          'weight' => '2',
         ),
         'media_large' => array(
           'label' => 'above',
@@ -1817,6 +2410,13 @@ function tap_features_field_default_fields() {
           'type' => 'hidden',
           'weight' => 0,
         ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_machine_rights',
+          'weight' => '2',
+        ),
       ),
       'entity_type' => 'file',
       'field_name' => 'field_machine_rights',
@@ -1833,7 +2433,7 @@ function tap_features_field_default_fields() {
           'size' => '60',
         ),
         'type' => 'text_textfield',
-        'weight' => '4',
+        'weight' => '3',
       ),
     ),
   );
@@ -1864,10 +2464,10 @@ function tap_features_field_default_fields() {
       'display' => array(
         'default' => array(
           'label' => 'above',
-          'module' => NULL,
+          'module' => 'tap',
           'settings' => array(),
-          'type' => 'media_large',
-          'weight' => 3,
+          'type' => 'tap_tourml_asset',
+          'weight' => '4',
         ),
         'media_large' => array(
           'label' => 'above',
@@ -1899,6 +2499,13 @@ function tap_features_field_default_fields() {
           'type' => 'hidden',
           'weight' => 0,
         ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tourml_asset',
+          'weight' => '4',
+        ),
       ),
       'entity_type' => 'file',
       'field_name' => 'field_watermark',
@@ -1926,7 +2533,7 @@ function tap_features_field_default_fields() {
           'progress_indicator' => 'throbber',
         ),
         'type' => 'media_generic',
-        'weight' => '8',
+        'weight' => '5',
       ),
     ),
   );
@@ -1967,10 +2574,10 @@ function tap_features_field_default_fields() {
       'display' => array(
         'default' => array(
           'label' => 'above',
-          'module' => 'text',
+          'module' => 'tap',
           'settings' => array(),
-          'type' => 'text_default',
-          'weight' => 0,
+          'type' => 'tap_tour_copyright',
+          'weight' => '0',
         ),
         'media_large' => array(
           'label' => 'above',
@@ -2002,6 +2609,13 @@ function tap_features_field_default_fields() {
           'type' => 'hidden',
           'weight' => 0,
         ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_copyright',
+          'weight' => '0',
+        ),
       ),
       'entity_type' => 'file',
       'field_name' => 'field_copyright',
@@ -2019,6 +2633,105 @@ function tap_features_field_default_fields() {
         ),
         'type' => 'text_textfield',
         'weight' => '1',
+      ),
+    ),
+  );
+
+  // Exported field: 'file-video-field_credit_line'
+  $fields['file-video-field_credit_line'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_credit_line',
+      'foreign keys' => array(
+        'format' => array(
+          'columns' => array(
+            'format' => 'format',
+          ),
+          'table' => 'filter_format',
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'module' => 'text',
+      'settings' => array(
+        'max_length' => '255',
+      ),
+      'translatable' => '0',
+      'type' => 'text',
+    ),
+    'field_instance' => array(
+      'bundle' => 'video',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_credit_line',
+          'weight' => '1',
+        ),
+        'media_large' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'media_link' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'media_original' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'media_preview' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'media_small' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_credit_line',
+          'weight' => '1',
+        ),
+      ),
+      'entity_type' => 'file',
+      'field_name' => 'field_credit_line',
+      'label' => 'Credit Line',
+      'required' => 0,
+      'settings' => array(
+        'text_processing' => '0',
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'text',
+        'settings' => array(
+          'size' => '60',
+        ),
+        'type' => 'text_textfield',
+        'weight' => '2',
       ),
     ),
   );
@@ -2058,17 +2771,10 @@ function tap_features_field_default_fields() {
       'display' => array(
         'default' => array(
           'label' => 'above',
-          'module' => 'date',
-          'settings' => array(
-            'format_type' => 'long',
-            'fromto' => 'both',
-            'multiple_from' => '',
-            'multiple_number' => '',
-            'multiple_to' => '',
-            'show_repeat_rule' => 'show',
-          ),
-          'type' => 'date_default',
-          'weight' => 2,
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_expiration',
+          'weight' => '3',
         ),
         'media_large' => array(
           'label' => 'above',
@@ -2100,6 +2806,13 @@ function tap_features_field_default_fields() {
           'type' => 'hidden',
           'weight' => 0,
         ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_expiration',
+          'weight' => '3',
+        ),
       ),
       'entity_type' => 'file',
       'field_name' => 'field_expiration',
@@ -2126,7 +2839,7 @@ function tap_features_field_default_fields() {
           'year_range' => '-3:+3',
         ),
         'type' => 'date_select',
-        'weight' => '5',
+        'weight' => '4',
       ),
     ),
   );
@@ -2167,10 +2880,10 @@ function tap_features_field_default_fields() {
       'display' => array(
         'default' => array(
           'label' => 'above',
-          'module' => 'text',
+          'module' => 'tap',
           'settings' => array(),
-          'type' => 'text_default',
-          'weight' => 1,
+          'type' => 'tap_tour_machine_rights',
+          'weight' => '2',
         ),
         'media_large' => array(
           'label' => 'above',
@@ -2201,6 +2914,13 @@ function tap_features_field_default_fields() {
           'settings' => array(),
           'type' => 'hidden',
           'weight' => 0,
+        ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tour_machine_rights',
+          'weight' => '2',
         ),
       ),
       'entity_type' => 'file',
@@ -2249,10 +2969,10 @@ function tap_features_field_default_fields() {
       'display' => array(
         'default' => array(
           'label' => 'above',
-          'module' => NULL,
+          'module' => 'tap',
           'settings' => array(),
-          'type' => 'media_large',
-          'weight' => 3,
+          'type' => 'tap_tourml_asset',
+          'weight' => '4',
         ),
         'media_large' => array(
           'label' => 'above',
@@ -2284,6 +3004,13 @@ function tap_features_field_default_fields() {
           'type' => 'hidden',
           'weight' => 0,
         ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tourml_asset',
+          'weight' => '4',
+        ),
       ),
       'entity_type' => 'file',
       'field_name' => 'field_watermark',
@@ -2311,7 +3038,7 @@ function tap_features_field_default_fields() {
           'progress_indicator' => 'throbber',
         ),
         'type' => 'media_generic',
-        'weight' => '7',
+        'weight' => '5',
       ),
     ),
   );
@@ -2368,9 +3095,9 @@ function tap_features_field_default_fields() {
         ),
         'tourml_xml' => array(
           'label' => 'above',
-          'module' => 'text',
+          'module' => 'tap',
           'settings' => array(),
-          'type' => 'text_default',
+          'type' => 'tap_tourml_description',
           'weight' => '2',
         ),
       ),
@@ -3870,6 +4597,7 @@ function tap_features_field_default_fields() {
   t('Body');
   t('Code');
   t('Copyright');
+  t('Credit Line');
   t('Description');
   t('Expiration');
   t('Group Stops');

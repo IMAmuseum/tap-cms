@@ -36,10 +36,12 @@ function tap_menu() {
  * Implements hook_entity_info_alter()
  */
 function tap_entity_info_alter(&$entity_info) {
-    $entity_info['node']['view modes']['tourml_xml'] = array(
-        'label'             => t('TourML XML'),
-        'custom settings'   => TRUE,
-    ); 
+    foreach($entity_info as $type => $entity) {
+        $entity_info[$type]['view modes']['tourml_xml'] = array(
+            'label'             => t('TourML XML'),
+            'custom settings'   => TRUE,
+        ); 
+    }
 }
 
 function tap_theme() {
@@ -145,6 +147,26 @@ function tap_field_formatter_info() {
             'label'         => t('TourML Description'),
             'field types'   => array(),
             'module'        => 'tap',
+        ),
+        'tap_tour_copyright' => array(
+            'label'         => t('TourML Copyright'),
+            'field types'   => array('text', 'list_text', 'text_long', 'text_wigh_summary'),
+        ),
+        'tap_tour_credit_line' => array(
+            'label'         => t('TourML Credit Line'),
+            'field types'   => array('text', 'list_text', 'text_long', 'text_wigh_summary'),
+        ),
+        'tap_tour_machine_rights' => array(
+            'label'         => t('TourML Machine Rights'),
+            'field types'   => array('text', 'list_text', 'text_long', 'text_wigh_summary'),
+        ),
+        'tap_tour_expiration' => array(
+            'label'         => t('TourML Expiration'),
+            'field types'   => array('date', 'datestamp', 'datetime'),
+        ),
+        'tap_tour_watermark' => array(
+            'label'         => t('TourML Watermark'),
+            'field types'   => array(),
         ),
     );
     return $formatters;
