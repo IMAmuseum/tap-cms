@@ -5,6 +5,7 @@ class TourML {
     public $stops       = array();
     public $connections = array();
     public $nid         = null;
+    public $tour        = null;
     public $tourml      = null;
 
     public function __construct($nid)
@@ -46,7 +47,8 @@ class TourML {
                 $nids[] = $result->entity_id;
             }
             
-            $stopNodes = node_load_multiple($nids);
+            $this->tour = $this->processMetadata($node);
+            $stopNodes  = node_load_multiple($nids);
         } else {
             $stopNodes = array($node);
         }
@@ -68,11 +70,18 @@ class TourML {
     }
 
     protected function processStop(&$node) {
+        $stop = $this->processMetadata($node);
+        //Render the stop
+        $this->stops[] = theme('tap_tourml_stop', $stop); 
+    }
+
+    protected function processMetadata($node) {
         node_build_content($node, 'tourml_xml');
-        $stop          = array();
-        $stop['id']    = $node->nid;
-        $properties    = array();
-        $hasTitleField = false;
+        $stop           = array();
+        $stop['id']     = $node->nid;
+        $stop['items']  = array();
+        $properties     = array();
+        $hasTitleField  = false;
         
         // Loop thru renderable fields
         foreach(element_children($node->content) as $field_name) {
@@ -134,9 +143,8 @@ class TourML {
         {
             $stop['items'][] = theme('tap_tourml_property_set', array('properties' => $properties));
         }
-        
-        //Render the stop
-        $this->stops[] = theme('tap_tourml_stop', $stop);
+
+        return $stop;
     }
 
     public function validate() {

@@ -5,7 +5,9 @@
 	xmlns:xml="http://www.w3.org/XML/1998/namespace"
 	xmlns:gml="http://www.opengis.net/gml"
 	xsi:schemaLocation="http://www.imamuseum.org/TourML/2011/11 TourML.xsd"
-	tourml:id="">
+	tourml:id="<?php print $tour->tour['id']; ?>">
+
+<?php foreach ($tour->tour['items'] as $tour_item) { print $tour_item; } ?>
 
 <?php foreach ($tour->stops as $stop) { print $stop; } ?>
 
