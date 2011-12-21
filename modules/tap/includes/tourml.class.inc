@@ -26,15 +26,17 @@ class TourML {
 
             if (isset($field['#formatter']) && strpos($field['#formatter'], 'tap_tourml') !== false)
             {
+                // Key an ID for the property.  This data is not
+                // available deep into the theme layer and we might
+                // need it later
+                foreach($field['#items'] as $k => $item) {
+                    $field['#items'][$k]['id'] = $field['#field_name'];
+                }
+
                 // Determine how a field should be rendered
                 switch($field['#formatter'])
                 {
                     case 'tap_tourml_property':
-                        //TODO: is there a better way to pass the field name?
-                        // Key an ID for the property
-                        foreach($field['#items'] as $k => $item) {
-                            $field['#items'][$k]['id'] = $field['#field_name'];
-                        }
                         // Build an array of rendered properties that can be added to a propertySet later
                         $properties[] = drupal_render($field);
                         break;
