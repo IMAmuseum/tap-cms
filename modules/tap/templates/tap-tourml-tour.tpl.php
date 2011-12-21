@@ -7,11 +7,8 @@
 	xsi:schemaLocation="http://www.imamuseum.org/TourML/2011/11 TourML.xsd"
 	tourml:id="<?php print $tour->tour['id']; ?>">
 
-<?php foreach ($tour->tour['items'] as $tour_item) { print $tour_item; } ?>
-
-<?php foreach ($tour->stops as $stop) { print $stop; } ?>
-
-<?php foreach ($tour->assets as $asset) { print $asset; } ?>
-    
-<?php foreach ($tour->connections as $connection) { print $connection; } ?>
+<?php print $metadata; ?>
+<?php print $stops; ?>
+<?php print $assets; ?>
+<?php print $connections; ?>
 </tourml:Tour>
