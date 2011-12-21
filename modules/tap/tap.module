@@ -41,6 +41,22 @@ function tap_menu() {
 function tap_tourml_preview($node)
 {
     $tourml = tap_tourml_render($node);
+    
+    //pretty up the output
+    $doc = new DOMDocument();
+    $doc->formatOutput = true;
+    $doc->preserveWhiteSpace = false;
+    $doc->loadXML($tourml);
+    
+//    //TODO: trying out validation, this needs some work and probably moved into the TourML class
+//    if ($doc->schemaValidate("https://raw.github.com/IMAmuseum/tourml/master/TourML.xsd"))
+//    {
+//        drupal_set_message("TourML is valid", 'status');
+//    } else {
+//        drupal_set_message("TourML does not validate", 'warning');
+//    }
+    
+    $tourml = $doc->saveXML();
 
     return '<pre class="brush: xml">' . $tourml . '</pre>';
 }
