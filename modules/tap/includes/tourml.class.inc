@@ -101,7 +101,9 @@ class TourML {
                 {
                     case 'tap_tourml_property':
                         // Build an array of rendered properties that can be added to a propertySet later
-                        $properties[] = drupal_render($field);
+                        if (!empty($field['#items'])) {
+                            $properties[] = drupal_render($field);
+                        }
                         break;
                     case 'tap_tourml_asset':
                         // Build an array of assets that will be rendered after all stops
@@ -139,7 +141,7 @@ class TourML {
         }
 
         // Render properties for a stop
-        if (count($properties))
+        if (!empty($properties))
         {
             $stop['items'][] = theme('tap_tourml_property_set', array('properties' => $properties));
         }
