@@ -64,8 +64,9 @@ class TourML {
     
     protected function processAssets()
     {
+        global $language;
         foreach($this->assets as $k => $asset) {
-            $this->assets[$k] = theme('tap_tourml_asset', array('asset' => $asset));
+            $this->assets[$k] = theme('tap_tourml_asset', array('asset' => $asset, 'language' => $language->language));
         }
     }
 
@@ -85,8 +86,8 @@ class TourML {
         
         // Loop thru renderable fields
         foreach(element_children($node->content) as $field_name) {
-            $field =& $node->content[$field_name];
 
+            $field =& $node->content[$field_name];
             if (isset($field['#formatter']) && strpos($field['#formatter'], 'tap_tourml') !== false)
             {
                 // Key an ID for the property.  This data is not

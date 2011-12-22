@@ -32,6 +32,8 @@ function tap_preprocess_file_tourml_xml(&$vars) {
 
 function tap_preprocess_tap_tourml_description_text_with_summary(&$vars)
 {
+    global $language;
+    $vars['language'] = $language->language;
     //dpm($vars);
 }
 
@@ -53,3 +55,11 @@ function tap_preprocess_tap_tourml_connection_node_reference(&$vars)
         $vars['items'][$k]['destId'] = $v['nid'];
     }
 }
+
+function tap_preprocess_tap_tourml_title_text(&$vars)
+{
+    global $language;
+    $vars['language'] = $language->language;
+    //dpm($vars);
+}
+
