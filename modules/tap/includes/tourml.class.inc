@@ -111,6 +111,7 @@ class TourML {
                         foreach($field['#items'] as $item) {
                             if (!isset($this->assets[$item['fid']])) {
                                 $this->assets[$item['fid']] = $item;
+                                $item['properties'] = module_invoke_all('tourml_asset_properties', $item);
                             }
                             $stop['items'][] = drupal_render($field);
                         }
