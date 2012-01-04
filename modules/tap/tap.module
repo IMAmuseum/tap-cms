@@ -147,6 +147,8 @@ function tap_theme() {
         ),
         'tap_tourml_property_list_boolean'              => $properties, 
         'tap_tourml_property_text'                      => $properties, 
+        'tap_tourml_property_datetime'                  => $properties,
+        'tap_tourml_property_date'                      => $properties,
         'tap_tourml_property_datestamp'                 => $properties, 
         'tap_tourml_property_number_decimal'            => $properties,
         'tap_tourml_property_number_float'              => $properties, 
@@ -307,7 +309,6 @@ function tap_field_display_alter(&$display, $context) {
  */
 function tap_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
     $element['#theme'] = $display['type'] . '_' . $field['type'];
-dpm($element);
     return $element;
 }
 

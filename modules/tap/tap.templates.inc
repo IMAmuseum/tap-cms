@@ -69,6 +69,14 @@ function theme_tap_tourml_property_list_boolean(&$vars) {
     return _theme_tap_tourml_property($vars);
 }
 
+function theme_tap_tourml_property_date(&$vars) {
+    return _theme_tap_tourml_property($vars);
+}
+
+function theme_tap_tourml_property_datetime(&$vars) {
+    return _theme_tap_tourml_property($vars);
+}
+
 function theme_tap_tourml_property_datestamp(&$vars) {
     return _theme_tap_tourml_property($vars);
 }
