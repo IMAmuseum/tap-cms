@@ -7,6 +7,26 @@ module_load_include('inc', 'tap', 'tap.forms');
  */
 
 /**
+ * Implements hook_requirements()
+ */
+function tap_requirements($phase) {
+    if ($phase == 'runtime') {
+        $severity   = (extension_loaded('ffmpeg')) ? REQUIREMENT_OK : REQUIREMENT_WARNING;
+        $value      = ($severity == REQUIREMENT_OK) ? 'Enabled' : 'Disabled';
+
+        $requirements['tap_ffmpeg'] = array(
+            'title'         => t('Tap FFMPEG'),
+            'description'   => t('To retrieve information about videos TAP requires that the ffmpeg extension be installed.  
+                you can download it from <a href="http://http://ffmpeg-php.sourceforge.net/">here</a>'),
+            'severity'      => $severity,
+            'value'         => $value,
+        );
+
+        return $requirements;
+    }
+}
+
+/**
  * Implements hook_permission()
  */
 function tap_permission() {
@@ -204,6 +224,8 @@ function tap_tourml_asset_properties($item) {
     switch($type) {
         case 'image':
             return _tap_asset_image($item);
+        case 'video':
+            return _tap_asset_video($item);
     }
 }
 
@@ -406,13 +428,63 @@ function _tap_asset_image($item) {
     $attr = image_get_info($path);
     return array(
         array(
-            'name'    => 'width',
+            'name'  => 'width',
             'value' => $attr['width'],
         ),
         array(
-            'name'    => 'height',
+            'name'  => 'height',
             'value' => $attr['height'],
         ),
     );
-
 }
+
+function _tap_asset_video($item) {
+    if (!extension_loaded('ffmpeg')) return;
+
+    $path = drupal_realpath($item['uri']);
+    $movie = new ffmpeg_movie($path);
+    return array(
+        array(
+            'name'  => 'duration',
+            'value' => duration($movie->getDuration()),
+        ),
+        array(
+            'name'  => 'width',
+            'value' => $movie->getFrameWidth(),
+        ),
+        array(
+            'name'  => 'height',
+            'value' => $movie->getFrameHeight(),
+        ),
+    );
+}
+
+/**
+ * @param $secs
+ * Takes a number of seconds
+ * @return
+ * Returns the duration formatted in HH:MM:SS
+ */
+function duration($secs) 
+{ 
+    $vals = array( 
+        'h' => $secs / 3600 % 24, 
+        'm' => $secs / 60 % 60, 
+        's' => $secs % 60
+    ); 
+ 
+    $ret = array(); 
+ 
+    $added = false; 
+    foreach ($vals as $k => $v) { 
+        if ($v > 0 || $added) { 
+            $added = true; 
+            $v = (strlen($v) == 1) ? '0'.$v : $v;
+            $ret[] = $v; 
+        } else {
+            $ret[] = '00';
+        }
+    } 
+ 
+    return join(':', $ret); 
+} 
