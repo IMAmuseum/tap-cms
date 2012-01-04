@@ -222,23 +222,23 @@ function tap_field_formatter_info() {
             'field types'   => array(),
             'module'        => 'tap',
         ),
-        'tap_tour_copyright' => array(
+        'tap_tourml_copyright' => array(
             'label'         => t('TourML Copyright'),
-            'field types'   => array('text', 'list_text', 'text_long', 'text_wigh_summary'),
+            'field types'   => array('text', 'list_text', 'text_long', 'text_with_summary'),
         ),
-        'tap_tour_credit_line' => array(
+        'tap_tourml_credit_line' => array(
             'label'         => t('TourML Credit Line'),
-            'field types'   => array('text', 'list_text', 'text_long', 'text_wigh_summary'),
+            'field types'   => array('text', 'list_text', 'text_long', 'text_with_summary'),
         ),
-        'tap_tour_machine_rights' => array(
+        'tap_tourml_machine_rights' => array(
             'label'         => t('TourML Machine Rights'),
-            'field types'   => array('text', 'list_text', 'text_long', 'text_wigh_summary'),
+            'field types'   => array('text', 'list_text', 'text_long', 'text_with_summary'),
         ),
-        'tap_tour_expiration' => array(
+        'tap_tourml_expiration' => array(
             'label'         => t('TourML Expiration'),
             'field types'   => array('date', 'datestamp', 'datetime'),
         ),
-        'tap_tour_watermark' => array(
+        'tap_tourml_watermark' => array(
             'label'         => t('TourML Watermark'),
             'field types'   => array(),
         ),
