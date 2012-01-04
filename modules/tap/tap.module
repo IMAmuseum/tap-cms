@@ -111,7 +111,7 @@ function tap_theme() {
          */
         'tap_tourml_property' => array(
             'variables' => array(
-                'id'            => '',
+                'name'          => '',
                 'value'         => '',
                 'attributes'    => array(),
             ),
@@ -174,13 +174,15 @@ function tap_theme() {
             'file'  => 'tap.templates.inc',
             'template'  => 'templates/tap-tourml-asset',
         ),
-        'tap_tourml_asset_file' => array(
+        'tap_tourml_asset_ref' => array(
             'variables' => array(
                 'items' => array(),
             ),
             'file'  => 'tap.templates.inc',
             'template'  => 'templates/tap-tourml-asset-file',
         ),
+        'tap_tourml_asset_file'     => $properties,
+        'tap_tourml_asset_image'    => $properties, 
         /**
          * Connections
          */
@@ -192,6 +194,17 @@ function tap_theme() {
             'template'  => 'templates/tap-tourml-connection-node-reference',
         ),
     );
+}
+
+/**
+ * Implements hook_tourml_asset_properties()
+ */
+function tap_tourml_asset_properties($item) {
+    list($type, $ext) = explode('/', $item['filemime']);
+    switch($type) {
+        case 'image':
+            return _tap_asset_image($item);
+    }
 }
 
 /******************************
@@ -386,4 +399,20 @@ function tap_tourml_preview($node)
 
 function _anti_field($text) {
     return str_replace('field_', '', $text);
+}
+
+function _tap_asset_image($item) {
+    $path = drupal_realpath($item['uri']);
+    $attr = image_get_info($path);
+    return array(
+        array(
+            'name'    => 'width',
+            'value' => $attr['width'],
+        ),
+        array(
+            'name'    => 'height',
+            'value' => $attr['height'],
+        ),
+    );
+
 }

@@ -30,14 +30,32 @@ function tap_preprocess_file_tourml_xml(&$vars) {
     //dpm($vars);
 }
 
-function tap_preprocess_tap_tourml_asset_file(&$vars)
-{
-    //dpm($vars);
+function tap_preprocess_tap_tourml_asset(&$vars) {
+    $properties = array();
+
+    foreach($vars['asset']['properties'] as $property) {
+        $properties[] = theme('tap_tourml_property', $property);
+    }
+
+    $vars['properties'] = theme('tap_tourml_property_set', array('properties' => $properties));
 }
+
+function theme_tap_tourml_asset_file(&$vars)
+{
+    return theme('tap_tourml_asset_ref', $vars);
+}
+
+function theme_tap_tourml_asset_image(&$vars) {
+    return theme('tap_tourml_asset_ref', $vars);
+}
+
 
 /**
  * Properties
  */
+function tap_preprocess_tap_tourml_property_set(&$vars) {
+}
+
 function tap_preprocess_tap_tourml_property(&$vars) {
     $vars['attributes'] = drupal_attributes($vars['attributes']);
 }
@@ -170,11 +188,3 @@ function tap_preprocess_tap_tourml_connection_node_reference(&$vars)
         $vars['items'][$k]['destId'] = $v['nid'];
     }
 }
-
-function tap_preprocess_tap_tourml_title_text(&$vars)
-{
-    global $language;
-    $vars['language'] = $language->language;
-    //dpm($vars);
-}
-

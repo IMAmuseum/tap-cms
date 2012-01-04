@@ -94,7 +94,7 @@ class TourML {
                 // available deep into the theme layer and we might
                 // need it later
                 foreach($field['#items'] as $k => $item) {
-                    $field['#items'][$k]['id'] = _anti_field($field['#field_name']);
+                    $field['#items'][$k]['name'] = _anti_field($field['#field_name']);
                 }
 
                 // Determine how a field should be rendered
@@ -108,10 +108,10 @@ class TourML {
                         break;
                     case 'tap_tourml_asset':
                         // Build an array of assets that will be rendered after all stops
-                        foreach($field['#items'] as $item) {
+                        foreach($field['#items'] as $key => $item) {
                             if (!isset($this->assets[$item['fid']])) {
-                                $this->assets[$item['fid']] = $item;
                                 $item['properties'] = module_invoke_all('tourml_asset_properties', $item);
+                                $this->assets[$item['fid']] = $item;
                             }
                             $stop['items'][] = drupal_render($field);
                         }
