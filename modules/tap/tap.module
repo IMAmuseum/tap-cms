@@ -126,7 +126,6 @@ function tap_theme() {
             'template'  => 'templates/tap-tourml-property-set',
         ),
         'tap_tourml_property_list_boolean'              => $properties, 
-        'tap_tourml_property_text'                      => $properties, 
         'tap_tourml_property_datetime'                  => $properties,
         'tap_tourml_property_date'                      => $properties,
         'tap_tourml_property_datestamp'                 => $properties, 
@@ -136,28 +135,35 @@ function tap_theme() {
         'tap_tourml_property_list_float'                => $properties, 
         'tap_tourml_property_list_integer'              => $properties, 
         'tap_tourml_property_list_text'                 => $properties,
+        'tap_tourml_property_text'                      => $properties, 
         'tap_tourml_property_text_long'                 => $properties,
         'tap_tourml_property_taxonomy_term_reference'   => $properties,
         /**
          * Title
          */
-        'tap_tourml_title_text' => array(
+        'tap_tourml_title' => array(
             'variables' => array(
-                'items' => array(),
+                'language'  => 'en',
+                'value'     => '',
             ),
             'file'  => 'tap.templates.inc',
-            'template'  => 'templates/tap-tourml-title-text',
+            'template'  => 'templates/tap-tourml-title',
         ),
+        'tap_tourml_title_text'         => $properties, 
+        'tap_tourml_title_text_long'    => $properties,
         /**
          * Description
          */
-        'tap_tourml_description_text_with_summary' => array(
+        'tap_tourml_description' => array(
             'variables' => array(
                 'items' => array(),
             ),
             'file'  => 'tap.templates.inc',
-            'template'  => 'templates/tap-tourml-description-text-with-summary',
+            'template'  => 'templates/tap-tourml-description',
         ),
+        'tap_tourml_description_text'               => $properties,
+        'tap_tourml_description_text_long'          => $properties,
+        'tap_tourml_description_text_with_summary'  => $properties,
         /**
          * Assets
          */
@@ -214,33 +220,38 @@ function tap_field_formatter_info() {
         ),
         'tap_tourml_title' => array(
             'label'         => t('TourML Title'),
-            'field types'   => array(),
+            'field types'   => array('text', 'text_long', 'text_with_summary'),
             'module'        => 'tap',
         ),
         'tap_tourml_description' => array(
             'label'         => t('TourML Description'),
-            'field types'   => array(),
+            'field types'   => array('text', 'text_long', 'text_with_summary'),
             'module'        => 'tap',
         ),
         'tap_tourml_copyright' => array(
             'label'         => t('TourML Copyright'),
             'field types'   => array('text', 'list_text', 'text_long', 'text_with_summary'),
+            'module'        => 'tap',
         ),
         'tap_tourml_credit_line' => array(
             'label'         => t('TourML Credit Line'),
             'field types'   => array('text', 'list_text', 'text_long', 'text_with_summary'),
+            'module'        => 'tap',
         ),
         'tap_tourml_machine_rights' => array(
             'label'         => t('TourML Machine Rights'),
             'field types'   => array('text', 'list_text', 'text_long', 'text_with_summary'),
+            'module'        => 'tap',
         ),
         'tap_tourml_expiration' => array(
             'label'         => t('TourML Expiration'),
             'field types'   => array('date', 'datestamp', 'datetime'),
+            'module'        => 'tap',
         ),
         'tap_tourml_watermark' => array(
             'label'         => t('TourML Watermark'),
             'field types'   => array(),
+            'module'        => 'tap',
         ),
     );
     return $formatters;
@@ -289,6 +300,7 @@ function tap_field_display_alter(&$display, $context) {
  */
 function tap_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
     $element['#theme'] = $display['type'] . '_' . $field['type'];
+dpm($element['#theme']);
     return $element;
 }
 
