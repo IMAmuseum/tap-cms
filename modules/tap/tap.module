@@ -5,6 +5,18 @@
  */
 
 /**
+ * Implements hook_permission()
+ */
+function tap_permission() {
+    return array(
+        'administer tap' => array(
+            'title'         => t('Administer Tap'),
+            'description'   => t('Perform administration tasks for TAP'),
+        ),
+    );
+}
+
+/**
  * Implements hook_menu()
  */
 function tap_menu() {
@@ -13,7 +25,7 @@ function tap_menu() {
         'title'             => 'TourML XML',
         'page callback'     => 'tap_tourml_preview',
         'page arguments'    => array(1),
-        'access arguments'  => array('access content'),
+        'access arguments'  => array('administer tap'),
         'type'              => MENU_LOCAL_TASK,
     );
   
@@ -26,6 +38,45 @@ function tap_menu() {
     );
 
     return $items;
+}
+
+function tap_node_view($node, $view_mode, $lang) {
+    switch($view_mode) {
+        case 'full':
+            tap_node_view_full($node, $lang);
+            break;
+    }
+}
+
+function tap_node_view_full(&$node, $lang) {
+    if ($node->type == 'tour') {
+        $node->content['tourml'] = drupal_get_form('tap_export_tourml_form', $node);
+    }
+}
+
+function tap_export_tourml_form($form, &$form_state, $node) {
+    $form = array();
+
+    $form_state['node'] = $node;
+
+    $form['export_tourml'] = array(
+        '#type'     => 'submit',
+        '#value'    => t('Export TourML'),
+    );
+
+    return $form;
+}
+
+function tap_export_tourml_form_submit($form, &$form_state) {
+    if ($form_state['clicked_button']['#value'] == t('Export TourML')) {
+        $tourml = tap_tourml_render($form_state['node']);
+        $title  = check_plain($form_state['node']->title);
+
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Content-Type: text/xml');
+        header('Content-Disposition: attachment; filename="' . $title . '.xml"');
+        die(print $tourml);
+    }
 }
 
 /******************************
@@ -277,7 +328,14 @@ function tap_tourml_render($node)
     module_load_include('inc', 'tap', 'includes/tourml.class');
 
     $tourml = new TourML($node->nid);
-    return $tourml->getTourML();
+
+    //pretty up the output
+    $doc = new DOMDocument();
+    $doc->formatOutput = true;
+    $doc->preserveWhiteSpace = false;
+    $doc->loadXML($tourml->getTourML());
+
+    return $doc->saveXML();
 }
 
 /**
@@ -289,15 +347,6 @@ function tap_tourml_render($node)
 function tap_tourml_preview($node)
 {
     $tourml = tap_tourml_render($node);
-    
-    //pretty up the output
-    $doc = new DOMDocument();
-    $doc->formatOutput = true;
-    $doc->preserveWhiteSpace = false;
-    $doc->loadXML($tourml);
-    
-    $tourml = $doc->saveXML();
-
     return '<pre class="brush: xml">' . htmlentities($tourml) . '</pre>';
 }
 
