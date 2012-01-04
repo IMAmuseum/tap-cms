@@ -168,7 +168,7 @@ function tap_theme() {
          * Assets
          */
         'tap_tourml_asset' => array(
-            'varibales' => array(
+            'variables' => array(
                 'asset' => array(),
             ),
             'file'  => 'tap.templates.inc',
