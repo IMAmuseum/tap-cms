@@ -92,11 +92,3 @@ function tap_get_stop_tourml($tourML, $object, $tour = NULL) {
       break;
   }
 }
-
-function tap_tourml_render($node)
-{
-    module_load_include('inc', 'tap', 'includes/tourml.class');
-    
-    $tourml = new TourML($node->nid);
-    return $tourml->getTourML();
-}
