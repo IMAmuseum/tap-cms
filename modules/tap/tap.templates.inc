@@ -42,11 +42,75 @@ function tap_preprocess_tap_tourml_asset_file(&$vars)
     //dpm($vars);
 }
 
-function tap_preprocess_tap_tourml_property_text(&$vars)
-{
-    //dpm($vars);
+/**
+ * Properties
+ */
+function tap_preprocess_tap_tourml_property(&$vars) {
+    $vars['attributes'] = drupal_attributes($vars['attributes']);
 }
 
+function _theme_tap_tourml_property($vars) {
+    $properties = '';
+    foreach($vars['items'] as $item) {
+        $properties .= theme('tap_tourml_property', $item);
+    }
+
+    return $properties;
+}
+
+/**
+ * these are all wrappers to _theme_tap_tourml_property() to handle the different field types
+ */
+function theme_tap_tourml_property_text(&$vars) {
+    return _theme_tap_tourml_property($vars);
+}
+
+function theme_tap_tourml_property_list_boolean(&$vars) {
+    return _theme_tap_tourml_property($vars);
+}
+
+function theme_tap_tourml_property_datestamp(&$vars) {
+    return _theme_tap_tourml_property($vars);
+}
+
+function theme_tap_tourml_property_number_decimal(&$vars) {
+    return _theme_tap_tourml_property($vars);
+}
+
+function theme_tap_tourml_property_number_float(&$vars) {
+    return _theme_tap_tourml_property($vars);
+}
+
+function theme_tap_tourml_property_number_integer(&$vars) {
+    return _theme_tap_tourml_property($vars);
+}
+
+function theme_tap_tourml_property_list_float(&$vars) {
+    return _theme_tap_tourml_property($vars);
+}
+
+function theme_tap_tourml_property_list_integer(&$vars) {
+    return _theme_tap_tourml_property($vars);
+}
+
+function theme_tap_tourml_property_list_text(&$vars) {
+    return _theme_tap_tourml_property($vars);
+}
+
+function theme_tap_tourml_property_text_long(&$vars) {
+    return _theme_tap_tourml_property($vars);
+}
+
+function theme_tap_tourml_property_taxonomy_term_reference(&$vars) {
+    foreach($vars['items'] as $id => $item) {
+        $vars['items'][$id]['value'] = taxonomy_term_load($item['tid'])->name;
+    }
+    return _theme_tap_tourml_property($vars);
+}
+
+/**
+ * Connections
+ */
 function tap_preprocess_tap_tourml_connection_node_reference(&$vars)
 {
     

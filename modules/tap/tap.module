@@ -96,7 +96,17 @@ function tap_entity_info_alter(&$entity_info) {
 }
 
 function tap_theme() {
+    $properties = array(
+        'variables' => array(
+            'items' => array(),
+        ),
+        'file'  => 'tap.templates.inc',
+    );
+
     return array(
+        /**
+         * Tour
+         */
         'tap_tourml_tour' => array(
             'variables' => array(
                 'id'    => 0,
@@ -105,6 +115,9 @@ function tap_theme() {
             'file'  => 'tap.templates.inc',
             'template'  => 'templates/tap-tourml-tour',
         ),        
+        /**
+         * Stop
+         */
         'tap_tourml_stop' => array(
             'variables' => array(
                 'id' => 0,
@@ -113,6 +126,18 @@ function tap_theme() {
             'file'  => 'tap.templates.inc',
             'template'  => 'templates/tap-tourml-stop',
         ),
+        /**
+         * Properties
+         */
+        'tap_tourml_property' => array(
+            'variables' => array(
+                'id'            => '',
+                'value'         => '',
+                'attributes'    => array(),
+            ),
+            'file'  => 'tap.templates.inc',
+            'template'  => 'templates/tap-tourml-property',
+        ),
         'tap_tourml_property_set' => array(
             'variables' => array(
                 'properties' => array(),
@@ -120,6 +145,20 @@ function tap_theme() {
             'file'  => 'tap.templates.inc',
             'template'  => 'templates/tap-tourml-property-set',
         ),
+        'tap_tourml_property_list_boolean'              => $properties, 
+        'tap_tourml_property_text'                      => $properties, 
+        'tap_tourml_property_datestamp'                 => $properties, 
+        'tap_tourml_property_number_decimal'            => $properties,
+        'tap_tourml_property_number_float'              => $properties, 
+        'tap_tourml_property_number_integer'            => $properties, 
+        'tap_tourml_property_list_float'                => $properties, 
+        'tap_tourml_property_list_integer'              => $properties, 
+        'tap_tourml_property_list_text'                 => $properties,
+        'tap_tourml_property_text_long'                 => $properties,
+        'tap_tourml_property_taxonomy_term_reference'   => $properties,
+        /**
+         * Title
+         */
         'tap_tourml_title_text' => array(
             'variables' => array(
                 'items' => array(),
@@ -127,6 +166,9 @@ function tap_theme() {
             'file'  => 'tap.templates.inc',
             'template'  => 'templates/tap-tourml-title-text',
         ),
+        /**
+         * Description
+         */
         'tap_tourml_description_text_with_summary' => array(
             'variables' => array(
                 'items' => array(),
@@ -134,13 +176,9 @@ function tap_theme() {
             'file'  => 'tap.templates.inc',
             'template'  => 'templates/tap-tourml-description-text-with-summary',
         ),
-        'tap_tourml_property_text' => array(
-            'variables' => array(
-                'items' => array(),
-            ),
-            'file'  => 'tap.templates.inc',
-            'template'  => 'templates/tap-tourml-property-text',
-        ),
+        /**
+         * Assets
+         */
         'tap_tourml_asset' => array(
             'varibales' => array(
                 'asset' => array(),
@@ -155,6 +193,9 @@ function tap_theme() {
             'file'  => 'tap.templates.inc',
             'template'  => 'templates/tap-tourml-asset-file',
         ),
+        /**
+         * Connections
+         */
         'tap_tourml_connection_node_reference' => array(
             'variables' => array(
                 'items' => array(),
@@ -266,6 +307,7 @@ function tap_field_display_alter(&$display, $context) {
  */
 function tap_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
     $element['#theme'] = $display['type'] . '_' . $field['type'];
+dpm($element);
     return $element;
 }
 
