@@ -226,6 +226,8 @@ function tap_tourml_asset_properties($item) {
             return _tap_asset_image($item);
         case 'video':
             return _tap_asset_video($item);
+        case 'audio':
+            return _tap_asset_audio($item);
     }
 }
 
@@ -419,10 +421,6 @@ function tap_tourml_preview($node)
     return '<pre class="brush: xml">' . htmlentities($tourml) . '</pre>';
 }
 
-function _anti_field($text) {
-    return str_replace('field_', '', $text);
-}
-
 function _tap_asset_image($item) {
     $path = drupal_realpath($item['uri']);
     $attr = image_get_info($path);
@@ -456,7 +454,33 @@ function _tap_asset_video($item) {
             'name'  => 'height',
             'value' => $movie->getFrameHeight(),
         ),
+        array(
+            'name'  => 'video_codec',
+            'value' => $movie->getVideoCodec(),
+        ),
+        array(
+            'name'  => 'audio_codec',
+            'value' => $movie->getAudioCodec(),
+        ),
     );
+}
+
+function _tap_asset_audio($item) {
+    if (!extension_loaded('ffmpeg')) return;
+
+    $path = drupal_realpath($item['uri']);
+    $audio = new ffmpeg_movie($path);
+    return array(
+        array(
+            'name'  => 'duration',
+            'value' => duration($audio->getDuration()),
+        ),
+        array(
+            'name'  => 'audio_codec',
+            'value' => $audio->getAudioCodec(),
+        ),
+    );
+
 }
 
 /**
@@ -487,4 +511,11 @@ function duration($secs)
     } 
  
     return join(':', $ret); 
-} 
+}
+
+/**
+ * Strips "field_" from text
+ */
+function _anti_field($text) {
+    return str_replace('field_', '', $text);
+}
