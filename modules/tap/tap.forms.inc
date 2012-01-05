@@ -17,6 +17,9 @@ function tap_export_tourml_form($form, &$form_state, $node) {
     return $form;
 }
 
+/**
+ * Submit function for tap_export_tourml_form
+ */
 function tap_export_tourml_form_submit($form, &$form_state) {
     if ($form_state['clicked_button']['#value'] == t('Export TourML')) {
         $tourml = tap_tourml_render($form_state['node']);

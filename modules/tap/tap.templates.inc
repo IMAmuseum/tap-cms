@@ -30,6 +30,10 @@ function tap_preprocess_file_tourml_xml(&$vars) {
     //dpm($vars);
 }
 
+/********************************
+ * Assets
+ */
+
 function tap_preprocess_tap_tourml_asset(&$vars) {
     $properties = array();
 
@@ -51,10 +55,10 @@ function theme_tap_tourml_asset_image(&$vars) {
     return theme('tap_tourml_asset_ref', $vars);
 }
 
-
-/**
+/********************************
  * Properties
  */
+
 function tap_preprocess_tap_tourml_property_set(&$vars) {
 }
 
@@ -129,9 +133,10 @@ function theme_tap_tourml_property_taxonomy_term_reference(&$vars) {
     return _theme_tap_tourml_property($vars);
 }
 
-/**
+/********************************
  * Titles
  */
+
 function _theme_tap_tourml_title($vars) {
     global $language;
 
@@ -152,9 +157,10 @@ function theme_tap_tourml_title_text_long(&$vars) {
     return _theme_tap_tourml_title($vars); 
 }
 
-/**
+/********************************
  * Descriptions
  */
+
 function _theme_tap_tourml_description($vars) {
     global $language;
 
@@ -179,9 +185,10 @@ function theme_tap_tourml_description_text_with_summary(&$vars) {
     return _theme_tap_tourml_description($vars);
 }
 
-/**
+/********************************
  * Connections
  */
+
 function tap_preprocess_tap_tourml_connection_node_reference(&$vars)
 {
     

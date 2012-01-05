@@ -95,6 +95,9 @@ function tap_entity_info_alter(&$entity_info) {
     }
 }
 
+/**
+ * Implements hook_theme()
+ */
 function tap_theme() {
     $properties = array(
         'variables' => array(
@@ -294,6 +297,9 @@ function tap_field_formatter_info() {
     return $formatters;
 }
 
+/**
+ * Implements hook_field_formatter_info_alter()
+ */
 function tap_field_formatter_info_alter(&$info)
 {
     $types = array();
@@ -391,6 +397,7 @@ function tap_block_contents($delta) {
 /**
  * @param $node
  * A node object
+ *
  * @return
  * Returns a rendered TourML string
  */
@@ -421,6 +428,15 @@ function tap_tourml_preview($node)
     return '<pre class="brush: xml">' . htmlentities($tourml) . '</pre>';
 }
 
+/**
+ * Act on image assets
+ *
+ * @param $item
+ * The asset item to enact upon
+ * 
+ * @return Array
+ * Return an array of key/value properties to be rendered with the asset
+ */
 function _tap_asset_image($item) {
     $path = drupal_realpath($item['uri']);
     $attr = image_get_info($path);
@@ -436,6 +452,15 @@ function _tap_asset_image($item) {
     );
 }
 
+/**
+ * Act on video assets
+ *
+ * @param $item
+ * The asset item to enact upon
+ * 
+ * @return Array
+ * Return an array of key/value properties to be rendered with the asset
+ */
 function _tap_asset_video($item) {
     if (!extension_loaded('ffmpeg')) return;
 
@@ -465,6 +490,15 @@ function _tap_asset_video($item) {
     );
 }
 
+/**
+ * Act on audio assets
+ *
+ * @param $item
+ * The asset item to enact upon
+ * 
+ * @return Array
+ * Return an array of key/value properties to be rendered with the asset
+ */
 function _tap_asset_audio($item) {
     if (!extension_loaded('ffmpeg')) return;
 
@@ -486,6 +520,7 @@ function _tap_asset_audio($item) {
 /**
  * @param $secs
  * Takes a number of seconds
+ *
  * @return
  * Returns the duration formatted in HH:MM:SS
  */
@@ -515,6 +550,12 @@ function duration($secs)
 
 /**
  * Strips "field_" from text
+ *
+ * @param $text
+ * The text to be parsed
+ *
+ * @return
+ * The parsed text minue "field_"
  */
 function _anti_field($text) {
     return str_replace('field_', '', $text);
