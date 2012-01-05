@@ -38,6 +38,8 @@ function tap_preprocess_tap_tourml_asset(&$vars) {
     }
 
     $vars['properties'] = theme('tap_tourml_property_set', array('properties' => $properties));
+    $vars['path'] = file_create_url($vars['asset']['uri']);
+
 }
 
 function theme_tap_tourml_asset_file(&$vars)
