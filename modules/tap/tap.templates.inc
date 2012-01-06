@@ -40,6 +40,12 @@ function tap_preprocess_tap_tourml_asset(&$vars) {
     $vars['content']    = FALSE;
 
     if (isset($vars['asset']['fid'])) {
+        // Media fields nest the file object inside of the asset.
+        // So if we run into one we need to merge it into the 
+        // parent array.
+        if (isset($vars['asset']['file'])) {
+            $vars['asset'] = array_merge($vars['asset'], (array)$vars['asset']['file']);
+        }
         $vars['path'] = file_create_url($vars['asset']['uri']);
         $vars['source'] = TRUE; 
     }
