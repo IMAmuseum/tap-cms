@@ -107,14 +107,20 @@ class TourML {
                         }
                         break;
                     case 'tap_tourml_asset':
+                        $prefix = $field['#bundle'] . '-' . $field['#field_name'] . '-';
+
                         // Build an array of assets that will be rendered after all stops
-                        foreach($field['#items'] as $key => $item) {
-                            if (!isset($this->assets[$item['fid']])) {
+                        foreach($field['#items'] as $key => &$item) {
+                            $item['id'] = (isset($item['fid'])) ? $item['fid'] : $key;
+                            $item['id'] = $prefix . $item['id'];
+
+                            // If this asset doesnt exist in our main object we need to process it
+                            if (!isset($this->assets[$item['id']])) {
                                 $item['properties'] = module_invoke_all('tourml_asset_properties', $item);
-                                $this->assets[$item['fid']] = $item;
+                                $this->assets[$item['id']] = $item;
                             }
-                            $stop['items'][] = drupal_render($field);
                         }
+                        $stop['items'][] = drupal_render($field);
                         break;
                     case 'tap_tourml_connection':
                         $ConnectionPriority = 0;

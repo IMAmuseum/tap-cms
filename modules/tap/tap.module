@@ -204,8 +204,11 @@ function tap_theme() {
             'file'  => 'tap.templates.inc',
             'template'  => 'templates/tap-tourml-asset-file',
         ),
-        'tap_tourml_asset_file'     => $properties,
-        'tap_tourml_asset_image'    => $properties, 
+        'tap_tourml_asset_file'                 => $properties,
+        'tap_tourml_asset_image'                => $properties, 
+        'tap_tourml_asset_text'                 => $properties,
+        'tap_tourml_asset_text_long'            => $properties,
+        'tap_tourml_asset_text_with_summary'    => $properties,
         /**
          * Connections
          */
@@ -219,10 +222,16 @@ function tap_theme() {
     );
 }
 
+/*******************************
+ * Contrib Hooks
+ */
+
 /**
  * Implements hook_tourml_asset_properties()
  */
 function tap_tourml_asset_properties($item) {
+    if (!isset($item['filemime'])) return;
+
     list($type, $ext) = explode('/', $item['filemime']);
     switch($type) {
         case 'image':

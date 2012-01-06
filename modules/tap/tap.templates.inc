@@ -35,15 +35,24 @@ function tap_preprocess_file_tourml_xml(&$vars) {
  */
 
 function tap_preprocess_tap_tourml_asset(&$vars) {
-    $properties = array();
+    $properties         = array();
+    $vars['source']     = FALSE;
+    $vars['content']    = FALSE;
+
+    if (isset($vars['asset']['fid'])) {
+        $vars['path'] = file_create_url($vars['asset']['uri']);
+        $vars['source'] = TRUE; 
+    }
+
+    if (isset($vars['asset']['value'])) {
+        $vars['content'] = TRUE;
+    }
 
     foreach($vars['asset']['properties'] as $property) {
         $properties[] = theme('tap_tourml_property', $property);
     }
 
     $vars['properties'] = theme('tap_tourml_property_set', array('properties' => $properties));
-    $vars['path'] = file_create_url($vars['asset']['uri']);
-
 }
 
 function theme_tap_tourml_asset_file(&$vars)
@@ -52,6 +61,18 @@ function theme_tap_tourml_asset_file(&$vars)
 }
 
 function theme_tap_tourml_asset_image(&$vars) {
+    return theme('tap_tourml_asset_ref', $vars);
+}
+
+function theme_tap_tourml_asset_text(&$vars) {
+    return theme('tap_tourml_asset_ref', $vars);
+}
+
+function theme_tap_tourml_asset_text_long(&$vars) {
+    return theme('tap_tourml_asset_ref', $vars);
+}
+
+function theme_tap_tourml_asset_text_with_summary(&$vars) {
     return theme('tap_tourml_asset_ref', $vars);
 }
 
