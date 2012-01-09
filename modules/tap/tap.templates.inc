@@ -96,6 +96,10 @@ function theme_tap_tourml_asset_text_with_summary(&$vars) {
     return theme('tap_tourml_asset_ref', $vars);
 }
 
+function theme_tap_tourml_asset_geofield(&$vars) {
+    return theme('tap_tourml_asset_ref', $vars);
+}
+
 /********************************
  * Properties
  */

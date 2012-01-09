@@ -209,6 +209,7 @@ function tap_theme() {
         'tap_tourml_asset_text'                 => $properties,
         'tap_tourml_asset_text_long'            => $properties,
         'tap_tourml_asset_text_with_summary'    => $properties,
+        'tap_tourml_asset_geofield'             => $properties,
         /**
          * Connections
          */
