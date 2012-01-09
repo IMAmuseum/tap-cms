@@ -39,6 +39,8 @@ function tap_preprocess_tap_tourml_asset(&$vars) {
     $vars['source']     = FALSE;
     $vars['content']    = FALSE;
 
+
+    // Handle File fields
     if (isset($vars['asset']['fid'])) {
         // Media fields nest the file object inside of the asset.
         // So if we run into one we need to merge it into the 
@@ -50,8 +52,20 @@ function tap_preprocess_tap_tourml_asset(&$vars) {
         $vars['source'] = TRUE; 
     }
 
+    // Handle text fields
     if (isset($vars['asset']['value'])) {
         $vars['content'] = TRUE;
+    }
+
+    // Handle geofield fields
+    if (isset($vars['asset']['wkt'])) {
+        $vars['content'] = TRUE;
+        geofield_load_geophp();
+
+        $geometry = geoPHP::load($vars['asset']['wkt'], 'wkt');
+        if ($geometry) {
+            $vars['asset']['value'] = $geometry->out('json');
+        }
     }
 
     foreach($vars['asset']['properties'] as $property) {
