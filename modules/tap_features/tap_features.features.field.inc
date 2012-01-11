@@ -3262,7 +3262,7 @@ function tap_features_field_default_fields() {
         'settings' => array(
           'openlayers_map' => 'geofield_widget_map',
         ),
-        'type' => 'geofield_geojson',
+        'type' => 'geofield_openlayers',
         'weight' => '-3',
       ),
     ),
