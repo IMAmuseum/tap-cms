@@ -3194,7 +3194,7 @@ function tap_features_field_default_fields() {
           'summary_rows' => 5,
         ),
         'type' => 'text_textarea_with_summary',
-        'weight' => '-4',
+        'weight' => '2',
       ),
     ),
   );
@@ -3263,7 +3263,97 @@ function tap_features_field_default_fields() {
           'openlayers_map' => 'geofield_widget_map',
         ),
         'type' => 'geofield_openlayers',
-        'weight' => '-3',
+        'weight' => '3',
+      ),
+    ),
+  );
+
+  // Exported field: 'node-geo_stop-field_tour_reference'
+  $fields['node-geo_stop-field_tour_reference'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_tour_reference',
+      'foreign keys' => array(
+        'nid' => array(
+          'columns' => array(
+            'nid' => 'nid',
+          ),
+          'table' => 'node',
+        ),
+      ),
+      'indexes' => array(
+        'nid' => array(
+          0 => 'nid',
+        ),
+      ),
+      'module' => 'node_reference',
+      'settings' => array(
+        'referenceable_types' => array(
+          'article' => 0,
+          'geo_stop' => 0,
+          'page' => 0,
+          'test_stop' => 0,
+          'tour' => 'tour',
+          'tour_audio_stop' => 0,
+          'tour_image_stop' => 0,
+          'tour_stop_group' => 0,
+          'tour_video_stop' => 0,
+        ),
+        'view' => array(
+          'args' => array(),
+          'display_name' => '',
+          'view_name' => '',
+        ),
+      ),
+      'translatable' => '0',
+      'type' => 'node_reference',
+    ),
+    'field_instance' => array(
+      'bundle' => 'geo_stop',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'node_reference',
+          'settings' => array(),
+          'type' => 'node_reference_default',
+          'weight' => 2,
+        ),
+        'teaser' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'entity_type' => 'node',
+      'field_name' => 'field_tour_reference',
+      'label' => 'Tour Reference',
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(
+          'autocomplete_match' => 'contains',
+          'autocomplete_path' => 'node_reference/autocomplete',
+          'size' => '60',
+        ),
+        'type' => 'options_select',
+        'weight' => '1',
       ),
     ),
   );
@@ -3778,7 +3868,9 @@ function tap_features_field_default_fields() {
       'settings' => array(
         'referenceable_types' => array(
           'article' => 0,
+          'geo_stop' => 0,
           'page' => 0,
+          'test_stop' => 0,
           'tour' => 'tour',
           'tour_audio_stop' => 0,
           'tour_image_stop' => 0,
@@ -4107,7 +4199,9 @@ function tap_features_field_default_fields() {
       'settings' => array(
         'referenceable_types' => array(
           'article' => 0,
+          'geo_stop' => 0,
           'page' => 0,
+          'test_stop' => 0,
           'tour' => 'tour',
           'tour_audio_stop' => 0,
           'tour_image_stop' => 0,
@@ -4437,7 +4531,9 @@ function tap_features_field_default_fields() {
       'settings' => array(
         'referenceable_types' => array(
           'article' => 0,
+          'geo_stop' => 0,
           'page' => 0,
+          'test_stop' => 0,
           'tour' => 'tour',
           'tour_audio_stop' => 0,
           'tour_image_stop' => 0,
@@ -4675,7 +4771,9 @@ function tap_features_field_default_fields() {
       'settings' => array(
         'referenceable_types' => array(
           'article' => 0,
+          'geo_stop' => 0,
           'page' => 0,
+          'test_stop' => 0,
           'tour' => 'tour',
           'tour_audio_stop' => 0,
           'tour_image_stop' => 0,
