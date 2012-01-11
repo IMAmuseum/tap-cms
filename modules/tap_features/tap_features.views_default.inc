@@ -120,7 +120,7 @@ function tap_features_views_default_views() {
   $handler->display->display_options['fields']['nid']['empty_zero'] = 0;
   $handler->display->display_options['fields']['nid']['hide_alter_empty'] = 1;
   $handler->display->display_options['fields']['nid']['link_to_node'] = 0;
-  /* Field: Content: Title */
+  /* Field: Broken/missing handler */
   $handler->display->display_options['fields']['title_field']['id'] = 'title_field';
   $handler->display->display_options['fields']['title_field']['table'] = 'field_data_title_field';
   $handler->display->display_options['fields']['title_field']['field'] = 'title_field';
@@ -143,7 +143,6 @@ function tap_features_views_default_views() {
   $handler->display->display_options['fields']['title_field']['hide_empty'] = 0;
   $handler->display->display_options['fields']['title_field']['empty_zero'] = 0;
   $handler->display->display_options['fields']['title_field']['hide_alter_empty'] = 1;
-  $handler->display->display_options['fields']['title_field']['field_api_classes'] = 0;
   /* Field: Content: Code */
   $handler->display->display_options['fields']['field_code']['id'] = 'field_code';
   $handler->display->display_options['fields']['field_code']['table'] = 'field_data_field_code';
