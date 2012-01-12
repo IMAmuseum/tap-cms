@@ -400,6 +400,7 @@ function tap_block_contents($delta) {
         l('Image Stop', 'node/add/tour-image-stop', $options),
         l('Video Stop', 'node/add/tour-video-stop', $options),
         l('Audio Stop', 'node/add/tour-audio-stop', $options),
+        l('Geo Group', 'node/add/geo-stop', $options),
         l('Stop Group', 'node/add/tour-stop-group', $options),
       );
       return array('#markup' => theme('item_list', array('items' => $links)));
