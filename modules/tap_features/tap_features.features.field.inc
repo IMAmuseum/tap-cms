@@ -3203,7 +3203,7 @@ function tap_features_field_default_fields() {
   $fields['node-geo_stop-field_code'] = array(
     'field_config' => array(
       'active' => '1',
-      'cardinality' => '-1',
+      'cardinality' => '1',
       'deleted' => '0',
       'entity_types' => array(),
       'field_name' => 'field_code',
@@ -3749,7 +3749,7 @@ function tap_features_field_default_fields() {
   $fields['node-tour_audio_stop-field_code'] = array(
     'field_config' => array(
       'active' => '1',
-      'cardinality' => '-1',
+      'cardinality' => '1',
       'deleted' => '0',
       'entity_types' => array(),
       'field_name' => 'field_code',
@@ -4087,7 +4087,7 @@ function tap_features_field_default_fields() {
   $fields['node-tour_image_stop-field_code'] = array(
     'field_config' => array(
       'active' => '1',
-      'cardinality' => '-1',
+      'cardinality' => '1',
       'deleted' => '0',
       'entity_types' => array(),
       'field_name' => 'field_code',
@@ -4420,7 +4420,7 @@ function tap_features_field_default_fields() {
   $fields['node-tour_stop_group-field_code'] = array(
     'field_config' => array(
       'active' => '1',
-      'cardinality' => '-1',
+      'cardinality' => '1',
       'deleted' => '0',
       'entity_types' => array(),
       'field_name' => 'field_code',
@@ -4749,7 +4749,7 @@ function tap_features_field_default_fields() {
   $fields['node-tour_video_stop-field_code'] = array(
     'field_config' => array(
       'active' => '1',
-      'cardinality' => '-1',
+      'cardinality' => '1',
       'deleted' => '0',
       'entity_types' => array(),
       'field_name' => 'field_code',

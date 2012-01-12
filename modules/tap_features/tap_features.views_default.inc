@@ -120,29 +120,28 @@ function tap_features_views_default_views() {
   $handler->display->display_options['fields']['nid']['empty_zero'] = 0;
   $handler->display->display_options['fields']['nid']['hide_alter_empty'] = 1;
   $handler->display->display_options['fields']['nid']['link_to_node'] = 0;
-  /* Field: Broken/missing handler */
-  $handler->display->display_options['fields']['title_field']['id'] = 'title_field';
-  $handler->display->display_options['fields']['title_field']['table'] = 'field_data_title_field';
-  $handler->display->display_options['fields']['title_field']['field'] = 'title_field';
-  $handler->display->display_options['fields']['title_field']['label'] = '';
-  $handler->display->display_options['fields']['title_field']['alter']['alter_text'] = 0;
-  $handler->display->display_options['fields']['title_field']['alter']['make_link'] = 1;
-  $handler->display->display_options['fields']['title_field']['alter']['path'] = 'node/[nid]';
-  $handler->display->display_options['fields']['title_field']['alter']['absolute'] = 0;
-  $handler->display->display_options['fields']['title_field']['alter']['external'] = 0;
-  $handler->display->display_options['fields']['title_field']['alter']['replace_spaces'] = 0;
-  $handler->display->display_options['fields']['title_field']['alter']['trim_whitespace'] = 0;
-  $handler->display->display_options['fields']['title_field']['alter']['nl2br'] = 0;
-  $handler->display->display_options['fields']['title_field']['alter']['word_boundary'] = 1;
-  $handler->display->display_options['fields']['title_field']['alter']['ellipsis'] = 1;
-  $handler->display->display_options['fields']['title_field']['alter']['strip_tags'] = 0;
-  $handler->display->display_options['fields']['title_field']['alter']['trim'] = 0;
-  $handler->display->display_options['fields']['title_field']['alter']['html'] = 0;
-  $handler->display->display_options['fields']['title_field']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['title_field']['element_default_classes'] = 1;
-  $handler->display->display_options['fields']['title_field']['hide_empty'] = 0;
-  $handler->display->display_options['fields']['title_field']['empty_zero'] = 0;
-  $handler->display->display_options['fields']['title_field']['hide_alter_empty'] = 1;
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'node';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['title']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['title']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['title']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['title']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['title']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['title']['hide_alter_empty'] = 1;
+  $handler->display->display_options['fields']['title']['link_to_node'] = 1;
   /* Field: Content: Code */
   $handler->display->display_options['fields']['field_code']['id'] = 'field_code';
   $handler->display->display_options['fields']['field_code']['table'] = 'field_data_field_code';
@@ -236,6 +235,7 @@ function tap_features_views_default_views() {
   $handler->display->display_options['filters']['type']['field'] = 'type';
   $handler->display->display_options['filters']['type']['value'] = array(
     'tour_audio_stop' => 'tour_audio_stop',
+    'geo_stop' => 'geo_stop',
     'tour_image_stop' => 'tour_image_stop',
     'tour_stop_group' => 'tour_stop_group',
     'tour_video_stop' => 'tour_video_stop',
@@ -245,7 +245,7 @@ function tap_features_views_default_views() {
   $handler->display->display_options['filters']['type']['expose']['label'] = 'Stop Type';
   $handler->display->display_options['filters']['type']['expose']['operator'] = 'type_op';
   $handler->display->display_options['filters']['type']['expose']['identifier'] = 'type';
-  $handler->display->display_options['filters']['type']['expose']['reduce'] = 1;
+  $handler->display->display_options['filters']['type']['expose']['reduce'] = 0;
   /* Filter criterion: Content: Code (field_code) */
   $handler->display->display_options['filters']['field_code_value']['id'] = 'field_code_value';
   $handler->display->display_options['filters']['field_code_value']['table'] = 'field_data_field_code';
@@ -269,7 +269,7 @@ function tap_features_views_default_views() {
     t('- All -'),
     t('Offset'),
     t('Type'),
-    t('node/[nid]'),
+    t('Title'),
     t('Code'),
     t('Options'),
     t('delete'),
