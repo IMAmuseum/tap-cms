@@ -231,16 +231,23 @@ function tap_theme() {
  * Implements hook_tourml_asset_properties()
  */
 function tap_tourml_asset_properties($item) {
-    if (!isset($item['filemime'])) return;
+    // Handle Geofields
+    if (isset($item['wkt'])) {
+        return _tap_asset_geofield($item);
+    }
 
-    list($type, $ext) = explode('/', $item['filemime']);
-    switch($type) {
-        case 'image':
-            return _tap_asset_image($item);
-        case 'video':
-            return _tap_asset_video($item);
-        case 'audio':
-            return _tap_asset_audio($item);
+    // Handle file fields
+    if (isset($item['filemime'])) { 
+
+        list($type, $ext) = explode('/', $item['filemime']);
+        switch($type) {
+            case 'image':
+                return _tap_asset_image($item);
+            case 'video':
+                return _tap_asset_video($item);
+            case 'audio':
+                return _tap_asset_audio($item);
+        }
     }
 }
 
@@ -436,6 +443,28 @@ function tap_tourml_preview($node)
 {
     $tourml = tap_tourml_render($node);
     return '<pre class="brush: xml">' . htmlentities($tourml) . '</pre>';
+}
+
+/**
+ * Act on geofield assets
+ *
+ * @param $item
+ * The asset item to enact upon
+ * 
+ * @return Array
+ * Return an array of key/value properties to be rendered with the asset
+ */
+function _tap_asset_geofield($item) {
+    return array(
+        array(
+            'name'  => 'centroid',
+            'value' => $item['lat'] . ',' . $item['lon'],
+        ),
+        array(
+            'name'  => 'bbox',
+            'value' => $item['left'] . ',' . $item['right'] . ',' . $item['bottom'] . ',' . $item['top'],
+        ),
+    );
 }
 
 /**
