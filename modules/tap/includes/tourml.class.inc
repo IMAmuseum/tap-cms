@@ -66,7 +66,7 @@ class TourML {
     {
         global $language;
         foreach($this->assets as $k => $asset) {
-            $this->assets[$k] = theme('tap_tourml_asset', array('asset' => $asset, 'language' => $language->language));
+            $this->assets[$k]['rendered'] = theme('tap_tourml_asset', array('asset' => $asset, 'language' => $language->language));
         }
     }
 

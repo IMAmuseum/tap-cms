@@ -59,6 +59,19 @@ function tap_menu() {
         'type'              => MENU_CALLBACK,
     );
 
+    $items['admin/tap'] = array(
+        'title'             => t('Tap'),
+        'page callback'     => 'drupal_get_form',
+        'page arguments'    => array('tap_admin_form'),
+        'access arguments'  => array('administer tap'),
+        'file' => 'tap.admin.inc',
+    );
+
+    $items['admin/tap/settings'] = array(
+        'title' => 'Settings',
+        'type' => MENU_DEFAULT_LOCAL_TASK,
+    );
+
     return $items;
 }
 
@@ -415,11 +428,13 @@ function tap_block_contents($delta) {
 /**
  * @param $node
  * A node object
+ * @param $return_object
+ * If set to true the tourml object will be returned instead of a string
  *
  * @return
  * Returns a rendered TourML string
  */
-function tap_tourml_render($node)
+function tap_tourml_render($node, $return_object = FALSE)
 {
     module_load_include('inc', 'tap', 'includes/tourml.class');
 
@@ -431,7 +446,7 @@ function tap_tourml_render($node)
     $doc->preserveWhiteSpace = false;
     $doc->loadXML($tourml->getTourML());
 
-    return $doc->saveXML();
+    return ($return_object) ? $tourml : $doc->saveXML();
 }
 
 /**
@@ -555,6 +570,16 @@ function _tap_asset_audio($item) {
         ),
     );
 
+}
+
+function _zip_init($path, $flag = ZIPARCHIVE::CHECKCONS) {
+    $bundle = new ZipArchive();
+    if ($bundle->open($path, $flag) !== TRUE) {
+        drupal_set_message("Could not use file $path", 'error');
+        return FALSE;
+    }
+
+    return $bundle;
 }
 
 /**

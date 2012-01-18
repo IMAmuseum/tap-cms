@@ -18,7 +18,7 @@ function tap_preprocess_tap_tourml_tour(&$vars) {
     }
 
     foreach ($tour->assets as $asset) {
-        $vars['assets'] .= $asset;
+        $vars['assets'] .= $asset['rendered'];
     }
 
     foreach ($tour->connections as $connection) {
