@@ -7,10 +7,15 @@ class TourML {
     public $nid         = null;
     public $tour        = null;
     public $tourml      = null;
+    public $settings    = array();
 
-    public function __construct($nid)
+    public function __construct($nid, $settings)
     {
-        $this->nid = $nid;
+        $this->nid      = $nid;
+        $this->settings = $settings;
+        $this->settings += array(
+            'absolute'  => TRUE,
+        );
     }
     
     public function getTourML()
@@ -66,7 +71,7 @@ class TourML {
     {
         global $language;
         foreach($this->assets as $k => $asset) {
-            $this->assets[$k]['rendered'] = theme('tap_tourml_asset', array('asset' => $asset, 'language' => $language->language));
+            $this->assets[$k]['rendered'] = theme('tap_tourml_asset', array('asset' => $asset, 'language' => $language->language, 'absolute' => $this->settings['absolute']));
         }
     }
 

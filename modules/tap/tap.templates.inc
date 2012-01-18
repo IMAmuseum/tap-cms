@@ -48,7 +48,11 @@ function tap_preprocess_tap_tourml_asset(&$vars) {
         if (isset($vars['asset']['file'])) {
             $vars['asset'] = array_merge($vars['asset'], (array)$vars['asset']['file']);
         }
-        $vars['path'] = file_create_url($vars['asset']['uri']);
+        if ($vars['absolute']) {
+            $vars['path'] = file_create_url($vars['asset']['uri']);
+        } else {
+            list($schema, $vars['path']) = explode('://', $vars['asset']['uri']);
+        }
         $vars['source'] = TRUE; 
     }
 

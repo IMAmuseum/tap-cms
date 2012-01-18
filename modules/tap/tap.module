@@ -205,7 +205,9 @@ function tap_theme() {
          */
         'tap_tourml_asset' => array(
             'variables' => array(
-                'asset' => array(),
+                'asset'     => array(),
+                'language'  => '',
+                'absolute'  => TRUE,
             ),
             'file'  => 'tap.templates.inc',
             'template'  => 'templates/tap-tourml-asset',
@@ -428,17 +430,25 @@ function tap_block_contents($delta) {
 /**
  * @param $node
  * A node object
- * @param $return_object
- * If set to true the tourml object will be returned instead of a string
+ * @param $settings
+ *  return_object:
+ *    If set to true the tourml object will be returned instead of a string
+ *  absolute:
+ *    If FALSE assets will use relative paths
  *
  * @return
  * Returns a rendered TourML string
  */
-function tap_tourml_render($node, $return_object = FALSE)
+function tap_tourml_render($node, $settings = array())
 {
+    $settings += array(
+        'return_object' => FALSE,
+        'absolute'  => TRUE,
+    );
+
     module_load_include('inc', 'tap', 'includes/tourml.class');
 
-    $tourml = new TourML($node->nid);
+    $tourml = new TourML($node->nid, $settings);
 
     //pretty up the output
     $doc = new DOMDocument();
@@ -446,7 +456,7 @@ function tap_tourml_render($node, $return_object = FALSE)
     $doc->preserveWhiteSpace = false;
     $doc->loadXML($tourml->getTourML());
 
-    return ($return_object) ? $tourml : $doc->saveXML();
+    return ($settings['return_object']) ? $tourml : $doc->saveXML();
 }
 
 /**

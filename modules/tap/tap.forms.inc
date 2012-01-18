@@ -67,7 +67,11 @@ function tap_export_tourml_form_submit($form, &$form_state) {
         $bundle->addEmptyDir($bdir);
 
         // Add tourml document
-        $tourml         = tap_tourml_render($node, TRUE);
+        $settings = array(
+            'return_object' => TRUE,
+            'absolute'      => FALSE,
+        );
+        $tourml         = tap_tourml_render($node, $settings);
         $operations[]   = array('tap_export_bundle_string', array($path, $bdir, $tourml->getTourML()));
 
         // Add file assets
