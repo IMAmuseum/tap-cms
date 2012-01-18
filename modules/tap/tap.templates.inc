@@ -27,7 +27,6 @@ function tap_preprocess_tap_tourml_tour(&$vars) {
 }
 
 function tap_preprocess_file_tourml_xml(&$vars) {
-    //dpm($vars);
 }
 
 /********************************

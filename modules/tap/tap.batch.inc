@@ -64,7 +64,9 @@ function tap_export_bundle_tour_save($node, $file_path, &$context) {
         }
     } 
     catch(Exception $e) {
-        watchdog('tap', 'Error creating bundle: ' . basename($file_path), array(), WATCHDOG_ERROR);
+        $message = 'Error creating bundle: ' . basename($file_path);
+        watchdog('tap', $message, array(), WATCHDOG_ERROR);
+        drupal_set_message($message, 'error');
         $trans->rollback();
     }
 }
