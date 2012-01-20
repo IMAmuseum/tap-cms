@@ -137,6 +137,7 @@ class TourML {
                         }
                         $this->connections[] = drupal_render($field);
                         break;
+                    case 'tap_tourml_root_stop':
                     case 'tap_tourml_description':
                         $stop['items'][] = drupal_render($field);
                         break;

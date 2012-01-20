@@ -139,6 +139,13 @@ function tap_theme() {
             'file'  => 'tap.templates.inc',
             'template'  => 'templates/tap-tourml-tour',
         ),
+        'tap_tourml_root_stop_entityreference' => array(
+            'variables' => array(
+                'items' => array(),
+            ),
+            'file'      => 'tap.templates.inc',
+            'template'  => 'templates/tap-tourml-root-stop-entityreference',
+        ), 
         /**
          * Stop
          */
@@ -285,53 +292,47 @@ function tap_field_formatter_info() {
     $formatters = array(
         'tap_tourml_connection' => array(
             'label'         => t('TourML Connection'),
-            'field types'   => array(),
-            'module'        => 'tap',
+            'field types'   => array('entityreference'),
         ),
         'tap_tourml_property' => array(
             'label'         => t('TourML Property'),
             'field types'   => array(),
-            'module'        => 'tap',
         ),
         'tap_tourml_asset' => array(
             'label'         => t('TourML Asset'),
             'field types'   => array(),
-            'module'        => 'tap',
         ),
         'tap_tourml_title' => array(
             'label'         => t('TourML Title'),
             'field types'   => array('text', 'text_long', 'text_with_summary'),
-            'module'        => 'tap',
         ),
         'tap_tourml_description' => array(
             'label'         => t('TourML Description'),
             'field types'   => array('text', 'text_long', 'text_with_summary'),
-            'module'        => 'tap',
         ),
         'tap_tourml_copyright' => array(
             'label'         => t('TourML Copyright'),
             'field types'   => array('text', 'list_text', 'text_long', 'text_with_summary'),
-            'module'        => 'tap',
         ),
         'tap_tourml_credit_line' => array(
             'label'         => t('TourML Credit Line'),
             'field types'   => array('text', 'list_text', 'text_long', 'text_with_summary'),
-            'module'        => 'tap',
         ),
         'tap_tourml_machine_rights' => array(
             'label'         => t('TourML Machine Rights'),
             'field types'   => array('text', 'list_text', 'text_long', 'text_with_summary'),
-            'module'        => 'tap',
         ),
         'tap_tourml_expiration' => array(
             'label'         => t('TourML Expiration'),
             'field types'   => array('date', 'datestamp', 'datetime'),
-            'module'        => 'tap',
         ),
         'tap_tourml_watermark' => array(
             'label'         => t('TourML Watermark'),
-            'field types'   => array(),
-            'module'        => 'tap',
+            'field types'   => array('text', 'list_text', 'text_long', 'text_with_summary', 'file', 'entity', 'media'),
+        ),
+        'tap_tourml_root_stop' => array(
+            'label'         => t('TourML Root Stop'),
+            'field types'   => array('entityreference'),
         ),
     );
     return $formatters;
@@ -356,7 +357,10 @@ function tap_field_formatter_info_alter(&$info)
 
     foreach($usableFormatters as $name)
     {
-        $info[$name]['field types'] = $types;
+        // Make formatter available for all fields if an empty array is defined for field type
+        if (empty($info[$name]['field types'])) {
+            $info[$name]['field types'] = $types;
+        }
     }
 }
 
