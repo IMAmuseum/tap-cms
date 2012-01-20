@@ -11,11 +11,11 @@ function tap_features_views_default_views() {
   $export = array();
 
   $view = new view;
-  $view->name = 'tour_stop_groups';
+  $view->name = 'tour_stops';
   $view->description = 'Returns a list of stop groups per tour';
   $view->tag = 'default';
   $view->base_table = 'node';
-  $view->human_name = 'tour_stop_groups';
+  $view->human_name = 'Tour Stops';
   $view->core = 7;
   $view->api_version = '3.0';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
@@ -210,18 +210,17 @@ function tap_features_views_default_views() {
   $handler->display->display_options['sorts']['field_code_value']['id'] = 'field_code_value';
   $handler->display->display_options['sorts']['field_code_value']['table'] = 'field_data_field_code';
   $handler->display->display_options['sorts']['field_code_value']['field'] = 'field_code_value';
-  /* Contextual filter: Content: Tour Reference (field_tour_reference) */
-  $handler->display->display_options['arguments']['field_tour_reference_nid']['id'] = 'field_tour_reference_nid';
-  $handler->display->display_options['arguments']['field_tour_reference_nid']['table'] = 'field_data_field_tour_reference';
-  $handler->display->display_options['arguments']['field_tour_reference_nid']['field'] = 'field_tour_reference_nid';
-  $handler->display->display_options['arguments']['field_tour_reference_nid']['default_action'] = 'default';
-  $handler->display->display_options['arguments']['field_tour_reference_nid']['default_argument_type'] = 'node';
-  $handler->display->display_options['arguments']['field_tour_reference_nid']['default_argument_skip_url'] = 0;
-  $handler->display->display_options['arguments']['field_tour_reference_nid']['summary']['number_of_records'] = '0';
-  $handler->display->display_options['arguments']['field_tour_reference_nid']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['field_tour_reference_nid']['summary_options']['items_per_page'] = '25';
-  $handler->display->display_options['arguments']['field_tour_reference_nid']['break_phrase'] = 0;
-  $handler->display->display_options['arguments']['field_tour_reference_nid']['not'] = 0;
+  /* Contextual filter: Content: Tour (field_tour:target_id) */
+  $handler->display->display_options['arguments']['field_tour_target_id']['id'] = 'field_tour_target_id';
+  $handler->display->display_options['arguments']['field_tour_target_id']['table'] = 'field_data_field_tour';
+  $handler->display->display_options['arguments']['field_tour_target_id']['field'] = 'field_tour_target_id';
+  $handler->display->display_options['arguments']['field_tour_target_id']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['field_tour_target_id']['default_argument_skip_url'] = 0;
+  $handler->display->display_options['arguments']['field_tour_target_id']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['field_tour_target_id']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['field_tour_target_id']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['arguments']['field_tour_target_id']['break_phrase'] = 0;
+  $handler->display->display_options['arguments']['field_tour_target_id']['not'] = 0;
   /* Filter criterion: Content: Published */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
@@ -240,6 +239,7 @@ function tap_features_views_default_views() {
     'tour_stop_group' => 'tour_stop_group',
     'tour_video_stop' => 'tour_video_stop',
   );
+  $handler->display->display_options['filters']['type']['group'] = '0';
   $handler->display->display_options['filters']['type']['exposed'] = TRUE;
   $handler->display->display_options['filters']['type']['expose']['operator_id'] = 'type_op';
   $handler->display->display_options['filters']['type']['expose']['label'] = 'Stop Type';
@@ -257,7 +257,7 @@ function tap_features_views_default_views() {
   $handler->display->display_options['filters']['field_code_value']['expose']['identifier'] = 'field_code_value';
   $handler->display->display_options['filters']['field_code_value']['expose']['required'] = 0;
   $handler->display->display_options['filters']['field_code_value']['expose']['multiple'] = FALSE;
-  $translatables['tour_stop_groups'] = array(
+  $translatables['tour_stops'] = array(
     t('Master'),
     t('more'),
     t('Apply'),
@@ -276,7 +276,7 @@ function tap_features_views_default_views() {
     t('All'),
     t('Stop Type'),
   );
-  $export['tour_stop_groups'] = $view;
+  $export['tour_stops'] = $view;
 
   return $export;
 }
