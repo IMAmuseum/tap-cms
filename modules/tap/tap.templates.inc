@@ -237,11 +237,10 @@ function theme_tap_tourml_description_text_with_summary(&$vars) {
  * Connections
  */
 
-function tap_preprocess_tap_tourml_connection_node_reference(&$vars)
+function tap_preprocess_tap_tourml_connection_entityreference(&$vars)
 {
-    
     foreach($vars['items'] as $k => $v)
     {
-        $vars['items'][$k]['destId'] = $v['nid'];
+        $vars['items'][$k]['destId'] = $v['target_id'];
     }
 }

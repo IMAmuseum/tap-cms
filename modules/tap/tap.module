@@ -88,7 +88,15 @@ function tap_node_view($node, $view_mode, $lang) {
 
 function tap_node_view_full(&$node, $lang) {
     if ($node->type == 'tour') {
+        // Render export form
         $node->content['tourml'] = drupal_get_form('tap_export_tourml_form', $node);
+
+        // Render tour stops
+        $view = views_get_view('tour_stops');
+        $view->args[] = $node->nid;
+        $node->content['tour_stops'] = array(
+            '#markup'   => $view->render(),
+        );
     }
 }
 
@@ -228,12 +236,12 @@ function tap_theme() {
         /**
          * Connections
          */
-        'tap_tourml_connection_node_reference' => array(
+        'tap_tourml_connection_entityreference' => array(
             'variables' => array(
                 'items' => array(),
             ),
             'file'  => 'tap.templates.inc',
-            'template'  => 'templates/tap-tourml-connection-node-reference',
+            'template'  => 'templates/tap-tourml-connection-entityreference',
         ),
     );
 }
