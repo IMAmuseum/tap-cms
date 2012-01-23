@@ -84,11 +84,11 @@ class TourML {
 
     protected function processMetadata($node) {
         node_build_content($node, 'tourml_xml');
-        $stop           = array();
-        $stop['id']     = $node->nid;
-        $stop['items']  = array();
-        $properties     = array();
-        $hasTitleField  = false;
+        $stop               = array();
+        $stop['real_id']    = $node->nid;
+        $stop['items']      = array();
+        $properties         = array();
+        $hasTitleField      = false;
         
         // Loop thru renderable fields
         foreach(element_children($node->content) as $field_name) {

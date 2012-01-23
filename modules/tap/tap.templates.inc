@@ -27,14 +27,13 @@ function tap_preprocess_tap_tourml_tour(&$vars) {
 }
 
 function tap_preprocess_tap_tourml_root_stop_entityreference(&$vars) {
-    $vars['stop_id'] = $vars['items'][0]['target_id'];
+    $vars['real_id'] = $vars['items'][0]['target_id'];
 }
 
 /********************************
  * Stops
  */
 function tap_preprocess_tap_tourml_stop(&$vars) {
-    dpm($vars);
 }
 
 /********************************
