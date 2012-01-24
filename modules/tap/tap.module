@@ -53,10 +53,11 @@ function tap_menu() {
 
     $items['node/%node/tourml'] = array(
         'title'             => 'TourML',
-        'page callback'     => 'tap_tourml_render',
-        'page arguments'    => array(1),
+        'page callback'     => 'tap_export_tourml',
+        'page arguments'    => array(1, FALSE),
         'access arguments'  => array('access content'),
         'type'              => MENU_CALLBACK,
+        'file'              => 'tap.export.inc',
     );
 
     $items['admin/tap'] = array(

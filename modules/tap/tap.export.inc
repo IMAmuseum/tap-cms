@@ -5,13 +5,18 @@
  * Export a downloadable tourml file
  * @param unknown_type $node
  */
-function tap_export_tourml($node) {
+function tap_export_tourml($node, $download = TRUE) {
 	$title = _clean_file_text($node->title);
 
 	$tourml = tap_tourml_render($node);
+
     header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
     header('Content-Type: text/xml');
-    header('Content-Disposition: attachment; filename="' . $title . '.xml"');
+
+    if ($download) {
+        header('Content-Disposition: attachment; filename="' . $title . '.xml"');
+    }
+
     die(print $tourml);
 }
 
