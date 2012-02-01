@@ -67,19 +67,8 @@ function tap_preprocess_tap_tourml_asset(&$vars) {
         $vars['content'] = TRUE;
     }
 
-    // Handle geofield fields
-    if (isset($vars['asset']['wkt'])) {
-        $vars['content'] = TRUE;
-        geofield_load_geophp();
-
-        $geometry = geoPHP::load($vars['asset']['wkt'], 'wkt');
-        if ($geometry) {
-            $vars['asset']['value'] = $geometry->out('json');
-        }
-    }
-
-    foreach($vars['asset']['properties'] as $property) {
-        $properties[] = theme('tap_tourml_property', $property);
+    foreach($vars['asset']['properties'] as $name => $value) {
+        $properties[] = theme('tap_tourml_property', array('name' => $name, 'value' => $value));
     }
 
     $vars['properties'] = theme('tap_tourml_property_set', array('properties' => $properties));
@@ -103,10 +92,6 @@ function theme_tap_tourml_asset_text_long(&$vars) {
 }
 
 function theme_tap_tourml_asset_text_with_summary(&$vars) {
-    return theme('tap_tourml_asset_ref', $vars);
-}
-
-function theme_tap_tourml_asset_geofield(&$vars) {
     return theme('tap_tourml_asset_ref', $vars);
 }
 

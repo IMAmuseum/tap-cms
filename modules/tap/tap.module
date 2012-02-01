@@ -241,7 +241,6 @@ function tap_theme() {
         'tap_tourml_asset_text'                 => $properties,
         'tap_tourml_asset_text_long'            => $properties,
         'tap_tourml_asset_text_with_summary'    => $properties,
-        'tap_tourml_asset_geofield'             => $properties,
         /**
          * Connections
          */
@@ -263,11 +262,6 @@ function tap_theme() {
  * Implements hook_tourml_asset_properties()
  */
 function tap_tourml_asset_properties($item) {
-    // Handle Geofields
-    if (isset($item['wkt'])) {
-        return _tap_asset_geofield($item);
-    }
-
     // Handle file fields
     if (isset($item['filemime'])) {
 
@@ -486,28 +480,6 @@ function tap_tourml_preview($node)
 }
 
 /**
- * Act on geofield assets
- *
- * @param $item
- * The asset item to enact upon
- *
- * @return Array
- * Return an array of key/value properties to be rendered with the asset
- */
-function _tap_asset_geofield($item) {
-    return array(
-        array(
-            'name'  => 'centroid',
-            'value' => $item['lat'] . ',' . $item['lon'],
-        ),
-        array(
-            'name'  => 'bbox',
-            'value' => $item['left'] . ',' . $item['right'] . ',' . $item['bottom'] . ',' . $item['top'],
-        ),
-    );
-}
-
-/**
  * Act on image assets
  *
  * @param $item
@@ -520,14 +492,8 @@ function _tap_asset_image($item) {
     $path = drupal_realpath($item['uri']);
     $attr = image_get_info($path);
     return array(
-        array(
-            'name'  => 'width',
-            'value' => $attr['width'],
-        ),
-        array(
-            'name'  => 'height',
-            'value' => $attr['height'],
-        ),
+        'width'     => $attr['width'],
+        'height'    => $attr['height'],
     );
 }
 
@@ -546,26 +512,11 @@ function _tap_asset_video($item) {
     $path = drupal_realpath($item['uri']);
     $movie = new ffmpeg_movie($path);
     return array(
-        array(
-            'name'  => 'duration',
-            'value' => duration($movie->getDuration()),
-        ),
-        array(
-            'name'  => 'width',
-            'value' => $movie->getFrameWidth(),
-        ),
-        array(
-            'name'  => 'height',
-            'value' => $movie->getFrameHeight(),
-        ),
-        array(
-            'name'  => 'video_codec',
-            'value' => $movie->getVideoCodec(),
-        ),
-        array(
-            'name'  => 'audio_codec',
-            'value' => $movie->getAudioCodec(),
-        ),
+        'duration'      => duration($movie->getDuration()),
+        'width'         => $movie->getFrameWidth(),
+        'height'        => $movie->getFrameHeight(),
+        'video_codec'   => $movie->getVideoCodec(),
+        'audio_codec'   => $movie->getAudioCodec(),
     );
 }
 
@@ -584,14 +535,8 @@ function _tap_asset_audio($item) {
     $path = drupal_realpath($item['uri']);
     $audio = new ffmpeg_movie($path);
     return array(
-        array(
-            'name'  => 'duration',
-            'value' => duration($audio->getDuration()),
-        ),
-        array(
-            'name'  => 'audio_codec',
-            'value' => $audio->getAudioCodec(),
-        ),
+        'duration'      => duration($audio->getDuration()),
+        'audio_codec'   => $audio->getAudioCodec(),
     );
 
 }

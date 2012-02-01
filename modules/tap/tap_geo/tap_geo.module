@@ -5,3 +5,72 @@
  */
 
 include_once('tap_geo.features.inc');
+
+/**
+ * Implements hook_theme()
+ *
+ * To implement TourML for a new field a theme function
+ * needs defined in the following format 
+ * tap_tourml_ELEMENTTYPE_FIELDTYPE.  The follow example
+ * renders a type of "geofield" as an asset
+ */
+function tap_geo_theme() {
+    return array(
+        'tap_tourml_asset_geofield' => array(
+            'variables' => array(
+                'items' => array(),
+            ),
+        ),
+    );
+}
+
+/**
+ * In the case of assets the theme function only
+ * needs to be a wrapper for theme_tap_tourml_asset_ref
+ * This is because assets will be rendered else where.
+ * The stop only needs to render a reference back to 
+ * the asset
+ */
+function theme_tap_tourml_asset_geofield(&$vars) {
+    return theme('tap_tourml_asset_ref', $vars);
+}
+
+/**
+ * Implements hook_tourml_asset()
+ *
+ * Use this hook to render assets.  The geofield
+ * module stores its data in $asset['wkt'] so
+ * we can check against this value to determine
+ * that we have a geofield, and act upon it.
+ */
+function tap_geo_tourml_asset($asset) {
+    // Handle geofield fields
+    if (isset($asset['wkt'])) {
+        geofield_load_geophp();
+
+        $geometry = geoPHP::load($asset['wkt'], 'wkt');
+        if ($geometry) {
+            $asset['value'] = $geometry->out('json');
+        }
+    }
+
+    return $asset;
+}
+
+/**
+ * Implements hook_tourml_asset_properties()
+ *
+ * Use this hook to define properties on an asset
+ *
+ * @return an array of data with a key value pair
+ * of properties
+ */
+function tap_geo_tourml_asset_properties($item) {
+    // Handle Geofields
+    if (isset($item['wkt'])) {
+        return array(
+            'centroid' => $item['lat'] . ',' . $item['lon'],
+            'bbox' => $item['left'] . ',' . $item['right'] . ',' . $item['bottom'] . ',' . $item['top'],
+        );
+    }
+}

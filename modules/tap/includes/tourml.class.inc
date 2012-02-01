@@ -72,6 +72,7 @@ class TourML {
     {
         global $language;
         foreach($this->assets as $k => $asset) {
+            $asset = module_invoke_all('tourml_asset', $asset);
             $this->assets[$k]['rendered'] = theme('tap_tourml_asset', array('asset' => $asset, 'language' => $language->language, 'absolute' => $this->settings['absolute']));
         }
     }
