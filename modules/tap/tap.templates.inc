@@ -27,7 +27,7 @@ function tap_preprocess_tap_tourml_tour(&$vars) {
 }
 
 function tap_preprocess_tap_tourml_root_stop_entityreference(&$vars) {
-    $vars['real_id'] = $vars['items'][0]['target_id'];
+    $vars['real_id'] = isset($vars['items'][0]['target_id']) ? $vars['items'][0]['target_id'] : '';
 }
 
 /********************************
