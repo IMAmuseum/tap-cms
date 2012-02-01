@@ -3109,312 +3109,6 @@ function tap_features_field_default_fields() {
     ),
   );
 
-  // Exported field: 'node-geo_stop-body'
-  $fields['node-geo_stop-body'] = array(
-    'field_config' => array(
-      'active' => '1',
-      'cardinality' => '1',
-      'deleted' => '0',
-      'entity_types' => array(
-        0 => 'node',
-      ),
-      'field_name' => 'body',
-      'foreign keys' => array(
-        'format' => array(
-          'columns' => array(
-            'format' => 'format',
-          ),
-          'table' => 'filter_format',
-        ),
-      ),
-      'indexes' => array(
-        'format' => array(
-          0 => 'format',
-        ),
-      ),
-      'module' => 'text',
-      'settings' => array(),
-      'translatable' => '0',
-      'type' => 'text_with_summary',
-    ),
-    'field_instance' => array(
-      'bundle' => 'geo_stop',
-      'default_value' => NULL,
-      'deleted' => '0',
-      'description' => '',
-      'display' => array(
-        'default' => array(
-          'label' => 'hidden',
-          'module' => 'text',
-          'settings' => array(),
-          'type' => 'text_default',
-          'weight' => '0',
-        ),
-        'teaser' => array(
-          'label' => 'hidden',
-          'module' => 'text',
-          'settings' => array(
-            'trim_length' => 600,
-          ),
-          'type' => 'text_summary_or_trimmed',
-          'weight' => 0,
-        ),
-        'tourml_xml' => array(
-          'label' => 'above',
-          'module' => 'tap',
-          'settings' => array(),
-          'type' => 'tap_tourml_description',
-          'weight' => '0',
-        ),
-      ),
-      'entity_type' => 'node',
-      'field_name' => 'body',
-      'label' => 'Body',
-      'required' => FALSE,
-      'settings' => array(
-        'display_summary' => TRUE,
-        'text_processing' => 1,
-        'user_register_form' => FALSE,
-      ),
-      'widget' => array(
-        'module' => 'text',
-        'settings' => array(
-          'rows' => 20,
-          'summary_rows' => 5,
-        ),
-        'type' => 'text_textarea_with_summary',
-        'weight' => '3',
-      ),
-    ),
-  );
-
-  // Exported field: 'node-geo_stop-field_code'
-  $fields['node-geo_stop-field_code'] = array(
-    'field_config' => array(
-      'active' => '1',
-      'cardinality' => '1',
-      'deleted' => '0',
-      'entity_types' => array(),
-      'field_name' => 'field_code',
-      'foreign keys' => array(
-        'format' => array(
-          'columns' => array(
-            'format' => 'format',
-          ),
-          'table' => 'filter_format',
-        ),
-      ),
-      'indexes' => array(
-        'format' => array(
-          0 => 'format',
-        ),
-      ),
-      'module' => 'text',
-      'settings' => array(
-        'max_length' => '255',
-      ),
-      'translatable' => '0',
-      'type' => 'text',
-    ),
-    'field_instance' => array(
-      'bundle' => 'geo_stop',
-      'default_value' => NULL,
-      'deleted' => '0',
-      'description' => '',
-      'display' => array(
-        'default' => array(
-          'label' => 'above',
-          'module' => 'text',
-          'settings' => array(),
-          'type' => 'text_default',
-          'weight' => 3,
-        ),
-        'teaser' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'tourml_xml' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-      ),
-      'entity_type' => 'node',
-      'field_name' => 'field_code',
-      'label' => 'Code',
-      'required' => 0,
-      'settings' => array(
-        'text_processing' => '0',
-        'user_register_form' => FALSE,
-      ),
-      'widget' => array(
-        'active' => 1,
-        'module' => 'text',
-        'settings' => array(
-          'size' => '60',
-        ),
-        'type' => 'text_textfield',
-        'weight' => '2',
-      ),
-    ),
-  );
-
-  // Exported field: 'node-geo_stop-field_geo'
-  $fields['node-geo_stop-field_geo'] = array(
-    'field_config' => array(
-      'active' => '1',
-      'cardinality' => '-1',
-      'deleted' => '0',
-      'entity_types' => array(),
-      'field_name' => 'field_geo',
-      'foreign keys' => array(),
-      'indexes' => array(),
-      'module' => 'geofield',
-      'settings' => array(),
-      'translatable' => '0',
-      'type' => 'geofield',
-    ),
-    'field_instance' => array(
-      'bundle' => 'geo_stop',
-      'default_value' => NULL,
-      'deleted' => '0',
-      'description' => '',
-      'display' => array(
-        'default' => array(
-          'label' => 'above',
-          'module' => 'geofield',
-          'settings' => array(
-            'data' => '',
-            'map_preset' => '',
-          ),
-          'type' => 'geofield_openlayers',
-          'weight' => '1',
-        ),
-        'teaser' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'tourml_xml' => array(
-          'label' => 'above',
-          'module' => 'tap',
-          'settings' => array(),
-          'type' => 'tap_tourml_asset',
-          'weight' => '0',
-        ),
-      ),
-      'entity_type' => 'node',
-      'field_name' => 'field_geo',
-      'label' => 'Geo Field',
-      'required' => 0,
-      'settings' => array(
-        'local_solr' => array(
-          'enabled' => FALSE,
-          'lat_field' => 'lat',
-          'lng_field' => 'lng',
-        ),
-        'user_register_form' => FALSE,
-      ),
-      'widget' => array(
-        'active' => 1,
-        'module' => 'geofield',
-        'settings' => array(
-          'openlayers_map' => 'geofield_widget_map',
-        ),
-        'type' => 'geofield_openlayers',
-        'weight' => '4',
-      ),
-    ),
-  );
-
-  // Exported field: 'node-geo_stop-field_tour'
-  $fields['node-geo_stop-field_tour'] = array(
-    'field_config' => array(
-      'active' => '1',
-      'cardinality' => '1',
-      'deleted' => '0',
-      'entity_types' => array(),
-      'field_name' => 'field_tour',
-      'foreign keys' => array(),
-      'indexes' => array(
-        'target_entity' => array(
-          0 => 'target_type',
-          1 => 'target_id',
-        ),
-      ),
-      'module' => 'entityreference',
-      'settings' => array(
-        'handler' => 'base',
-        'handler_settings' => array(
-          'sort' => array(
-            'direction' => 'ASC',
-            'field' => 'body:value',
-            'property' => 'title',
-            'type' => 'property',
-          ),
-          'target_bundles' => array(
-            'tour' => 'tour',
-          ),
-        ),
-        'handler_submit' => 'Change handler',
-        'target_type' => 'node',
-      ),
-      'translatable' => '0',
-      'type' => 'entityreference',
-    ),
-    'field_instance' => array(
-      'bundle' => 'geo_stop',
-      'default_value' => NULL,
-      'deleted' => '0',
-      'description' => '',
-      'display' => array(
-        'default' => array(
-          'label' => 'above',
-          'module' => 'entityreference',
-          'settings' => array(
-            'link' => FALSE,
-          ),
-          'type' => 'entityreference_label',
-          'weight' => 4,
-        ),
-        'teaser' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'tourml_xml' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-      ),
-      'entity_type' => 'node',
-      'field_name' => 'field_tour',
-      'label' => 'Tour',
-      'required' => 0,
-      'settings' => array(
-        'user_register_form' => FALSE,
-      ),
-      'widget' => array(
-        'active' => 1,
-        'module' => 'options',
-        'settings' => array(
-          'match_operator' => 'CONTAINS',
-          'path' => '',
-          'size' => '60',
-        ),
-        'type' => 'options_select',
-        'weight' => '1',
-      ),
-    ),
-  );
-
   // Exported field: 'node-tour-body'
   $fields['node-tour-body'] = array(
     'field_config' => array(
@@ -3573,7 +3267,7 @@ function tap_features_field_default_fields() {
           'size' => '60',
         ),
         'type' => 'entityreference_autocomplete',
-        'weight' => '2',
+        'weight' => '3',
       ),
     ),
   );
@@ -3709,9 +3403,9 @@ function tap_features_field_default_fields() {
         ),
         'tourml_xml' => array(
           'label' => 'above',
-          'module' => 'text',
+          'module' => 'tap',
           'settings' => array(),
-          'type' => 'text_default',
+          'type' => 'tap_tourml_description',
           'weight' => '0',
         ),
       ),
@@ -3871,7 +3565,7 @@ function tap_features_field_default_fields() {
           'label' => 'above',
           'settings' => array(),
           'type' => 'hidden',
-          'weight' => 0,
+          'weight' => '0',
         ),
       ),
       'entity_type' => 'node',
@@ -4369,9 +4063,9 @@ function tap_features_field_default_fields() {
         ),
         'tourml_xml' => array(
           'label' => 'above',
-          'module' => 'text',
+          'module' => 'tap',
           'settings' => array(),
-          'type' => 'text_default',
+          'type' => 'tap_tourml_description',
           'weight' => '0',
         ),
       ),
@@ -4690,9 +4384,9 @@ function tap_features_field_default_fields() {
         ),
         'tourml_xml' => array(
           'label' => 'above',
-          'module' => 'text',
+          'module' => 'tap',
           'settings' => array(),
-          'type' => 'text_default',
+          'type' => 'tap_tourml_description',
           'weight' => '0',
         ),
       ),
@@ -4852,7 +4546,7 @@ function tap_features_field_default_fields() {
           'label' => 'above',
           'settings' => array(),
           'type' => 'hidden',
-          'weight' => 0,
+          'weight' => '0',
         ),
       ),
       'entity_type' => 'node',
@@ -4980,7 +4674,6 @@ function tap_features_field_default_fields() {
   t('Credit Line');
   t('Description');
   t('Expiration');
-  t('Geo Field');
   t('Image');
   t('Machine Rights');
   t('Root Stop');

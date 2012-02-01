@@ -19,14 +19,6 @@ function tap_features_views_api() {
  */
 function tap_features_node_info() {
   $items = array(
-    'geo_stop' => array(
-      'name' => t('Geo Stop'),
-      'base' => 'node_content',
-      'description' => '',
-      'has_title' => '1',
-      'title_label' => t('Title'),
-      'help' => '',
-    ),
     'tour' => array(
       'name' => t('Tour'),
       'base' => 'node_content',
