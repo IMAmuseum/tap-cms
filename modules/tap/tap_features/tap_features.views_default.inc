@@ -246,7 +246,7 @@ function tap_features_views_default_views() {
   $handler->display->display_options['filters']['type']['expose']['label'] = 'Stop Type';
   $handler->display->display_options['filters']['type']['expose']['operator'] = 'type_op';
   $handler->display->display_options['filters']['type']['expose']['identifier'] = 'type';
-  $handler->display->display_options['filters']['type']['expose']['reduce'] = 0;
+  $handler->display->display_options['filters']['type']['expose']['reduce'] = 1;
   /* Filter criterion: Content: Code (field_code) */
   $handler->display->display_options['filters']['field_code_value']['id'] = 'field_code_value';
   $handler->display->display_options['filters']['field_code_value']['table'] = 'field_data_field_code';
