@@ -5,19 +5,15 @@ api = 2
 projects[drupal][version] = "7.x"
 
 ; Modules
-projects[admin_menu][version] = "3.0-rc1"
-
 projects[ctools][version] = "1.0-rc1"
 
-projects[date][version] = "2.0-rc1"
-
-projects[devel][version] = "1.2"
+projects[date][version] = "2.1"
 
 projects[entity][version] = "1.0-rc1"
 
 projects[entity_translation][version] = "1.0-alpha1"
 
-projects[entityreference][version] = "1.0-beta3"
+projects[entityreference][version] = "1.0-beta4"
 
 projects[features][version] = "1.0-beta6"
 
@@ -25,9 +21,11 @@ projects[file_entity][version] = "2.0-unstable3"
 
 projects[styles][version] = "2.0-alpha8"
 
-projects[geofield][version] = "1.0-beta2"
+projects[geofield][version] = "1.0-rc1"
 
 ; Libraries
+; Please fill the following out. Type may be one of get, git, bzr or svn,
+; and url is the url of the download.
 libraries[jplayer][download][type] = "get"
 libraries[jplayer][download][url] = "http://jplayer.org/latest/jQuery.jPlayer.2.1.0.zip"
 libraries[jplayer][directory_name] = "jplayer"
@@ -40,33 +38,27 @@ projects[media][version] = "1.0-rc3"
 
 projects[media_flickr][version] = "1.0-alpha1"
 
-projects[media_youtube][version] = "1.0-alpha5"
-
-projects[references][version] = "2.0-beta3"
+projects[media_youtube][version] = "1.0-beta2"
 
 projects[openlayers][version] = "2.0-beta1"
 
-projects[syntaxhighlighter][version] = "2.x-dev"
-
 projects[title][version] = "1.0-alpha2"
 
-projects[token][version] = "1.0-beta7"
+projects[token][version] = "1.0-rc1"
 
 projects[transliteration][version] = "3.0"
 
-projects[viewfield][version] = "2.x-dev"
+projects[views][version] = "3.3"
 
-projects[views][version] = "3.1"
-
-projects[wysiwyg][version] = "2.1"
-
-projects[tap-cms][download][type] = "get"
-projects[tap-cms][download][url] = "https://github.com/IMAmuseum/tap-cms/tarball/v2.0-alpha1"
 projects[tap-cms][type] = "module"
+projects[tap-cms][download][type] = "git"
+projects[tap-cms][download][url] = "git://github.com/IMAmuseum/tap-cms.git"
+projects[tap-cms][download][revision] = "83891eb9f1b176f9a9eb3d085291ba7e5f5c55cb"
 
-; Please fill the following out. Type may be one of get, git, bzr or svn,
-; and url is the url of the download.
+; Libraries
 libraries[ckeditor][download][type] = "get"
 libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%203.6.2/ckeditor_3.6.2.tar.gz"
 libraries[ckeditor][directory_name] = "ckeditor"
 libraries[ckeditor][type] = "library"
+
+
