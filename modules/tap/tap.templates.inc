@@ -67,8 +67,12 @@ function tap_preprocess_tap_tourml_asset(&$vars) {
         $vars['content'] = TRUE;
     }
 
-    foreach($vars['asset']['properties'] as $name => $value) {
-        $properties[] = theme('tap_tourml_property', array('name' => $name, 'value' => $value));
+    if (array_key_exists('properties', $vars['asset'])) {
+      if (is_array($vars['asset']['properties'])) {
+        foreach($vars['asset']['properties'] as $name => $value) {
+          $properties[] = theme('tap_tourml_property', array('name' => $name, 'value' => $value));
+        }
+      }
     }
 
     $vars['properties'] = theme('tap_tourml_property_set', array('properties' => $properties));

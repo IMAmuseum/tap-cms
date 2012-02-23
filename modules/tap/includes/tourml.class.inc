@@ -78,7 +78,7 @@ class TourML {
     }
 
     protected function processStop(&$node) {
-        $stop = $this->processMetadata($node);
+	    $stop = $this->processMetadata($node);
         //Render the stop
         $this->stops[] = theme('tap_tourml_stop', $stop); 
     }
