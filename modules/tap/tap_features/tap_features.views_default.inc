@@ -121,7 +121,7 @@ function tap_features_views_default_views() {
   $handler->display->display_options['fields']['nid']['empty_zero'] = 0;
   $handler->display->display_options['fields']['nid']['hide_alter_empty'] = 1;
   $handler->display->display_options['fields']['nid']['link_to_node'] = 0;
-  /* Field: Content: Title */
+  /* Field: Broken/missing handler */
   $handler->display->display_options['fields']['title_field']['id'] = 'title_field';
   $handler->display->display_options['fields']['title_field']['table'] = 'field_data_title_field';
   $handler->display->display_options['fields']['title_field']['field'] = 'title_field';
@@ -143,7 +143,6 @@ function tap_features_views_default_views() {
   $handler->display->display_options['fields']['title_field']['hide_empty'] = 0;
   $handler->display->display_options['fields']['title_field']['empty_zero'] = 0;
   $handler->display->display_options['fields']['title_field']['hide_alter_empty'] = 1;
-  $handler->display->display_options['fields']['title_field']['field_api_classes'] = 0;
   /* Field: Content: Code */
   $handler->display->display_options['fields']['field_code']['id'] = 'field_code';
   $handler->display->display_options['fields']['field_code']['table'] = 'field_data_field_code';
@@ -166,7 +165,7 @@ function tap_features_views_default_views() {
   $handler->display->display_options['fields']['field_code']['empty_zero'] = 0;
   $handler->display->display_options['fields']['field_code']['hide_alter_empty'] = 1;
   $handler->display->display_options['fields']['field_code']['field_api_classes'] = 0;
-  /* Field: Content: Edit link */
+  /* Field: Node: Edit link */
   $handler->display->display_options['fields']['edit_node']['id'] = 'edit_node';
   $handler->display->display_options['fields']['edit_node']['table'] = 'views_entity_node';
   $handler->display->display_options['fields']['edit_node']['field'] = 'edit_node';
@@ -187,7 +186,7 @@ function tap_features_views_default_views() {
   $handler->display->display_options['fields']['edit_node']['hide_empty'] = 0;
   $handler->display->display_options['fields']['edit_node']['empty_zero'] = 0;
   $handler->display->display_options['fields']['edit_node']['hide_alter_empty'] = 1;
-  /* Field: Content: Delete link */
+  /* Field: Node: Delete link */
   $handler->display->display_options['fields']['delete_node']['id'] = 'delete_node';
   $handler->display->display_options['fields']['delete_node']['table'] = 'views_entity_node';
   $handler->display->display_options['fields']['delete_node']['field'] = 'delete_node';
@@ -229,7 +228,6 @@ function tap_features_views_default_views() {
   $handler->display->display_options['fields']['field_tour']['hide_empty'] = 0;
   $handler->display->display_options['fields']['field_tour']['empty_zero'] = 0;
   $handler->display->display_options['fields']['field_tour']['hide_alter_empty'] = 1;
-  $handler->display->display_options['fields']['field_tour']['click_sort_column'] = 'target_id';
   $handler->display->display_options['fields']['field_tour']['settings'] = array(
     'link' => 1,
   );
@@ -238,7 +236,7 @@ function tap_features_views_default_views() {
   $handler->display->display_options['sorts']['field_code_value']['id'] = 'field_code_value';
   $handler->display->display_options['sorts']['field_code_value']['table'] = 'field_data_field_code';
   $handler->display->display_options['sorts']['field_code_value']['field'] = 'field_code_value';
-  /* Contextual filter: Content: Tour (field_tour:target_id) */
+  /* Contextual filter: Content: Tour (field_tour) */
   $handler->display->display_options['arguments']['field_tour_target_id']['id'] = 'field_tour_target_id';
   $handler->display->display_options['arguments']['field_tour_target_id']['table'] = 'field_data_field_tour';
   $handler->display->display_options['arguments']['field_tour_target_id']['field'] = 'field_tour_target_id';
@@ -297,7 +295,7 @@ function tap_features_views_default_views() {
     t('- All -'),
     t('Offset'),
     t('Type'),
-    t('Title'),
+    t('Broken handler field_data_title_field.title_field'),
     t('node/[nid]'),
     t('Code'),
     t('Options'),
