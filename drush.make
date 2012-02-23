@@ -50,6 +50,8 @@ projects[transliteration][version] = "3.0"
 
 projects[views][version] = "3.3"
 
+projects[jplayer][version] = "7.x-2.x-dev"
+
 projects[tap-cms][type] = "module"
 projects[tap-cms][download][type] = "git"
 projects[tap-cms][download][url] = "git://github.com/IMAmuseum/tap-cms.git"
