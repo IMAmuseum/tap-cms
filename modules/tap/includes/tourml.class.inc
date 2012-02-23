@@ -88,6 +88,7 @@ class TourML {
         $stop               = array();
         $stop['real_id']    = $node->nid;
         $stop['items']      = array();
+        $stop['view']		= $node->type;
         $properties         = array();
         $hasTitleField      = false;
         
