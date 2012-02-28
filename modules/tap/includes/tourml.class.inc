@@ -41,7 +41,7 @@ class TourML {
             // Find all referenced nodes to this tour
             $results = db_select('field_data_field_tour', 'ref')
                 ->fields('ref', array('entity_id'))
-                ->condition('field_tour_target_type', 'node')
+                ->condition('entity_type', 'node')
                 ->condition('field_tour_target_id', $node->nid)
                 ->execute()
                 ->fetchAll();
