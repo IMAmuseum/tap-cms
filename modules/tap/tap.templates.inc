@@ -57,7 +57,11 @@ function tap_preprocess_tap_tourml_asset(&$vars) {
         if ($vars['absolute']) {
             $vars['path'] = file_create_url($vars['asset']['uri']);
         } else {
-            list($schema, $vars['path']) = explode('://', $vars['asset']['uri']);
+        	$file_path = array_pop(explode('/', $vars['asset']['uri']));
+        	if(!empty($vars['base_path'])) {
+	        	$file_path = $vars['base_path'] . '/' . $file_path;	
+        	}
+			$vars['path'] = $file_path;
         }
         $vars['source'] = TRUE; 
     }
@@ -239,4 +243,10 @@ function tap_preprocess_tap_tourml_connection_entityreference(&$vars)
     {
         $vars['items'][$k]['destId'] = $v['target_id'];
     }
+}
+
+/********************************
+ * iOS plist file
+ */
+function tap_preprocess_ios_tourml_xml(&$vars){
 }

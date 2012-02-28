@@ -42,7 +42,31 @@ function tap_permission() {
  * Implements hook_menu()
  */
 function tap_menu() {
-
+    $items['admin/content/tourml-export'] = array(
+        'title'             => 'TourML Export',
+        'page callback'     => 'drupal_get_form',
+        'page arguments'    => array('tap_tourml_export_form'),
+        'access arguments'  => array('administer tap'),
+        'type'              => MENU_LOCAL_TASK,
+        'file'              => 'tap.export.inc',
+    );
+	
+    $items['admin/content/%/tourml-export'] = array(
+        'title'             => 'TourML Export',
+        'page callback'     => 'drupal_get_form',
+        'page arguments'    => array('tap_tourml_export_form', 2),
+        'access arguments'  => array('administer tap'),
+        'type'              => MENU_CALLBACK,
+        'file'              => 'tap.export.inc',
+    );	
+	
+    $items['admin/content/tourml-export/autocomplete'] = array(
+        'page callback'     => 'tap_export_entity_autocomplete',
+        'access arguments'  => array('administer tap'),
+        'type'              => MENU_CALLBACK,
+        'file'              => 'tap.export.inc',
+    );	
+    
     $items['node/%node/tourml_xml'] = array(
         'title'             => 'TourML XML',
         'page callback'     => 'tap_tourml_preview',
@@ -225,6 +249,7 @@ function tap_theme() {
                 'asset'     => array(),
                 'language'  => '',
                 'absolute'  => TRUE,
+                'base_path' => '',
             ),
             'file'  => 'tap.templates.inc',
             'template'  => 'templates/tap-tourml-asset',
@@ -251,6 +276,17 @@ function tap_theme() {
             'file'  => 'tap.templates.inc',
             'template'  => 'templates/tap-tourml-connection-entityreference',
         ),
+        /**
+		 * iOS plist
+		 */
+        'ios_plist_xml' => array(
+			'variables' => array(
+				'bundle_name' => '',
+				'bundle_id' => '',
+			),
+			'file' => 'tap.templates.inc',
+			'template' => 'templates/ios-plist-xml',
+		),
     );
 }
 
