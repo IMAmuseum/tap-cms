@@ -6,8 +6,9 @@
 	xmlns:gml="http://www.opengis.net/gml"
 	xsi:schemaLocation="http://www.imamuseum.org/TourML/2011/11 TourML.xsd"
 	tourml:id="tour-<?php print $tour->tour['real_id']; ?>">
-
+<tourml:TourMetadata>
 <?php print $metadata; ?>
+</tourml:TourMetadata>
 <?php print $stops; ?>
 <?php print $assets; ?>
 <?php print $connections; ?>

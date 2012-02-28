@@ -37,6 +37,6 @@ function tap_export_tourml_form_submit($form, &$form_state) {
 
     // Export a downloadable zip file with all assets
     if ($form_state['clicked_button']['#value'] == t('Export Bundle')) {
-		tap_export_bundle($node);
+		drupal_goto('admin/content/' . $node->nid . '/tourml-export');
     }
 }
