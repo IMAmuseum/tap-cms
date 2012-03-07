@@ -6,6 +6,15 @@
  */
 
 /**
+ * Allow alteration of assets before rendering
+ * @param $item
+ * The asset item passed by reference
+ */
+function hook_tourml_asset(&$item) {
+    $item['new_property'] = TRUE;
+}
+
+/**
  * Allow creation of extra properties to media assets
  *
  * @param $item

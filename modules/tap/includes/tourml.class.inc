@@ -73,7 +73,7 @@ class TourML {
     {
         global $language;
         foreach($this->assets as $k => $asset) {
-            $asset = module_invoke_all('tourml_asset', $asset);
+            module_invoke_all('tourml_asset', $asset);
             $this->assets[$k]['rendered'] = theme('tap_tourml_asset', array(
             	'asset' => $asset, 
             	'language' => $language->language, 
@@ -121,6 +121,7 @@ class TourML {
                         }
                         break;
                     case 'tap_tourml_asset':
+                        if (empty($field['#items'])) break;
                         $prefix = $field['#bundle'] . '-' . $field['#field_name'] . '-';
 
                         // Build an array of assets that will be rendered after all stops

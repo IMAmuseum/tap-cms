@@ -356,7 +356,7 @@ function tap_export_bundle_tour_save($node, $file_path, &$context) {
 }
 
 function tap_export_bundle_finish($success, $results, $operations) {
-    if ($success) {
+    if ($success && isset($results['bundle'])) {
         $message = 'Bundle has been created with ' . format_plural(count($results), 'One file included.', '@count files included.');
 		$message .= ' ' . l('Download bundle', $results['bundle']);
     } else {

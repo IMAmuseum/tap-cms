@@ -45,7 +45,6 @@ function tap_preprocess_tap_tourml_asset(&$vars) {
     $vars['source']     = FALSE;
     $vars['content']    = FALSE;
 
-
     // Handle File fields
     if (isset($vars['asset']['fid'])) {
         // Media fields nest the file object inside of the asset.
