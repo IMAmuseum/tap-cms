@@ -143,8 +143,8 @@ class TourML {
                         foreach($field['#items'] as $k => $v)
                         {
                             // add referenced node to tourml
-                            $node = node_load($v['target_id']);
-                            $this->processStop($node);
+                            $target_node = node_load($v['target_id']);
+                            $this->processStop($target_node);
 
                             $field['#items'][$k]['priority'] = ++$ConnectionPriority;
                             $field['#items'][$k]['srcId'] = $node->nid;
