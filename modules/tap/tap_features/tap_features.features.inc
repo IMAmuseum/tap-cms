@@ -5,6 +5,16 @@
  */
 
 /**
+ * Implements hook_ctools_plugin_api().
+ */
+function tap_features_ctools_plugin_api() {
+  list($module, $api) = func_get_args();
+  if ($module == "strongarm" && $api == "strongarm") {
+    return array("version" => "1");
+  }
+}
+
+/**
  * Implements hook_views_api().
  */
 function tap_features_views_api() {
@@ -39,6 +49,14 @@ function tap_features_node_info() {
       'name' => t('Image Stop'),
       'base' => 'node_content',
       'description' => t('An image stop on a tour.'),
+      'has_title' => '1',
+      'title_label' => t('Title'),
+      'help' => '',
+    ),
+    'tour_set' => array(
+      'name' => t('Tour Set'),
+      'base' => 'node_content',
+      'description' => t('A TourSet element may be used as the top-level element of a TourML instance in order to represent one or more tours.'),
       'has_title' => '1',
       'title_label' => t('Title'),
       'help' => '',

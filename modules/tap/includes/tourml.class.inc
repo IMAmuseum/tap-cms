@@ -1,13 +1,14 @@
 <?php
 
 class TourML {
-    public $assets      = array();
-    public $stops       = array();
-    public $connections = array();
-    public $nid         = null;
-    public $tour        = null;
-    public $tourml      = null;
-    public $settings    = array();
+    public $assets              = array();
+    public $multipart_assets    = array();
+    public $stops               = array();
+    public $connections         = array();
+    public $nid                 = null;
+    public $tour                = null;
+    public $tourml              = null;
+    public $settings            = array();
 
     public function __construct($nid, $settings)
     {
@@ -72,14 +73,26 @@ class TourML {
     protected function processAssets()
     {
         global $language;
+
         foreach($this->assets as $k => $asset) {
             module_invoke_all('tourml_asset', $asset);
             $this->assets[$k]['rendered'] = theme('tap_tourml_asset', array(
-            	'asset' => $asset, 
-            	'language' => $language->language, 
-            	'absolute' => $this->settings['absolute'], 
-            	'base_path' => $this->settings['base_path']
+	           'asset' => $asset, 
+	           'language' => $language->language, 
+	           'absolute' => $this->settings['absolute'], 
+	           'base_path' => $this->settings['base_path']
 			));
+        }
+
+        foreach($this->multipart_assets as $k => $asset) {
+            $asset = module_invoke_all('tourml_asset', $asset);
+            $this->multipart_assets[$k]['rendered'] = theme('tap_tourml_multipart_asset', array(
+                'asset_id' => $k,
+                'asset' => $asset, 
+                'language' => $language->language, 
+                'absolute' => $this->settings['absolute'], 
+                'base_path' => $this->settings['base_path']
+            ));
         }
     }
 
@@ -97,7 +110,7 @@ class TourML {
         $stop['view']		= $node->type;
         $properties         = array();
         $hasTitleField      = false;
-        
+
         // Loop thru renderable fields
         foreach(element_children($node->content) as $field_name) {
 
@@ -120,6 +133,44 @@ class TourML {
                             module_invoke_all('tourml_property', $field);
                             $properties[] = drupal_render($field);
                         }
+                        break;
+                    case 'tap_tourml_multipart_asset':
+                        $prefix = $field['#bundle'] . '-' . $field['#field_name'] . '-';
+                        // special handling for field collection module field
+                        if($field['#field_type'] == 'field_collection') {
+                            foreach($field['#items'] as &$collection) {
+                                $id = $prefix . $collection['value'];
+                                // retrieve the field collection entity
+                                $entity = field_collection_item_load($collection['value']);
+                                // retrieve the field instances for this field collection
+                                $instances = field_info_instances('field_collection_item', $field['#field_name']);
+                                // iterate over all the fields attached to the entity
+                                foreach($instances as $field_name => $settings) {
+                                    foreach($entity->{$field_name}['und'] as $key => $item) {
+                                        // set reference id
+                                        $collection['id'] = $id;
+                                        $uid = (isset($item['fid'])) ? $item['fid'] : $key;
+                                        // unique key for field in set
+                                        $part_id = $prefix . $field_name . '-' . $uid;
+                                        $item['name'] = $field_name;
+                                        $item['properties'] = module_invoke_all('tourml_asset_properties', $item);
+                                        $this->multipart_assets[$id][$part_id] = $item;
+                                    }
+                                }
+                            }
+                        } else {
+                            $id = $prefix . $node->nid;                            
+                            // Build an array of assets that will be rendered after all stops
+                            foreach($field['#items'] as $key => &$item) {
+                                $part_id = (isset($item['fid'])) ? $item['fid'] : $key;
+                                $part_id = $prefix . $part_id;
+
+                                $item['id'] = $id;
+                                $item['properties'] = module_invoke_all('tourml_asset_properties', $item);
+                                $this->multipart_assets[$id][$part_id] = $item;
+                            }
+                        }
+                        $stop['items'][] = drupal_render($field);
                         break;
                     case 'tap_tourml_asset':
                         if (empty($field['#items'])) break;

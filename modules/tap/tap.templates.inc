@@ -21,6 +21,10 @@ function tap_preprocess_tap_tourml_tour(&$vars) {
         $vars['assets'] .= $asset['rendered'];
     }
 
+    foreach($tour->multipart_assets as $asset) {
+        $vars['assets'] .= $asset['rendered'];
+    }
+
     foreach ($tour->connections as $connection) {
         $vars['connections'] .= $connection;
     }
@@ -100,6 +104,81 @@ function theme_tap_tourml_asset_text_long(&$vars) {
 
 function theme_tap_tourml_asset_text_with_summary(&$vars) {
     return theme('tap_tourml_asset_ref', $vars);
+}
+
+/********************************
+ * multipart Assets
+ */
+
+function tap_preprocess_tap_tourml_multipart_asset(&$vars) {
+    foreach($vars['asset'] as $key => $asset) {
+        $properties                         = array();
+        $vars['asset'][$key]['source']      = FALSE;
+        $vars['asset'][$key]['content']     = FALSE;
+
+        if (isset($asset['fid'])) {
+            // Media fields nest the file object inside of the asset.
+            // So if we run into one we need to merge it into the 
+            // parent array.
+            if (isset($asset['file'])) {
+                $vars['asset'][$key] = array_merge($asset, (array)$vars['asset'][$key]['file']);
+            }
+            if ($vars['absolute']) {
+                $vars['asset'][$key]['path'] = file_create_url($asset['uri']);
+            } else {
+                $file_path = array_pop(explode('/', $asset['uri']));
+                if(!empty($vars['base_path'])) {
+                    $file_path = $vars['base_path'] . '/' . $file_path; 
+                }
+                $vars['asset'][$key]['path'] = $file_path;
+            }
+            $vars['asset'][$key]['source'] = TRUE; 
+        }
+        // Handle text fields
+        if (isset($asset['value'])) {
+            $vars['asset'][$key]['content'] = TRUE;
+        }
+
+        if (array_key_exists('properties', $asset)) {
+            if (is_array($asset['properties'])) {
+                foreach($asset['properties'] as $name => $value) {
+                    $properties[] = theme('tap_tourml_property', array('name' => $name, 'value' => $value));
+                }
+            }
+        }
+        $vars['asset'][$key]['properties'] = theme('tap_tourml_property_set', array('properties' => $properties));     
+    }
+}
+
+function tap_preprocess_tap_tourml_multipart_asset_ref(&$vars) {
+    $vars['refererences'] = array();
+    foreach($vars['items'] as $item) {
+        $vars['references'][$item['id']] = $item['name'];
+    }
+}
+
+function theme_tap_tourml_multipart_asset_file(&$vars) {
+    return theme('tap_tourml_multipart_asset_ref', $vars);
+}
+
+function theme_tap_tourml_multipart_asset_image(&$vars) {
+    return theme('tap_tourml_multipart_asset_ref', $vars);
+}
+
+function theme_tap_tourml_multipart_asset_text(&$vars) {
+    return theme('tap_tourml_multipart_asset_ref', $vars);
+}
+
+function theme_tap_tourml_multipart_asset_text_long(&$vars) {
+    return theme('tap_tourml_multipart_asset_ref', $vars);
+}
+
+function theme_tap_tourml_multipart_asset_text_with_summary(&$vars) {
+    return theme('tap_tourml_multipart_asset_ref', $vars);
+}
+
+function theme_tap_tourml_multipart_asset_field_collection(&$vars) {
+    return theme('tap_tourml_multipart_asset_ref', $vars);
 }
 
 /********************************
