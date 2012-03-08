@@ -267,6 +267,33 @@ function tap_theme() {
         'tap_tourml_asset_text_long'            => $properties,
         'tap_tourml_asset_text_with_summary'    => $properties,
         /**
+         * multipart Assets
+         */
+        'tap_tourml_multipart_asset' => array(
+            'variables' => array(
+                'asset_id'  => '',
+                'asset'     => array(),
+                'language'  => '',
+                'absolute'  => TRUE,
+                'base_path' => '',
+            ),
+            'file'  => 'tap.templates.inc',
+            'template'  => 'templates/tap-tourml-multipart-asset',
+        ),
+        'tap_tourml_multipart_asset_ref' => array(
+            'variables' => array(
+                'items' => array(),
+            ),
+            'file'  => 'tap.templates.inc',
+            'template'  => 'templates/tap-tourml-multipart-asset-file',
+        ),
+        'tap_tourml_multipart_asset_file'               => $properties,
+        'tap_tourml_multipart_asset_image'              => $properties,
+        'tap_tourml_multipart_asset_text'               => $properties,
+        'tap_tourml_multipart_asset_text_long'          => $properties,
+        'tap_tourml_multipart_asset_text_with_summary'  => $properties,
+        'tap_tourml_multipart_asset_field_collection'   => $properties,
+        /**
          * Connections
          */
         'tap_tourml_connection_entityreference' => array(
@@ -332,6 +359,10 @@ function tap_field_formatter_info() {
         ),
         'tap_tourml_asset' => array(
             'label'         => t('TourML Asset'),
+            'field types'   => array(),
+        ),
+        'tap_tourml_multipart_asset' => array(
+            'label'         => t('TourML Multipart Asset'),
             'field types'   => array(),
         ),
         'tap_tourml_title' => array(
