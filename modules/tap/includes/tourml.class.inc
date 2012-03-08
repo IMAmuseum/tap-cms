@@ -75,7 +75,7 @@ class TourML {
         global $language;
 
         foreach($this->assets as $k => $asset) {
-            $asset = module_invoke_all('tourml_asset', $asset);
+            module_invoke_all('tourml_asset', $asset);
             $this->assets[$k]['rendered'] = theme('tap_tourml_asset', array(
 	           'asset' => $asset, 
 	           'language' => $language->language, 
@@ -130,6 +130,7 @@ class TourML {
                     case 'tap_tourml_property':
                         // Build an array of rendered properties that can be added to a propertySet later
                         if (!empty($field['#items'])) {
+                            module_invoke_all('tourml_property', $field);
                             $properties[] = drupal_render($field);
                         }
                         break;
@@ -172,6 +173,7 @@ class TourML {
                         $stop['items'][] = drupal_render($field);
                         break;
                     case 'tap_tourml_asset':
+                        if (empty($field['#items'])) break;
                         $prefix = $field['#bundle'] . '-' . $field['#field_name'] . '-';
 
                         // Build an array of assets that will be rendered after all stops
@@ -191,6 +193,10 @@ class TourML {
                         $ConnectionPriority = 0;
                         foreach($field['#items'] as $k => $v)
                         {
+                            // add referenced node to tourml
+                            $node = node_load($v['target_id']);
+                            $this->processStop($node);
+
                             $field['#items'][$k]['priority'] = ++$ConnectionPriority;
                             $field['#items'][$k]['srcId'] = $node->nid;
                         }
