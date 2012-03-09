@@ -189,7 +189,7 @@ function tap_preprocess_tap_tourml_property_set(&$vars) {
 }
 
 function tap_preprocess_tap_tourml_property(&$vars) {
-    $vars['attributes'] = drupal_attributes($vars['attributes']);
+    $vars['attributes_array'] = $vars['attributes'];
 }
 
 function _theme_tap_tourml_property($vars) {
