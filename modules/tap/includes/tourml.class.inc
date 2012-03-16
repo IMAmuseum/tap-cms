@@ -85,7 +85,7 @@ class TourML {
         }
 
         foreach($this->multipart_assets as $k => $asset) {
-            $asset = module_invoke_all('tourml_asset', $asset);
+            $asset = module_invoke_all('tourml_multipart_asset', $asset);
             $this->multipart_assets[$k]['rendered'] = theme('tap_tourml_multipart_asset', array(
                 'asset_id' => $k,
                 'asset' => $asset, 
