@@ -67,7 +67,7 @@ function tap_menu() {
         'file'              => 'tap.export.inc',
     );	
     
-    $items['node/%node/tourml_xml'] = array(
+    $items['node/%node/tourml'] = array(
         'title'             => 'TourML XML',
         'page callback'     => 'tap_tourml_preview',
         'page arguments'    => array(1),
@@ -75,7 +75,7 @@ function tap_menu() {
         'type'              => MENU_LOCAL_TASK,
     );
 
-    $items['node/%node/tourml'] = array(
+    $items['node/%node/tourml.xml'] = array(
         'title'             => 'TourML',
         'page callback'     => 'tap_export_tourml',
         'page arguments'    => array(1, FALSE),
@@ -543,7 +543,9 @@ function tap_tourml_render($node, $settings = array())
 function tap_tourml_preview($node)
 {
     $tourml = tap_tourml_render($node);
-    return '<pre class="brush: xml">' . htmlentities($tourml) . '</pre>';
+    $output = l('XML', 'node/' . $node->nid . '/tourml.xml');
+    $output .= '<pre class="brush: xml">' . htmlentities($tourml) . '</pre>';
+    return $output;
 }
 
 /**
