@@ -137,7 +137,7 @@ class TourML {
                         }
                         break;
                     case 'tap_tourml_multipart_asset':
-                        $prefix = $field['#bundle'] . '-' . $field['#field_name'] . '-' . $field['#object']->nid;
+                        $prefix = $field['#bundle'] . '-' . $field['#field_name'] . '-' . $field['#object']->nid . '-';
                         // special handling for field collection module field
                         if($field['#field_type'] == 'field_collection') {
                             foreach($field['#items'] as &$collection) {
@@ -176,7 +176,7 @@ class TourML {
                         break;
                     case 'tap_tourml_asset':
                         if (empty($field['#items'])) break;
-                        $prefix = $field['#bundle'] . '-' . $field['#field_name'] . '-' . $field['#object']->nid;
+                        $prefix = $field['#bundle'] . '-' . $field['#field_name'] . '-' . $field['#object']->nid . '-';
 
                         // Build an array of assets that will be rendered after all stops
                         foreach($field['#items'] as $key => &$item) {
