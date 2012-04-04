@@ -25,7 +25,8 @@ function tap_graphviz_menu() {
         'title'             => 'Graphviz',
         'page callback'     => 'tap_graphviz_view',
         'page arguments'    => array(1),
-        'access arguments'  => array('administer tap'),
+        'access callback'   => 'tap_graphviz_access',
+        'access arguments'  => array(1),
         'type'              => MENU_LOCAL_TASK,
     );
 
@@ -37,6 +38,12 @@ function tap_graphviz_menu() {
     );
 
     return $items;
+}
+
+function tap_graphviz_access($node) {
+    if (!user_access($node)) return FALSE;
+    if ($node->type == 'tour') return TRUE;
+    return FALSE;
 }
 
 function tap_graphviz_settings() {
