@@ -1,0 +1,152 @@
+<?php
+
+define('TOURML_NS', 'http://www.imamuseum.org/TourML/2011/11');
+
+function tap_graphviz_menu() {
+    $items['admin/tap/graphviz'] = array(
+        'title'             => t('GraphViz'),
+        'page callback'     => 'drupal_get_form',
+        'page arguments'    => array('tap_graphviz_admin_form'),
+        'access arguments'  => array('administer tap'),
+        'type'              => MENU_LOCAL_TASK,
+        'file'              => 'tap_graphviz.admin.inc',
+    );
+
+    $items['admin/tap/graphviz/settings'] = array(
+        'title'             => t('GraphViz Settings'),
+        'page callback'     => 'drupal_get_form',
+        'page arguments'    => array('tap_graphviz_admin_settings_form'),
+        'access arguments'  => array('administer tap'),
+        'type'              => MENU_LOCAL_TASK,
+        'file'              => 'tap_graphviz.admin.inc',
+    );
+
+    $items['node/%node/graphviz'] = array(
+        'title'             => 'Graphviz',
+        'page callback'     => 'tap_graphviz_view',
+        'page arguments'    => array(1),
+        'access arguments'  => array('administer tap'),
+        'type'              => MENU_LOCAL_TASK,
+    );
+
+    $items['node/%node/graphviz.svg'] = array(
+        'page callback'     => 'tap_graphviz_tour_image',
+        'page arguments'    => array(1),
+        'access arguments'  => array('administer tap'),
+        'type'              => MENU_CALLBACK,
+    );
+
+    return $items;
+}
+
+function tap_graphviz_settings() {
+    return array(
+        'tour' => array(
+            'style'     => 'filled',
+            'shape'     => variable_get('tour_shape', 'box'),
+            'fillcolor' => variable_get('tour_fillcolor', '#FFFFFF'),
+        ),
+        'stop' => array(
+            'style'     => 'filled',
+            'shape'     => variable_get('stop_shape', 'box'),
+            'fillcolor' => variable_get('stop_fillcolor', '#CCFFFF'),
+        ),
+        'connection' => array(
+        ),
+        'asset' => array(
+            'style'     => 'filled',
+            'shape'     => variable_get('asset_shape', 'box'),
+            'fillcolor' => variable_get('asset_fillcolor', '#ff0000'),
+        ),
+    );
+}
+
+function tap_graphviz_view($node) {
+    return theme('image', array(
+        'path'  => 'node/' . $node->nid . '/graphviz.svg',
+    ));
+}
+
+function tap_graphviz_tour_image($node) {
+    $tourml = tap_tourml_render($node);
+    tap_graphviz_image($tourml);
+}
+
+function tap_graphviz_image($tourml, $render = TRUE) {
+    include_once('Image/GraphViz.php');
+
+    $settings   = tap_graphviz_settings();
+    $graph      = new Image_GraphViz();
+    $xml        = new SimpleXMLElement($tourml);
+    $tour       = $xml->children(TOURML_NS);
+    $tour_id    = $tour->attributes(TOURML_NS)->id;
+
+    if (isset($tour->TourMetadata->RootStopRef)) {
+        $graph->addNode(
+            $tour_id,
+            array(
+                'shape'     => $settings['tour']['shape'],
+                'style'     => $settings['tour']['style'],
+                'fillcolor' => $settings['tour']['fillcolor'],
+                'label'     => (string)$tour->TourMetadata->Title,
+            )
+        );
+
+        $graph->addEdge(
+            array(
+                $tour_id => (string)$tour->TourMetadata->RootStopRef->attributes(TOURML_NS)->id
+            )
+        );
+    }
+
+    foreach($tour->Stop as $stop) {
+        $id = (string)$stop->attributes(TOURML_NS)->id;
+        $graph->addNode(
+            $id,
+            array(
+                'shape'     => $settings['stop']['shape'], 
+                'style'     => $settings['stop']['style'],
+                'fillcolor' => $settings['stop']['fillcolor'],
+                'label'     => (string)$stop->Title,
+            )
+        );
+
+        if (isset($stop->AssetRef)) {
+            foreach($stop->AssetRef as $asset) {
+                $asset_id = (string)$asset->attributes(TOURML_NS)->id;
+                $graph->addNode(
+                    $asset_id,
+                    array(
+                        'shape'     => $settings['asset']['shape'],
+                        'style'     => $settings['asset']['style'],
+                        'fillcolor' => $settings['asset']['fillcolor'],
+                        'label'     => 'A',
+                    )
+                );
+
+                $graph->addEdge(
+                    array(
+                        $id => $asset_id,
+                    )
+                );
+            }
+        }
+
+    }
+
+    foreach($tour->Connection as $connection) {
+        $graph->addEdge(
+            array(
+                (string)$connection->attributes(TOURML_NS)->srcId => (string)$connection->attributes(TOURML_NS)->destId,
+            )
+        );
+    }
+
+    if ($render) {
+        $graph->image();
+    } else {
+        // removes a stray ]> that gets added by graphviz
+        $xml = new SimpleXMLElement($graph->fetch());
+        return '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">' . $xml->g->asXML() . '</svg>';
+    }
+}
