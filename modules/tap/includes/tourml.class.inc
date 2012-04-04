@@ -77,11 +77,11 @@ class TourML {
         foreach($this->assets as $k => $asset) {
             $asset += module_invoke_all('tourml_asset', $asset);
             $this->assets[$k]['rendered'] = theme('tap_tourml_asset', array(
-	           'asset' => $asset, 
-	           'language' => $language->language, 
-	           'absolute' => $this->settings['absolute'], 
-	           'base_path' => $this->settings['base_path']
-			));
+               'asset' => $asset, 
+               'language' => $language->language, 
+               'absolute' => $this->settings['absolute'], 
+               'base_path' => $this->settings['base_path']
+            ));
         }
 
         foreach($this->multipart_assets as $k => $asset) {
@@ -96,9 +96,10 @@ class TourML {
         }
     }
 
-    protected function processStop(&$node) {
+    public function processStop(&$node) {
         if (!isset($this->stops[$node->nid])) {
-	        $stop = $this->processMetadata($node);
+            drupal_alter('tourml_stop', $this, $node);
+            $stop = $this->processMetadata($node);
             //Render the stop
             $this->stops[$node->nid] = theme('tap_tourml_stop', $stop); 
         }
@@ -109,7 +110,7 @@ class TourML {
         $stop               = array();
         $stop['real_id']    = $node->nid;
         $stop['items']      = array();
-        $stop['view']		= $node->type;
+        $stop['view']       = $node->type;
         $properties         = array();
         $hasTitleField      = false;
 
