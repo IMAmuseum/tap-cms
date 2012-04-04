@@ -42,27 +42,16 @@ function tap_graphviz_admin_form_submit($form, &$form_state) {
 }
 
 function tap_graphviz_admin_settings_form($form, &$form_state) {
-    drupal_add_css(drupal_get_path('module', 'tap_graphviz') . '/css/colorpicker.css');
-    drupal_add_js(drupal_get_path('module', 'tap_graphviz') . '/js/colorpicker.js');
 
-    $inline = "
-    (function($) {
-        $('#edit-tour-fillcolor, #edit-stop-fillcolor, #edit-asset-fillcolor').ColorPicker({
-            onSubmit: function(hsb, hex, rgb, el) {
-                $(el).val(hex);
-                $(el).ColorPickerHide();
-            },
-            onBeforeShow: function () {
-                $(this).ColorPickerSetColor(this.value);
-            }
-        })
-        .bind('keyup', function(){
-            $(this).ColorPickerSetColor(this.value);
-        });
-    })(jQuery);
-    ";
-
-    drupal_add_js($inline, 'inline');
+    $form['tap_graphviz_type'] = array(
+        '#type'     => 'select',
+        '#title'    => t('Display Type'),
+        '#options'  => array(
+            'neato' => t('Neato'),
+            'dot'   => t('Dot'),
+        ),
+        '#default_value'    => variable_get('tap_graphviz_type'),
+    );
 
     $form['tour'] = array(
         '#type'     => 'fieldset',

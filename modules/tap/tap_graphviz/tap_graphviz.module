@@ -88,6 +88,8 @@ function tap_graphviz_image($tourml, $render = TRUE) {
     $tour       = $xml->children(TOURML_NS);
     $tour_id    = $tour->attributes(TOURML_NS)->id;
 
+    $graph->addAttributes(array('overlap' => 'scale'));
+
     if (isset($tour->TourMetadata->RootStopRef)) {
         $graph->addNode(
             $tour_id,
@@ -150,10 +152,10 @@ function tap_graphviz_image($tourml, $render = TRUE) {
     }
 
     if ($render) {
-        $graph->image();
+        $graph->image('svg', variable_get('tap_graphviz_type', 'neato'));
     } else {
         // removes a stray ]> that gets added by graphviz
-        $xml = new SimpleXMLElement($graph->fetch());
+        $xml = new SimpleXMLElement($graph->fetch('svg', varaible_get('tap_graphviz_type', 'neato')));
         return '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">' . $xml->g->asXML() . '</svg>';
     }
 }
