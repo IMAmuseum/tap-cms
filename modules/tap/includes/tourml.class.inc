@@ -138,7 +138,7 @@ class TourML {
                         }
                         break;
                     case 'tap_tourml_multipart_asset':
-                        $prefix = $field['#bundle'] . '-' . $field['#field_name'] . '-' . $field['#object']->nid . '-';
+                        $prefix = $field['#bundle'] . '-' . $field['#field_name'] . '-';
                         // special handling for field collection module field
                         if($field['#field_type'] == 'field_collection') {
                             foreach($field['#items'] as &$collection) {
@@ -177,16 +177,17 @@ class TourML {
                         break;
                     case 'tap_tourml_asset':
                         if (empty($field['#items'])) break;
-                        $prefix = $field['#bundle'] . '-' . $field['#field_name'] . '-' . $field['#object']->nid . '-';
+                        $prefix = $field['#field_name'] . '-';
 
                         // Build an array of assets that will be rendered after all stops
                         foreach($field['#items'] as $key => &$item) {
+                            $item['field'] = $field;
                             $item['id'] = (isset($item['fid'])) ? $item['fid'] : $key;
                             $item['id'] = $prefix . $item['id'];
 
                             // If this asset doesnt exist in our main object we need to process it
                             if (!isset($this->assets[$item['id']])) {
-                                $item['properties'] = module_invoke_all('tourml_asset_properties', $item);
+                                drupal_alter('tourml_asset', $this, $item);
                                 $this->assets[$item['id']] = $item;
                             }
                         }

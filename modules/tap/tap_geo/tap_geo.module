@@ -58,17 +58,14 @@ function tap_geo_tourml_asset($asset) {
 }
 
 /**
- * Implements hook_tourml_asset_properties()
+ * Implements hook_tourml_asset_alter()
  *
  * Use this hook to define properties on an asset
- *
- * @return an array of data with a key value pair
- * of properties
  */
-function tap_geo_tourml_asset_properties($item) {
+function tap_geo_tourml_asset_alter(&$tour, &$item) {
     // Handle Geofields
     if (isset($item['wkt'])) {
-        return array(
+        $item['properties'] = array(
             'centroid' => $item['lat'] . ',' . $item['lon'],
             'bbox' => $item['left'] . ',' . $item['right'] . ',' . $item['bottom'] . ',' . $item['top'],
         );

@@ -50,7 +50,7 @@ function tap_menu() {
         'type'              => MENU_LOCAL_TASK,
         'file'              => 'tap.export.inc',
     );
-	
+    
     $items['admin/content/%/tourml-export'] = array(
         'title'             => 'TourML Export',
         'page callback'     => 'drupal_get_form',
@@ -58,14 +58,14 @@ function tap_menu() {
         'access arguments'  => array('administer tap'),
         'type'              => MENU_CALLBACK,
         'file'              => 'tap.export.inc',
-    );	
-	
+    );  
+    
     $items['admin/content/tourml-export/autocomplete'] = array(
         'page callback'     => 'tap_export_entity_autocomplete',
         'access arguments'  => array('administer tap'),
         'type'              => MENU_CALLBACK,
         'file'              => 'tap.export.inc',
-    );	
+    );  
     
     $items['node/%node/tourml'] = array(
         'title'             => 'TourML XML',
@@ -304,16 +304,16 @@ function tap_theme() {
             'template'  => 'templates/tap-tourml-connection-entityreference',
         ),
         /**
-		 * iOS plist
-		 */
+         * iOS plist
+         */
         'ios_plist_xml' => array(
-			'variables' => array(
-				'bundle_name' => '',
-				'bundle_id' => '',
-			),
-			'file' => 'tap.templates.inc',
-			'template' => 'templates/ios-plist-xml',
-		),
+            'variables' => array(
+                'bundle_name' => '',
+                'bundle_id' => '',
+            ),
+            'file' => 'tap.templates.inc',
+            'template' => 'templates/ios-plist-xml',
+        ),
     );
 }
 
@@ -322,20 +322,23 @@ function tap_theme() {
  */
 
 /**
- * Implements hook_tourml_asset_properties()
+ * Implements hook_tourml_asset_alter()
  */
-function tap_tourml_asset_properties($item) {
+function tap_tourml_asset_alter(&$tour, &$item) {
     // Handle file fields
     if (isset($item['filemime'])) {
 
         list($type, $ext) = explode('/', $item['filemime']);
         switch($type) {
             case 'image':
-                return _tap_asset_image($item);
+                _tap_asset_image($item);
+                break;
             case 'video':
-                return _tap_asset_video($item);
+                _tap_asset_video($item);
+                break;
             case 'audio':
-                return _tap_asset_audio($item);
+                _tap_asset_audio($item);
+                break;
         }
     }
 }
@@ -557,10 +560,10 @@ function tap_tourml_preview($node)
  * @return Array
  * Return an array of key/value properties to be rendered with the asset
  */
-function _tap_asset_image($item) {
+function _tap_asset_image(&$item) {
     $path = drupal_realpath($item['uri']);
     $attr = image_get_info($path);
-    return array(
+    $item['properties'] = array(
         'width'     => $attr['width'],
         'height'    => $attr['height'],
     );
@@ -575,12 +578,12 @@ function _tap_asset_image($item) {
  * @return Array
  * Return an array of key/value properties to be rendered with the asset
  */
-function _tap_asset_video($item) {
+function _tap_asset_video(&$item) {
     if (!extension_loaded('ffmpeg')) return;
 
     $path = drupal_realpath($item['uri']);
     $movie = new ffmpeg_movie($path);
-    return array(
+    $item['properties'] = array(
         'duration'      => duration($movie->getDuration()),
         'width'         => $movie->getFrameWidth(),
         'height'        => $movie->getFrameHeight(),
@@ -598,16 +601,15 @@ function _tap_asset_video($item) {
  * @return Array
  * Return an array of key/value properties to be rendered with the asset
  */
-function _tap_asset_audio($item) {
+function _tap_asset_audio(&$item) {
     if (!extension_loaded('ffmpeg')) return;
 
     $path = drupal_realpath($item['uri']);
     $audio = new ffmpeg_movie($path);
-    return array(
+    $item['properties'] = array(
         'duration'      => duration($audio->getDuration()),
         'audio_codec'   => $audio->getAudioCodec(),
     );
-
 }
 
 /**
@@ -683,5 +685,5 @@ function _anti_field($text) {
  * The cleaned up text
  */
 function _clean_file_text($text) {
-	return preg_replace('/\s+/', '', check_plain($text));
+    return preg_replace('/\s+/', '', check_plain($text));
 }
