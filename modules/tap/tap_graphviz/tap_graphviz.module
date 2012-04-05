@@ -41,7 +41,8 @@ function tap_graphviz_menu() {
 }
 
 function tap_graphviz_access($node) {
-    if (!user_access($node)) return FALSE;
+    if (!node_access('view', $node)) return FALSE;
+    if (!user_access('administer tap')) return FALSE;
     if ($node->type == 'tour') return TRUE;
     return FALSE;
 }
@@ -129,7 +130,7 @@ function tap_graphviz_image($tourml, $render = TRUE) {
                         'shape'     => $settings['asset']['shape'],
                         'style'     => $settings['asset']['style'],
                         'fillcolor' => $settings['asset']['fillcolor'],
-                        'label'     => 'A',
+                        'label'     => 'Asset',
                     )
                 );
 
@@ -155,7 +156,7 @@ function tap_graphviz_image($tourml, $render = TRUE) {
         $graph->image('svg', variable_get('tap_graphviz_type', 'neato'));
     } else {
         // removes a stray ]> that gets added by graphviz
-        $xml = new SimpleXMLElement($graph->fetch('svg', varaible_get('tap_graphviz_type', 'neato')));
+        $xml = new SimpleXMLElement($graph->fetch('svg', variable_get('tap_graphviz_type', 'neato')));
         return '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">' . $xml->g->asXML() . '</svg>';
     }
 }

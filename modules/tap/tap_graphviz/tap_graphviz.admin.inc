@@ -45,7 +45,7 @@ function tap_graphviz_admin_settings_form($form, &$form_state) {
 
     $form['tap_graphviz_type'] = array(
         '#type'     => 'select',
-        '#title'    => t('Display Type'),
+        '#title'    => t('Default Display Type'),
         '#options'  => array(
             'neato' => t('Neato'),
             'dot'   => t('Dot'),
