@@ -156,21 +156,23 @@ class TourML {
                                         // unique key for field in set
                                         $part_id = $prefix . $field_name . '-' . $uid;
                                         $item['name'] = $field_name;
-                                        $item['properties'] = module_invoke_all('tourml_asset_properties', $item);
-                                        $this->multipart_assets[$id][$part_id] = $item;
+                                        if(!isset($this->multipart_assets[$id][$part_id])) {
+                                            drupal_alter('tourml_asset', $this, $item);
+                                            $this->multipart_assets[$id][$part_id] = $item;
+                                        }
                                     }
                                 }
                             }
                         } else {
-                            $id = $prefix . $node->nid;                            
                             // Build an array of assets that will be rendered after all stops
                             foreach($field['#items'] as $key => &$item) {
                                 $part_id = (isset($item['fid'])) ? $item['fid'] : $key;
                                 $part_id = $prefix . $part_id;
-
-                                $item['id'] = $id;
-                                $item['properties'] = module_invoke_all('tourml_asset_properties', $item);
-                                $this->multipart_assets[$id][$part_id] = $item;
+                                $item['id'] = $prefix . $node->nid;;
+                                if(!isset($this->multipart_assets[$item['id']][$part_id])) {
+                                    drupal_alter('tourml_asset', $this, $item);
+                                    $this->multipart_assets[$item['id']][$part_id] = $item;
+                                }
                             }
                         }
                         $stop['items'][] = drupal_render($field);
