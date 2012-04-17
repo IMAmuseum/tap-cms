@@ -157,7 +157,7 @@ class TourML {
                                         $part_id = $prefix . $field_name . '-' . $uid;
                                         $item['name'] = $field_name;
                                         if(!isset($this->multipart_assets[$id][$part_id])) {
-                                            drupal_alter('tourml_asset', $this, $item);
+                                            drupal_alter('tourml_multipart_asset', $this, $item);
                                             $this->multipart_assets[$id][$part_id] = $item;
                                         }
                                     }
@@ -170,7 +170,7 @@ class TourML {
                                 $part_id = $prefix . $part_id;
                                 $item['id'] = $prefix . $node->nid;;
                                 if(!isset($this->multipart_assets[$item['id']][$part_id])) {
-                                    drupal_alter('tourml_asset', $this, $item);
+                                    drupal_alter('tourml_multipart_asset', $this, $item);
                                     $this->multipart_assets[$item['id']][$part_id] = $item;
                                 }
                             }
