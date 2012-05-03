@@ -2,7 +2,7 @@
 core = 7.x
 
 api = 2
-projects[drupal][version] = "7.x"
+projects[drupal][version] = "7.13"
 
 ; Modules
 projects[admin_menu][version] = "3.0-rc2"
@@ -75,9 +75,9 @@ projects[views][version] = "3.3"
 projects[wysiwyg][version] = "2.1"
 
 projects[tap-cms][type] = "module"
-projects[tap-cms][download][type] = "git"
-projects[tap-cms][download][url] = "git@github.com:IMAmuseum/tap-cms.git"
-projects[tap-cms][download][revision] = "029ff23a71f5ba4fe74d3630aac2445664662584"
+projects[tap-cms][download][type] = "get"
+projects[tap-cms][download][url] = "https://github.com/IMAmuseum/tap-cms/zipball/master"
+;projects[tap-cms][download][revision] = "029ff23a71f5ba4fe74d3630aac2445664662584"
 
 ; Libraries
 ; Please fill the following out. Type may be one of get, git, bzr or svn,

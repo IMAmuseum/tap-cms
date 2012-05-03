@@ -17,11 +17,11 @@ Installing TAP via drush will download drupal, all contributed modules, and the 
 NOTE: To install TAP via this method you must be running the latest 5.x branch of drush.
 
     # pear channel-discover pear.drush.org
-    # pear install drush/drush-5.0.0
+    # pear install drush/drush
 
 Once you have drush installed you will need to download and process the drush make file to proceed.
 
-    # wget https://raw.github.com/IMAmuseum/tap-cms/master/drush.make
+    # wget --no-check-certificate https://raw.github.com/IMAmuseum/tap-cms/master/drush.make
     # drush make drush.make
 
 Drush will attempt to fetch Drupal and all related modules and libraries. Now that you have all of the files required to setup TAP, Follow these instructions to finish the installation of Drupal.
