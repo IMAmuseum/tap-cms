@@ -5,9 +5,13 @@ api = 2
 projects[drupal][version] = "7.x"
 
 ; Modules
+projects[admin_menu][version] = "3.0-rc1"
+
 projects[ctools][version] = "1.0-rc1"
 
 projects[date][version] = "2.1"
+
+projects[devel][version] = "1.2"
 
 projects[entity][version] = "1.0-rc1"
 
@@ -42,6 +46,24 @@ projects[media_youtube][version] = "1.0-beta2"
 
 projects[openlayers][version] = "2.0-beta1"
 
+projects[syntaxhighlighter][version] = "2.x-dev"
+
+; Please fill the following out. Type may be one of get, git, bzr or svn,
+; and url is the url of the download.
+projects[tap_features][download][type] = ""
+projects[tap_features][download][url] = ""
+projects[tap_features][type] = "module"
+projects[tap_features][subdir] = "tap-cms/modules/tap"
+projects[tap_features][version] = "1.1-dev"
+
+; Please fill the following out. Type may be one of get, git, bzr or svn,
+; and url is the url of the download.
+projects[tap_geo][download][type] = ""
+projects[tap_geo][download][url] = ""
+projects[tap_geo][type] = "module"
+projects[tap_geo][subdir] = "tap-cms/modules/tap"
+projects[tap_geo][version] = "1.1-dev"
+
 projects[title][version] = "1.0-alpha2"
 
 projects[token][version] = "1.0-rc1"
@@ -50,14 +72,37 @@ projects[transliteration][version] = "3.0"
 
 projects[views][version] = "3.3"
 
-projects[jplayer][version] = "7.x-2.x-dev"
+projects[wysiwyg][version] = "2.1"
 
 projects[tap-cms][type] = "module"
 projects[tap-cms][download][type] = "git"
-projects[tap-cms][download][url] = "git://github.com/IMAmuseum/tap-cms.git"
-projects[tap-cms][download][revision] = "83891eb9f1b176f9a9eb3d085291ba7e5f5c55cb"
+projects[tap-cms][download][url] = "git@github.com:IMAmuseum/tap-cms.git"
+projects[tap-cms][download][revision] = "86e4e911cbfabbeb96a6f3c1c2dc356431cd0929"
 
 ; Libraries
+; Please fill the following out. Type may be one of get, git, bzr or svn,
+; and url is the url of the download.
+libraries[geoPHP][download][type] = ""
+libraries[geoPHP][download][url] = ""
+libraries[geoPHP][directory_name] = "geoPHP"
+libraries[geoPHP][type] = "library"
+
+; Please fill the following out. Type may be one of get, git, bzr or svn,
+; and url is the url of the download.
+libraries[FirePHPCore][download][type] = ""
+libraries[FirePHPCore][download][url] = ""
+libraries[FirePHPCore][directory_name] = "FirePHPCore"
+libraries[FirePHPCore][type] = "library"
+
+; Please fill the following out. Type may be one of get, git, bzr or svn,
+; and url is the url of the download.
+libraries[syntaxhighlighter_3.0.83][download][type] = ""
+libraries[syntaxhighlighter_3.0.83][download][url] = ""
+libraries[syntaxhighlighter_3.0.83][directory_name] = "syntaxhighlighter_3.0.83"
+libraries[syntaxhighlighter_3.0.83][type] = "library"
+
+; Please fill the following out. Type may be one of get, git, bzr or svn,
+; and url is the url of the download.
 libraries[ckeditor][download][type] = "get"
 libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%203.6.2/ckeditor_3.6.2.tar.gz"
 libraries[ckeditor][directory_name] = "ckeditor"
