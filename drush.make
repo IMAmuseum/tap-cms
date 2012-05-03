@@ -76,7 +76,7 @@ projects[wysiwyg][version] = "2.1"
 
 projects[tap-cms][type] = "module"
 projects[tap-cms][download][type] = "get"
-projects[tap-cms][download][url] = "https://github.com/IMAmuseum/tap-cms/zipball/master"
+projects[tap-cms][download][url] = "http://www.tapintomuseums.org/tap-2.x-latest.tar.gz"
 ;projects[tap-cms][download][revision] = "029ff23a71f5ba4fe74d3630aac2445664662584"
 
 ; Libraries
