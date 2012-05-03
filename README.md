@@ -33,7 +33,7 @@ Once Drupal is installed and configured visit http://mytapsite.com/admin/modules
 If you already have an existing drupal site that you would like to install TAP on follow the directions below.
 
     # cd /PATH_TO_DRUPAL_SITE/sites/all/modules
-    # wget https://github.com/IMAmuseum/tap-cms/tarball/v2.0-alpha1
-    # tar zxvf v2.0-alpha1
+    # wget https://github.com/IMAmuseum/tap-cms/tarball/v2.0-beta1
+    # tar zxvf v2.0-beta1
 
 Once you have unpackaged the TAP CMS visit http://mysite.com/admin/modules and enable the TAP module.
