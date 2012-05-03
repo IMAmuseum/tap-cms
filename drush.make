@@ -5,27 +5,27 @@ api = 2
 projects[drupal][version] = "7.x"
 
 ; Modules
-projects[admin_menu][version] = "3.0-rc1"
+projects[admin_menu][version] = "3.0-rc2"
 
-projects[ctools][version] = "1.0-rc1"
+projects[ctools][version] = "1.0"
 
-projects[date][version] = "2.1"
+projects[date][version] = "2.5"
 
 projects[devel][version] = "1.2"
 
-projects[entity][version] = "1.0-rc1"
+projects[entity][version] = "1.0-rc2"
 
 projects[entity_translation][version] = "1.0-alpha1"
 
-projects[entityreference][version] = "1.0-beta4"
+projects[entityreference][version] = "1.0-rc1"
 
-projects[features][version] = "1.0-beta6"
+projects[features][version] = "1.0-rc2"
 
 projects[file_entity][version] = "2.0-unstable3"
 
 projects[styles][version] = "2.0-alpha8"
 
-projects[geofield][version] = "1.0-rc1"
+projects[geofield][version] = "1.0"
 
 ; Libraries
 ; Please fill the following out. Type may be one of get, git, bzr or svn,
@@ -38,11 +38,11 @@ libraries[jplayer][type] = "library"
 ; Modules
 projects[libraries][version] = "1.0"
 
-projects[media][version] = "1.0-rc3"
+projects[media][version] = "1.0"
 
 projects[media_flickr][version] = "1.0-alpha1"
 
-projects[media_youtube][version] = "1.0-beta2"
+projects[media_youtube][version] = "1.0-beta3"
 
 projects[openlayers][version] = "2.0-beta1"
 
@@ -66,7 +66,7 @@ projects[tap_geo][version] = "1.1-dev"
 
 projects[title][version] = "1.0-alpha2"
 
-projects[token][version] = "1.0-rc1"
+projects[token][version] = "1.0"
 
 projects[transliteration][version] = "3.0"
 
@@ -77,13 +77,13 @@ projects[wysiwyg][version] = "2.1"
 projects[tap-cms][type] = "module"
 projects[tap-cms][download][type] = "git"
 projects[tap-cms][download][url] = "git@github.com:IMAmuseum/tap-cms.git"
-projects[tap-cms][download][revision] = "86e4e911cbfabbeb96a6f3c1c2dc356431cd0929"
+projects[tap-cms][download][revision] = "029ff23a71f5ba4fe74d3630aac2445664662584"
 
 ; Libraries
 ; Please fill the following out. Type may be one of get, git, bzr or svn,
 ; and url is the url of the download.
-libraries[geoPHP][download][type] = ""
-libraries[geoPHP][download][url] = ""
+libraries[geoPHP][download][type] = "get"
+libraries[geoPHP][download][url] = "https://github.com/downloads/phayes/geoPHP/geoPHP.tar.gz"
 libraries[geoPHP][directory_name] = "geoPHP"
 libraries[geoPHP][type] = "library"
 
