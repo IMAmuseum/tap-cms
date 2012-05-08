@@ -32,6 +32,7 @@
 			$(document).ready(function() {
 				// specify url to tourML document
 				tap.url = '<?php print $url; ?>';
+
 				// initialize app
 				tap.initApp();
 				// initialize router
@@ -43,7 +44,6 @@
 					e.preventDefault();
 					window.history.back();
 				});
-
 			});
 		}(jQuery));
 	</script>

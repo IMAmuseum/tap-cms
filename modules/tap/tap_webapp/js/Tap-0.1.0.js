@@ -165,7 +165,7 @@ TapTourModel = Backbone.Model.extend({
 TapAssetCollection = Backbone.Collection.extend({
 	model: TapAssetModel,
 	initialize: function(models, id) {
-		this.localStorage = new Store(id + '-asset');
+		this.localStorage = new Backbone.LocalStorage(id + '-asset');
 	}
 });
 
@@ -173,7 +173,7 @@ TapAssetCollection = Backbone.Collection.extend({
 TapStopCollection = Backbone.Collection.extend({
 	model: TapStopModel,
 	initialize: function(models, id) {
-		this.localStorage = new Store(id + '-stop');
+		this.localStorage = new Backbone.LocalStorage(id + '-stop');
 	},
 	// retrieve the stop id of a given key code
 	getStopByKeycode: function(key) {
@@ -192,7 +192,7 @@ TapStopCollection = Backbone.Collection.extend({
 // define tour collection
 TapTourCollection = Backbone.Collection.extend({
 	model: TapTourModel,
-	localStorage: new Store('tours'),
+	localStorage: new Backbone.LocalStorage('tours'),
 	selectTour: function(id) { // load data for the selected tour
 		// set the current tour
 		tap.currentTour = id;
@@ -230,30 +230,34 @@ jQuery(function() {
 		el: $('#tour-stop').find(":jqmData(role='content')"),
 		template: _.template($('#tour-stop-audio-tpl').html()),
 		render: function() {
+			var mp3AudioUri, oggAudioUri, wavAudioUri;
+
 			if($stop["attributes"]["assetRef"]){
-				$.each($stop["attributes"]["assetRef"], function() {
-					$assetItem = tap.tourAssets.models;
-					for(var i=0;i<$assetItem.length;i++) {
-						if($assetItem[i].get('id') == this['id']){
-							for(var j=0;j<$assetItem[i].attributes.source.length;j++){
-								if($assetItem[i].attributes.source[j].format == "audio/mp3"){
-									$mp3AudioUri = $assetItem[i].attributes.source[j].uri;
-								}
-								if($assetItem[i].attributes.source[j].format == "audio/ogg"){
-									$oggAudioUri = $assetItem[i].attributes.source[j].uri;
-								}
-								if($assetItem[i].attributes.source[j].format == "audio/wav"){
-									$wavAudioUri = $assetItem[i].attributes.source[j].uri;
-								}
-							}
+				_.each($stop.get("assetRef"), function(assetRef) {
+					var asset = tap.tourAssets.get(assetRef.id);
+					var assetSources = asset.get("source");
+
+					_.each(assetSources, function(assetSource){
+						switch (assetSource.format) {
+							case 'audio/mp3':
+							case 'audio/mpeg':
+								mp3AudioUri = assetSource.uri;
+								break;
+							case 'audio/ogg':
+								oggAudioUri = assetSource.uri;
+								break;
+							case 'audio/wav':
+								wavAudioUri = assetSource.uri;
+								break;
 						}
-					}
+					});
 				});
 			}
-			$(this.el).html(this.template({
-				tourStopMp3Audio : $mp3AudioUri,
-				tourStopOggAudio : $oggAudioUri,
-				tourStopWavAudio : $wavAudioUri,
+
+			this.$el.html(this.template({
+				tourStopMp3Audio : mp3AudioUri,
+				tourStopOggAudio : oggAudioUri,
+				tourStopWavAudio : wavAudioUri,
 				tourStopTitle : $stop["attributes"]["title"][0].value
 			}));
 			return this;
@@ -267,9 +271,9 @@ jQuery(function() {
 		el: $('#tour-stop').find(":jqmData(role='content')"),
 		template: _.template($('#tour-stop-tpl').html()),
 		render: function() {
-			$(this.el).html(this.template({
-				tourStopTitle : $stop["attributes"]["title"][0].value,
-				tourStopDescription : $stop["attributes"]["description"][0].value
+			this.$el.html(this.template({
+				tourStopTitle : $stop.get("title") ? $stop.get("title")[0].value : undefined,
+				tourStopDescription : $stop.get('description') ? $stop.get('description')[0].value : undefined
 			}));
 			return this;
 		}
@@ -285,7 +289,7 @@ jQuery(function() {
 			this.$el.html(this.template({
 				tourStopTitle : $stop["attributes"]["title"][0].value
 			}));
-			myPhotoSwipe = $("#Gallery a").photoSwipe({
+			var myPhotoSwipe = $("#Gallery a").photoSwipe({
 				enableMouseWheel: false,
 				enableKeyboard: true,
 				doubleTapZoomLevel : 0,
@@ -318,23 +322,25 @@ jQuery(function() {
 		el: $('#tour-stop').find(":jqmData(role='content')"),
 		template: _.template($('#tour-stop-image-tpl').html()),
 		render: function() {
+			var imageUri, iconUri;
+
 			if($stop["attributes"]["assetRef"]){
 				$.each($stop["attributes"]["assetRef"], function() {
 					$assetItem = tap.tourAssets.models;
 					for(var i=0;i<$assetItem.length;i++) {
-						if(($assetItem[i].get('id') == this['id']) && (this['usage']=="primary")){
-							$imageUri = $assetItem[i].attributes.source[0].uri;
+						if(($assetItem[i].get('id') == this['id']) && (this['usage'] == "primary" || this['usage'] == "tour_image")){
+							imageUri = $assetItem[i].attributes.source[0].uri;
 						}
 						if(($assetItem[i].get('id') == this['id']) && (this['usage']=="icon")){
-							$iconUri = $assetItem[i].attributes.source[0].uri;
+							iconUri = $assetItem[i].attributes.source[0].uri;
 						}
 					}
 				});
 			}
 
 			this.$el.html(this.template({
-				tourImageUri : $imageUri,
-				tourIconUri : $iconUri,
+				tourImageUri : imageUri,
+				tourIconUri : iconUri,
 				tourStopTitle : $stop["attributes"]["title"][0].value
 			}));
 
@@ -405,9 +411,11 @@ jQuery(function() {
 		el: $('#tour-details').find(":jqmData(role='content')"),
 		template: _.template($('#tour-details-tpl').html()),
 		render: function() {
+			var currentTour = tap.tours.get(tap.currentTour);
+
 			$(this.el).html(this.template({
-				publishDate: tap.tours.get(tap.currentTour).get('publishDate')[0].value,
-				description: tap.tours.get(tap.currentTour).get('description')[0].value,
+				publishDate: currentTour.get('publishDate') ? currentTour.get('publishDate')[0].value : undefined,
+				description: currentTour.get('description') ? currentTour.get('description')[0].value : undefined,
 				stopCount: tap.tourStops.length,
 				assetCount: tap.tourAssets.length
 			}));
@@ -439,7 +447,7 @@ jQuery(function() {
 		template: _.template($('#tour-list-item-tpl').html()),
 		render: function() {
 			$(this.el).html(this.template({
-				title: this.model.get('title')[0].value,
+				title: this.model.get('title') ? this.model.get('title')[0].value : undefined,
 				id: this.model.get('id')
 			}));
 			return this;
@@ -453,28 +461,31 @@ jQuery(function() {
 		el: $('#tour-stop').find(":jqmData(role='content')"),
 		template: _.template($('#tour-stop-video-tpl').html()),
 		render: function() {
+			var mp4ViedoUri, oggVideoUri;
 			if($stop["attributes"]["assetRef"]){
-				$.each($stop["attributes"]["assetRef"], function() {
-					$assetItem = tap.tourAssets.models;
-					for(var i=0;i<$assetItem.length;i++) {
-						if($assetItem[i].get('id') == this['id']){
-							for(var j=0;j<$assetItem[i].attributes.source.length;j++){
-								if($assetItem[i].attributes.source[j].format == "video/mp4"){
-									$mp4VideoUri = $assetItem[i].attributes.source[j].uri;
-								}
-								if($assetItem[i].attributes.source[j].format == "video/ogg"){
-									$oggVideoUri = $assetItem[i].attributes.source[j].uri;
-								}
-							}
+				_.each($stop.get("assetRef"), function(assetRef) {
+					var asset = tap.tourAssets.get(assetRef.id);
+					var assetSources = asset.get("source");
+
+					_.each(assetSources, function(assetSource){
+						switch (assetSource.format) {
+							case 'video/mp4':
+								mp4VideoUri = assetSource.uri;
+								break;
+							case 'video/ogg':
+								oggVideoUri = assetSource.uri;
+								break;
 						}
-					}
+					});
 				});
 			}
-			$(this.el).html(this.template({
+
+			this.$el.html(this.template({
 				tourStopTitle : $stop["attributes"]["title"][0].value,
-				tourStopMp4Video : $mp4VideoUri,
-				tourStopOggVideo : $oggVideoUri
+				tourStopMp4Video : mp4VideoUri,
+				tourStopOggVideo : oggVideoUri
 			}));
+
 			return this;
 		}
 	});
@@ -654,21 +665,21 @@ if (!tap) {
 		// create new tour
 		tap.tours.create({
 			id: data.id,
-			//appResource: data.tourMetadata && data.tourMetadata.appResource ? objectToArray(data.tourMetadata.appResource) : undefined,
-			appResource: objectToArray(data.appResource),
+			appResource: data.tourMetadata && data.tourMetadata.appResource ? objectToArray(data.tourMetadata.appResource) : undefined,
+			//appResource: objectToArray(data.appResource),
 			connection: objectToArray(data.connection),
-			//description: data.tourMetadata && data.tourMetadata.description ? objectToArray(data.tourMetadata.description) : undefined,
-			//lastModified: data.tourMetadata && data.tourMetadata.lastModified ? data.tourMetadata.lastModified : undefined,
-			//propertySet: data.tourMetadata && data.tourMetadata.propertySet ? objectToArray(data.tourMetadata.property) : undefined,
-			//publishDate: data.tourMetadata && data.tourMetadata.publishDate ? objectToArray(data.tourMetadata.publishDate) : undefined,
-			//rootStopRef: data.tourMetadata && data.tourMetadata.rootStopRef ? data.tourMetadata.rootStopRef : undefined,
-			//title: data.tourMetadata && data.tourMetadata.title ? objectToArray(data.tourMetadata.title) : undefined,
-			description: objectToArray(data.description),
-			lastModified: data.lastModified,
-			propertySet: objectToArray(data.propertySet.property),
-			publishDate: objectToArray(data.publishDate),
-			rootStopRef: objectToArray(data.rootStopRef),
-			title: objectToArray(data.title)
+			description: data.tourMetadata && data.tourMetadata.description ? objectToArray(data.tourMetadata.description) : undefined,
+			lastModified: data.tourMetadata && data.tourMetadata.lastModified ? data.tourMetadata.lastModified : undefined,
+			propertySet: data.tourMetadata && data.tourMetadata.propertySet ? objectToArray(data.tourMetadata.property) : undefined,
+			publishDate: data.tourMetadata && data.tourMetadata.publishDate ? objectToArray(data.tourMetadata.publishDate) : undefined,
+			rootStopRef: data.tourMetadata && data.tourMetadata.rootStopRef ? data.tourMetadata.rootStopRef : undefined,
+			title: data.tourMetadata && data.tourMetadata.title ? objectToArray(data.tourMetadata.title) : undefined
+			// description: objectToArray(data.description),
+			// lastModified: data.lastModified,
+			// propertySet: objectToArray(data.propertySet.property),
+			// publishDate: objectToArray(data.publishDate),
+			// rootStopRef: objectToArray(data.rootStopRef),
+			// title: objectToArray(data.title)
 		});
 
 		var i, j;
