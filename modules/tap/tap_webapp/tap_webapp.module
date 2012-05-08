@@ -1,0 +1,35 @@
+<?php
+
+function tap_webapp_menu() {
+	$items['node/%node/web-app'] = array(
+        'title'             => 'TAP Web-App Preview',
+        'page callback'     => 'tap_webapp_preview',
+        'page arguments'    => array(1),
+        'access arguments'  => array('access content'),
+        'type'              => MENU_LOCAL_TASK
+    );
+
+    return $items;
+}
+
+function tap_webapp_theme() {
+	return array(
+		'tap_webapp_preview' => array(
+			'variables' => array(
+				'url' => null,
+				'jsPath' => '/' . drupal_get_path('module', 'tap_webapp') . '/js/',
+				'cssPath' => '/' . drupal_get_path('module', 'tap_webapp') . '/css/',
+			),
+			'template'  => 'templates/tap-webapp-preview',
+		),
+	);
+}
+
+function tap_webapp_preview($node) {
+
+	$tourMLuri = url('node/' . $node->nid . '/tourml.xml');
+
+	print theme('tap_webapp_preview', array('url' => $tourMLuri));
+
+	die();
+}
