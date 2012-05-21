@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * @file
+ * Code for the TAP Base feature.
+ */
+
+include_once 'tap.features.inc';
+
 module_load_include('inc', 'tap', 'tap.forms');
 
 /************************************

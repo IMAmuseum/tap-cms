@@ -40,19 +40,23 @@ class TourML {
         
         if ($node->type === 'tour')
         {
-            // Find all referenced nodes to this tour
-            $results = db_select('field_data_field_tour', 'ref')
-                ->fields('ref', array('entity_id'))
-                ->condition('entity_type', 'node')
-                ->condition('field_tour_target_id', $node->nid)
-                ->execute()
-                ->fetchAll();
+            $nids  = array();
+            $field = variable_get('tap_connection_field');
+
+            if (db_table_exists('field_data_' . $field)) { 
+                // Find all referenced nodes to this tour
+                $results = db_select('field_data_field_tour', 'ref')
+                    ->fields('ref', array('entity_id'))
+                    ->condition('entity_type', 'node')
+                    ->condition('field_tour_target_id', $node->nid)
+                    ->execute()
+                    ->fetchAll();
             
-            $nids = array();
-            // Build an array of stop nodes
-            foreach($results as $result) 
-            {
-                $nids[] = $result->entity_id;
+                // Build an array of stop nodes
+                foreach($results as $result) 
+                {
+                    $nids[] = $result->entity_id;
+                }
             }
             
             $this->tour = $this->processMetadata($node);
