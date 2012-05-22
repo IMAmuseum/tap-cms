@@ -1,4 +1,8 @@
 <?php
+/**
+ * @file
+ * Admin settings for graphviz.
+ */
 
 function tap_graphviz_admin_form($form, &$form_state) {
     $form['endpoint'] = array(
@@ -31,9 +35,11 @@ function tap_graphviz_admin_form($form, &$form_state) {
 function tap_graphviz_admin_form_submit($form, &$form_state) {
     if (!empty($form_state['values']['endpoint'])) {
         $tourml = file_get_contents($form_state['values']['endpoint']);
-    } elseif (file_exists($_FILES['files']['tmp_name']['file'])) {
+    } 
+    elseif (file_exists($_FILES['files']['tmp_name']['file'])) {
         $tourml = file_get_contents($_FILES['files']['tmp_name']['file']);
-    } else {
+    } 
+    else {
         return;
     }
 

@@ -1,10 +1,14 @@
 <?php
+/**
+ * @file
+ * Admin settings for TAP
+ */
 
 function tap_admin_form() {
     // Get available fields for building connections 
     $options = array('' => '---');
     $fields = _field_info_collate_fields();
-    foreach($fields['fields'] as $field) {
+    foreach ($fields['fields'] as $field) {
         if ($field['type'] == 'entityreference') {
             $options[$field['field_name']] = $field['field_name'];
         }

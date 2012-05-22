@@ -1,17 +1,20 @@
 <?php
+/**
+ * @file
+ * Helper class for rendering drupal nodes into TourML 
+ */
 
 class TourML {
     public $assets              = array();
     public $multipart_assets    = array();
     public $stops               = array();
     public $connections         = array();
-    public $nid                 = null;
-    public $tour                = null;
-    public $tourml              = null;
+    public $nid                 = NULL;
+    public $tour                = NULL;
+    public $tourml              = NULL;
     public $settings            = array();
 
-    public function __construct($nid, $settings)
-    {
+    public function __construct($nid, $settings) {
         $this->nid      = $nid;
         $this->settings = $settings;
         $this->settings += array(
@@ -20,8 +23,7 @@ class TourML {
         );
     }
     
-    public function getTourML()
-    {
+    public function getTourML() {
         $stopNodes = $this->loadStopNodes();
         
         $this->processStops($stopNodes);
@@ -33,13 +35,11 @@ class TourML {
         return $this->tourml;
     }
     
-    protected function loadStopNodes()
-    {
+    protected function loadStopNodes() {
         $stopNodes = array();
         $node = node_load($this->nid);
         
-        if ($node->type === 'tour')
-        {
+        if ($node->type === 'tour') {
             $nids  = array();
             $field = variable_get('tap_connection_field');
 
@@ -53,15 +53,15 @@ class TourML {
                     ->fetchAll();
             
                 // Build an array of stop nodes
-                foreach($results as $result) 
-                {
+                foreach ($results as $result) {
                     $nids[] = $result->entity_id;
                 }
             }
             
             $this->tour = $this->processMetadata($node);
             $stopNodes  = node_load_multiple($nids);
-        } else {
+        } 
+        else {
             $stopNodes = array($node);
         }
         
@@ -69,16 +69,15 @@ class TourML {
     }
     
     protected function processStops(&$nodes) {
-        foreach($nodes as $node) {
+        foreach ($nodes as $node) {
             $this->processStop($node);
         }
     }
     
-    protected function processAssets()
-    {
+    protected function processAssets() {
         global $language;
 
-        foreach($this->assets as $k => $asset) {
+        foreach ($this->assets as $k => $asset) {
             $asset += module_invoke_all('tourml_asset', $asset);
             $this->assets[$k]['rendered'] = theme('tap_tourml_asset', array(
                'asset' => $asset, 
@@ -88,7 +87,7 @@ class TourML {
             ));
         }
 
-        foreach($this->multipart_assets as $k => $asset) {
+        foreach ($this->multipart_assets as $k => $asset) {
             $asset += module_invoke_all('tourml_multipart_asset', $asset);
             $this->multipart_assets[$k]['rendered'] = theme('tap_tourml_multipart_asset', array(
                 'asset_id' => $k,
@@ -116,24 +115,22 @@ class TourML {
         $stop['items']      = array();
         $stop['view']       = $node->type;
         $properties         = array();
-        $hasTitleField      = false;
+        $hasTitleField      = FALSE;
 
         // Loop thru renderable fields
-        foreach(element_children($node->content) as $field_name) {
+        foreach (element_children($node->content) as $field_name) {
 
             $field =& $node->content[$field_name];
-            if (isset($field['#formatter']) && strpos($field['#formatter'], 'tap_tourml') !== false)
-            {
+            if (isset($field['#formatter']) && strpos($field['#formatter'], 'tap_tourml') !== FALSE) {
                 // Key an ID for the property.  This data is not
                 // available deep into the theme layer and we might
                 // need it later
-                foreach($field['#items'] as $k => $item) {
+                foreach ($field['#items'] as $k => $item) {
                     $field['#items'][$k]['name'] = _anti_field($field['#field_name']);
                 }
 
                 // Determine how a field should be rendered
-                switch($field['#formatter'])
-                {
+                switch ($field['#formatter']) {
                     case 'tap_tourml_property':
                         // Build an array of rendered properties that can be added to a propertySet later
                         if (!empty($field['#items'])) {
@@ -144,36 +141,37 @@ class TourML {
                     case 'tap_tourml_multipart_asset':
                         $prefix = $field['#bundle'] . '-' . $field['#field_name'] . '-';
                         // special handling for field collection module field
-                        if($field['#field_type'] == 'field_collection') {
-                            foreach($field['#items'] as &$collection) {
+                        if ($field['#field_type'] == 'field_collection') {
+                            foreach ($field['#items'] as &$collection) {
                                 $id = $prefix . $collection['value'];
                                 // retrieve the field collection entity
                                 $entity = field_collection_item_load($collection['value']);
                                 // retrieve the field instances for this field collection
                                 $instances = field_info_instances('field_collection_item', $field['#field_name']);
                                 // iterate over all the fields attached to the entity
-                                foreach($instances as $field_name => $settings) {
-                                    foreach($entity->{$field_name}['und'] as $key => $item) {
+                                foreach ($instances as $field_name => $settings) {
+                                    foreach ($entity->{$field_name}['und'] as $key => $item) {
                                         // set reference id
                                         $collection['id'] = $id;
                                         $uid = (isset($item['fid'])) ? $item['fid'] : $key;
                                         // unique key for field in set
                                         $part_id = $prefix . $field_name . '-' . $uid;
                                         $item['name'] = $field_name;
-                                        if(!isset($this->multipart_assets[$id][$part_id])) {
+                                        if (!isset($this->multipart_assets[$id][$part_id])) {
                                             drupal_alter('tourml_multipart_asset', $this, $item);
                                             $this->multipart_assets[$id][$part_id] = $item;
                                         }
                                     }
                                 }
                             }
-                        } else {
+                        } 
+                        else {
                             // Build an array of assets that will be rendered after all stops
-                            foreach($field['#items'] as $key => &$item) {
+                            foreach ($field['#items'] as $key => &$item) {
                                 $part_id = (isset($item['fid'])) ? $item['fid'] : $key;
                                 $part_id = $prefix . $part_id;
                                 $item['id'] = $prefix . $node->nid;;
-                                if(!isset($this->multipart_assets[$item['id']][$part_id])) {
+                                if (!isset($this->multipart_assets[$item['id']][$part_id])) {
                                     drupal_alter('tourml_multipart_asset', $this, $item);
                                     $this->multipart_assets[$item['id']][$part_id] = $item;
                                 }
@@ -186,7 +184,7 @@ class TourML {
                         $prefix = $field['#field_name'] . '-';
 
                         // Build an array of assets that will be rendered after all stops
-                        foreach($field['#items'] as $key => &$item) {
+                        foreach ($field['#items'] as $key => &$item) {
                             $item['field'] = $field;
                             $item['id'] = (isset($item['fid'])) ? $item['fid'] : $key;
                             $item['id'] = $prefix . $item['id'];
@@ -201,8 +199,7 @@ class TourML {
                         break;
                     case 'tap_tourml_connection':
                         $ConnectionPriority = 0;
-                        foreach($field['#items'] as $k => $v)
-                        {
+                        foreach ($field['#items'] as $k => $v) {
                             // add referenced node to tourml
                             $target_node = node_load($v['target_id']);
                             $this->processStop($target_node);
@@ -217,7 +214,7 @@ class TourML {
                         $stop['items'][] = drupal_render($field);
                         break;
                     case 'tap_tourml_title':
-                        $hasTitleField = true;
+                        $hasTitleField = TRUE;
                         array_unshift($stop['items'], drupal_render($field));
                         break;
                 }
@@ -225,14 +222,12 @@ class TourML {
         }
         
         //If no title field specified by TourML display, use the node title
-        if (!$hasTitleField)
-        {
+        if (!$hasTitleField) {
             array_unshift($stop['items'], theme('tap_tourml_title_text', array('items' => array(array('value' => $node->title))))); //TODO: needs discussion
         }
 
         // Render properties for a stop
-        if (!empty($properties))
-        {
+        if (!empty($properties)) {
             $stop['items'][] = theme('tap_tourml_property_set', array('properties' => $properties));
         }
 
@@ -244,11 +239,11 @@ class TourML {
             $this->getTourML();
         }        
         //TODO: trying out validation, this needs some work and probably moved into the TourML class
-        if ($doc->schemaValidate("https://raw.github.com/IMAmuseum/tourml/master/TourML.xsd"))
-        {
-            drupal_set_message("TourML is valid", 'status');
-        } else {
-            drupal_set_message("TourML does not validate", 'warning');
+        if ($doc->schemaValidate("https://raw.github.com/IMAmuseum/tourml/master/TourML.xsd")) {
+            drupal_set_message(check_plain("TourML is valid"), 'status');
+        } 
+        else {
+            drupal_set_message(check_plain("TourML does not validate"), 'warning');
         }
     }
 }

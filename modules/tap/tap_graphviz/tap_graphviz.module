@@ -4,7 +4,7 @@ define('TOURML_NS', 'http://www.imamuseum.org/TourML/2011/11');
 
 function tap_graphviz_menu() {
     $items['admin/tap/graphviz'] = array(
-        'title'             => t('GraphViz'),
+        'title'             => 'GraphViz',
         'page callback'     => 'drupal_get_form',
         'page arguments'    => array('tap_graphviz_admin_form'),
         'access arguments'  => array('administer tap'),
@@ -13,7 +13,7 @@ function tap_graphviz_menu() {
     );
 
     $items['admin/tap/graphviz/settings'] = array(
-        'title'             => t('GraphViz Settings'),
+        'title'             => 'GraphViz Settings',
         'page callback'     => 'drupal_get_form',
         'page arguments'    => array('tap_graphviz_admin_settings_form'),
         'access arguments'  => array('administer tap'),
@@ -121,7 +121,7 @@ function tap_graphviz_image($tourml, $render = TRUE) {
         );
     }
 
-    foreach($tour->Stop as $stop) {
+    foreach ($tour->Stop as $stop) {
         $id = (string)$stop->attributes(TOURML_NS)->id;
         $graph->addNode(
             $id,
@@ -134,7 +134,7 @@ function tap_graphviz_image($tourml, $render = TRUE) {
         );
 
         if (isset($stop->AssetRef)) {
-            foreach($stop->AssetRef as $asset) {
+            foreach ($stop->AssetRef as $asset) {
                 $asset_id = (string)$asset->attributes(TOURML_NS)->id;
                 $graph->addNode(
                     $asset_id,
@@ -156,7 +156,7 @@ function tap_graphviz_image($tourml, $render = TRUE) {
 
     }
 
-    foreach($tour->Connection as $connection) {
+    foreach ($tour->Connection as $connection) {
         $graph->addEdge(
             array(
                 (string)$connection->attributes(TOURML_NS)->srcId => (string)$connection->attributes(TOURML_NS)->destId,
@@ -166,7 +166,8 @@ function tap_graphviz_image($tourml, $render = TRUE) {
 
     if ($render) {
         $graph->image('svg', variable_get('tap_graphviz_type', 'neato'));
-    } else {
+    } 
+    else {
         // removes a stray ]> that gets added by graphviz
         $xml = new SimpleXMLElement($graph->fetch('svg', variable_get('tap_graphviz_type', 'neato')));
         return '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">' . $xml->g->asXML() . '</svg>';

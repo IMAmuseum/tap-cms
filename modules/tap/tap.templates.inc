@@ -1,4 +1,8 @@
 <?php
+/**
+ * @file
+ * Template functions
+ */
 
 function tap_preprocess_tap_tourml_tour(&$vars) {
     $tour                   = $vars['tour'];
@@ -21,7 +25,7 @@ function tap_preprocess_tap_tourml_tour(&$vars) {
         $vars['assets'] .= $asset['rendered'];
     }
 
-    foreach($tour->multipart_assets as $asset) {
+    foreach ($tour->multipart_assets as $asset) {
         $vars['assets'] .= $asset['rendered'];
     }
 
@@ -59,12 +63,13 @@ function tap_preprocess_tap_tourml_asset(&$vars) {
         }
         if ($vars['absolute']) {
             $vars['path'] = file_create_url($vars['asset']['uri']);
-        } else {
-        	$file_path = array_pop(explode('/', $vars['asset']['uri']));
-        	if(!empty($vars['base_path'])) {
-	        	$file_path = $vars['base_path'] . '/' . $file_path;	
-        	}
-			$vars['path'] = $file_path;
+        } 
+        else {
+            $file_path = array_pop(explode('/', $vars['asset']['uri']));
+            if (!empty($vars['base_path'])) {
+                $file_path = $vars['base_path'] . '/' . $file_path; 
+            }
+            $vars['path'] = $file_path;
         }
         $vars['source'] = TRUE; 
     }
@@ -76,7 +81,7 @@ function tap_preprocess_tap_tourml_asset(&$vars) {
 
     if (array_key_exists('properties', $vars['asset'])) {
       if (is_array($vars['asset']['properties'])) {
-        foreach($vars['asset']['properties'] as $name => $value) {
+        foreach ($vars['asset']['properties'] as $name => $value) {
           $properties[] = theme('tap_tourml_property', array('name' => $name, 'value' => $value));
         }
       }
@@ -85,8 +90,7 @@ function tap_preprocess_tap_tourml_asset(&$vars) {
     $vars['properties'] = theme('tap_tourml_property_set', array('properties' => $properties));
 }
 
-function theme_tap_tourml_asset_file(&$vars)
-{
+function theme_tap_tourml_asset_file(&$vars) {
     return theme('tap_tourml_asset_ref', $vars);
 }
 
@@ -111,7 +115,7 @@ function theme_tap_tourml_asset_text_with_summary(&$vars) {
  */
 
 function tap_preprocess_tap_tourml_multipart_asset(&$vars) {
-    foreach($vars['asset'] as $key => $asset) {
+    foreach ($vars['asset'] as $key => $asset) {
         $properties                         = array();
         $vars['asset'][$key]['source']      = FALSE;
         $vars['asset'][$key]['content']     = FALSE;
@@ -125,9 +129,10 @@ function tap_preprocess_tap_tourml_multipart_asset(&$vars) {
             }
             if ($vars['absolute']) {
                 $vars['asset'][$key]['path'] = file_create_url($asset['uri']);
-            } else {
+            } 
+            else {
                 $file_path = array_pop(explode('/', $asset['uri']));
-                if(!empty($vars['base_path'])) {
+                if (!empty($vars['base_path'])) {
                     $file_path = $vars['base_path'] . '/' . $file_path; 
                 }
                 $vars['asset'][$key]['path'] = $file_path;
@@ -141,7 +146,7 @@ function tap_preprocess_tap_tourml_multipart_asset(&$vars) {
 
         if (array_key_exists('properties', $asset)) {
             if (is_array($asset['properties'])) {
-                foreach($asset['properties'] as $name => $value) {
+                foreach ($asset['properties'] as $name => $value) {
                     $properties[] = theme('tap_tourml_property', array('name' => $name, 'value' => $value));
                 }
             }
@@ -152,7 +157,7 @@ function tap_preprocess_tap_tourml_multipart_asset(&$vars) {
 
 function tap_preprocess_tap_tourml_multipart_asset_ref(&$vars) {
     $vars['refererences'] = array();
-    foreach($vars['items'] as $item) {
+    foreach ($vars['items'] as $item) {
         $vars['references'][$item['id']] = $item['name'];
     }
 }
@@ -194,7 +199,7 @@ function tap_preprocess_tap_tourml_property(&$vars) {
 
 function _theme_tap_tourml_property($vars) {
     $properties = '';
-    foreach($vars['items'] as $item) {
+    foreach ($vars['items'] as $item) {
         $properties .= theme('tap_tourml_property', $item);
     }
 
@@ -253,7 +258,7 @@ function theme_tap_tourml_property_text_long(&$vars) {
 }
 
 function theme_tap_tourml_property_taxonomy_term_reference(&$vars) {
-    foreach($vars['items'] as $id => $item) {
+    foreach ($vars['items'] as $id => $item) {
         $vars['items'][$id]['value'] = taxonomy_term_load($item['tid'])->name;
     }
     return _theme_tap_tourml_property($vars);
@@ -267,7 +272,7 @@ function _theme_tap_tourml_title($vars) {
     global $language;
 
     $properties = '';
-    foreach($vars['items'] as $item) {
+    foreach ($vars['items'] as $item) {
         $item['language'] = $language->language;
         $properties .= theme('tap_tourml_title', $item);
     }
@@ -291,7 +296,7 @@ function _theme_tap_tourml_description($vars) {
     global $language;
 
     $properties = '';
-    foreach($vars['items'] as $item) {
+    foreach ($vars['items'] as $item) {
         $item['language'] = $language->language;
         $properties .= theme('tap_tourml_description', $item);
     }
@@ -315,10 +320,8 @@ function theme_tap_tourml_description_text_with_summary(&$vars) {
  * Connections
  */
 
-function tap_preprocess_tap_tourml_connection_entityreference(&$vars)
-{
-    foreach($vars['items'] as $k => $v)
-    {
+function tap_preprocess_tap_tourml_connection_entityreference(&$vars) {
+    foreach ($vars['items'] as $k => $v) {
         $vars['items'][$k]['destId'] = $v['target_id'];
     }
 }
@@ -326,5 +329,5 @@ function tap_preprocess_tap_tourml_connection_entityreference(&$vars)
 /********************************
  * iOS plist file
  */
-function tap_preprocess_ios_tourml_xml(&$vars){
+function tap_preprocess_ios_tourml_xml(&$vars) {
 }
