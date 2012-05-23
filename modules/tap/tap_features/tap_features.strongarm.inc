@@ -14,7 +14,7 @@ function tap_features_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'additional_settings__active_tab_poll_stop';
-  $strongarm->value = 'edit-comment';
+  $strongarm->value = 'edit-submission';
   $export['additional_settings__active_tab_poll_stop'] = $strongarm;
 
   $strongarm = new stdClass();
@@ -188,13 +188,6 @@ function tap_features_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'comment_geo_stop';
-  $strongarm->value = '0';
-  $export['comment_geo_stop'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
   $strongarm->name = 'comment_poll_stop';
   $strongarm->value = '0';
   $export['comment_poll_stop'] = $strongarm;
@@ -233,6 +226,13 @@ function tap_features_strongarm() {
   $strongarm->name = 'comment_preview_tour_video_stop';
   $strongarm->value = '1';
   $export['comment_preview_tour_video_stop'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'comment_subject_field_poll_stop';
+  $strongarm->value = 1;
+  $export['comment_subject_field_poll_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
@@ -363,6 +363,19 @@ function tap_features_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'field_bundle_settings_field_collection_item__field_image_asset';
+  $strongarm->value = array(
+    'view_modes' => array(),
+    'extra_fields' => array(
+      'form' => array(),
+      'display' => array(),
+    ),
+  );
+  $export['field_bundle_settings_field_collection_item__field_image_asset'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'field_bundle_settings_file__audio';
   $strongarm->value = array(
     'view_modes' => array(),
@@ -444,6 +457,10 @@ function tap_features_strongarm() {
             'visible' => TRUE,
           ),
           'default' => array(
+            'weight' => '0',
+            'visible' => TRUE,
+          ),
+          'media_original' => array(
             'weight' => '0',
             'visible' => TRUE,
           ),
@@ -581,7 +598,9 @@ function tap_features_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'menu_options_poll_stop';
-  $strongarm->value = array();
+  $strongarm->value = array(
+    0 => 'main-menu',
+  );
   $export['menu_options_poll_stop'] = $strongarm;
 
   $strongarm = new stdClass();
@@ -661,6 +680,7 @@ function tap_features_strongarm() {
   $strongarm->name = 'node_options_poll_stop';
   $strongarm->value = array(
     0 => 'status',
+    1 => 'promote',
   );
   $export['node_options_poll_stop'] = $strongarm;
 
@@ -742,7 +762,7 @@ function tap_features_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'node_submitted_poll_stop';
-  $strongarm->value = 0;
+  $strongarm->value = 1;
   $export['node_submitted_poll_stop'] = $strongarm;
 
   $strongarm = new stdClass();

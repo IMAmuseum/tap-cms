@@ -26,6 +26,14 @@ function tap_features_views_api() {
  */
 function tap_features_node_info() {
   $items = array(
+    'poll_stop' => array(
+      'name' => t('Poll Stop'),
+      'base' => 'node_content',
+      'description' => t('A poll stop on a tour.'),
+      'has_title' => '1',
+      'title_label' => t('Title'),
+      'help' => '',
+    ),
     'tour_audio_stop' => array(
       'name' => t('Audio Stop'),
       'base' => 'node_content',

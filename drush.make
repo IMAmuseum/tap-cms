@@ -31,6 +31,8 @@ projects[strongarm][version] = "2.0-rc1"
 
 projects[jplayer][version] = "2.x-dev"
 
+projects[field_collection][version] = "7.x-1.0-beta4"
+
 ; Libraries
 ; Please fill the following out. Type may be one of get, git, bzr or svn,
 ; and url is the url of the download.
