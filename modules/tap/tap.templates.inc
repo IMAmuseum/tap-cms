@@ -71,7 +71,8 @@ function tap_preprocess_tap_tourml_asset(&$vars) {
             }
             $vars['path'] = $file_path;
         }
-        $vars['source'] = TRUE; 
+        $vars['source'] = TRUE;
+        $vars['asset_rights'] = theme('tap_tourml_asset_rights', array('file' => file_load($vars['asset']['fid'])));
     }
 
     // Handle text fields
@@ -115,7 +116,7 @@ function theme_tap_tourml_asset_text_with_summary(&$vars) {
  */
 
 function tap_preprocess_tap_tourml_multipart_asset(&$vars) {
-    foreach ($vars['asset'] as $key => $asset) {
+    foreach ($vars['asset'] as $key => &$asset) {
         $properties                         = array();
         $vars['asset'][$key]['source']      = FALSE;
         $vars['asset'][$key]['content']     = FALSE;
@@ -125,23 +126,24 @@ function tap_preprocess_tap_tourml_multipart_asset(&$vars) {
             // So if we run into one we need to merge it into the 
             // parent array.
             if (isset($asset['file'])) {
-                $vars['asset'][$key] = array_merge($asset, (array)$vars['asset'][$key]['file']);
+                $asset = array_merge($asset, (array)$asset['file']);
             }
             if ($vars['absolute']) {
-                $vars['asset'][$key]['path'] = file_create_url($asset['uri']);
+                $asset['path'] = file_create_url($asset['uri']);
             } 
             else {
                 $file_path = array_pop(explode('/', $asset['uri']));
                 if (!empty($vars['base_path'])) {
                     $file_path = $vars['base_path'] . '/' . $file_path; 
                 }
-                $vars['asset'][$key]['path'] = $file_path;
+                $asset['path'] = $file_path;
             }
-            $vars['asset'][$key]['source'] = TRUE; 
+            $asset['source'] = TRUE;
+            $asset['asset_rights'] = theme('tap_tourml_asset_rights', array('file' => file_load($asset['fid'])));
         }
         // Handle text fields
         if (isset($asset['value'])) {
-            $vars['asset'][$key]['content'] = TRUE;
+            $asset['content'] = TRUE;
         }
 
         if (array_key_exists('properties', $asset)) {
@@ -151,7 +153,7 @@ function tap_preprocess_tap_tourml_multipart_asset(&$vars) {
                 }
             }
         }
-        $vars['asset'][$key]['properties'] = theme('tap_tourml_property_set', array('properties' => $properties));     
+        $asset['properties'] = theme('tap_tourml_property_set', array('properties' => $properties));   
     }
 }
 
@@ -324,6 +326,122 @@ function tap_preprocess_tap_tourml_connection_entityreference(&$vars) {
     foreach ($vars['items'] as $k => $v) {
         $vars['items'][$k]['destId'] = $v['target_id'];
     }
+}
+
+/********************************
+ * Asset Rights
+ */
+function tap_preprocess_tap_tourml_asset_rights(&$vars) {
+    $file = file_view($vars['file'], 'tourml_xml');
+    foreach (element_children($file) as $field_name) {
+        $field = $file[$field_name];
+        if(empty($field['#formatter'])) continue;
+
+        switch($field['#formatter']) {
+            case 'tap_tourml_copyright':
+            case 'tap_tourml_credit_line':
+            case 'tap_tourml_machine_rights':
+            case 'tap_tourml_expiration':
+            case 'tap_tourml_watermark':
+                if(empty($field['#items'])) continue;
+                $vars['items'][] = drupal_render($field);
+                break;
+        }
+    }
+}
+
+/********************************
+ * Copyright
+ */
+function _theme_tap_tourml_copyright($vars) {
+    $copyright = theme('tap_tourml_copyright', array('value' => $vars['items'][0]['value']));
+    return $copyright;
+}
+
+function theme_tap_tourml_copyright_text(&$vars) {
+    return _theme_tap_tourml_copyright($vars);
+}
+
+function theme_tap_tourml_copyright_text_long(&$vars) {
+    return _theme_tap_tourml_copyright($vars);
+}
+
+function theme_tap_tourml_copyright_text_with_summary(&$vars) {
+    return _theme_tap_tourml_copyright($vars);
+}
+
+/********************************
+ * Credit Line
+ */
+function _theme_tap_tourml_credit_line($vars) {
+    $credit_line = theme('tap_tourml_credit_line', array('value' => $vars['items'][0]['value']));
+    return $credit_line;
+}
+
+function theme_tap_tourml_credit_line_text(&$vars) {
+    return _theme_tap_tourml_credit_line($vars);
+}
+
+function theme_tap_tourml_credit_line_text_long(&$vars) {
+    return _theme_tap_tourml_credit_line($vars);
+}
+
+function theme_tap_tourml_credit_line_text_with_summary(&$vars) {
+    return _theme_tap_tourml_credit_line($vars);
+}
+
+/********************************
+ * Machine Rights
+ */
+function _theme_tap_tourml_machine_rights($vars) {
+    $machine_rights = theme('tap_tourml_machine_rights', array('value' => $vars['items'][0]['value']));
+    return $machine_rights;
+}
+
+function theme_tap_tourml_machine_rights_text(&$vars) {
+    return _theme_tap_tourml_machine_rights($vars);
+}
+
+function theme_tap_tourml_machine_rights_text_long(&$vars) {
+    return _theme_tap_tourml_machine_rights($vars);
+}
+
+function theme_tap_tourml_machine_rights_text_with_summary(&$vars) {
+    return _theme_tap_tourml_machine_rights($vars);
+}
+
+/********************************
+ * Expiration
+ */
+function _theme_tap_tourml_expiration($vars) {
+
+}
+
+function theme_tap_tourml_expiration_date(&$vars) {
+    return _theme_tap_tourml_expiration($vars);
+}
+
+function theme_tap_tourml_expiration_datestamp(&$vars) {
+    return _theme_tap_tourml_expiration($vars);
+}
+
+function theme_tap_tourml_expiration_datetime(&$vars) {
+    return _theme_tap_tourml_expiration($vars);
+}
+
+/********************************
+ * Watermark
+ */
+function _theme_tap_tourml_watermark($vars) {
+
+}
+
+function theme_tap_tourml_watermark_file(&$vars) {
+    return _theme_tap_tourml_watermark($vars);
+}
+
+function theme_tap_tourml_watermark_image(&$vars) {
+    return _theme_tap_tourml_watermark($vars);
 }
 
 /********************************

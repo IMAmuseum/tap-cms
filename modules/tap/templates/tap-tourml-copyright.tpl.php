@@ -1,0 +1,1 @@
+<tourml:Copyright><?php print $value; ?></tourml:Copyright>

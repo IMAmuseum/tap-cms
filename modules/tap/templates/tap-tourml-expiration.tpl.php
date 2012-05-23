@@ -1,0 +1,1 @@
+<tourml:Expiration><?php print $value; ?></tourml:Expiration>

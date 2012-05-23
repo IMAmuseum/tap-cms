@@ -1,0 +1,1 @@
+<tourml:MachineRights><?php print $value; ?></tourml:MachineRights>

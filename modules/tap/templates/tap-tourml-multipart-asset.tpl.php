@@ -12,5 +12,8 @@
             <?php print $part['properties']; ?>
         </tourml:Source>
         <?php endif; ?>
+        <?php if(isset($part['asset_rights'])): ?>
+            <?php print $part['asset_rights']; ?>
+        <?php endif; ?>
     <?php endforeach; ?>
 </tourml:Asset>

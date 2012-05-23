@@ -139,6 +139,7 @@ class TourML {
                         }
                         break;
                     case 'tap_tourml_multipart_asset':
+                        if (empty($field['#items'])) break;
                         $prefix = $field['#bundle'] . '-' . $field['#field_name'] . '-';
                         // special handling for field collection module field
                         if ($field['#field_type'] == 'field_collection') {

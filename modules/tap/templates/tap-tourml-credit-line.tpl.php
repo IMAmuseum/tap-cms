@@ -1,0 +1,1 @@
+<tourml:CreditLine><?php print $value; ?></tourml:CreditLine>

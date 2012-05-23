@@ -301,6 +301,67 @@ function tap_theme() {
         'tap_tourml_multipart_asset_text_with_summary'  => $properties,
         'tap_tourml_multipart_asset_field_collection'   => $properties,
         /**
+         * Asset rights type
+         */
+        'tap_tourml_asset_rights' => array(
+            'variables' => array(
+                'file' => array(),
+            ),
+            'file'  => 'tap.templates.inc',
+            'template'  => 'templates/tap-tourml-asset-rights',
+        ),
+        /**
+         * Copyright
+         */
+        'tap_tourml_copyright' => array(
+            'variables' => array(
+                'value' => '',
+            ),
+            'file'  => 'tap.templates.inc',
+            'template'  => 'templates/tap-tourml-copyright',
+        ),
+        'tap_tourml_copyright_text'                     => $properties,
+        'tap_tourml_copyright_text_long'                => $properties,
+        'tap_tourml_copyright_text_with_summary'        => $properties,
+        /**
+         * Credit line
+         */
+        'tap_tourml_credit_line' => array(
+            'variables' => array(
+                'value' => '',
+            ),
+            'file'  => 'tap.templates.inc',
+            'template'  => 'templates/tap-tourml-credit-line',
+        ),        
+        'tap_tourml_credit_line_text'                   => $properties,
+        'tap_tourml_credit_line_text_long'              => $properties,
+        'tap_tourml_credit_line_text_with_summary'      => $properties,
+        /**
+         * Machine rights
+         */
+        'tap_tourml_machine_rights' => array(
+            'variables' => array(
+                'value' => '',
+            ),
+            'file'  => 'tap.templates.inc',
+            'template'  => 'templates/tap-tourml-machine-rights',
+        ),          
+        'tap_tourml_machine_rights_text'                => $properties,
+        'tap_tourml_machine_rights_text_long'           => $properties,
+        'tap_tourml_machine_rights_text_with_summary'   => $properties,
+        /**
+         * Watermark
+         */
+        'tap_tourml_watermark' => array(
+            'variables' => array(
+                'value' => '',
+            ),
+            'file'  => 'tap.templates.inc',
+            'template'  => 'templates/tap-tourml-watermark',
+        ),          
+        'tap_tourml_watermark_file'                     => $properties,
+        'tap_tourml_watermark_image'                    => $properties,   
+        /**
          * Connections
          */
         'tap_tourml_connection_entityreference' => array(
@@ -394,15 +455,15 @@ function tap_field_formatter_info() {
         ),
         'tap_tourml_copyright' => array(
             'label'         => t('TourML Copyright'),
-            'field types'   => array('text', 'list_text', 'text_long', 'text_with_summary'),
+            'field types'   => array('text', 'text_long', 'text_with_summary'),
         ),
         'tap_tourml_credit_line' => array(
             'label'         => t('TourML Credit Line'),
-            'field types'   => array('text', 'list_text', 'text_long', 'text_with_summary'),
+            'field types'   => array('text', 'text_long', 'text_with_summary'),
         ),
         'tap_tourml_machine_rights' => array(
             'label'         => t('TourML Machine Rights'),
-            'field types'   => array('text', 'list_text', 'text_long', 'text_with_summary'),
+            'field types'   => array('text', 'text_long', 'text_with_summary'),
         ),
         'tap_tourml_expiration' => array(
             'label'         => t('TourML Expiration'),

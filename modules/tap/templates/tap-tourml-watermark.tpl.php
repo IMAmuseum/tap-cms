@@ -1,0 +1,1 @@
+<tourml:Watermark tourml:id="<?php print $id; ?>" tourml:usage="<?php print $usage; ?>"><?php print $value; ?></tourml:Watermark>
