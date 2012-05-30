@@ -255,6 +255,13 @@ function tap_tourml_export_form_submit(&$form, &$form_state) {
                 $operations[] = array('tap_export_bundle_asset', array($path, $asset_dir, $asset['uri']));
             }
         }
+        foreach($tourml->multipart_assets as $asset) {
+            foreach($asset as $part) {
+                if(isset($part['fid'])) {
+                    $operations[] = array('tap_export_bundle_asset', array($path, $asset_dir, $part['uri']));
+                }
+            }
+        }
     }
 
     $operations[]   = array('tap_export_bundle_tour_save', array($node, $path));
@@ -371,8 +378,8 @@ function tap_export_bundle_finish($success, $results, $operations) {
     else {
         $message = t('An error occurred');
     }
-
-    drupal_set_message(check_plain($message));
+    $message = check_markup($message, 'full_html');
+    drupal_set_message($message);
 }
 
 /*
