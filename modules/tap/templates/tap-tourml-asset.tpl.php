@@ -10,7 +10,7 @@
         <?php print $properties; ?>
     </tourml:Source>
     <?php endif; ?>
-    <?php if($asset_rights): ?>
+    <?php if(isset($asset_rights)): ?>
         <?php print $asset_rights; ?>
     <?php endif; ?>
 </tourml:Asset>
