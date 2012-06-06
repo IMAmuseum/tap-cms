@@ -1,1 +1,1 @@
-<tourml:CreditLine><?php print $value; ?></tourml:CreditLine>
+<tourml:CreditLine><![CDATA[<?php print $value; ?>]]></tourml:CreditLine>

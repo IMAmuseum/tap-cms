@@ -1,1 +1,1 @@
-<tourml:Description xml:lang="<?php print $language; ?>"><?php print $value; ?></tourml:Description>
+<tourml:Description xml:lang="<?php print $language; ?>"><![CDATA[<?php print $value; ?>]]></tourml:Description>

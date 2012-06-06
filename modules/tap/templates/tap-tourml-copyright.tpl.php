@@ -1,1 +1,1 @@
-<tourml:Copyright><?php print $value; ?></tourml:Copyright>
+<tourml:Copyright><![CDATA[<?php print $value; ?>]]></tourml:Copyright>

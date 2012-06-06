@@ -1,7 +1,7 @@
 <tourml:Asset tourml:id="asset-<?php print $asset['id']; ?>">
     <?php if ($content): ?>
     <tourml:Content>
-        <tourml:Data><?php print $asset['value']; ?></tourml:Data>
+        <tourml:Data><![CDATA[<?php print $asset['value']; ?>]]></tourml:Data>
         <?php print $properties; ?>
     </tourml:Content>
     <?php endif; ?>

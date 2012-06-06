@@ -2,7 +2,7 @@
     <?php foreach($asset as $part): ?>
         <?php if ($part['content']): ?>
         <tourml:Content tourml:part="<?php print $part['name']; ?>">
-            <tourml:Data><?php print $part['value']; ?></tourml:Data>
+            <tourml:Data><![CDATA[<?php print $part['value']; ?>]]></tourml:Data>
             <?php print $part['properties']; ?>
         </tourml:Content>
         <?php endif; ?>
