@@ -337,6 +337,12 @@ function tap_export_bundle_tour_save($node, $file_path, &$context) {
     $trans          = db_transaction();
 
     try {
+        $bundle_dir = drupal_realpath('public://' . $settings['settings']['file_directory']);
+        // create bundle directory if it doesn't already exist
+        if(!is_dir($bundle_dir)) {
+            mkdir($bundle_dir);
+        }
+
         // Begin building file object.
         $file           = new stdClass();
         $file->uid      = $user->uid;
