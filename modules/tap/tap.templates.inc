@@ -160,7 +160,7 @@ function tap_preprocess_tap_tourml_multipart_asset(&$vars) {
 function tap_preprocess_tap_tourml_multipart_asset_ref(&$vars) {
     $vars['references'] = array();
     foreach ($vars['items'] as $item) {
-        $vars['references'][$item['id']] = $item['name'];
+        $vars['references'][$item['id']] = $item;
     }
 }
 

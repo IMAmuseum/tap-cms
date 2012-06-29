@@ -154,6 +154,7 @@ class TourML {
                                     foreach ($entity->{$field_name}['und'] as $key => $item) {
                                         // set reference id
                                         $collection['id'] = $id;
+                                        $collection['field'] = $field;
                                         $uid = (isset($item['fid'])) ? $item['fid'] : $key;
                                         // unique key for field in set
                                         $part_id = $prefix . $field_name . '-' . $uid;
@@ -171,7 +172,8 @@ class TourML {
                             foreach ($field['#items'] as $key => &$item) {
                                 $part_id = (isset($item['fid'])) ? $item['fid'] : $key;
                                 $part_id = $prefix . $part_id;
-                                $item['id'] = $prefix . $node->nid;;
+                                $item['id'] = $prefix . $node->nid;
+                                $item['field'] = $field;
                                 if (!isset($this->multipart_assets[$item['id']][$part_id])) {
                                     drupal_alter('tourml_multipart_asset', $this, $item);
                                     $this->multipart_assets[$item['id']][$part_id] = $item;
