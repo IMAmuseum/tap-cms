@@ -104,6 +104,15 @@ function tap_menu() {
         'type' => MENU_DEFAULT_LOCAL_TASK,
     );
 
+    $items['node/%node/tourmlval'] = array(
+        'title'             => 'Validate XML',
+        'page callback'     => 'tap_tourml_validate',
+        'page arguments'    => array(1),
+        'access arguments'  => array('administer tap'),
+        'type'              => MENU_LOCAL_TASK,
+    );
+
+
     return $items;
 }
 
@@ -653,6 +662,38 @@ function tap_tourml_preview($node) {
 }
 
 /**
+ * @param $node
+ * A node object
+ * @return
+ * Validates a rendered TourML file
+ */
+function tap_tourml_validate($node) {
+    $settings = array(
+        'return_object' => FALSE,
+        'absolute'  => TRUE,
+    );
+
+    module_load_include('inc', 'tap', 'includes/tourml.class');
+    $tourml = new TourML($node->nid, $settings);
+    $doc = new DOMDocument();
+    $doc->formatOutout = TRUE;
+    $doc->preserveWhiteSpate = FALSE;
+    $doc->loadXML($tourml->getTourML());    
+
+    // Enable user error handling 
+    libxml_use_internal_errors(true); 
+
+    if (!$doc->schemaValidate('/var/www/tourml.bpoc.org/sites/all/modules/tap-cms/TourML.xsd')) {
+      $output = tourml_display_errors();
+    }
+    else {
+      $output = 'Valid';
+    }
+
+    return  $output;
+}
+
+/**
  * Act on image assets
  *
  * @param $item
@@ -788,3 +829,37 @@ function _anti_field($text) {
 function _clean_file_text($text) {
     return preg_replace('/\s+/', '', check_plain($text));
 }
+
+function tourml_display_error($error) 
+{ 
+  $return = "<br/>\n"; 
+  switch ($error->level) { 
+    case LIBXML_ERR_WARNING: 
+      $return .= "<b>Warning $error->code</b>: "; 
+      break; 
+    case LIBXML_ERR_ERROR: 
+      $return .= "<b>Error $error->code</b>: "; 
+      break; 
+    case LIBXML_ERR_FATAL: 
+      $return .= "<b>Fatal Error $error->code</b>: "; 
+      break; 
+  } 
+  $return .= trim($error->message); 
+  if ($error->file) { 
+    $return .= " in <b>$error->file</b>"; 
+  } 
+  $return .= " on line <b>$error->line</b>\n"; 
+
+  return $return; 
+} 
+
+function tourml_display_errors() { 
+  $errors = libxml_get_errors(); 
+  $output = '';
+  foreach ($errors as $error) { 
+    $output .= tourml_display_error($error); 
+  } 
+  libxml_clear_errors(); 
+  return $output;
+} 
+
