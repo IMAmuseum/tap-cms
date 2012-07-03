@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Helper class for rendering drupal nodes into TourML 
+ * Helper class for rendering drupal nodes into TourML
  */
 
 class TourML {
@@ -22,28 +22,28 @@ class TourML {
             'base_path' => '',
         );
     }
-    
+
     public function getTourML() {
         $stopNodes = $this->loadStopNodes();
-        
+
         $this->processStops($stopNodes);
-        
+
         // Stops have been rendered, now render assets
         $this->processAssets();
 
         $this->tourml = theme('tap_tourml_tour', array('tour' => $this));
         return $this->tourml;
     }
-    
+
     protected function loadStopNodes() {
         $stopNodes = array();
         $node = node_load($this->nid);
-        
+
         if ($node->type === 'tour') {
             $nids  = array();
             $field = variable_get('tap_connection_field');
 
-            if (db_table_exists('field_data_' . $field)) { 
+            if (db_table_exists('field_data_' . $field)) {
                 // Find all referenced nodes to this tour
                 $results = db_select('field_data_field_tour', 'ref')
                     ->fields('ref', array('entity_id'))
@@ -51,29 +51,29 @@ class TourML {
                     ->condition('field_tour_target_id', $node->nid)
                     ->execute()
                     ->fetchAll();
-            
+
                 // Build an array of stop nodes
                 foreach ($results as $result) {
                     $nids[] = $result->entity_id;
                 }
             }
-            
+
             $this->tour = $this->processMetadata($node);
             $stopNodes  = node_load_multiple($nids);
-        } 
+        }
         else {
             $stopNodes = array($node);
         }
-        
+
         return $stopNodes;
     }
-    
+
     protected function processStops(&$nodes) {
         foreach ($nodes as $node) {
             $this->processStop($node);
         }
     }
-    
+
     protected function processAssets() {
         global $language;
 
@@ -81,24 +81,25 @@ class TourML {
             $asset += module_invoke_all('tourml_asset', $asset);
             $asset['type'] = str_replace("field_", "", $asset['field']['#field_name']);
             $this->assets[$k]['rendered'] = theme('tap_tourml_asset', array(
-               'asset' => $asset, 
-               'language' => $language->language, 
-               'absolute' => $this->settings['absolute'], 
+               'asset' => $asset,
+               'language' => $language->language,
+               'absolute' => $this->settings['absolute'],
                'base_path' => $this->settings['base_path']
             ));
         }
 
         foreach ($this->multipart_assets as $k => $asset) {
-            $asset += module_invoke_all('tourml_multipart_asset', $asset);
+            $asset['items'] += module_invoke_all('tourml_multipart_asset', $asset['items']);
             $this->multipart_assets[$k]['rendered'] = theme('tap_tourml_multipart_asset', array(
                 'asset_id' => $k,
                 'asset_type' => str_replace("field_", "", $asset['field']['#field_name']),
-                'asset' => $asset['items'], 
-                'language' => $language->language, 
-                'absolute' => $this->settings['absolute'], 
+                'asset' => $asset['items'],
+                'language' => $language->language,
+                'absolute' => $this->settings['absolute'],
                 'base_path' => $this->settings['base_path']
             ));
         }
+
     }
 
     public function processStop(&$node) {
@@ -106,7 +107,7 @@ class TourML {
             drupal_alter('tourml_stop', $this, $node);
             $stop = $this->processMetadata($node);
             //Render the stop
-            $this->stops[$node->nid] = theme('tap_tourml_stop', $stop); 
+            $this->stops[$node->nid] = theme('tap_tourml_stop', $stop);
         }
     }
 
@@ -228,7 +229,7 @@ class TourML {
                 }
             }
         }
-        
+
         //If no title field specified by TourML display, use the node title
         if (!$hasTitleField) {
             array_unshift($stop['items'], theme('tap_tourml_title_text', array('items' => array(array('value' => $node->title))))); //TODO: needs discussion
@@ -245,11 +246,11 @@ class TourML {
     public function validate() {
         if (empty($this->tourml)) {
             $this->getTourML();
-        }        
+        }
         //TODO: trying out validation, this needs some work and probably moved into the TourML class
         if ($doc->schemaValidate("https://raw.github.com/IMAmuseum/tourml/master/TourML.xsd")) {
             drupal_set_message(check_plain("TourML is valid"), 'status');
-        } 
+        }
         else {
             drupal_set_message(check_plain("TourML does not validate"), 'warning');
         }
