@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Export functions 
+ * Export functions
  */
 
 /*
@@ -17,9 +17,9 @@ function tap_tourml_export_form($form, &$form_state) {
         '#default_value' => isset($form_state['build_info']['args'][0]) ? $form_state['build_info']['args'][0] : '',
         '#autocomplete_path' => 'admin/content/tourml-export/autocomplete',
         '#element_validate' => array('tap_export_entity_autocomplete_validate'),
-        '#value_callback' => 'tap_export_entity_autocomplete_value',    
+        '#value_callback' => 'tap_export_entity_autocomplete_value',
     );
-    
+
     $default_bundle_name = '';
     if (isset($form_state['build_info']['args'][0]) && is_numeric($form_state['build_info']['args'][0])) {
         $node = node_load($form_state['build_info']['args'][0]);
@@ -27,7 +27,7 @@ function tap_tourml_export_form($form, &$form_state) {
             $default_bundle_name = _clean_bundle_id($node->title);
         }
     }
-    
+
     $form['bundle_name'] = array(
         '#title' => t('Bundle Name'),
         '#type' => 'textfield',
@@ -36,7 +36,7 @@ function tap_tourml_export_form($form, &$form_state) {
         '#default_value' => $default_bundle_name,
         '#element_validate' => array('tap_export_bundle_id_validate'),
     );
-    
+
     $form['export_options'] = array(
         '#title' => t('Export Options'),
         '#type' => 'fieldset',
@@ -53,12 +53,12 @@ function tap_tourml_export_form($form, &$form_state) {
             'wrapper' => 'separate-languages-option',
         ),
     );
-    
+
     $languages = array();
     foreach (language_list() as $key => $item) {
         $languages[$key] = $item->native;
     }
-    
+
     $form['export_options']['languages'] = array(
         '#title' => t('Languages'),
         '#type' => 'select',
@@ -66,8 +66,7 @@ function tap_tourml_export_form($form, &$form_state) {
         '#options' => $languages,
         '#multiple' => TRUE,
     );
-    
-    if (empty($form_state['values']['bundle_type']) || 
+    if (empty($form_state['values']['bundle_type']) ||
         (isset($form_state['values']['bundle_type']) && $form_state['values']['bundle_type'] != 'ios')) {
         $form['export_options']['separate_languages'] = array(
             '#title' => t('Separate Languages'),
@@ -78,21 +77,20 @@ function tap_tourml_export_form($form, &$form_state) {
             '#prefix' => '<div id="separate-languages-option">',
             '#suffix' => '</div>',
         );
-    } 
-    else {
+    } else {
         $form['export_options']['separate_languages'] = array(
             '#type' => 'hidden',
             '#value' => 0,
             '#prefix' => '<div id="separate-languages-option">',
-            '#suffix' => '</div>',          
+            '#suffix' => '</div>',
         );
     }
-    
+
     $form['submit'] = array(
         '#value' => t('Export'),
         '#type' => 'submit',
     );
-    
+
     return $form;
 }
 
@@ -113,12 +111,12 @@ function tap_export_entity_autocomplete($string) {
         ->condition('n.type', 'tour', '=')
         ->range(0, 10);
     $results = $query->execute();
-    
+
     $matches = array();
     foreach ($results as $row) {
         $matches[$row->title . " [nid:$row->nid]"] = '<div class="reference-autocomplete">' . $row->title . '</div>';
     }
-    return drupal_json_output($matches);    
+    return drupal_json_output($matches);
 }
 
 /*
@@ -154,7 +152,7 @@ function tap_export_entity_autocomplete_validate($element, &$form_state, $form) 
     if (!isset($element['#language'])) {
         $element['#language'] = 'und';
     }
-    
+
     $field = field_widget_field($element, $form_state);
     $instance = field_widget_instance($element, $form_state);
 
@@ -192,7 +190,7 @@ function tap_tourml_export_form_submit(&$form, &$form_state) {
     $bundle_type = $form_state['values']['bundle_type'];
     $bundle_name = $form_state['values']['bundle_name'];
     $seperate_bundle = (bool)$form_state['values']['separate_languages'];
-    
+
     // Set tourml settings
     $settings = array(
         'return_object' => TRUE,
@@ -229,7 +227,7 @@ function tap_tourml_export_form_submit(&$form, &$form_state) {
     }
 
     $bundle = _zip_init($path, ZIPARCHIVE::CREATE);
-    
+
     $bdir = "$title.bundle";
     $bundle->addEmptyDir($bdir);
     // generate plist file
@@ -239,16 +237,16 @@ function tap_tourml_export_form_submit(&$form, &$form_state) {
     foreach ($form_state['values']['languages'] as $lang) {
         // set current language
         $language = $language_list[$lang];
-        
+
         // setup language directory for ios
         $lang_dir = $bdir . '/' . $lang . '.lproj';
         $asset_dir = $lang_dir . '/assets';
         $bundle->addEmptyDir($lang_dir);
         $bundle->addEmptyDir($asset_dir);
-        
+
         $tourml         = tap_tourml_render($node, $settings);
         $operations[]   = array('tap_export_bundle_string', array($path, $lang_dir, $tourml->tourml));
-        
+
         // Add file assets
         foreach ($tourml->assets as $asset) {
             if (isset($asset['fid'])) {
@@ -359,11 +357,11 @@ function tap_export_bundle_tour_save($node, $file_path, &$context) {
             if ($file = file_save($file)) {
                 $node->field_tour_bundle[$node->language][0] = (array)$file;
                 $node->field_tour_bundle[$node->language][0]['display'] = 1;
-                node_save($node);
-                
+                field_attach_update('node', $node);
+
                 $context['results']['bundle'] = file_create_url($dest);
             }
-        } 
+        }
         else {
             throw new Exception('Unable to move uploaded file');
         }
@@ -380,7 +378,7 @@ function tap_export_bundle_finish($success, $results, $operations) {
     if ($success && isset($results['bundle'])) {
         $message = 'Bundle has been created with ' . format_plural(count($results), 'One file included.', '@count files included.');
         $message .= ' ' . l(t('Download bundle'), $results['bundle']);
-    } 
+    }
     else {
         $message = t('An error occurred');
     }
@@ -397,9 +395,9 @@ function tap_export_bundle_plist_file($bundle, $dir, $bundle_name) {
     $url = explode('.', str_replace('http://', '', $base_url));
     $url = array_reverse($url);
     $url = implode('.', $url);
-    
+
     $bundle_id = $url . '.' . $bundle_name;
-    
+
     $plist_file = theme('ios_plist_xml', array('bundle_name' => $bundle_name, 'bundle_id' => $bundle_id));
     $bundle->addFromString("$dir/Info.plist" , $plist_file);
 }
