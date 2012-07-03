@@ -1,4 +1,4 @@
-<tourml:Asset tourml:id="asset-<?php print $asset['id']; ?>">
+<tourml:Asset tourml:id="asset-<?php print $asset['id']; ?>" tourml:type="<?php print $asset['type']; ?>">
     <?php if ($content): ?>
     <tourml:Content>
         <tourml:Data><![CDATA[<?php print $asset['value']; ?>]]></tourml:Data>

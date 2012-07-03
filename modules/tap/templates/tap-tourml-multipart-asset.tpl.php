@@ -1,4 +1,4 @@
-<tourml:Asset tourml:id="asset-<?php print $asset_id; ?>">
+<tourml:Asset tourml:id="asset-<?php print $asset_id; ?>" tourml:type="<?php print $asset_type; ?>">
     <?php foreach($asset as $part): ?>
         <?php if ($part['content']): ?>
         <tourml:Content tourml:part="<?php print $part['name']; ?>">

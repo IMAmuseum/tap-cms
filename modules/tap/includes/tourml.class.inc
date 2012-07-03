@@ -79,6 +79,7 @@ class TourML {
 
         foreach ($this->assets as $k => $asset) {
             $asset += module_invoke_all('tourml_asset', $asset);
+            $asset['type'] = str_replace("field_", "", $asset['field']['#field_name']);
             $this->assets[$k]['rendered'] = theme('tap_tourml_asset', array(
                'asset' => $asset, 
                'language' => $language->language, 
@@ -91,7 +92,8 @@ class TourML {
             $asset += module_invoke_all('tourml_multipart_asset', $asset);
             $this->multipart_assets[$k]['rendered'] = theme('tap_tourml_multipart_asset', array(
                 'asset_id' => $k,
-                'asset' => $asset, 
+                'asset_type' => str_replace("field_", "", $asset['field']['#field_name']),
+                'asset' => $asset['items'], 
                 'language' => $language->language, 
                 'absolute' => $this->settings['absolute'], 
                 'base_path' => $this->settings['base_path']
@@ -141,10 +143,14 @@ class TourML {
                     case 'tap_tourml_multipart_asset':
                         if (empty($field['#items'])) break;
                         $prefix = $field['#bundle'] . '-' . $field['#field_name'] . '-';
-                        // special handling for field collection module field
+                        // special handling for field collection module field+
                         if ($field['#field_type'] == 'field_collection') {
                             foreach ($field['#items'] as &$collection) {
                                 $id = $prefix . $collection['value'];
+                                $this->multipart_assets[$id]['field'] = $field;
+                                // set reference id
+                                $collection['id'] = $id;
+                                $collection['field'] = $field;
                                 // retrieve the field collection entity
                                 $entity = field_collection_item_load($collection['value']);
                                 // retrieve the field instances for this field collection
@@ -152,31 +158,30 @@ class TourML {
                                 // iterate over all the fields attached to the entity
                                 foreach ($instances as $field_name => $settings) {
                                     foreach ($entity->{$field_name}['und'] as $key => $item) {
-                                        // set reference id
-                                        $collection['id'] = $id;
-                                        $collection['field'] = $field;
                                         $uid = (isset($item['fid'])) ? $item['fid'] : $key;
                                         // unique key for field in set
                                         $part_id = $prefix . $field_name . '-' . $uid;
                                         $item['name'] = $field_name;
-                                        if (!isset($this->multipart_assets[$id][$part_id])) {
+                                        $item['field'] = $entity->{$field_name};
+                                        if (!isset($this->multipart_assets[$id]['items'][$part_id])) {
                                             drupal_alter('tourml_multipart_asset', $this, $item);
-                                            $this->multipart_assets[$id][$part_id] = $item;
+                                            $this->multipart_assets[$id]['items'][$part_id] = $item;
                                         }
                                     }
                                 }
                             }
-                        } 
+                        }
                         else {
                             // Build an array of assets that will be rendered after all stops
+                            $this->multipart_assets[$prefix . $node->nid]['field'] = $field;
                             foreach ($field['#items'] as $key => &$item) {
                                 $part_id = (isset($item['fid'])) ? $item['fid'] : $key;
                                 $part_id = $prefix . $part_id;
                                 $item['id'] = $prefix . $node->nid;
                                 $item['field'] = $field;
-                                if (!isset($this->multipart_assets[$item['id']][$part_id])) {
+                                if (!isset($this->multipart_assets[$item['id']]['items'][$part_id])) {
                                     drupal_alter('tourml_multipart_asset', $this, $item);
-                                    $this->multipart_assets[$item['id']][$part_id] = $item;
+                                    $this->multipart_assets[$item['id']]['items'][$part_id] = $item;
                                 }
                             }
                         }
