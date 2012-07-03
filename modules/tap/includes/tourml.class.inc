@@ -174,7 +174,6 @@ class TourML {
                         }
                         else {
                             // Build an array of assets that will be rendered after all stops
-                            $this->multipart_assets[$prefix . $node->nid]['field'] = $field;
                             foreach ($field['#items'] as $key => &$item) {
                                 $part_id = (isset($item['fid'])) ? $item['fid'] : $key;
                                 $part_id = $prefix . $part_id;
@@ -184,6 +183,7 @@ class TourML {
                                     drupal_alter('tourml_multipart_asset', $this, $item);
                                     $this->multipart_assets[$item['id']]['items'][$part_id] = $item;
                                 }
+                                $this->multipart_assets[$item['id']]['field'] = $field;
                             }
                         }
                         $stop['items'][] = drupal_render($field);
