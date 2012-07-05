@@ -195,7 +195,7 @@ class TourML {
                         // Build an array of assets that will be rendered after all stops
                         foreach ($field['#items'] as $key => &$item) {
                             $item['field'] = $field;
-                            $item['id'] = (isset($item['fid'])) ? $item['fid'] : $key;
+                            $item['id'] = (isset($item['fid'])) ? $item['fid'] : $field['#object']->nid . '-' . $key;
                             $item['id'] = $prefix . $item['id'];
 
                             // If this asset doesnt exist in our main object we need to process it
