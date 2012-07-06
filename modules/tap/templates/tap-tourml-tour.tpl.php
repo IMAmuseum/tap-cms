@@ -5,7 +5,8 @@
 	xmlns:xml="http://www.w3.org/XML/1998/namespace"
 	xmlns:gml="http://www.opengis.net/gml"
 	xsi:schemaLocation="http://www.imamuseum.org/TourML/2011/11 TourML.xsd"
-	tourml:id="tour-<?php print $tour->tour['real_id']; ?>">
+	tourml:id="tour-<?php print $tour->tour['real_id']; ?>"
+	tourml:lastModified="<?php print date('c', $tour->tour['last_modified']); ?>">
 <tourml:TourMetadata>
 <?php print $metadata; ?>
 </tourml:TourMetadata>

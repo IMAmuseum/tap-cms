@@ -120,6 +120,17 @@ class TourML {
         $properties         = array();
         $hasTitleField      = FALSE;
 
+        $query = db_select('node', 'n');
+        $query->addExpression('MAX(n.changed)', 'changed');
+        $query->join('field_data_field_tour', 't', 'n.nid = t.entity_id');
+        $changed = $query->execute()->fetchField();
+
+        if ($changed && $changed > $node->changed) {
+            $stop['last_modified'] = $changed;
+        } else {
+            $stop['last_modified'] = $node->changed;
+        }
+
         // Loop thru renderable fields
         foreach (element_children($node->content) as $field_name) {
 
