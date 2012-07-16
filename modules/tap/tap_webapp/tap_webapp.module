@@ -13,12 +13,18 @@ function tap_webapp_menu() {
 }
 
 function tap_webapp_theme() {
+
+    $module_path = drupal_get_path('module', 'tap_webapp');
+    $webapp_version = '0.1.0';
+    $tap_version = '0.1.0';
+
     return array(
         'tap_webapp_preview' => array(
             'variables' => array(
-                'url' => NULL,
-                'jsPath' => '/' . drupal_get_path('module', 'tap_webapp') . '/js/',
-                'cssPath' => '/' . drupal_get_path('module', 'tap_webapp') . '/css/',
+                'tourml_path' => null,
+                'webapp_css_path' => "/$module_path/tap-webapp-$webapp_version/Tap-$tap_version.css",
+                'webapp_dependencies_path' => "/$module_path/tap-webapp-$webapp_version/Tap-$tap_version-dependencies.min.js",
+                'webapp_js_path' => "/$module_path/tap-webapp-$webapp_version/Tap-$tap_version.min.js",
             ),
             'template'  => 'templates/tap-webapp-preview',
         ),
@@ -29,7 +35,7 @@ function tap_webapp_preview($node) {
 
     $tourMLuri = url('node/' . $node->nid . '/tourml.xml');
 
-    print theme('tap_webapp_preview', array('url' => $tourMLuri));
+    print theme('tap_webapp_preview', array('tourml_path' => $tourMLuri));
 
     die();
 }
