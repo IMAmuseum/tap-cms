@@ -33,7 +33,18 @@ function tap_webapp_theme() {
 
 function tap_webapp_preview($node) {
 
-    $tourMLuri = url('node/' . $node->nid . '/tourml.xml');
+    // First, find the tour that this node is in
+    if ($node->type != 'tour') {
+        $tour_nid = $node->field_tour['und'][0]['target_id'];
+        if (!is_numeric($tour_nid)) {
+            dpm('non-numeric tour id');
+            return;
+        } 
+    } else {
+        $tour_nid = $node->nid;
+    }
+
+    $tourMLuri = url('node/' . $tour_nid . '/tourml.xml');
 
     print theme('tap_webapp_preview', array('tourml_path' => $tourMLuri));
 

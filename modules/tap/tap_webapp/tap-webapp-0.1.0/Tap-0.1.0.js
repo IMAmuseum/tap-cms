@@ -1,5 +1,5 @@
 /*
- * TAP - v0.1.0 - 2012-07-13
+ * TAP - v0.1.0 - 2012-07-17
  * http://tapintomuseums.org/
  * Copyright (c) 2011-2012 Indianapolis Museum of Art
  * GPLv3
@@ -298,17 +298,6 @@ TapAPI.collections.Tours = Backbone.Collection.extend({
 	}
 });
 
-Backbone.View.prototype.close = function () {
-	if(document.getElementById('audioPlayer')) document.getElementById('audioPlayer').pause();
-	if(document.getElementById('videoPlayer')) document.getElementById('videoPlayer').pause();
-	
-	this.$el.empty().undelegate();
-	this.unbind();
-	this.undelegateEvents();
-	if (this.onClose){
-		this.onClose();
-	}
-};
 // TapAPI Namespace Initialization //
 if (typeof TapAPI === 'undefined'){TapAPI = {};}
 if (typeof TapAPI.views === 'undefined'){TapAPI.views = {};}
@@ -324,7 +313,14 @@ jQuery(function() {
 
 			_.defaults(this.options, {
 				page_title: '',
-				back_label: 'Back'
+				back_label: 'Back',
+				nav_menu: [
+					{ label: 'Menu', prefix: 'tourstoplist' },
+					{ label: 'Keypad', prefix: 'tourkeypad' },
+					{ label: 'Map', prefix: 'tourmap'}
+				],
+				active_index: null,
+				header_nav: true
 			});
 
 			if (this.onInit) {
@@ -346,7 +342,11 @@ jQuery(function() {
 			this.$el.empty();
 			this.$el.html(TapAPI.templateManager.get('page')({
 				title: this.options.page_title,
-				back_label: this.options.back_label
+				back_label: this.options.back_label,
+				header_nav: this.options.header_nav,
+				nav_menu: this.options.nav_menu,
+				active_index: this.options.active_index,
+				tour_id: tap.currentTour
 			}));
 			this.renderContent();
 			return this;
@@ -548,8 +548,12 @@ jQuery(function() {
 
 		events: {
 			'tap #gobtn' : 'submit',
-			'tap #keypad div button' : 'writekeycode',
+			'tap #keypad div .button' : 'writekeycode',
 			'tap #delete' : 'clearkeycode'
+		},
+
+		onInit: function() {
+			this.options.active_index = 'tourkeypad';
 		},
 
 		renderContent: function() {
@@ -599,6 +603,8 @@ jQuery(function() {
 
 		onInit: function() {
 			console.log('MapView.initialize');
+
+			this.options.active_index = 'tourmap';
 
 			this.tile_layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 				attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy; <a href="http://cloudmade.com">CloudMade</a>',
@@ -910,6 +916,10 @@ jQuery(function() {
 	// Define the stop list view
 	TapAPI.views.StopList = TapAPI.views.Page.extend({
 
+		onInit: function() {
+			this.options.active_index = 'tourstoplist';
+		},
+
 		renderContent: function() {
 			var content_template = TapAPI.templateManager.get('tour-stop-list');
 
@@ -919,8 +929,19 @@ jQuery(function() {
 			//if ($('li', this.$el).length == tap.tourStops.models.length) return;
 
 			_.each(tap.tourStops.models, function(stop) {
+
+				// If in codes-only mode, abort if the stop does not have a code
+				if (tap.config.StopListView.codes_only) {
+					var code = undefined;
+					_.each(stop.get('propertySet'), function(prop) {
+						if (prop.name == 'code') code = prop.value;
+					});
+					if (code === undefined) return;
+				}
+
 				var item = new TapAPI.views.StopListItem({model: stop});
 				$('#tour-stop-list', this.$el).append(item.render().el);
+				
 			}, this);
 
 		}
@@ -958,12 +979,14 @@ jQuery(function() {
 
 		onInit: function() {
 			this.options.page_title = this.model.get('title')[0].value;
+			this.options.header_nav = false;
 		},
 
 		renderContent: function() {
 			var content_template = TapAPI.templateManager.get('tour-details');
 
 			$(":jqmData(role='content')", this.$el).append(content_template({
+				tour_index: tap.config.default_index,
 				tour_id: this.model.id,
 				publishDate: this.model.get('publishDate') ? this.model.get('publishDate')[0].value : undefined,
 				description: this.model.get('description') ? this.model.get('description')[0].value : undefined,
@@ -989,9 +1012,8 @@ jQuery(function() {
 	TapAPI.views.TourList = TapAPI.views.Page.extend({
 
 		onInit: function() {
-			_.defaults(this.options, {
-				page_title: 'Tour List'
-			});
+			this.options.page_title = 'Tour List';
+			this.options.header_nav = false;
 		},
 
 		renderContent: function() {
@@ -1275,10 +1297,19 @@ if (!tap) {
 	 * Takes care of storing/loading data in local storage and initializing
 	 * the tour collection.
 	 * @param url The url to the TourML document
+	 * @param config Optional configuration object
 	 */
-	tap.initApp = function(url) {
+	tap.initApp = function(url, config) {
 
-		tap.url = url;
+		tap.url = url;		
+
+		if (config === undefined) config = {};
+		tap.config = _.defaults(config, {
+			default_index: 'tourstoplist',
+			StopListView: {
+				codes_only: true
+			}
+		});
 
 		// trigger tap init start event
 		tap.trigger('tap.init.start');
@@ -1312,7 +1343,7 @@ if (!tap) {
 		tap.trigger('tap.init.end');
 
 		// initialize router
-		tap.router = new AppRouter();		
+		tap.router = new AppRouter();
 		
 	};
     
@@ -1533,7 +1564,7 @@ return __p;
 TapAPI.templates['keypad'] = function(obj){
 var __p='';var print=function(){__p+=Array.prototype.join.call(arguments, '')};
 with(obj||{}){
-__p+='<fieldset class="ui-grid-b" id="keypad" data-theme=\'d\'>\n\t<div class="ui-block-a" id="writeStyle">\n\t\t<div class="ui-bar" id="write"></div>\n\t</div>\n\t<div class="ui-block-b">\n\t\t<div class="ui-bar ui-bar-d" id="gobtn">Go</div>\t\n\t</div>\n\t<div class="ui-block-a"><button class="ui-bar ui-bar-d">1</button></div>\n\t<div class="ui-block-b"><button class="ui-bar ui-bar-d">2</button></div>\t \n\t<div class="ui-block-b"><button class="ui-bar ui-bar-d">3</button></div>  \n\t<div class="ui-block-a"><button class="ui-bar ui-bar-d">4</button></div>\n\t<div class="ui-block-b"><button class="ui-bar ui-bar-d">5</button></div>\t \n\t<div class="ui-block-b"><button class="ui-bar ui-bar-d">6</button></div>  \n\t<div class="ui-block-a"><button class="ui-bar ui-bar-d">7</button></div>\n\t<div class="ui-block-b"><button class="ui-bar ui-bar-d">8</button></div>\t \n\t<div class="ui-block-b"><button class="ui-bar ui-bar-d">9</button></div>  \n\t<div class="ui-block-a"><button class="ui-bar ui-bar-d">0</button></div>\n\t<div class="ui-block-b" id="clearStyle">\n\t\t<div class="ui-bar ui-bar-d" id="delete">Clear</div>\n\t</div>\n</fieldset>\n';
+__p+='<fieldset class="ui-grid-b" id="keypad" data-theme=\'d\'>\n\t<div class="ui-block-a" id="writeStyle">\n\t\t<div class="ui-bar" id="write"></div>\n\t</div>\n\t<div class="ui-block-b">\n\t\t<div class="ui-bar ui-bar-d" id="gobtn">Go</div>\t\n\t</div>\n\t<div class="ui-block-a"><div class="button ui-bar ui-bar-d">1</div></div>\n\t<div class="ui-block-b"><div class="button ui-bar ui-bar-d">2</div></div>\t \n\t<div class="ui-block-b"><div class="button ui-bar ui-bar-d">3</div></div>  \n\t<div class="ui-block-a"><div class="button ui-bar ui-bar-d">4</div></div>\n\t<div class="ui-block-b"><div class="button ui-bar ui-bar-d">5</div></div>\t \n\t<div class="ui-block-b"><div class="button ui-bar ui-bar-d">6</div></div>  \n\t<div class="ui-block-a"><div class="button ui-bar ui-bar-d">7</div></div>\n\t<div class="ui-block-b"><div class="button ui-bar ui-bar-d">8</div></div>\t \n\t<div class="ui-block-b"><div class="button ui-bar ui-bar-d">9</div></div>  \n\t<div class="ui-block-a"><div class="button ui-bar ui-bar-d">0</div></div>\n\t<div class="ui-block-b" id="clearStyle">\n\t\t<div class="ui-bar ui-bar-d" id="delete">Clear</div>\n\t</div>\n</fieldset>\n';
 }
 return __p;
 }
@@ -1542,9 +1573,27 @@ var __p='';var print=function(){__p+=Array.prototype.join.call(arguments, '')};
 with(obj||{}){
 __p+='<div data-role="header">\n\t<a id=\'back-button\' data-rel="back">'+
 ( back_label )+
-'</a>\n\t<h1 id="page-title">'+
+'</a>\n\t';
+ if (header_nav) { 
+;__p+='\n\t<div id=\'index-selector\' class=\'ui-title\' data-role="controlgroup" data-type="horizontal" data-mini="true">\n\t\t';
+ _.each(nav_menu, function(item) { 
+;__p+='\n\t\t<a data-role="button" '+
+( (active_index == item.prefix) ? 'data-theme="b"' : "" )+
+' href=\'#'+
+( item.prefix )+
+'/'+
+( tour_id )+
+'\'>'+
+( item.label )+
+'</a>\n\t\t';
+ }); 
+;__p+='\n\t</div>\n\t';
+ } else { 
+;__p+='\n\t<h1 id="page-title">'+
 ( title )+
-'</h1>\n</div>\n<div data-role="content">\n</div>\n<!--\n<div data-role="footer">\n</div>\n-->';
+'</h1>\n\t';
+ } 
+;__p+='\n</div>\n<div data-role="content">\n</div>\n<!--\n<div data-role="footer">\n</div>\n-->';
 }
 return __p;
 }
@@ -1586,7 +1635,9 @@ return __p;
 TapAPI.templates['tour-details'] = function(obj){
 var __p='';var print=function(){__p+=Array.prototype.join.call(arguments, '')};
 with(obj||{}){
-__p+='<div class="">\t\t\t\n\t<a href="#tourkeypad/'+
+__p+='<div class="">\t\t\t\n\t<a href="#'+
+( tour_index )+
+'/'+
 ( tour_id )+
 '" id="start-tour" data-role="button" data-theme="b">Start Tour</a>\n</div>\n<div class=\'tour-details\'>\n\t'+
 ( description )+
