@@ -46,7 +46,12 @@ function theme_tap_tourml_asset_geofield(&$vars) {
 function tap_geo_tourml_asset($asset) {
     // Handle geofield fields
     if (isset($asset['wkt'])) {
-        geofield_load_geophp();
+        
+        $geophp = geophp_load();
+        if (!$geophp) {
+            drupal_set_message(t("Unable to load geoPHP library. Not all values will be calculated correctly"), 'error');
+            return $asset;
+        }
 
         $geometry = geoPHP::load($asset['wkt'], 'wkt');
         if ($geometry) {
