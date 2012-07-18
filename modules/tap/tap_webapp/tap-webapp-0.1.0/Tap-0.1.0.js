@@ -1,5 +1,5 @@
 /*
- * TAP - v0.1.0 - 2012-07-17
+ * TAP - v0.1.0 - 2012-07-18
  * http://tapintomuseums.org/
  * Copyright (c) 2011-2012 Indianapolis Museum of Art
  * GPLv3
@@ -456,34 +456,6 @@ if (typeof TapAPI.views === 'undefined'){TapAPI.views = {};}
 if (typeof TapAPI.views.registry === 'undefined'){TapAPI.views.registry = {};}
 // TapAPI Namespace Initialization //
 
-jQuery(function() {
-
-	// Defines the base view for a page
-	TapAPI.views.Dialog = Backbone.View.extend({
-
-		template: TapAPI.templateManager.get('dialog'),
-		content: '',
-
-		render: function(event) {
-
-			this.$el.empty();
-			$(this.el).html(this.template({
-				content: this.content
-			}));
-			return this;
-
-		}
-
-	});
-	
-});
-
-// TapAPI Namespace Initialization //
-if (typeof TapAPI === 'undefined'){TapAPI = {};}
-if (typeof TapAPI.views === 'undefined'){TapAPI.views = {};}
-if (typeof TapAPI.views.registry === 'undefined'){TapAPI.views.registry = {};}
-// TapAPI Namespace Initialization //
-
 // Add this view to the registry
 TapAPI.views.registry['tour_image_stop'] = 'ImageStop';
 
@@ -617,14 +589,14 @@ jQuery(function() {
 			this.position_marker = null;
 			this.view_initialized = false;
 			this.LocationIcon = L.Icon.extend({
-				iconUrl: 'assets/images/icon-locate.png',
+				iconUrl: tap.base_path + 'images/icon-locate.png',
 				shadowUrl: null,
 				iconSize: new L.Point(24, 24),
 				iconAnchor: new L.Point(12, 12)
 			});
 			this.MarkerIcon = L.Icon.extend({
-				iconUrl: 'assets/images/marker.png',
-				shadowUrl: 'assets/images/marker-shadow.png',
+				iconUrl: tap.base_path + 'images/marker.png',
+				shadowUrl: tap.base_path + 'images/marker-shadow.png',
 				iconSize: new L.Point(25,41),
 				iconAnchor: new L.Point(12,41)
 			});
@@ -1292,6 +1264,15 @@ if (!tap) {
 	tap.currentStop = ''; // id of the current stop
 	tap.currentTour = ''; // id of the current tour
 
+	var script_src = $('head script').last().attr('src');
+	if (script_src.indexOf('Init.js') >= 0) {
+		tap.base_path = '';
+	} else {
+		// In deployment
+		tap.base_path = script_src.substring(0, script_src.lastIndexOf('/')) + '/';
+		console.log('TAP.js base path: ' + tap.base_path);
+	}
+
 	_.extend(tap, Backbone.Events);
 	/*
 	 * Takes care of storing/loading data in local storage and initializing
@@ -1301,7 +1282,7 @@ if (!tap) {
 	 */
 	tap.initApp = function(url, config) {
 
-		tap.url = url;		
+		tap.url = url;
 
 		if (config === undefined) config = {};
 		tap.config = _.defaults(config, {
