@@ -10,8 +10,8 @@
 	<link rel="stylesheet" href="<?php print $webapp_css_path; ?>" />
 
 	<script type='text/javascript'>console.log('Clearing local storage'); localStorage.clear();</script>
-    <script src="<?php print $webapp_dependencies_path; ?>"></script>
-    <script src="<?php print $webapp_js_path; ?>"></script>
+    <script type='text/javascript' src="<?php print $webapp_dependencies_path; ?>"></script>
+    <script type='text/javascript' src="<?php print $webapp_js_path; ?>"></script>
 	
 	<script type="text/javascript">
 		(function($){
