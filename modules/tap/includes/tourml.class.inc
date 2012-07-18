@@ -41,7 +41,11 @@ class TourML {
 
         if ($node->type === 'tour') {
             $nids  = array();
-            $field = variable_get('tap_connection_field');
+            $field = variable_get('tap_connection_field', null);
+
+            if ($field == null) {
+                drupal_set_message(t('The TAP connection field is not configured'), 'warning');
+            }
 
             if (db_table_exists('field_data_' . $field)) {
                 // Find all referenced nodes to this tour
