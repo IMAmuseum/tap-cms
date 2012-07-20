@@ -32,6 +32,10 @@ class TourML {
         $this->processAssets();
 
         $this->tourml = theme('tap_tourml_tour', array('tour' => $this));
+
+        //clean up the tourml by removing all field_ strings
+        $this->tourml = str_replace("field_", "", $this->tourml);
+
         return $this->tourml;
     }
 
