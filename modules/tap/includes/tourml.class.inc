@@ -33,9 +33,6 @@ class TourML {
 
         $this->tourml = theme('tap_tourml_tour', array('tour' => $this));
 
-        //clean up the tourml by removing all field_ strings
-        $this->tourml = str_replace("field_", "", $this->tourml);
-
         return $this->tourml;
     }
 
@@ -87,7 +84,7 @@ class TourML {
 
         foreach ($this->assets as $k => $asset) {
             $asset += module_invoke_all('tourml_asset', $asset);
-            $asset['type'] = str_replace("field_", "", $asset['field']['#field_name']);
+            $asset['type'] = _anti_field($asset['field']['#field_name']);
             $this->assets[$k]['rendered'] = theme('tap_tourml_asset', array(
                'asset' => $asset,
                'language' => $language->language,
@@ -100,7 +97,7 @@ class TourML {
             $asset['items'] += module_invoke_all('tourml_multipart_asset', $asset['items']);
             $this->multipart_assets[$k]['rendered'] = theme('tap_tourml_multipart_asset', array(
                 'asset_id' => $k,
-                'asset_type' => str_replace("field_", "", $asset['field']['#field_name']),
+                'asset_type' => _anti_field($asset['field']['#field_name']),
                 'asset' => $asset['items'],
                 'language' => $language->language,
                 'absolute' => $this->settings['absolute'],
@@ -162,7 +159,7 @@ class TourML {
                         break;
                     case 'tap_tourml_multipart_asset':
                         if (empty($field['#items'])) break;
-                        $prefix = $field['#bundle'] . '-' . $field['#field_name'] . '-';
+                        $prefix = $field['#bundle'] . '-' . _anti_field($field['#field_name']) . '-';
                         // special handling for field collection module field+
                         if ($field['#field_type'] == 'field_collection') {
                             foreach ($field['#items'] as &$collection) {
@@ -182,7 +179,7 @@ class TourML {
                                         $uid = (isset($item['fid'])) ? $item['fid'] : $key;
                                         // unique key for field in set
                                         $part_id = $prefix . $field_name . '-' . $uid;
-                                        $item['name'] = $field_name;
+                                        $item['name'] = _anti_field($field_name);
                                         $item['field'] = $entity->{$field_name};
                                         if (!isset($this->multipart_assets[$id]['items'][$part_id])) {
                                             drupal_alter('tourml_multipart_asset', $this, $item);
@@ -210,7 +207,7 @@ class TourML {
                         break;
                     case 'tap_tourml_asset':
                         if (empty($field['#items'])) break;
-                        $prefix = $field['#field_name'] . '-';
+                        $prefix = _anti_field($field['#field_name']) . '-';
 
                         // Build an array of assets that will be rendered after all stops
                         foreach ($field['#items'] as $key => &$item) {
