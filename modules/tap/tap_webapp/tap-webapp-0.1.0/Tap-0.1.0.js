@@ -1,5 +1,5 @@
 /*
- * TAP - v0.1.0 - 2012-07-18
+ * TAP - v0.1.0 - 2012-07-20
  * http://tapintomuseums.org/
  * Copyright (c) 2011-2012 Indianapolis Museum of Art
  * GPLv3
@@ -18,24 +18,6 @@ String.prototype.toCamel = function(){
 		.replace(/\s/g, '')
 		.replace(/^(.)/, function($1) { return $1.toLowerCase(); });
 };
-
-/*
- * Retrieve attribute based on language
- */
-function getAttributeByLanguage(attr) {
-	var items = [];
-	for(var i = 0; i < attr.length; i++) {
-		// get language specific and language neutral
-		if(!attr[i].lang || (attr[i].lang && attr[i].lang == tap.language)) {
-			items.push(attr[i]);
-		}
-	}
-	// return all items if no language matched
-	if(items.length === 0) {
-		items = attr;
-	}
-	return items;
-}
 
 /*
  * Load xml document
@@ -109,29 +91,144 @@ if (typeof TapAPI.models === 'undefined'){TapAPI.models = {};}
 
 // define asset model
 TapAPI.models.Asset = Backbone.Model.extend({
-	get: function(attr) { // override get method
-		if(!this.attributes[attr]) return this.attributes[attr];
-		switch(attr) { // retrieve attribute based on language
-			case 'tourMetadata':
-			case 'propertySet':
-			case 'source':
-			case 'content':
-				return getAttributeByLanguage(objectToArray(this.attributes[attr]));
-			default:
-				return this.attributes[attr];
+	parse: function(response) {
+		response.propertySet = new TapAPI.collections.PropertySet(
+			response.propertySet,
+			response.id
+		);
+
+		if (response.source) {
+			response.source = new TapAPI.collections.Sources(
+				response.source,
+				response.id
+			);
+		}
+
+		if (response.content) {
+			response.content = new TapAPI.collections.Content(
+				response.content,
+				response.id
+			);
+		}
+
+		return response;
+	},
+	getSourcesByPart: function(part) {
+		if (_.isUndefined(this.get('source'))) return undefined;
+
+		var sources, models;
+		sources = this.get('source').where({"part": part, "lang": tap.language});
+		if (sources.length === 0) {
+			sources = this.get('source').where({"part": part});
+		}
+		if (sources.length) {
+			models = sources;
+		}
+		return models;
+	},
+	getContentsByPart: function(part) {
+		if (_.isUndefined(this.get('content'))) return undefined;
+
+		var contents, models;
+		contents = this.get('content').where({"part": part, "lang": tap.language});
+		if (contents.length === 0) {
+			contents = this.get('content').where({"part": part});
+		}
+		if (contents.length) {
+			models = contents;
+		}
+		return models;
+	},
+	getSourcesByFormat: function(format) {
+		if (_.isUndefined(this.get('source'))) return undefined;
+
+		var sources, models;
+		sources = this.get('source').where({"format": format, "lang": tap.language});
+		if (sources.length === 0) {
+			sources = this.get('source').where({"format": format});
+		}
+		if (sources.length) {
+			models = sources;
+		}
+		return models;
+	},
+	getContentsByFormat: function(format) {
+		if (_.isUndefined(this.get('content'))) return undefined;
+
+		var contents, models;
+		contents = this.get('content').where({"format": format, "lang": tap.language});
+		if (contents.length === 0) {
+			contents = this.get('content').where({"format": format});
+		}
+		if (contents.length) {
+			models = contents;
+		}
+		return models;
+	}
+});
+// TapAPI Namespace Initialization //
+if (typeof TapAPI === 'undefined'){TapAPI = {};}
+if (typeof TapAPI.models === 'undefined'){TapAPI.models = {};}
+// TapAPI Namespace Initialization //
+
+// define asset model
+TapAPI.models.Content = Backbone.Model.extend({
+	initialize: function() {
+		//parse never gets called due to this not being in localstorage as its own record
+		this.set('propertySet', new TapAPI.collections.PropertySet(
+			this.get('propertySet'),
+			this.id
+		));
+
+		if (this.get('data').value) {
+			this.set('data', this.get('data').value);
 		}
 	},
-	/**
-	* Retrieves the property value of a given property name
-	* @param  string key The propety name
-	* @return string The property value
-	*/
-	getPropertyByName: function(name) {
-		if(_.isUndefined(this.get('propertySet'))) return false;
-		var property = _.find(this.get('propertySet'), function(item) {
-			return item['name'] === key;
-		});
-		return _.isUndefined(property) ? false : property.value;
+	defaults: {
+		'lang': undefined,
+		'propertySet': undefined,
+		'data': undefined,
+		'format': undefined,
+		'lastModified': undefined,
+		'part': undefined
+	}
+});
+
+// TapAPI Namespace Initialization //
+if (typeof TapAPI === 'undefined'){TapAPI = {};}
+if (typeof TapAPI.models === 'undefined'){TapAPI.models = {};}
+// TapAPI Namespace Initialization //
+
+// define asset model
+TapAPI.models.Property = Backbone.Model.extend({
+	defaults: {
+		'name': undefined,
+		'value': undefined,
+		'lang': undefined
+	}
+});
+
+// TapAPI Namespace Initialization //
+if (typeof TapAPI === 'undefined'){TapAPI = {};}
+if (typeof TapAPI.models === 'undefined'){TapAPI.models = {};}
+// TapAPI Namespace Initialization //
+
+// define asset model
+TapAPI.models.Source = Backbone.Model.extend({
+	initialize: function() {
+		//parse never gets called due to this not being in localstorage as its own record
+		this.set('propertySet', new TapAPI.collections.PropertySet(
+			this.get('propertySet'),
+			this.id
+		));
+	},
+	defaults: {
+		'lang': undefined,
+		'propertySet': undefined,
+		'uri': undefined,
+		'format': undefined,
+		'lastModified': undefined,
+		'part': undefined
 	}
 });
 
@@ -145,38 +242,56 @@ TapAPI.models.Stop = Backbone.Model.extend({
 	get: function(attr) { // override get method
 		if(!this.attributes[attr]) return this.attributes[attr];
 		switch(attr) {  // retrieve attribute based on language
-			case 'tourMetadata':
-			case 'propertySet':
 			case 'description':
 			case 'title':
-				return getAttributeByLanguage(this.attributes[attr]);
+				if (this.attributes[attr].length === 0) return undefined;
+				
+				var value, property;
+
+				property = _.find(this.attributes[attr], function(item) {
+					return item.lang === tap.language;
+				});
+
+				if (!property && tap.language !== tap.defaultLanguage) {
+					property = _.find(this.attributes[attr], function(item) {
+						return item.lang === tap.defaultLanguage;
+					});
+				}
+
+				if (!property) {
+					property = _.find(this.attributes[attr], function(item) {
+						return item.lang === undefined || item.lang === "";
+					});
+				}
+
+				if (property) {
+					value = property.value;
+				}
+
+				return value;
 			default:
 				return this.attributes[attr];
 		}
 	},
-	/**
-	* Retrieves the property value of a given property name
-	* @param  string name The propety name
-	* @return string The property value
-	*/
-	getPropertyByName: function(name) {
-		if(_.isUndefined(this.get('propertySet'))) return false;
-		var property = _.find(this.get('propertySet'), function(item) {
-			return item['name'] === name;
-		});
-		return _.isUndefined(property) ? false : property.value;
+	parse: function(response) {
+		response.propertySet = new TapAPI.collections.PropertySet(
+			response.propertySet,
+			response.id
+		);
+
+		return response;
 	},
 	/**
 	* Retrieves all asset models for a stop
 	* @return array An array of asset models
 	*/
 	getAssets: function() {
-		if(_.isUndefined(this.get('assetRef'))) return false;
+		if(_.isUndefined(this.get('assetRef'))) return undefined;
 		var assets = [];
 		_.each(this.get('assetRef'), function(item) {
 			assets.push(tap.tourAssets.get(item.id));
 		});
-		return _.isEmpty(assets) ? false : assets;
+		return _.isEmpty(assets) ? undefined : assets;
 	},
 	/**
 	* Retrieves an asset with a given usage
@@ -184,27 +299,26 @@ TapAPI.models.Stop = Backbone.Model.extend({
 	* @return mixed The asset model
 	*/
 	getAssetsByUsage: function(usage) {
-		if(_.isUndefined(this.get('assetRef'))) return false;
+		if(_.isUndefined(this.get('assetRef'))) return undefined;
 		var assets = [];
 		_.each(this.get('assetRef'), function(item) {
 			if(item['usage'] === usage) {
 				assets.push(tap.tourAssets.get(item.id));
 			}
 		});
-		return _.isEmpty(assets) ? false : assets;
+		return _.isEmpty(assets) ? undefined : assets;
 	},
 	/**
 	* Retrieves a sorted array of connections
 	* @return array The connection array ordered by priority in ascending order
 	*/
 	getSortedConnections: function() {
-		if(_.isUndefined(this.get('connections'))) return false;
+		if(_.isUndefined(this.get('connections'))) return undefined;
 		return _.sortBy(this.get('connection'), function(connection) {
 			return parseInt(connection.priority, 10);
 		});
 	}
 });
-
 // TapAPI Namespace Initialization //
 if (typeof TapAPI === 'undefined'){TapAPI = {};}
 if (typeof TapAPI.models === 'undefined'){TapAPI.models = {};}
@@ -215,17 +329,46 @@ TapAPI.models.Tour = Backbone.Model.extend({
 	get: function(attr) { // override get method
 		if(!this.attributes[attr]) return this.attributes[attr];
 		switch(attr) {  // retrieve attribute based on language
-			case 'tourMetadata':
-			case 'propertySet':
 			case 'description':
 			case 'title':
-				return getAttributeByLanguage(this.attributes[attr]);
+				if (this.attributes[attr].length === 0) return undefined;
+
+				var value, property;
+
+				property = _.find(this.attributes[attr], function(item) {
+					return item.lang === tap.language;
+				});
+
+				if (!property && tap.language !== tap.defaultLanguage) {
+					property = _.find(this.attributes[attr], function(item) {
+						return item.lang === tap.defaultLanguage;
+					});
+				}
+
+				if (!property) {
+					property = _.find(this.attributes[attr], function(item) {
+						return item.lang === undefined || item.lang === "";
+					});
+				}
+
+				if (property) {
+					value = property.value;
+				}
+				
+				return value;
 			default:
 				return this.attributes[attr];
 		}
+	},
+	parse: function(response) {
+		response.propertySet = new TapAPI.collections.PropertySet(
+			response.propertySet,
+			this.id
+		);
+
+		return response;
 	}
 });
-
 // TapAPI Namespace Initialization //
 if (typeof TapAPI === 'undefined'){TapAPI = {};}
 if (typeof TapAPI.collections === 'undefined'){TapAPI.collections = {};}
@@ -244,6 +387,53 @@ if (typeof TapAPI === 'undefined'){TapAPI = {};}
 if (typeof TapAPI.collections === 'undefined'){TapAPI.collections = {};}
 // TapAPI Namespace Initialization //
 
+// define sources collection
+TapAPI.collections.Content = Backbone.Collection.extend({
+	model: TapAPI.models.Content,
+	initialize: function(models, id) {
+		this.localStorage = new Backbone.LocalStorage(id + '-source');
+	}
+});
+// TapAPI Namespace Initialization //
+if (typeof TapAPI === 'undefined'){TapAPI = {};}
+if (typeof TapAPI.collections === 'undefined'){TapAPI.collections = {};}
+// TapAPI Namespace Initialization //
+
+// define assett collection
+TapAPI.collections.PropertySet = Backbone.Collection.extend({
+	model: TapAPI.models.Property,
+	initialize: function(models, id) {
+		this.localStorage = new Backbone.LocalStorage(id + '-propertyset');
+	},
+	getValueByName: function(propertyName) {
+		var property, value; 
+		property = this.where({"name": propertyName, "lang": tap.language});
+		if (property.length === 0) {
+			property = this.where({"name": propertyName});
+		}
+		if (property.length) {
+			value = property[0].get('value');
+		}
+		return value;
+	}
+});
+// TapAPI Namespace Initialization //
+if (typeof TapAPI === 'undefined'){TapAPI = {};}
+if (typeof TapAPI.collections === 'undefined'){TapAPI.collections = {};}
+// TapAPI Namespace Initialization //
+
+// define sources collection
+TapAPI.collections.Sources = Backbone.Collection.extend({
+	model: TapAPI.models.Source,
+	initialize: function(models, id) {
+		this.localStorage = new Backbone.LocalStorage(id + '-source');
+	}
+});
+// TapAPI Namespace Initialization //
+if (typeof TapAPI === 'undefined'){TapAPI = {};}
+if (typeof TapAPI.collections === 'undefined'){TapAPI.collections = {};}
+// TapAPI Namespace Initialization //
+
 // define stop collection
 TapAPI.collections.Stops = Backbone.Collection.extend({
 	model: TapAPI.models.Stop,
@@ -253,17 +443,14 @@ TapAPI.collections.Stops = Backbone.Collection.extend({
 	// retrieve the stop id of a given key code
 	getStopByKeycode: function(key) {
 		for(var i = 0; i < this.models.length; i++) {
-			if(this.models[i].get('propertySet')) {
-				for(var j = 0; j < this.models[i].get('propertySet').length; j++) {
-					if(this.models[i].get('propertySet')[j].name == 'code' &&
-						this.models[i].get('propertySet')[j].value == key) return this.models[i];
-				}
+			var code = this.models[i].get('propertySet').where({"name":"code", "value":key});
+			if (code.length) {
+				return this.models[i];
 			}
 		}
-		return false;
+		return undefined;
 	}
 });
-
 // TapAPI Namespace Initialization //
 if (typeof TapAPI === 'undefined'){TapAPI = {};}
 if (typeof TapAPI.collections === 'undefined'){TapAPI.collections = {};}
@@ -287,14 +474,11 @@ TapAPI.collections.Tours = Backbone.Collection.extend({
 		// create new instance of AssetCollection
 		tap.tourAssets = new TapAPI.collections.Assets(null, id);
 
-		if (tap.GeoLocation !== null) {
-			tap.tourStops.on('reset', TapAPI.geoLocation.stopsReset);
-		}
-
 		// load data from local storage
-		tap.tourAssets.fetch();		
+		tap.tourAssets.fetch();
 		tap.tourStops.fetch();
 
+		tap.trigger("tap.tour.selected");
 	}
 });
 
@@ -382,44 +566,57 @@ jQuery(function() {
 		renderContent: function() {
 
 			var content_template = TapAPI.templateManager.get('audio-stop');
+			var contentContainer = this.$el.find(":jqmData(role='content')");
 
-			$(":jqmData(role='content')", this.$el).append(content_template({
-				tourStopTitle: this.model.get('title')[0].value
+			contentContainer.append(content_template({
+				tourStopTitle: this.model.get('title')
 			}));
 
-			var asset_refs = tap.currentStop.get("assetRef");
-			
+			var assets = this.model.getAssets();
 
-			if (asset_refs) {
-				_.each(asset_refs, function(assetRef) {
+			if (assets) {
+				var audioPlayer = this.$el.find('#audio-player');
+				var videoPlayer = this.$el.find('#video-player');
+				var videoAspect;
 
-					var asset = tap.tourAssets.get(assetRef.id);
-					var assetSources = asset.get("source");
+				_.each(assets, function(asset) {
+					var sources = asset.get('source');
 
-					_.each(assetSources, function(assetSource) {
+					sources.each(function(source){
+						var source_str = "<source src='" + source.get('uri') + "' type='" + source.get('format') + "' />";
 
-						var source_str = "<source src='" + assetSource.uri + "' type='" + assetSource.format + "' />";
-
-						switch(assetSource.format.substring(0,5)) {
+						switch(source.get('format').substring(0,5)) {
 							case 'audio':
-								$('#audio-player', this.$el).append(source_str);
+								audioPlayer.append(source_str);
 								break;
 							case 'video':
-								$('#video-player', this.$el).append(source_str);
+								videoPlayer.append(source_str);
+								
 								break;
 							default:
 								console.log('Unsupported format for audio asset:', assetSource);
 						}
+					});
+				});
 
-					}, this);
-				}, this);
-
+				var mediaOptions = {};
+				var mediaElement = null;
 				// If there are video sources and no audio sources, switch to the video element
-				if ($('#video-player source', this.$el).length && !$('#audio-player source', this.$el).length) {
-					$('#audio-player', this.$el).hide();
-					$('#video-player', this.$el).show();
-				}
+				if (videoPlayer.find('source').length && !audioPlayer.find('source').length) {
+					audioPlayer.remove();
+					videoPlayer.show();
+					mediaOptions.defaultVideoWidth = '100%';
+					// mediaOptions.defaultVideoHeight = 270;
 
+					mediaElement = videoPlayer;
+				} else {
+					videoPlayer.remove();
+					mediaOptions.defaultAudioWidth = '100%';
+					//mediaOptions.defaultAudioHeight = 270;
+
+					mediaElement = audioPlayer;
+				}
+				mediaElement.mediaelementplayer(mediaOptions);
 			}
 
 			return this;
@@ -440,9 +637,9 @@ jQuery(function() {
 		renderContent: function() {
 			var content_template = TapAPI.templateManager.get('stop');
 
-			$(":jqmData(role='content')", this.$el).append(content_template({
-				tourStopTitle : this.model.get("title") ? this.model.get("title")[0].value : undefined,
-				tourStopDescription : this.model.get('description') ? this.model.get('description')[0].value : undefined
+			this.$el.find(":jqmData(role='content')").append(content_template({
+				tourStopTitle : this.model.get("title") ? this.model.get("title") : undefined,
+				tourStopDescription : this.model.get('description') ? this.model.get('description') : undefined
 			}));
 			return this;
 
@@ -605,12 +802,14 @@ jQuery(function() {
 			_.defaults(this.options, {
 				'init-lat': 39.829104,
 				'init-lon': -86.189504,
-				'init-zoom': 2,
-				'units': 'si'
+				'init-zoom': 2
 			});
 		},
 
 		renderContent: function() {
+
+			TapAPI.geoLocation.startLocating();
+
 			var content_template = TapAPI.templateManager.get('tour-map');
 
 			//$(":jqmData(role='page')", this.$el).attr('id', 'tour-map-page');
@@ -621,9 +820,11 @@ jQuery(function() {
 				if (e.data.map_view.map === null) {
 					e.data.map_view.initMap();
 				}
+				setTimeout(e.data.map_view.resizeContentArea, 2000);
 			});
 
 			$(window).bind('orientationchange resize', this.resizeContentArea);
+			//$(":jqmData(role='page')").bind('updatelayout', function() { alert('x'); });
 
 		},
 
@@ -690,7 +891,9 @@ jQuery(function() {
 
 			// Parse the contents of the asset
 			asset = tap.tourAssets.get(asset_ref.id);
-			var data = $.parseJSON(asset.get('content')[0].data.value);
+			var content = asset.get('content');
+			if (content === undefined) return;
+			var data = $.parseJSON(content.at(0).get('data'));
 
 			if (data.type == 'Point') {
 
@@ -707,7 +910,7 @@ jQuery(function() {
 				}
 
 				popup.setContent(template({
-					'title': this.stop.get('title')[0].value,
+					'title': this.stop.get('title'),
 					'tour_id': tap.currentTour,
 					'stop_id': this.stop.id,
 					'distance': d_content
@@ -732,7 +935,7 @@ jQuery(function() {
 				}
 
 				this.stop_popups[stop.id].setContent(template({
-					'title': stop.get('title')[0].value,
+					'title': stop.get('title'),
 					'tour_id': tap.currentTour,
 					'stop_id': stop.get('id'),
 					'distance': d_content
@@ -781,12 +984,26 @@ jQuery(function() {
 
 		formatStopDistance: function(d) {
 
-			if (this.options.units == 'si') {
+			if (tap.config.units == 'si') {
 
-				if (d < 1000) {
-					return d.toFixed(2) + ' m';
-				} else {
+				if (d < 100) {
+					return parseInt(d) + ' m';
+				} else if (d < 10000) {
 					return (d/1000).toFixed(2) + ' km';
+				} else {
+					return parseInt(d/1000) + ' km';
+				}
+
+			} else {
+				
+				// Assume it's English
+				var feet = 3.28084 * d;
+				if (feet > 52800) { // > 10 miles
+					return parseInt(feet/5280) + ' mi';
+				} if (feet > 528) { // > .1 miles
+					return (feet/5280).toFixed(2) + ' mi';
+				} else {
+					return parseInt(feet) + ' ft';
 				}
 
 			}
@@ -808,6 +1025,7 @@ jQuery(function() {
 
 
 		onClose: function() {
+			TapAPI.geoLocation.stopLocating();
 			$(window).unbind('orientationchange resize', this.resizeContentArea);
 		}
 
@@ -834,17 +1052,17 @@ jQuery(function() {
 		renderContent: function() {
 			var content_template = TapAPI.templateManager.get('stop-group');
 			var template_args = {
-				tourStopTitle : this.model.get('title')[0].value
+				tourStopTitle : this.model.get('title')
 			};
 
 			var description = this.model.get("description");
 			if (description !== undefined) {
-				template_args['description'] = description[0].value;
+				template_args['description'] = description;
 			} else {
 				template_args['description'] = '';
 			}
 
-			$(":jqmData(role='content')", this.$el).append(content_template(template_args));
+			this.$el.find(":jqmData(role='content')").append(content_template(template_args));
 
 			var connections = this.model.get('connection');
 			var listContainer = this.$el.find("#stop-list");
@@ -867,7 +1085,7 @@ jQuery(function() {
 		template: TapAPI.templateManager.get('stop-group-list-item'),
 		render: function() {
 			this.$el.html(this.template({
-				title: this.model.get('title') ? this.model.get('title')[0].value : undefined,
+				title: this.model.get('title') ? this.model.get('title') : undefined,
 				id: this.model.get('id'),
 				tourId: tap.currentTour
 			}));
@@ -895,24 +1113,23 @@ jQuery(function() {
 		renderContent: function() {
 			var content_template = TapAPI.templateManager.get('tour-stop-list');
 
-			$(":jqmData(role='content')", this.$el).append(content_template());
+			this.$el.find(":jqmData(role='content')").append(content_template());
 
 			// TODO: figure out a better way to avoid rendering again
 			//if ($('li', this.$el).length == tap.tourStops.models.length) return;
 
+			var listContainer = this.$el.find('#tour-stop-list');
+			
 			_.each(tap.tourStops.models, function(stop) {
 
 				// If in codes-only mode, abort if the stop does not have a code
 				if (tap.config.StopListView.codes_only) {
-					var code = undefined;
-					_.each(stop.get('propertySet'), function(prop) {
-						if (prop.name == 'code') code = prop.value;
-					});
-					if (code === undefined) return;
+					var code = stop.get('propertySet').where({"name":"code"});
+					if (!code.length) return;
 				}
 
 				var item = new TapAPI.views.StopListItem({model: stop});
-				$('#tour-stop-list', this.$el).append(item.render().el);
+				listContainer.append(item.render().el);
 				
 			}, this);
 
@@ -925,10 +1142,9 @@ jQuery(function() {
 
 		tagName: 'li',
 		template: TapAPI.templateManager.get('tour-stop-list-item'),
-
 		render: function() {
 			$(this.el).html(this.template({
-				title: this.model.get('title') ? this.model.get('title')[0].value : undefined,
+				title: this.model.get('title') ? this.model.get('title') : undefined,
 				stop_id: this.model.get('id'),
 				tour_id: tap.currentTour
 			}));
@@ -950,18 +1166,18 @@ jQuery(function() {
 	TapAPI.views.TourDetails = TapAPI.views.Page.extend({
 
 		onInit: function() {
-			this.options.page_title = this.model.get('title')[0].value;
+			this.options.page_title = this.model.get('title');
 			this.options.header_nav = false;
 		},
 
 		renderContent: function() {
 			var content_template = TapAPI.templateManager.get('tour-details');
 
-			$(":jqmData(role='content')", this.$el).append(content_template({
+			this.$el.find(":jqmData(role='content')").append(content_template({
 				tour_index: tap.config.default_index,
 				tour_id: this.model.id,
-				publishDate: this.model.get('publishDate') ? this.model.get('publishDate')[0].value : undefined,
-				description: this.model.get('description') ? this.model.get('description')[0].value : undefined,
+				publishDate: this.model.get('publishDate') ? this.model.get('publishDate') : undefined,
+				description: this.model.get('description') ? this.model.get('description') : undefined,
 				stopCount: tap.tourStops.length,
 				assetCount: tap.tourAssets.length
 			}));
@@ -991,11 +1207,12 @@ jQuery(function() {
 		renderContent: function() {
 			var content_template = TapAPI.templateManager.get('tour-list');
 
-			$(":jqmData(role='content')", this.$el).append(content_template);
+			this.$el.find(":jqmData(role='content')").append(content_template);
 
+			var tourList = this.$el.find('#tour-list');
 			// iterate through all of the tour models to setup new views
 			_.each(this.model.models, function(tour) {
-					$('#tour-list', this.$el).append(new TapAPI.views.TourListItem({model: tour}).render().el);
+				tourList.append(new TapAPI.views.TourListItem({model: tour}).render().el);
 			}, this);
 			$('#tour-list').listview('refresh'); // refresh listview since we generated the data dynamically
 
@@ -1008,8 +1225,8 @@ jQuery(function() {
 		tagName: 'li',
 		template: TapAPI.templateManager.get('tour-list-item'),
 		render: function() {
-			$(this.el).html(this.template({
-				title: this.model.get('title') ? this.model.get('title')[0].value : undefined,
+			this.$el.html(this.template({
+				title: this.model.get('title') ? this.model.get('title') : undefined,
 				id: this.model.get('id')
 			}));
 			return this;
@@ -1038,21 +1255,19 @@ jQuery(function() {
 		renderContent: function() {
 			var content_template = TapAPI.templateManager.get('video-stop');
 
-			$(":jqmData(role='content')", this.$el).append(content_template({
-				tourStopTitle: this.model.get('title')[0].value
+			this.$el.find(":jqmData(role='content')").append(content_template({
+				tourStopTitle: this.model.get('title')
 			}));
 
-			var asset_refs = tap.currentStop.get("assetRef");
-
-			if (asset_refs) {
-				_.each(asset_refs, function(assetRef) {
-					var asset = tap.tourAssets.get(assetRef.id);
-					var assetSources = asset.get("source");
-
-					_.each(assetSources, function(assetSource){
-						$('video', this.$el).append("<source src='" + assetSource.uri + "' type='" + assetSource.format + "' />");
-					}, this);
-				}, this);
+			var assets = this.model.getAssets();
+			if (assets.length) {
+				var videoContainer = this.$el.find('video');
+				_.each(assets, function(asset) {
+					var sources = asset.get("source");
+					sources.each(function(source) {
+						videoContainer.append("<source src='" + source.get('uri') + "' type='" + source.get('format') + "' />");
+					});
+				});
 			}
 
 			return this;
@@ -1195,7 +1410,9 @@ jQuery(function() {
 				if ((resource === undefined) || (resource.usage != 'geo')) return;
 
 				asset = tap.tourAssets.get(resource.id);
-				var data = $.parseJSON(asset.get('content')[0].data.value);
+				var content = asset.get('content');
+				if (content === undefined) return;
+				var data = $.parseJSON(content.at(0).get('data'));
 
 				if (data.type == 'Point') {
 					map_options['init-lon'] = data.coordinates[0];
@@ -1205,9 +1422,9 @@ jQuery(function() {
 			});
 
 			// Look to see if the initial map zoom level is set
-			_.each(tour.get('propertySet'), function(property) {
-				if (property.name == 'initial_map_zoom') {
-					map_options['init-zoom'] = property.value;
+			_.each(tour.get('propertySet').models, function(property) {
+				if (property.get('name') == 'initial_map_zoom') {
+					map_options['init-zoom'] = property.get('value');
 				}
 			});
 
@@ -1260,10 +1477,16 @@ if (!tap) {
 	tap.tours = {};
 	tap.tourAssets = {};
 	tap.tourStops = {}; // initialize tour stop
-	tap.language = 'en'; // set default language
+	tap.language = 'en'; // set default user language
+	tap.defaultLanguage = 'en'; // the default language to fallback to
 	tap.currentStop = ''; // id of the current stop
 	tap.currentTour = ''; // id of the current tour
 
+	//get the users language
+	var userLang = (navigator.language) ? navigator.language : navigator.userLanguage;
+	tap.language = userLang.split("-")[0];
+
+	// Determine the base path so that complete paths can be defined where needed
 	var script_src = $('head script').last().attr('src');
 	if (script_src.indexOf('Init.js') >= 0) {
 		tap.base_path = '';
@@ -1287,10 +1510,16 @@ if (!tap) {
 		if (config === undefined) config = {};
 		tap.config = _.defaults(config, {
 			default_index: 'tourstoplist',
+			units: 'si',
 			StopListView: {
 				codes_only: true
 			}
 		});
+
+		// configure any events
+		if (TapAPI.geoLocation !== undefined) {
+			tap.on('tap.tour.selected', TapAPI.geoLocation.parseCurrentStopLocations);
+		}
 
 		// trigger tap init start event
 		tap.trigger('tap.init.start');
@@ -1360,6 +1589,7 @@ if (!tap) {
 					}
 				}
 			}
+
 			stops.create({
 				id: data.stop[i].id,
 				connection: connections,
@@ -1377,20 +1607,30 @@ if (!tap) {
 		var numAssets = data.asset.length;
 		for (i = 0; i < numAssets; i++) {
 			// modifiy source propertySet child to match similar elements
-			if(data.asset[i].source && data.asset[i].source) {
-				var propertySet = [];
+			if(data.asset[i].source) {
+				data.asset[i].source = objectToArray(data.asset[i].source);
 				var numSources = data.asset[i].source.length;
 				for (j = 0; j < numSources; j++) {
 					if(data.asset[i].source[j].propertySet) {
-						data.asset[i].source[j].propertySet = data.asset[i].source[j].propertySet.property;
+						data.asset[i].source[j].propertySet = objectToArray(data.asset[i].source[j].propertySet.property);
 					}
 				}
 			}
+			if(data.asset[i].content) {
+				data.asset[i].content = objectToArray(data.asset[i].content);
+				var numContent = data.asset[i].content.length;
+				for (j = 0; j < numContent; j++) {
+					if(data.asset[i].content[j].propertySet) {
+						data.asset[i].content[j].propertySet = objectToArray(data.asset[i].content[j].propertySet.property);
+					}
+				}
+			}
+
 			assets.create({
 				assetRights: objectToArray(data.asset[i].assetRights),
-				content: objectToArray(data.asset[i].content),
+				content: data.asset[i].content,
 				id: data.asset[i].id,
-				source: objectToArray(data.asset[i].source),
+				source: data.asset[i].source,
 				propertySet: data.asset[i].propertySet ? objectToArray(data.asset[i].propertySet.property) : undefined
 			});
 		}
@@ -1412,6 +1652,7 @@ jQuery(function() {
 	TapAPI.geoLocation = {
 
 		latest_location: null,
+		interval: null,
 
 		locate: function() {
 
@@ -1433,8 +1674,8 @@ jQuery(function() {
 			console.log('locationError', error);
 		},
 
-		// When the stop collection is reset, check for geo assets
-		stopsReset: function() {
+		// Parse the current stop locations. Should be triggered when a new tour is selected.
+		parseCurrentStopLocations: function() {
 
 			_.each(tap.tourStops.models, function(stop) {
 
@@ -1444,7 +1685,9 @@ jQuery(function() {
 					if (geo_assets) {
 
 						// Parse the contents of the asset
-						var data = $.parseJSON(geo_assets[0].get('content')[0].data.value);
+						var content = geo_assets[0].get('content');
+						if (content === undefined) return;
+						var data = $.parseJSON(content.at(0).get('data'));
 
 						if (data.type == 'Point') {
 							stop.set('location', new L.LatLng(data.coordinates[1], data.coordinates[0]));
@@ -1472,14 +1715,24 @@ jQuery(function() {
 
 			});
 
+		},
+
+		startLocating: function(delay) {
+
+			if (delay === undefined) delay = 5000;
+			TapAPI.geoLocation.locate();
+			TapAPI.geoLocation.interval = setInterval(TapAPI.geoLocation.locate, 5000);
+
+		},
+
+		stopLocating: function() {
+			clearInterval(TapAPI.geoLocation.interval);
+			TapAPI.geoLocation.interval = null;
 		}
 
 	};
 
 	_.extend(TapAPI.geoLocation, Backbone.Events);
-
-	TapAPI.geoLocation.locate();
-	setInterval(TapAPI.geoLocation.locate, 5000);
 
 });
 // TapAPI Namespace Initialization //
@@ -1552,11 +1805,11 @@ return __p;
 TapAPI.templates['page'] = function(obj){
 var __p='';var print=function(){__p+=Array.prototype.join.call(arguments, '')};
 with(obj||{}){
-__p+='<div data-role="header">\n\t<a id=\'back-button\' data-rel="back">'+
+__p+='<div data-role="header" data-position="fixed">\n\t<a id=\'back-button\' data-rel="back" data-mini="true">'+
 ( back_label )+
 '</a>\n\t';
  if (header_nav) { 
-;__p+='\n\t<div id=\'index-selector\' class=\'ui-title\' data-role="controlgroup" data-type="horizontal" data-mini="true">\n\t\t';
+;__p+='\n\t<div id=\'index-selector\' data-role="controlgroup" data-type="horizontal" data-mini="true">\n\t\t';
  _.each(nav_menu, function(item) { 
 ;__p+='\n\t\t<a data-role="button" '+
 ( (active_index == item.prefix) ? 'data-theme="b"' : "" )+

@@ -19,7 +19,9 @@
 			$(document).ready(function() {
 
 				// initialize app
-				tap.initApp("<?php print $tourml_path; ?>");
+				tap.initApp("<?php print $tourml_path; ?>", {
+					units: '<?php print variable_get('tap_webapp_units', 'si'); ?>'
+				});
 				// start backbone history collection
 				Backbone.history.start();
 
