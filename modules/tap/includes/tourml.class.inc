@@ -169,6 +169,7 @@ class TourML {
                                 $instances = field_info_instances('field_collection_item', $field['#field_name']);
                                 // iterate over all the fields attached to the entity
                                 foreach ($instances as $field_name => $settings) {
+                                    if(empty($entity->{$field_name})) continue;
                                     foreach ($entity->{$field_name}['und'] as $key => $item) {
                                         $uid = (isset($item['fid'])) ? $item['fid'] : $key;
                                         // unique key for field in set
