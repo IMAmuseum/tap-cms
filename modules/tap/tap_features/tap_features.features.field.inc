@@ -47,7 +47,7 @@ function tap_features_field_default_fields() {
           'module' => 'text',
           'settings' => array(),
           'type' => 'text_default',
-          'weight' => 0,
+          'weight' => '2',
         ),
         'tourml_xml' => array(
           'label' => 'above',
@@ -71,7 +71,7 @@ function tap_features_field_default_fields() {
           'rows' => '5',
         ),
         'type' => 'text_textarea',
-        'weight' => '1',
+        'weight' => '2',
       ),
     ),
   );
@@ -118,7 +118,7 @@ function tap_features_field_default_fields() {
             'image_style' => '',
           ),
           'type' => 'image',
-          'weight' => 1,
+          'weight' => '0',
         ),
         'tourml_xml' => array(
           'label' => 'above',
@@ -161,6 +161,74 @@ function tap_features_field_default_fields() {
         ),
         'type' => 'media_generic',
         'weight' => '0',
+      ),
+    ),
+  );
+
+  // Exported field: 'field_collection_item-field_image_asset-field_title'
+  $fields['field_collection_item-field_image_asset-field_title'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_title',
+      'foreign keys' => array(
+        'format' => array(
+          'columns' => array(
+            'format' => 'format',
+          ),
+          'table' => 'filter_format',
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'module' => 'text',
+      'settings' => array(
+        'max_length' => '255',
+      ),
+      'translatable' => '0',
+      'type' => 'text',
+    ),
+    'field_instance' => array(
+      'bundle' => 'field_image_asset',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'text',
+          'settings' => array(),
+          'type' => 'text_default',
+          'weight' => '1',
+        ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'entity_type' => 'field_collection_item',
+      'field_name' => 'field_title',
+      'label' => 'Title',
+      'required' => 0,
+      'settings' => array(
+        'text_processing' => '0',
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'text',
+        'settings' => array(
+          'size' => '60',
+        ),
+        'type' => 'text_textfield',
+        'weight' => '1',
       ),
     ),
   );
@@ -2216,11 +2284,11 @@ function tap_features_field_default_fields() {
             'public' => 'public',
           ),
           'allowed_types' => array(
-            'audio' => 0,
-            'default' => 0,
-            0 => 0,
             'image' => 'image',
             'video' => 0,
+            0 => 0,
+            'audio' => 0,
+            'default' => 0,
           ),
           'file_extensions' => 'jpg jpeg gif png',
           'progress_indicator' => 'throbber',
@@ -2733,11 +2801,11 @@ function tap_features_field_default_fields() {
             'public' => 'public',
           ),
           'allowed_types' => array(
-            'audio' => 0,
-            'default' => 0,
-            0 => 0,
             'image' => 'image',
             'video' => 0,
+            0 => 0,
+            'audio' => 0,
+            'default' => 0,
           ),
           'file_extensions' => 'jpg jpeg gif png',
           'progress_indicator' => 'throbber',
@@ -3477,18 +3545,11 @@ function tap_features_field_default_fields() {
       'display' => array(
         'default' => array(
           'label' => 'above',
-          'module' => 'jplayer',
+          'module' => 'file_entity',
           'settings' => array(
-            'autoplay' => 0,
-            'backgroundColor' => '000000',
-            'mode' => 'playlist',
-            'muted' => FALSE,
-            'preload' => 'metadata',
-            'repeat' => 'none',
-            'solution' => 'html, flash',
-            'volume' => 80,
+            'file_view_mode' => 'default',
           ),
-          'type' => 'jplayer_player',
+          'type' => 'file_rendered',
           'weight' => '2',
         ),
         'teaser' => array(
@@ -3512,7 +3573,7 @@ function tap_features_field_default_fields() {
       'settings' => array(
         'description_field' => 0,
         'file_directory' => '',
-        'file_extensions' => 'mp3 ogg wav',
+        'file_extensions' => 'mp3 mp4 ogg wav',
         'max_filesize' => '',
         'user_register_form' => FALSE,
       ),
@@ -3521,13 +3582,15 @@ function tap_features_field_default_fields() {
         'module' => 'media',
         'settings' => array(
           'allowed_schemes' => array(
+            'flickr' => 0,
             'public' => 'public',
+            'youtube' => 0,
           ),
           'allowed_types' => array(
             'audio' => 0,
             'default' => 0,
-            'image' => 'image',
-            'video' => 0,
+            'image' => 0,
+            'video' => 'video',
           ),
           'progress_indicator' => 'throbber',
         ),
@@ -4045,7 +4108,7 @@ function tap_features_field_default_fields() {
           'module' => 'tap',
           'settings' => array(),
           'type' => 'tap_tourml_description',
-          'weight' => '1',
+          'weight' => '2',
         ),
       ),
       'entity_type' => 'node',
@@ -4121,7 +4184,7 @@ function tap_features_field_default_fields() {
           'module' => 'tap',
           'settings' => array(),
           'type' => 'tap_tourml_property',
-          'weight' => '2',
+          'weight' => '3',
         ),
       ),
       'entity_type' => 'node',
@@ -4139,7 +4202,73 @@ function tap_features_field_default_fields() {
           'size' => '60',
         ),
         'type' => 'text_textfield',
-        'weight' => '3',
+        'weight' => '4',
+      ),
+    ),
+  );
+
+  // Exported field: 'node-tour_stop_group-field_geo'
+  $fields['node-tour_stop_group-field_geo'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_geo',
+      'foreign keys' => array(),
+      'indexes' => array(),
+      'module' => 'geofield',
+      'settings' => array(),
+      'translatable' => '0',
+      'type' => 'geofield',
+    ),
+    'field_instance' => array(
+      'bundle' => 'tour_stop_group',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => 'The geographic location of this stop group',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'geofield',
+          'settings' => array(
+            'data' => 'full',
+          ),
+          'type' => 'geofield_wkt',
+          'weight' => '9',
+        ),
+        'teaser' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tourml_asset',
+          'weight' => '5',
+        ),
+      ),
+      'entity_type' => 'node',
+      'field_name' => 'field_geo',
+      'label' => 'Geo Location',
+      'required' => 0,
+      'settings' => array(
+        'local_solr' => array(
+          'enabled' => FALSE,
+          'lat_field' => 'lat',
+          'lng_field' => 'lng',
+        ),
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'geofield',
+        'settings' => array(),
+        'type' => 'geofield_latlon',
+        'weight' => '8',
       ),
     ),
   );
@@ -4193,7 +4322,7 @@ function tap_features_field_default_fields() {
           'label' => 'above',
           'module' => 'entityreference',
           'settings' => array(
-            'link' => FALSE,
+            'link' => 1,
           ),
           'type' => 'entityreference_label',
           'weight' => '5',
@@ -4209,7 +4338,7 @@ function tap_features_field_default_fields() {
           'module' => 'tap',
           'settings' => array(),
           'type' => 'tap_tourml_connection',
-          'weight' => '3',
+          'weight' => '4',
         ),
       ),
       'entity_type' => 'node',
@@ -4227,8 +4356,104 @@ function tap_features_field_default_fields() {
           'path' => '',
           'size' => '60',
         ),
-        'type' => 'entityreference_autocomplete_tags',
-        'weight' => '4',
+        'type' => 'entityreference_autocomplete',
+        'weight' => '5',
+      ),
+    ),
+  );
+
+  // Exported field: 'node-tour_stop_group-field_header_image'
+  $fields['node-tour_stop_group-field_header_image'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_header_image',
+      'foreign keys' => array(
+        'fid' => array(
+          'columns' => array(
+            'fid' => 'fid',
+          ),
+          'table' => 'file_managed',
+        ),
+      ),
+      'indexes' => array(
+        'fid' => array(
+          0 => 'fid',
+        ),
+      ),
+      'module' => 'image',
+      'settings' => array(
+        'default_image' => 0,
+        'uri_scheme' => 'public',
+      ),
+      'translatable' => '0',
+      'type' => 'image',
+    ),
+    'field_instance' => array(
+      'bundle' => 'tour_stop_group',
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'image',
+          'settings' => array(
+            'image_link' => '',
+            'image_style' => '',
+          ),
+          'type' => 'image',
+          'weight' => '7',
+        ),
+        'teaser' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tourml_asset',
+          'weight' => '1',
+        ),
+      ),
+      'entity_type' => 'node',
+      'field_name' => 'field_header_image',
+      'label' => 'Header Image',
+      'required' => 0,
+      'settings' => array(
+        'alt_field' => 0,
+        'default_image' => 0,
+        'file_directory' => '',
+        'file_extensions' => 'png gif jpg jpeg',
+        'max_filesize' => '',
+        'max_resolution' => '',
+        'min_resolution' => '',
+        'title_field' => 0,
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'media',
+        'settings' => array(
+          'allowed_schemes' => array(
+            'flickr' => 0,
+            'public' => 'public',
+            'youtube' => 0,
+          ),
+          'allowed_types' => array(
+            'audio' => 0,
+            'default' => 0,
+            'image' => 'image',
+            'video' => 0,
+          ),
+          'progress_indicator' => 'throbber',
+        ),
+        'type' => 'media_generic',
+        'weight' => '2',
       ),
     ),
   );
@@ -4292,7 +4517,7 @@ function tap_features_field_default_fields() {
           'label' => 'above',
           'settings' => array(),
           'type' => 'hidden',
-          'weight' => '4',
+          'weight' => '6',
         ),
       ),
       'entity_type' => 'node',
@@ -4311,7 +4536,7 @@ function tap_features_field_default_fields() {
           'size' => '60',
         ),
         'type' => 'options_select',
-        'weight' => '2',
+        'weight' => '3',
       ),
     ),
   );
@@ -4660,9 +4885,11 @@ function tap_features_field_default_fields() {
       'display' => array(
         'default' => array(
           'label' => 'above',
-          'module' => 'styles',
-          'settings' => array(),
-          'type' => 'styles_file_original',
+          'module' => 'file_entity',
+          'settings' => array(
+            'file_view_mode' => 'default',
+          ),
+          'type' => 'file_rendered',
           'weight' => '1',
         ),
         'teaser' => array(
@@ -4698,11 +4925,11 @@ function tap_features_field_default_fields() {
             'public' => 'public',
           ),
           'allowed_types' => array(
-            'audio' => 0,
-            'default' => 0,
-            0 => 0,
             'image' => 0,
             'video' => 'video',
+            0 => 0,
+            'audio' => 0,
+            'default' => 0,
           ),
           'progress_indicator' => 'throbber',
         ),
@@ -4797,11 +5024,14 @@ function tap_features_field_default_fields() {
   t('Copyright');
   t('Credit Line');
   t('Expiration');
+  t('Geo Location');
+  t('Header Image');
   t('Image');
   t('Image Asset');
   t('Machine Rights');
   t('Question');
   t('Stops');
+  t('The geographic location of this stop group');
   t('Title');
   t('Tour');
   t('Video');
