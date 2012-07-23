@@ -1,5 +1,5 @@
 <?php if (!empty($items)): ?>
-<tourml:AssetRights>
+<tourml:Rights>
 <?php foreach ($items as $item) { print $item; } ?>
-</tourml:AssetRights>
+</tourml:Rights>
 <?php endif; ?>
