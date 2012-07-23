@@ -60,3 +60,27 @@ function tap_webapp_preview($node) {
 
     die();
 }
+
+function tap_webapp_preprocess_tap_webapp_preview(&$vars) {
+
+    $navbar_labels = array(
+        'tourstoplist' => t('Menu'),
+        'tourkeypad' => t('Keypad'),
+        'tourmap' => t('Map')
+    );
+    
+    $default_navbar_items = variable_get('tap_webapp_navbar_items', array(
+        'tourstoplist' => 'tourstoplist', 
+        'tourkeypad' => 'tourkeypad', 
+        'tourmap' => 'tourmap'
+    ));
+
+    foreach($default_navbar_items as $key=>$val) {
+        $vars['default_navbar_items'][] = array(
+            'prefix' => $key,
+            'label' => $navbar_labels[$key]
+        );
+    }
+
+}
+

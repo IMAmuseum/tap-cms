@@ -20,7 +20,8 @@
 
 				// initialize app
 				tap.initApp("<?php print $tourml_path; ?>", {
-					units: '<?php print variable_get('tap_webapp_units', 'si'); ?>'
+					units: '<?php print variable_get('tap_webapp_units', 'si'); ?>',
+					navbar_items: <?php print json_encode($default_navbar_items); ?>
 				});
 				// start backbone history collection
 				Backbone.history.start();

@@ -9,9 +9,26 @@ function tap_webapp_admin_form() {
     $form['tap_webapp_units'] = array(
         '#type'             => 'select',
         '#title'            => t('System of units'),
-        '#description'      => t('Which system of units to use in the UI'),
+        '#description'      => t('Which system of units should be used in the UI?'),
         '#options'          => array('si' => t('SI'), 'english' => t('English')),
+        '#required'         => true,
         '#default_value'    => variable_get('tap_webapp_units', 'si')
+    );
+
+    $default = variable_get('tap_webapp_navbar_items', array(
+        'tourstoplist' => 'tourstoplist', 
+        'tourkeypad' => 'tourkeypad', 
+        'tourmap' => 'tourmap')
+    );
+
+    $form['tap_webapp_navbar_items'] = array(
+        '#type'             => 'select',
+        '#title'            => t('Default navigation bar items'),
+        '#description'      => t('Which items should be shown by default?'),
+        '#required'         => true,
+        '#multiple'         => true,
+        '#options'          => array('tourstoplist' => t('Menu'), 'tourkeypad' => t('Keypad'), 'tourmap' => t('Map')),
+        '#default_value'    => $default
     );
 
     return system_settings_form($form);
