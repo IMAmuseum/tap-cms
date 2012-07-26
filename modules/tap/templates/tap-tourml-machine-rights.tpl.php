@@ -1,1 +1,0 @@
-<tourml:MachineRights><![CDATA[<?php print $value; ?>]]></tourml:MachineRights>

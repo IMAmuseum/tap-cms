@@ -19996,14 +19996,15 @@ _.extend(Backbone.LocalStorage.prototype, {
     this.localStorage().setItem(this.name+"-"+model.id, JSON.stringify(model));
     this.records.push(model.id.toString());
     this.save();
-    return model.toJSON();
+    return this.find(model);
   },
 
   // Update a model by replacing its copy in `this.data`.
   update: function(model) {
     this.localStorage().setItem(this.name+"-"+model.id, JSON.stringify(model));
-    if (!_.include(this.records, model.id.toString())) this.records.push(model.id.toString()); this.save();
-    return model.toJSON();
+    if (!_.include(this.records, model.id.toString())) this.records.push(model.id.toString());
+    this.save();
+    return this.find(model);
   },
 
   // Retrieve a model from `this.data` by id.
@@ -20066,18 +20067,18 @@ Backbone.LocalStorage.sync = window.Store.sync = Backbone.localSync = function(m
 Backbone.ajaxSync = Backbone.sync;
 
 Backbone.getSyncMethod = function(model) {
-	if(model.localStorage || (model.collection && model.collection.localStorage))
-	{
-		return Backbone.localSync;
-	}
+  if(model.localStorage || (model.collection && model.collection.localStorage))
+  {
+    return Backbone.localSync;
+  }
 
-	return Backbone.ajaxSync;
+  return Backbone.ajaxSync;
 };
 
 // Override 'Backbone.sync' to default to localSync,
 // the original 'Backbone.sync' is still available in 'Backbone.ajaxSync'
 Backbone.sync = function(method, model, options, error) {
-	return Backbone.getSyncMethod(model).apply(this, [method, model, options, error]);
+  return Backbone.getSyncMethod(model).apply(this, [method, model, options, error]);
 };
 
 })();

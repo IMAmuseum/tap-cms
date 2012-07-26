@@ -35,7 +35,7 @@ function tap_features_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'additional_settings__active_tab_tour_stop_group';
-  $strongarm->value = 'edit-comment';
+  $strongarm->value = 'edit-menu';
   $export['additional_settings__active_tab_tour_stop_group'] = $strongarm;
 
   $strongarm = new stdClass();

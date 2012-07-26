@@ -72,7 +72,7 @@ function tap_preprocess_tap_tourml_asset(&$vars) {
             $vars['path'] = $file_path;
         }
         $vars['source'] = TRUE;
-        $vars['asset_rights'] = theme('tap_tourml_asset_rights', array('file' => file_load($vars['asset']['fid'])));
+        $vars['source_rights'] = theme('tap_tourml_asset_rights', array('file' => file_load($vars['asset']['fid'])));
     }
 
     // Handle text fields
@@ -139,7 +139,7 @@ function tap_preprocess_tap_tourml_multipart_asset(&$vars) {
                 $asset['path'] = $file_path;
             }
             $asset['source'] = TRUE;
-            $asset['asset_rights'] = theme('tap_tourml_asset_rights', array('file' => file_load($asset['fid'])));
+            $asset['source_rights'] = theme('tap_tourml_asset_rights', array('file' => file_load($asset['fid'])));
         }
         // Handle text fields
         if (isset($asset['value'])) {
@@ -340,9 +340,7 @@ function tap_preprocess_tap_tourml_asset_rights(&$vars) {
         switch($field['#formatter']) {
             case 'tap_tourml_copyright':
             case 'tap_tourml_credit_line':
-            case 'tap_tourml_machine_rights':
             case 'tap_tourml_expiration':
-            case 'tap_tourml_watermark':
                 if(empty($field['#items'])) continue;
                 $vars['items'][] = drupal_render($field);
                 break;
@@ -391,26 +389,6 @@ function theme_tap_tourml_credit_line_text_with_summary(&$vars) {
 }
 
 /********************************
- * Machine Rights
- */
-function _theme_tap_tourml_machine_rights($vars) {
-    $machine_rights = theme('tap_tourml_machine_rights', array('value' => $vars['items'][0]['value']));
-    return $machine_rights;
-}
-
-function theme_tap_tourml_machine_rights_text(&$vars) {
-    return _theme_tap_tourml_machine_rights($vars);
-}
-
-function theme_tap_tourml_machine_rights_text_long(&$vars) {
-    return _theme_tap_tourml_machine_rights($vars);
-}
-
-function theme_tap_tourml_machine_rights_text_with_summary(&$vars) {
-    return _theme_tap_tourml_machine_rights($vars);
-}
-
-/********************************
  * Expiration
  */
 function _theme_tap_tourml_expiration($vars) {
@@ -427,21 +405,6 @@ function theme_tap_tourml_expiration_datestamp(&$vars) {
 
 function theme_tap_tourml_expiration_datetime(&$vars) {
     return _theme_tap_tourml_expiration($vars);
-}
-
-/********************************
- * Watermark
- */
-function _theme_tap_tourml_watermark($vars) {
-
-}
-
-function theme_tap_tourml_watermark_file(&$vars) {
-    return _theme_tap_tourml_watermark($vars);
-}
-
-function theme_tap_tourml_watermark_image(&$vars) {
-    return _theme_tap_tourml_watermark($vars);
 }
 
 /********************************

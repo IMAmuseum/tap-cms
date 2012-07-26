@@ -204,7 +204,7 @@ function tap_features_field_default_fields() {
           'module' => 'text',
           'settings' => array(),
           'type' => 'text_default',
-          'weight' => '1',
+          'weight' => 2,
         ),
         'tourml_xml' => array(
           'label' => 'above',
@@ -517,6 +517,7 @@ function tap_features_field_default_fields() {
             'multiple_from' => '',
             'multiple_number' => '',
             'multiple_to' => '',
+            'show_repeat_rule' => 'show',
           ),
           'type' => 'date_default',
           'weight' => '4',
@@ -548,204 +549,6 @@ function tap_features_field_default_fields() {
         ),
         'type' => 'date_select',
         'weight' => '4',
-      ),
-    ),
-  );
-
-  // Exported field: 'file-application-field_machine_rights'
-  $fields['file-application-field_machine_rights'] = array(
-    'field_config' => array(
-      'active' => '1',
-      'cardinality' => '1',
-      'deleted' => '0',
-      'entity_types' => array(),
-      'field_name' => 'field_machine_rights',
-      'foreign keys' => array(
-        'format' => array(
-          'columns' => array(
-            'format' => 'format',
-          ),
-          'table' => 'filter_format',
-        ),
-      ),
-      'indexes' => array(
-        'format' => array(
-          0 => 'format',
-        ),
-      ),
-      'module' => 'text',
-      'settings' => array(
-        'max_length' => '255',
-      ),
-      'translatable' => '0',
-      'type' => 'text',
-    ),
-    'field_instance' => array(
-      'bundle' => 'application',
-      'default_value' => NULL,
-      'deleted' => '0',
-      'description' => '',
-      'display' => array(
-        'default' => array(
-          'label' => 'above',
-          'module' => 'text',
-          'settings' => array(),
-          'type' => 'text_default',
-          'weight' => 1,
-        ),
-        'media_large' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_link' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_original' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_preview' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_small' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'tourml_xml' => array(
-          'label' => 'above',
-          'module' => 'text',
-          'settings' => array(),
-          'type' => 'text_default',
-          'weight' => '3',
-        ),
-      ),
-      'entity_type' => 'file',
-      'field_name' => 'field_machine_rights',
-      'label' => 'Machine Rights',
-      'required' => 0,
-      'settings' => array(
-        'text_processing' => '0',
-        'user_register_form' => FALSE,
-      ),
-      'widget' => array(
-        'active' => 1,
-        'module' => 'text',
-        'settings' => array(
-          'size' => '60',
-        ),
-        'type' => 'text_textfield',
-        'weight' => '3',
-      ),
-    ),
-  );
-
-  // Exported field: 'file-application-field_watermark'
-  $fields['file-application-field_watermark'] = array(
-    'field_config' => array(
-      'active' => '1',
-      'cardinality' => '1',
-      'deleted' => '0',
-      'entity_types' => array(),
-      'field_name' => 'field_watermark',
-      'foreign keys' => array(),
-      'indexes' => array(
-        'fid' => array(
-          0 => 'fid',
-        ),
-      ),
-      'module' => 'media',
-      'settings' => array(),
-      'translatable' => '0',
-      'type' => 'media',
-    ),
-    'field_instance' => array(
-      'bundle' => 'application',
-      'deleted' => '0',
-      'description' => '',
-      'display' => array(
-        'default' => array(
-          'label' => 'above',
-          'module' => NULL,
-          'settings' => array(),
-          'type' => 'media_large',
-          'weight' => 3,
-        ),
-        'media_large' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_link' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_original' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_preview' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_small' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'tourml_xml' => array(
-          'label' => 'above',
-          'module' => 'tap',
-          'settings' => array(),
-          'type' => 'tap_tourml_asset',
-          'weight' => '5',
-        ),
-      ),
-      'entity_type' => 'file',
-      'field_name' => 'field_watermark',
-      'label' => 'Watermark',
-      'required' => 0,
-      'settings' => array(
-        'file_extensions' => 'jpg jpeg gif png txt doc xls pdf ppt pps odt ods odp mp3 mov m4v mp4 mpeg avi ogg wmv ico',
-        'user_register_form' => FALSE,
-      ),
-      'widget' => array(
-        'active' => 1,
-        'module' => 'media',
-        'settings' => array(
-          'allowed_schemes' => array(
-            'public' => 'public',
-          ),
-          'allowed_types' => array(
-            'audio' => 0,
-            'default' => 0,
-            'image' => 'image',
-            'video' => 0,
-          ),
-          'file_extensions' => 'jpg jpeg gif png',
-          'progress_indicator' => 'throbber',
-        ),
-        'type' => 'media_generic',
-        'weight' => '5',
       ),
     ),
   );
@@ -823,9 +626,9 @@ function tap_features_field_default_fields() {
         ),
         'tourml_xml' => array(
           'label' => 'above',
-          'module' => 'text',
+          'module' => 'tap',
           'settings' => array(),
-          'type' => 'text_default',
+          'type' => 'tap_tourml_copyright',
           'weight' => '0',
         ),
       ),
@@ -922,9 +725,9 @@ function tap_features_field_default_fields() {
         ),
         'tourml_xml' => array(
           'label' => 'above',
-          'module' => 'text',
+          'module' => 'tap',
           'settings' => array(),
-          'type' => 'text_default',
+          'type' => 'tap_tourml_credit_line',
           'weight' => '1',
         ),
       ),
@@ -990,6 +793,7 @@ function tap_features_field_default_fields() {
             'multiple_from' => '',
             'multiple_number' => '',
             'multiple_to' => '',
+            'show_repeat_rule' => 'show',
           ),
           'type' => 'date_default',
           'weight' => '4',
@@ -1026,15 +830,9 @@ function tap_features_field_default_fields() {
         ),
         'tourml_xml' => array(
           'label' => 'above',
-          'module' => 'date',
-          'settings' => array(
-            'format_type' => 'long',
-            'fromto' => 'both',
-            'multiple_from' => '',
-            'multiple_number' => '',
-            'multiple_to' => '',
-          ),
-          'type' => 'date_default',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tourml_expiration',
           'weight' => '3',
         ),
       ),
@@ -1064,204 +862,6 @@ function tap_features_field_default_fields() {
         ),
         'type' => 'date_select',
         'weight' => '4',
-      ),
-    ),
-  );
-
-  // Exported field: 'file-audio-field_machine_rights'
-  $fields['file-audio-field_machine_rights'] = array(
-    'field_config' => array(
-      'active' => '1',
-      'cardinality' => '1',
-      'deleted' => '0',
-      'entity_types' => array(),
-      'field_name' => 'field_machine_rights',
-      'foreign keys' => array(
-        'format' => array(
-          'columns' => array(
-            'format' => 'format',
-          ),
-          'table' => 'filter_format',
-        ),
-      ),
-      'indexes' => array(
-        'format' => array(
-          0 => 'format',
-        ),
-      ),
-      'module' => 'text',
-      'settings' => array(
-        'max_length' => '255',
-      ),
-      'translatable' => '0',
-      'type' => 'text',
-    ),
-    'field_instance' => array(
-      'bundle' => 'audio',
-      'default_value' => NULL,
-      'deleted' => '0',
-      'description' => '',
-      'display' => array(
-        'default' => array(
-          'label' => 'above',
-          'module' => 'text',
-          'settings' => array(),
-          'type' => 'text_default',
-          'weight' => '3',
-        ),
-        'media_large' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_link' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_original' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_preview' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_small' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'tourml_xml' => array(
-          'label' => 'above',
-          'module' => 'text',
-          'settings' => array(),
-          'type' => 'text_default',
-          'weight' => '2',
-        ),
-      ),
-      'entity_type' => 'file',
-      'field_name' => 'field_machine_rights',
-      'label' => 'Machine Rights',
-      'required' => 0,
-      'settings' => array(
-        'text_processing' => '0',
-        'user_register_form' => FALSE,
-      ),
-      'widget' => array(
-        'active' => 1,
-        'module' => 'text',
-        'settings' => array(
-          'size' => '60',
-        ),
-        'type' => 'text_textfield',
-        'weight' => '3',
-      ),
-    ),
-  );
-
-  // Exported field: 'file-audio-field_watermark'
-  $fields['file-audio-field_watermark'] = array(
-    'field_config' => array(
-      'active' => '1',
-      'cardinality' => '1',
-      'deleted' => '0',
-      'entity_types' => array(),
-      'field_name' => 'field_watermark',
-      'foreign keys' => array(),
-      'indexes' => array(
-        'fid' => array(
-          0 => 'fid',
-        ),
-      ),
-      'module' => 'media',
-      'settings' => array(),
-      'translatable' => '0',
-      'type' => 'media',
-    ),
-    'field_instance' => array(
-      'bundle' => 'audio',
-      'deleted' => '0',
-      'description' => '',
-      'display' => array(
-        'default' => array(
-          'label' => 'above',
-          'module' => 'tap',
-          'settings' => array(),
-          'type' => 'tap_tourml_asset',
-          'weight' => '5',
-        ),
-        'media_large' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_link' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_original' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_preview' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_small' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'tourml_xml' => array(
-          'label' => 'above',
-          'module' => 'tap',
-          'settings' => array(),
-          'type' => 'tap_tourml_asset',
-          'weight' => '4',
-        ),
-      ),
-      'entity_type' => 'file',
-      'field_name' => 'field_watermark',
-      'label' => 'Watermark',
-      'required' => 0,
-      'settings' => array(
-        'file_extensions' => 'jpg jpeg gif png txt doc xls pdf ppt pps odt ods odp mp3 mov m4v mp4 mpeg avi ogg wmv ico',
-        'user_register_form' => FALSE,
-      ),
-      'widget' => array(
-        'active' => 1,
-        'module' => 'media',
-        'settings' => array(
-          'allowed_schemes' => array(
-            'public' => 'public',
-          ),
-          'allowed_types' => array(
-            'audio' => 0,
-            'default' => 0,
-            'image' => 'image',
-            'video' => 0,
-          ),
-          'file_extensions' => 'jpg jpeg gif png',
-          'progress_indicator' => 'throbber',
-        ),
-        'type' => 'media_generic',
-        'weight' => '5',
       ),
     ),
   );
@@ -1339,9 +939,9 @@ function tap_features_field_default_fields() {
         ),
         'tourml_xml' => array(
           'label' => 'above',
-          'module' => 'text',
+          'module' => 'tap',
           'settings' => array(),
-          'type' => 'text_default',
+          'type' => 'tap_tourml_copyright',
           'weight' => '0',
         ),
       ),
@@ -1438,9 +1038,9 @@ function tap_features_field_default_fields() {
         ),
         'tourml_xml' => array(
           'label' => 'above',
-          'module' => 'text',
+          'module' => 'tap',
           'settings' => array(),
-          'type' => 'text_default',
+          'type' => 'tap_tourml_credit_line',
           'weight' => '1',
         ),
       ),
@@ -1506,6 +1106,7 @@ function tap_features_field_default_fields() {
             'multiple_from' => '',
             'multiple_number' => '',
             'multiple_to' => '',
+            'show_repeat_rule' => 'show',
           ),
           'type' => 'date_default',
           'weight' => '2',
@@ -1542,15 +1143,9 @@ function tap_features_field_default_fields() {
         ),
         'tourml_xml' => array(
           'label' => 'above',
-          'module' => 'date',
-          'settings' => array(
-            'format_type' => 'long',
-            'fromto' => 'both',
-            'multiple_from' => '',
-            'multiple_number' => '',
-            'multiple_to' => '',
-          ),
-          'type' => 'date_default',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tourml_expiration',
           'weight' => '3',
         ),
       ),
@@ -1580,204 +1175,6 @@ function tap_features_field_default_fields() {
         ),
         'type' => 'date_select',
         'weight' => '4',
-      ),
-    ),
-  );
-
-  // Exported field: 'file-default-field_machine_rights'
-  $fields['file-default-field_machine_rights'] = array(
-    'field_config' => array(
-      'active' => '1',
-      'cardinality' => '1',
-      'deleted' => '0',
-      'entity_types' => array(),
-      'field_name' => 'field_machine_rights',
-      'foreign keys' => array(
-        'format' => array(
-          'columns' => array(
-            'format' => 'format',
-          ),
-          'table' => 'filter_format',
-        ),
-      ),
-      'indexes' => array(
-        'format' => array(
-          0 => 'format',
-        ),
-      ),
-      'module' => 'text',
-      'settings' => array(
-        'max_length' => '255',
-      ),
-      'translatable' => '0',
-      'type' => 'text',
-    ),
-    'field_instance' => array(
-      'bundle' => 'default',
-      'default_value' => NULL,
-      'deleted' => '0',
-      'description' => '',
-      'display' => array(
-        'default' => array(
-          'label' => 'above',
-          'module' => 'text',
-          'settings' => array(),
-          'type' => 'text_default',
-          'weight' => '1',
-        ),
-        'media_large' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_link' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_original' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_preview' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_small' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'tourml_xml' => array(
-          'label' => 'above',
-          'module' => 'text',
-          'settings' => array(),
-          'type' => 'text_default',
-          'weight' => '2',
-        ),
-      ),
-      'entity_type' => 'file',
-      'field_name' => 'field_machine_rights',
-      'label' => 'Machine Rights',
-      'required' => 0,
-      'settings' => array(
-        'text_processing' => '0',
-        'user_register_form' => FALSE,
-      ),
-      'widget' => array(
-        'active' => 1,
-        'module' => 'text',
-        'settings' => array(
-          'size' => '60',
-        ),
-        'type' => 'text_textfield',
-        'weight' => '3',
-      ),
-    ),
-  );
-
-  // Exported field: 'file-default-field_watermark'
-  $fields['file-default-field_watermark'] = array(
-    'field_config' => array(
-      'active' => '1',
-      'cardinality' => '1',
-      'deleted' => '0',
-      'entity_types' => array(),
-      'field_name' => 'field_watermark',
-      'foreign keys' => array(),
-      'indexes' => array(
-        'fid' => array(
-          0 => 'fid',
-        ),
-      ),
-      'module' => 'media',
-      'settings' => array(),
-      'translatable' => '0',
-      'type' => 'media',
-    ),
-    'field_instance' => array(
-      'bundle' => 'default',
-      'deleted' => '0',
-      'description' => '',
-      'display' => array(
-        'default' => array(
-          'label' => 'above',
-          'module' => 'tap',
-          'settings' => array(),
-          'type' => 'tap_tourml_asset',
-          'weight' => '3',
-        ),
-        'media_large' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_link' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_original' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_preview' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_small' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'tourml_xml' => array(
-          'label' => 'above',
-          'module' => 'tap',
-          'settings' => array(),
-          'type' => 'tap_tourml_asset',
-          'weight' => '4',
-        ),
-      ),
-      'entity_type' => 'file',
-      'field_name' => 'field_watermark',
-      'label' => 'Watermark',
-      'required' => 0,
-      'settings' => array(
-        'file_extensions' => 'jpg jpeg gif png txt doc xls pdf ppt pps odt ods odp mp3 mov m4v mp4 mpeg avi ogg wmv ico',
-        'user_register_form' => FALSE,
-      ),
-      'widget' => array(
-        'active' => 1,
-        'module' => 'media',
-        'settings' => array(
-          'allowed_schemes' => array(
-            'public' => 'public',
-          ),
-          'allowed_types' => array(
-            'audio' => 0,
-            'default' => 0,
-            'image' => 'image',
-            'video' => 0,
-          ),
-          'file_extensions' => 'jpg jpeg gif png',
-          'progress_indicator' => 'throbber',
-        ),
-        'type' => 'media_generic',
-        'weight' => '5',
       ),
     ),
   );
@@ -1855,9 +1252,9 @@ function tap_features_field_default_fields() {
         ),
         'tourml_xml' => array(
           'label' => 'above',
-          'module' => 'text',
+          'module' => 'tap',
           'settings' => array(),
-          'type' => 'text_default',
+          'type' => 'tap_tourml_copyright',
           'weight' => '0',
         ),
       ),
@@ -1954,9 +1351,9 @@ function tap_features_field_default_fields() {
         ),
         'tourml_xml' => array(
           'label' => 'above',
-          'module' => 'text',
+          'module' => 'tap',
           'settings' => array(),
-          'type' => 'text_default',
+          'type' => 'tap_tourml_credit_line',
           'weight' => '1',
         ),
       ),
@@ -2022,6 +1419,7 @@ function tap_features_field_default_fields() {
             'multiple_from' => '',
             'multiple_number' => '',
             'multiple_to' => '',
+            'show_repeat_rule' => 'show',
           ),
           'type' => 'date_default',
           'weight' => '3',
@@ -2058,15 +1456,9 @@ function tap_features_field_default_fields() {
         ),
         'tourml_xml' => array(
           'label' => 'above',
-          'module' => 'date',
-          'settings' => array(
-            'format_type' => 'long',
-            'fromto' => 'both',
-            'multiple_from' => '',
-            'multiple_number' => '',
-            'multiple_to' => '',
-          ),
-          'type' => 'date_default',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tourml_expiration',
           'weight' => '3',
         ),
       ),
@@ -2096,205 +1488,6 @@ function tap_features_field_default_fields() {
         ),
         'type' => 'date_select',
         'weight' => '4',
-      ),
-    ),
-  );
-
-  // Exported field: 'file-text-field_machine_rights'
-  $fields['file-text-field_machine_rights'] = array(
-    'field_config' => array(
-      'active' => '1',
-      'cardinality' => '1',
-      'deleted' => '0',
-      'entity_types' => array(),
-      'field_name' => 'field_machine_rights',
-      'foreign keys' => array(
-        'format' => array(
-          'columns' => array(
-            'format' => 'format',
-          ),
-          'table' => 'filter_format',
-        ),
-      ),
-      'indexes' => array(
-        'format' => array(
-          0 => 'format',
-        ),
-      ),
-      'module' => 'text',
-      'settings' => array(
-        'max_length' => '255',
-      ),
-      'translatable' => '0',
-      'type' => 'text',
-    ),
-    'field_instance' => array(
-      'bundle' => 'text',
-      'default_value' => NULL,
-      'deleted' => '0',
-      'description' => '',
-      'display' => array(
-        'default' => array(
-          'label' => 'above',
-          'module' => 'text',
-          'settings' => array(),
-          'type' => 'text_default',
-          'weight' => '2',
-        ),
-        'media_large' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_link' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_original' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_preview' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_small' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'tourml_xml' => array(
-          'label' => 'above',
-          'module' => 'text',
-          'settings' => array(),
-          'type' => 'text_default',
-          'weight' => '2',
-        ),
-      ),
-      'entity_type' => 'file',
-      'field_name' => 'field_machine_rights',
-      'label' => 'Machine Rights',
-      'required' => 0,
-      'settings' => array(
-        'text_processing' => '0',
-        'user_register_form' => FALSE,
-      ),
-      'widget' => array(
-        'active' => 1,
-        'module' => 'text',
-        'settings' => array(
-          'size' => '60',
-        ),
-        'type' => 'text_textfield',
-        'weight' => '3',
-      ),
-    ),
-  );
-
-  // Exported field: 'file-text-field_watermark'
-  $fields['file-text-field_watermark'] = array(
-    'field_config' => array(
-      'active' => '1',
-      'cardinality' => '1',
-      'deleted' => '0',
-      'entity_types' => array(),
-      'field_name' => 'field_watermark',
-      'foreign keys' => array(),
-      'indexes' => array(
-        'fid' => array(
-          0 => 'fid',
-        ),
-      ),
-      'module' => 'media',
-      'settings' => array(),
-      'translatable' => '0',
-      'type' => 'media',
-    ),
-    'field_instance' => array(
-      'bundle' => 'text',
-      'deleted' => '0',
-      'description' => '',
-      'display' => array(
-        'default' => array(
-          'label' => 'above',
-          'module' => 'tap',
-          'settings' => array(),
-          'type' => 'tap_tourml_asset',
-          'weight' => '4',
-        ),
-        'media_large' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_link' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_original' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_preview' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_small' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'tourml_xml' => array(
-          'label' => 'above',
-          'module' => 'tap',
-          'settings' => array(),
-          'type' => 'tap_tourml_asset',
-          'weight' => '4',
-        ),
-      ),
-      'entity_type' => 'file',
-      'field_name' => 'field_watermark',
-      'label' => 'Watermark',
-      'required' => 0,
-      'settings' => array(
-        'file_extensions' => 'jpg jpeg gif png txt doc xls pdf ppt pps odt ods odp mp3 mov m4v mp4 mpeg avi ogg wmv ico',
-        'user_register_form' => FALSE,
-      ),
-      'widget' => array(
-        'active' => 1,
-        'module' => 'media',
-        'settings' => array(
-          'allowed_schemes' => array(
-            'public' => 'public',
-          ),
-          'allowed_types' => array(
-            'image' => 'image',
-            'video' => 0,
-            0 => 0,
-            'audio' => 0,
-            'default' => 0,
-          ),
-          'file_extensions' => 'jpg jpeg gif png',
-          'progress_indicator' => 'throbber',
-        ),
-        'type' => 'media_generic',
-        'weight' => '5',
       ),
     ),
   );
@@ -2372,9 +1565,9 @@ function tap_features_field_default_fields() {
         ),
         'tourml_xml' => array(
           'label' => 'above',
-          'module' => 'text',
+          'module' => 'tap',
           'settings' => array(),
-          'type' => 'text_default',
+          'type' => 'tap_tourml_copyright',
           'weight' => '0',
         ),
       ),
@@ -2471,9 +1664,9 @@ function tap_features_field_default_fields() {
         ),
         'tourml_xml' => array(
           'label' => 'above',
-          'module' => 'text',
+          'module' => 'tap',
           'settings' => array(),
-          'type' => 'text_default',
+          'type' => 'tap_tourml_credit_line',
           'weight' => '1',
         ),
       ),
@@ -2539,6 +1732,7 @@ function tap_features_field_default_fields() {
             'multiple_from' => '',
             'multiple_number' => '',
             'multiple_to' => '',
+            'show_repeat_rule' => 'show',
           ),
           'type' => 'date_default',
           'weight' => '3',
@@ -2575,15 +1769,9 @@ function tap_features_field_default_fields() {
         ),
         'tourml_xml' => array(
           'label' => 'above',
-          'module' => 'date',
-          'settings' => array(
-            'format_type' => 'long',
-            'fromto' => 'both',
-            'multiple_from' => '',
-            'multiple_number' => '',
-            'multiple_to' => '',
-          ),
-          'type' => 'date_default',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tourml_expiration',
           'weight' => '3',
         ),
       ),
@@ -2613,205 +1801,6 @@ function tap_features_field_default_fields() {
         ),
         'type' => 'date_select',
         'weight' => '4',
-      ),
-    ),
-  );
-
-  // Exported field: 'file-video-field_machine_rights'
-  $fields['file-video-field_machine_rights'] = array(
-    'field_config' => array(
-      'active' => '1',
-      'cardinality' => '1',
-      'deleted' => '0',
-      'entity_types' => array(),
-      'field_name' => 'field_machine_rights',
-      'foreign keys' => array(
-        'format' => array(
-          'columns' => array(
-            'format' => 'format',
-          ),
-          'table' => 'filter_format',
-        ),
-      ),
-      'indexes' => array(
-        'format' => array(
-          0 => 'format',
-        ),
-      ),
-      'module' => 'text',
-      'settings' => array(
-        'max_length' => '255',
-      ),
-      'translatable' => '0',
-      'type' => 'text',
-    ),
-    'field_instance' => array(
-      'bundle' => 'video',
-      'default_value' => NULL,
-      'deleted' => '0',
-      'description' => '',
-      'display' => array(
-        'default' => array(
-          'label' => 'above',
-          'module' => 'text',
-          'settings' => array(),
-          'type' => 'text_default',
-          'weight' => '2',
-        ),
-        'media_large' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_link' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_original' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_preview' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_small' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'tourml_xml' => array(
-          'label' => 'above',
-          'module' => 'text',
-          'settings' => array(),
-          'type' => 'text_default',
-          'weight' => '2',
-        ),
-      ),
-      'entity_type' => 'file',
-      'field_name' => 'field_machine_rights',
-      'label' => 'Machine Rights',
-      'required' => 0,
-      'settings' => array(
-        'text_processing' => '0',
-        'user_register_form' => FALSE,
-      ),
-      'widget' => array(
-        'active' => 1,
-        'module' => 'text',
-        'settings' => array(
-          'size' => '60',
-        ),
-        'type' => 'text_textfield',
-        'weight' => '3',
-      ),
-    ),
-  );
-
-  // Exported field: 'file-video-field_watermark'
-  $fields['file-video-field_watermark'] = array(
-    'field_config' => array(
-      'active' => '1',
-      'cardinality' => '1',
-      'deleted' => '0',
-      'entity_types' => array(),
-      'field_name' => 'field_watermark',
-      'foreign keys' => array(),
-      'indexes' => array(
-        'fid' => array(
-          0 => 'fid',
-        ),
-      ),
-      'module' => 'media',
-      'settings' => array(),
-      'translatable' => '0',
-      'type' => 'media',
-    ),
-    'field_instance' => array(
-      'bundle' => 'video',
-      'deleted' => '0',
-      'description' => '',
-      'display' => array(
-        'default' => array(
-          'label' => 'above',
-          'module' => 'tap',
-          'settings' => array(),
-          'type' => 'tap_tourml_asset',
-          'weight' => '4',
-        ),
-        'media_large' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_link' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_original' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_preview' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'media_small' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-        'tourml_xml' => array(
-          'label' => 'above',
-          'module' => 'tap',
-          'settings' => array(),
-          'type' => 'tap_tourml_asset',
-          'weight' => '4',
-        ),
-      ),
-      'entity_type' => 'file',
-      'field_name' => 'field_watermark',
-      'label' => 'Watermark',
-      'required' => 0,
-      'settings' => array(
-        'file_extensions' => 'jpg jpeg gif png txt doc xls pdf ppt pps odt ods odp mp3 mov m4v mp4 mpeg avi ogg wmv ico',
-        'user_register_form' => FALSE,
-      ),
-      'widget' => array(
-        'active' => 1,
-        'module' => 'media',
-        'settings' => array(
-          'allowed_schemes' => array(
-            'public' => 'public',
-          ),
-          'allowed_types' => array(
-            'image' => 'image',
-            'video' => 0,
-            0 => 0,
-            'audio' => 0,
-            'default' => 0,
-          ),
-          'file_extensions' => 'jpg jpeg gif png',
-          'progress_indicator' => 'throbber',
-        ),
-        'type' => 'media_generic',
-        'weight' => '5',
       ),
     ),
   );
@@ -3136,6 +2125,11 @@ function tap_features_field_default_fields() {
       'settings' => array(
         'handler' => 'base',
         'handler_settings' => array(
+          'behaviors' => array(
+            'views-select-list' => array(
+              'status' => 0,
+            ),
+          ),
           'sort' => array(
             'direction' => 'ASC',
             'field' => 'body:value',
@@ -3429,6 +2423,98 @@ function tap_features_field_default_fields() {
     ),
   );
 
+  // Exported field: 'node-tour_audio_stop-field_image'
+  $fields['node-tour_audio_stop-field_image'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_image',
+      'foreign keys' => array(
+        'fid' => array(
+          'columns' => array(
+            'fid' => 'fid',
+          ),
+          'table' => 'file_managed',
+        ),
+      ),
+      'indexes' => array(
+        'fid' => array(
+          0 => 'fid',
+        ),
+      ),
+      'module' => 'image',
+      'settings' => array(
+        'default_image' => 0,
+        'uri_scheme' => 'public',
+      ),
+      'translatable' => '0',
+      'type' => 'image',
+    ),
+    'field_instance' => array(
+      'bundle' => 'tour_audio_stop',
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'image',
+          'settings' => array(
+            'image_link' => '',
+            'image_style' => '',
+          ),
+          'type' => 'image',
+          'weight' => 6,
+        ),
+        'teaser' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tourml_asset',
+          'weight' => '4',
+        ),
+      ),
+      'entity_type' => 'node',
+      'field_name' => 'field_image',
+      'label' => 'Image',
+      'required' => 0,
+      'settings' => array(
+        'alt_field' => 0,
+        'file_directory' => '',
+        'file_extensions' => 'png gif jpg jpeg',
+        'max_filesize' => '',
+        'max_resolution' => '',
+        'min_resolution' => '',
+        'title_field' => 0,
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'media',
+        'settings' => array(
+          'allowed_schemes' => array(
+            0 => 'public',
+            1 => 'private',
+          ),
+          'allowed_types' => array(
+            0 => 'image',
+          ),
+          'preview_image_style' => 'thumbnail',
+          'progress_indicator' => 'throbber',
+        ),
+        'type' => 'media_generic',
+        'weight' => '7',
+      ),
+    ),
+  );
+
   // Exported field: 'node-tour_audio_stop-field_tour'
   $fields['node-tour_audio_stop-field_tour'] = array(
     'field_config' => array(
@@ -3447,6 +2533,11 @@ function tap_features_field_default_fields() {
       'settings' => array(
         'handler' => 'base',
         'handler_settings' => array(
+          'behaviors' => array(
+            'views-select-list' => array(
+              'status' => 0,
+            ),
+          ),
           'sort' => array(
             'direction' => 'ASC',
             'field' => 'body:value',
@@ -3488,7 +2579,7 @@ function tap_features_field_default_fields() {
           'label' => 'above',
           'settings' => array(),
           'type' => 'hidden',
-          'weight' => '4',
+          'weight' => '5',
         ),
       ),
       'entity_type' => 'node',
@@ -3573,7 +2664,7 @@ function tap_features_field_default_fields() {
       'settings' => array(
         'description_field' => 0,
         'file_directory' => '',
-        'file_extensions' => 'mp3 mp4 ogg wav',
+        'file_extensions' => 'mp3 ogg wav mp4',
         'max_filesize' => '',
         'user_register_form' => FALSE,
       ),
@@ -3669,7 +2760,7 @@ function tap_features_field_default_fields() {
           'size' => 60,
         ),
         'type' => 'text_textfield',
-        'weight' => -5,
+        'weight' => '-5',
       ),
     ),
   );
@@ -3914,6 +3005,11 @@ function tap_features_field_default_fields() {
       'settings' => array(
         'handler' => 'base',
         'handler_settings' => array(
+          'behaviors' => array(
+            'views-select-list' => array(
+              'status' => 0,
+            ),
+          ),
           'sort' => array(
             'direction' => 'ASC',
             'field' => 'body:value',
@@ -4476,6 +3572,11 @@ function tap_features_field_default_fields() {
       'settings' => array(
         'handler' => 'base',
         'handler_settings' => array(
+          'behaviors' => array(
+            'views-select-list' => array(
+              'status' => 0,
+            ),
+          ),
           'sort' => array(
             'direction' => 'ASC',
             'field' => 'body:value',
@@ -4769,6 +3870,98 @@ function tap_features_field_default_fields() {
     ),
   );
 
+  // Exported field: 'node-tour_video_stop-field_image'
+  $fields['node-tour_video_stop-field_image'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_image',
+      'foreign keys' => array(
+        'fid' => array(
+          'columns' => array(
+            'fid' => 'fid',
+          ),
+          'table' => 'file_managed',
+        ),
+      ),
+      'indexes' => array(
+        'fid' => array(
+          0 => 'fid',
+        ),
+      ),
+      'module' => 'image',
+      'settings' => array(
+        'default_image' => 0,
+        'uri_scheme' => 'public',
+      ),
+      'translatable' => '0',
+      'type' => 'image',
+    ),
+    'field_instance' => array(
+      'bundle' => 'tour_video_stop',
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'image',
+          'settings' => array(
+            'image_link' => '',
+            'image_style' => '',
+          ),
+          'type' => 'image',
+          'weight' => 6,
+        ),
+        'teaser' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'tourml_xml' => array(
+          'label' => 'above',
+          'module' => 'tap',
+          'settings' => array(),
+          'type' => 'tap_tourml_asset',
+          'weight' => '4',
+        ),
+      ),
+      'entity_type' => 'node',
+      'field_name' => 'field_image',
+      'label' => 'Placeholder Image',
+      'required' => 0,
+      'settings' => array(
+        'alt_field' => 0,
+        'file_directory' => '',
+        'file_extensions' => 'png gif jpg jpeg',
+        'max_filesize' => '',
+        'max_resolution' => '',
+        'min_resolution' => '',
+        'title_field' => 0,
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'media',
+        'settings' => array(
+          'allowed_schemes' => array(
+            0 => 'public',
+            1 => 'private',
+          ),
+          'allowed_types' => array(
+            0 => 'image',
+          ),
+          'preview_image_style' => 'thumbnail',
+          'progress_indicator' => 'throbber',
+        ),
+        'type' => 'media_generic',
+        'weight' => '6',
+      ),
+    ),
+  );
+
   // Exported field: 'node-tour_video_stop-field_tour'
   $fields['node-tour_video_stop-field_tour'] = array(
     'field_config' => array(
@@ -4787,6 +3980,11 @@ function tap_features_field_default_fields() {
       'settings' => array(
         'handler' => 'base',
         'handler_settings' => array(
+          'behaviors' => array(
+            'views-select-list' => array(
+              'status' => 0,
+            ),
+          ),
           'sort' => array(
             'direction' => 'ASC',
             'field' => 'body:value',
@@ -4828,7 +4026,7 @@ function tap_features_field_default_fields() {
           'label' => 'above',
           'settings' => array(),
           'type' => 'hidden',
-          'weight' => '4',
+          'weight' => '5',
         ),
       ),
       'entity_type' => 'node',
@@ -5008,7 +4206,7 @@ function tap_features_field_default_fields() {
           'size' => 60,
         ),
         'type' => 'text_textfield',
-        'weight' => -5,
+        'weight' => '-5',
       ),
     ),
   );
@@ -5028,14 +4226,13 @@ function tap_features_field_default_fields() {
   t('Header Image');
   t('Image');
   t('Image Asset');
-  t('Machine Rights');
+  t('Placeholder Image');
   t('Question');
   t('Stops');
   t('The geographic location of this stop group');
   t('Title');
   t('Tour');
   t('Video');
-  t('Watermark');
 
   return $fields;
 }
