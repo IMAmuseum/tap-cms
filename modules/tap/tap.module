@@ -57,7 +57,7 @@ function tap_menu() {
         'type'              => MENU_LOCAL_TASK,
         'file'              => 'tap.export.inc',
     );
-    
+
     $items['admin/content/%/tourml-export'] = array(
         'title'             => 'TourML Export',
         'page callback'     => 'drupal_get_form',
@@ -65,15 +65,15 @@ function tap_menu() {
         'access arguments'  => array('administer tap'),
         'type'              => MENU_CALLBACK,
         'file'              => 'tap.export.inc',
-    );  
-    
+    );
+
     $items['admin/content/tourml-export/autocomplete'] = array(
         'page callback'     => 'tap_export_entity_autocomplete',
         'access arguments'  => array('administer tap'),
         'type'              => MENU_CALLBACK,
         'file'              => 'tap.export.inc',
-    );  
-    
+    );
+
     $items['node/%node/tourml'] = array(
         'title'             => 'TourML XML',
         'page callback'     => 'tap_tourml_preview',
@@ -341,7 +341,7 @@ function tap_theme() {
             ),
             'file'  => 'tap.templates.inc',
             'template'  => 'templates/tap-tourml-credit-line',
-        ),        
+        ),
         'tap_tourml_credit_line_text'                   => $properties,
         'tap_tourml_credit_line_text_long'              => $properties,
         'tap_tourml_credit_line_text_with_summary'      => $properties,
@@ -354,7 +354,7 @@ function tap_theme() {
             ),
             'file'  => 'tap.templates.inc',
             'template'  => 'templates/tap-tourml-machine-rights',
-        ),          
+        ),
         'tap_tourml_machine_rights_text'                => $properties,
         'tap_tourml_machine_rights_text_long'           => $properties,
         'tap_tourml_machine_rights_text_with_summary'   => $properties,
@@ -367,7 +367,7 @@ function tap_theme() {
             ),
             'file'  => 'tap.templates.inc',
             'template'  => 'templates/tap-tourml-watermark',
-        ),          
+        ),
         'tap_tourml_watermark_file'                     => $properties,
         'tap_tourml_watermark_image'                    => $properties,   
         /**
@@ -453,6 +453,9 @@ function tap_field_formatter_info() {
         'tap_tourml_multipart_asset' => array(
             'label'         => t('TourML Multipart Asset'),
             'field types'   => array(),
+            'settings'      => array(
+                'image_styles' => array(),
+            ),
         ),
         'tap_tourml_title' => array(
             'label'         => t('TourML Title'),
@@ -513,6 +516,57 @@ function tap_field_formatter_info_alter(&$info) {
 }
 
 /**
+ * Implements hook_field_formatter_settings_form().
+ */
+function tap_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+    $display = $instance['display'][$view_mode];
+    $formatter = $display['type'];
+    if ($formatter === 'tap_tourml_multipart_asset' && $field['type'] === 'image') {
+        $form = tap_default_formatter_settings_form($field, $instance, $view_mode, $form, $form_state);
+        return $form;
+    }
+}
+
+/**
+ * Settings for the default formatter.
+ */
+function tap_default_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+    $display = $instance['display'][$view_mode];
+    $settings = $display['settings'];
+    $formatter = $display['type'];
+
+    $styles = array();
+    foreach(image_styles() as $key => $style) {
+        $styles[$key] = $style['name'];
+    }
+    $styles['original'] = 'original';
+
+    $form = array();
+    $form['image_styles'] = array(
+        '#title' => t('Image Styles'),
+        '#type' => 'select',
+        '#options' => $styles,
+        '#default_value' => $settings['image_styles'],
+        '#description' => t('Specify the image style(s) to add to the asset when exporting tourml.'),
+        '#multiple' => true,
+        '#weight' => 0,
+    );
+    return $form;
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary().
+ */
+function tap_field_formatter_settings_summary($field, $instance, $view_mode) {
+    $display = $instance['display'][$view_mode];
+    $formatter = $display['type'];
+
+    if ($display['type'] === 'tap_tourml_multipart_asset' && $field['type'] === 'image') {
+        return t('Select image styles.');
+    }
+}
+
+/**
  * Implements hook_field_display_alter()
  */
 function tap_field_display_alter(&$display, $context) {
@@ -521,7 +575,7 @@ function tap_field_display_alter(&$display, $context) {
             // Override the field formatter with our tap formatter
             if (strpos($display['type'], 'tap_tourml_') !== FALSE) {
                 //$display['type'] = $display['type'] . '_' . $context['field']['type'];
-            } 
+            }
             else {
                 $display['type'] = 'hidden';
             }
@@ -534,6 +588,7 @@ function tap_field_display_alter(&$display, $context) {
  * Implements hook_field_formatter_view()
  */
 function tap_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+    $element['#image_styles'] = empty($display['settings']['image_styles']) ? array() : $display['settings']['image_styles'];
     $element['#theme'] = $display['type'] . '_' . $field['type'];
     return $element;
 }
@@ -595,8 +650,8 @@ function tap_block_configure($delta = '') {
                 $selectValues[$k] = $v->name;
             }
             $form['tap_addstop_block_content_types'] = array(
-                '#type' => 'checkboxes', 
-                '#title' => t('The content types to display in the block.'), 
+                '#type' => 'checkboxes',
+                '#title' => t('The content types to display in the block.'),
                 '#default_value' => variable_get('tap_addstop_block_content_types', array('tour_audio_stop', 'tour_image_stop', 'tour_stop_group', 'tour_video_stop')), 
                 '#options' => $selectValues,
             );
@@ -678,10 +733,10 @@ function tap_tourml_validate($node) {
     $doc = new DOMDocument();
     $doc->formatOutout = TRUE;
     $doc->preserveWhiteSpate = FALSE;
-    $doc->loadXML($tourml->getTourML());    
+    $doc->loadXML($tourml->getTourML());
 
-    // Enable user error handling 
-    libxml_use_internal_errors(true); 
+    // Enable user error handling
+    libxml_use_internal_errors(true);
 
     if (!$doc->schemaValidate('/var/www/tourml.bpoc.org/sites/all/modules/tap-cms/TourML.xsd')) {
       $output = tourml_display_errors();
@@ -795,7 +850,7 @@ function duration($secs) {
             $added = TRUE;
             $v = (strlen($v) == 1) ? '0' . $v : $v;
             $ret[] = $v;
-        } 
+        }
         else {
             $ret[] = '00';
         }
@@ -830,36 +885,36 @@ function _clean_file_text($text) {
     return preg_replace('/\s+/', '', check_plain($text));
 }
 
-function tourml_display_error($error) 
-{ 
-  $return = "<br/>\n"; 
-  switch ($error->level) { 
-    case LIBXML_ERR_WARNING: 
-      $return .= "<b>Warning $error->code</b>: "; 
-      break; 
+function tourml_display_error($error)
+{
+  $return = "<br/>\n";
+  switch ($error->level) {
+    case LIBXML_ERR_WARNING:
+      $return .= "<b>Warning $error->code</b>: ";
+      break;
     case LIBXML_ERR_ERROR: 
-      $return .= "<b>Error $error->code</b>: "; 
-      break; 
-    case LIBXML_ERR_FATAL: 
-      $return .= "<b>Fatal Error $error->code</b>: "; 
-      break; 
-  } 
-  $return .= trim($error->message); 
-  if ($error->file) { 
-    $return .= " in <b>$error->file</b>"; 
-  } 
-  $return .= " on line <b>$error->line</b>\n"; 
+      $return .= "<b>Error $error->code</b>: ";
+      break;
+    case LIBXML_ERR_FATAL:
+      $return .= "<b>Fatal Error $error->code</b>: ";
+      break;
+  }
+  $return .= trim($error->message);
+  if ($error->file) {
+    $return .= " in <b>$error->file</b>";
+  }
+  $return .= " on line <b>$error->line</b>\n";
 
-  return $return; 
-} 
+  return $return;
+}
 
-function tourml_display_errors() { 
-  $errors = libxml_get_errors(); 
+function tourml_display_errors() {
+  $errors = libxml_get_errors();
   $output = '';
-  foreach ($errors as $error) { 
-    $output .= tourml_display_error($error); 
-  } 
-  libxml_clear_errors(); 
+  foreach ($errors as $error) {
+    $output .= tourml_display_error($error);
+  }
+  libxml_clear_errors();
   return $output;
-} 
+}
 
