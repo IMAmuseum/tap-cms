@@ -1,5 +1,5 @@
 /*
- * TAP - v0.1.0 - 2012-07-23
+ * TAP - v0.1.0 - 2012-07-26
  * http://tapintomuseums.org/
  * Copyright (c) 2011-2012 Indianapolis Museum of Art
  * GPLv3
@@ -94,20 +94,26 @@ TapAPI.models.Asset = Backbone.Model.extend({
 	parse: function(response) {
 		response.propertySet = new TapAPI.collections.PropertySet(
 			response.propertySet,
-			response.id
+			{id: response.id}
 		);
 
 		if (response.source) {
 			response.source = new TapAPI.collections.Sources(
 				response.source,
-				response.id
+				{
+					id: response.id,
+					asset: this
+				}
 			);
 		}
 
 		if (response.content) {
 			response.content = new TapAPI.collections.Content(
 				response.content,
-				response.id
+				{
+					id: response.id,
+					asset: this
+				}
 			);
 		}
 
@@ -184,6 +190,12 @@ TapAPI.models.Content = Backbone.Model.extend({
 			this.set('data', this.get('data').value);
 		}
 	},
+	getAsset: function() {
+		return this.collection.asset;
+	},
+	save: function() {
+		this.collection.asset.save();
+	},
 	defaults: {
 		'lang': undefined,
 		'propertySet': undefined,
@@ -221,6 +233,12 @@ TapAPI.models.Source = Backbone.Model.extend({
 			this.get('propertySet'),
 			this.id
 		));
+	},
+	getAsset: function() {
+		return this.collection.asset;
+	},
+	save: function() {
+		this.collection.asset.save();
 	},
 	defaults: {
 		'lang': undefined,
@@ -404,8 +422,9 @@ if (typeof TapAPI.collections === 'undefined'){TapAPI.collections = {};}
 // define sources collection
 TapAPI.collections.Content = Backbone.Collection.extend({
 	model: TapAPI.models.Content,
-	initialize: function(models, id) {
-		this.localStorage = new Backbone.LocalStorage(id + '-source');
+	initialize: function(models, options) {
+		this.localStorage = new Backbone.LocalStorage(options.id + '-source');
+		this.asset = options.asset;
 	}
 });
 // TapAPI Namespace Initialization //
@@ -416,11 +435,11 @@ if (typeof TapAPI.collections === 'undefined'){TapAPI.collections = {};}
 // define assett collection
 TapAPI.collections.PropertySet = Backbone.Collection.extend({
 	model: TapAPI.models.Property,
-	initialize: function(models, id) {
-		this.localStorage = new Backbone.LocalStorage(id + '-propertyset');
+	initialize: function(models, options) {
+		this.localStorage = new Backbone.LocalStorage(options.id + '-propertyset');
 	},
 	getValueByName: function(propertyName) {
-		var property, value; 
+		var property, value;
 		property = this.where({"name": propertyName, "lang": tap.language});
 		if (property.length === 0) {
 			property = this.where({"name": propertyName});
@@ -439,8 +458,9 @@ if (typeof TapAPI.collections === 'undefined'){TapAPI.collections = {};}
 // define sources collection
 TapAPI.collections.Sources = Backbone.Collection.extend({
 	model: TapAPI.models.Source,
-	initialize: function(models, id) {
-		this.localStorage = new Backbone.LocalStorage(id + '-source');
+	initialize: function(models, options) {
+		this.localStorage = new Backbone.LocalStorage(options.id + '-source');
+		this.asset = options.asset;
 	}
 });
 // TapAPI Namespace Initialization //
@@ -528,7 +548,7 @@ jQuery(function() {
 				back_label: 'Back',
 				nav_menu: navbar_items,
 				active_index: null,
-				header_nav: true
+				header_nav: (tap.config.header_nav !== undefined) ? tap.config.header_nav : true
 			});
 
 			if (this.onInit) {
@@ -960,7 +980,9 @@ jQuery(function() {
 					'title': this.stop.get('title'),
 					'tour_id': tap.currentTour,
 					'stop_id': this.stop.id,
-					'distance': d_content
+					'distance': d_content,
+					'stop_lat': data.coordinates[1],
+					'stop_lon': data.coordinates[0]
 				}));
 
 				this.map_view.stop_popups[this.stop.id] = popup;
@@ -985,9 +1007,10 @@ jQuery(function() {
 					'title': stop.get('title'),
 					'tour_id': tap.currentTour,
 					'stop_id': stop.get('id'),
-					'distance': d_content
+					'distance': d_content,
+					'stop_lat': stop.get('location').lat,
+					'stop_lon': stop.get('location').lng
 				}));
-
 
 			}, this.map_view);
 
@@ -1561,6 +1584,7 @@ if (!tap) {
 				{ label: 'Keypad', prefix: 'tourkeypad' },
 				{ label: 'Map', prefix: 'tourmap'}
 			],
+			header_nav: true,
 			default_index: 'tourstoplist',
 			units: 'si',
 			StopListView: {
@@ -1883,7 +1907,7 @@ return __p;
 TapAPI.templates['page'] = function(obj){
 var __p='';var print=function(){__p+=Array.prototype.join.call(arguments, '')};
 with(obj||{}){
-__p+='<div data-role="header" data-position="fixed">\n\t<a id=\'back-button\' data-rel="back" data-mini="true">'+
+__p+='<div data-role="header" data-id="tap-header" data-position="fixed">\n\t<a id=\'back-button\' data-rel="back" data-mini="true">'+
 ( back_label )+
 '</a>\n\t';
  if (header_nav) { 
@@ -1905,7 +1929,23 @@ __p+='<div data-role="header" data-position="fixed">\n\t<a id=\'back-button\' da
 ( title )+
 '</h1>\n\t';
  } 
-;__p+='\n</div>\n<div data-role="content">\n</div>\n<!--\n<div data-role="footer">\n</div>\n-->';
+;__p+='\n</div>\n<div data-role="content">\n</div>\n';
+ if (!header_nav) { 
+;__p+='\n<div data-role="footer" data-id="tap-footer" data-position="fixed">\n\t<div data-role="navbar">\n\t\t<ul>\n\t\t\t';
+ _.each(nav_menu, function(item) { 
+;__p+='\n\t\t\t<li><a '+
+( (active_index == item.prefix) ? 'data-theme="b"' : "" )+
+' href=\'#'+
+( item.prefix )+
+'/'+
+( tour_id )+
+'\'>'+
+( item.label )+
+'</a></li>\n\t\t\t';
+ }); 
+;__p+='\n\t\t</ul>\n\t</div>\n</div>\n';
+ } 
+;__p+='';
 }
 return __p;
 }
@@ -1986,7 +2026,11 @@ __p+='<div class=\'marker-bubble-content\'>\n\t<div class=\'title\'>'+
 ( tour_id )+
 '/'+
 ( stop_id )+
-'\'>View stop</a></div>\n\t<div class=\'directions\'>Get Directions</div>\n</div>';
+'\'>View stop</a></div>\n\t<div class=\'directions\'>\n\t\t<a href=\'http://maps.google.com/maps?saddr=Current%20Location&daddr='+
+( stop_lat )+
+','+
+( stop_lon )+
+'\'>Get Directions</a>\n\t</div>\n</div>';
 }
 return __p;
 }
