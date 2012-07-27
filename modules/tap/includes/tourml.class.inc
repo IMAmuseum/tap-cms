@@ -95,6 +95,27 @@ class TourML {
 
         foreach ($this->multipart_assets as $k => $asset) {
             $asset['items'] += module_invoke_all('tourml_multipart_asset', $asset['items']);
+
+            $asset_styles = array();
+            foreach ($asset['items'] as $id => $item) {
+                if (empty($item['field']['image_styles'])) continue;
+                // setup a cloned asset part with the appropriate image styles
+                foreach ($item['field']['image_styles'] as $style) {
+                    theme('image_style', array('style_name' => $style, 'path' => $item['uri']));
+                    // set properties on new asset part
+                    $new_asset = $item;
+                    $new_asset['name'] = $style;
+                    $new_asset['uri'] = image_style_url($style, $item['uri']);
+                    // get image properties
+                    $image_info = getimagesize($new_asset['uri']);
+                    $new_asset['properties']['width'] = $image_info[0];
+                    $new_asset['properties']['height'] = $image_info[1];
+                    $asset_styles[$id . '_' . $style] = $new_asset;
+                }
+            }
+            // add new asset parts to original asset array
+            $asset['items'] = array_merge($asset['items'], $asset_styles);
+
             $this->multipart_assets[$k]['rendered'] = theme('tap_tourml_multipart_asset', array(
                 'asset_id' => $k,
                 'asset_type' => _anti_field($asset['field']['#field_name']),

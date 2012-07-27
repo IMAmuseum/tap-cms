@@ -582,7 +582,7 @@ function tap_field_display_alter(&$display, $context) {
  * Implements hook_field_formatter_view()
  */
 function tap_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
-    $element['#image_styles'] = empty($display['settings']['image_styles']) ? array() : $display['settings']['image_styles'];
+    $element['image_styles'] = empty($display['settings']['image_styles']) ? array() : $display['settings']['image_styles'];
     $element['#theme'] = $display['type'] . '_' . $field['type'];
     return $element;
 }
