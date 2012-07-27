@@ -1,5 +1,5 @@
 /*
- * TAP - v0.1.0 - 2012-07-26
+ * TAP - v0.1.0 - 2012-07-27
  * http://tapintomuseums.org/
  * Copyright (c) 2011-2012 Indianapolis Museum of Art
  * GPLv3
@@ -537,10 +537,19 @@ jQuery(function() {
 				navbar_items = tap.config.navbar_items;
 			} else {
 				navbar_items = [
-					{ label: 'Menu', prefix: 'tourstoplist' },
-					{ label: 'Keypad', prefix: 'tourkeypad' },
-					{ label: 'Map', prefix: 'tourmap'}
+					{ label: 'Menu', endpoint: 'tourstoplist' },
+					{ label: 'Keypad', endpoint: 'tourkeypad' },
+					{ label: 'Map', endpoint: 'tourmap'}
 				];
+			}
+
+			var header_nav_default = true;
+			var footer_nav_default = false;
+			if (tap.config.navbar_location !== undefined) {
+				if (tap.config.navbar_location == 'footer') {
+					header_nav_default = false;
+					footer_nav_default = true;
+				}
 			}
 
 			_.defaults(this.options, {
@@ -548,7 +557,8 @@ jQuery(function() {
 				back_label: 'Back',
 				nav_menu: navbar_items,
 				active_index: null,
-				header_nav: (tap.config.header_nav !== undefined) ? tap.config.header_nav : true
+				header_nav: header_nav_default,
+				footer_nav: footer_nav_default
 			});
 
 			if (this.onInit) {
@@ -572,6 +582,7 @@ jQuery(function() {
 				title: this.options.page_title,
 				back_label: this.options.back_label,
 				header_nav: this.options.header_nav,
+				footer_nav: this.options.footer_nav,
 				nav_menu: this.options.nav_menu,
 				active_index: this.options.active_index,
 				tour_id: tap.currentTour
@@ -1238,13 +1249,14 @@ jQuery(function() {
 		onInit: function() {
 			this.options.page_title = this.model.get('title');
 			this.options.header_nav = false;
+			this.options.footer_nav = false;
 		},
 
 		renderContent: function() {
 			var content_template = TapAPI.templateManager.get('tour-details');
 
 			this.$el.find(":jqmData(role='content')").append(content_template({
-				tour_index: tap.config.default_index,
+				tour_index: tap.config.default_nav_item,
 				tour_id: this.model.id,
 				publishDate: this.model.get('publishDate') ? this.model.get('publishDate') : undefined,
 				description: this.model.get('description') ? this.model.get('description') : undefined,
@@ -1272,6 +1284,7 @@ jQuery(function() {
 		onInit: function() {
 			this.options.page_title = 'Tour List';
 			this.options.header_nav = false;
+			this.options.footer_nav = false;
 		},
 
 		renderContent: function() {
@@ -1578,14 +1591,19 @@ if (!tap) {
 		tap.url = url;
 
 		if (config === undefined) config = {};
+
+		/*
+		 * When editing the default configuration, the documentation should be updated.
+		 * https://github.com/IMAmuseum/tap-web-app/wiki/Configuring-the-web-app
+		 */
 		tap.config = _.defaults(config, {
 			navbar_items: [
-				{ label: 'Menu', prefix: 'tourstoplist' },
-				{ label: 'Keypad', prefix: 'tourkeypad' },
-				{ label: 'Map', prefix: 'tourmap'}
+				{ label: 'Menu', endpoint: 'tourstoplist' },
+				{ label: 'Keypad', endpoint: 'tourkeypad' },
+				{ label: 'Map', endpoint: 'tourmap'}
 			],
-			header_nav: true,
-			default_index: 'tourstoplist',
+			navbar_location: 'header',
+			default_nav_item: 'tourstoplist',
 			units: 'si',
 			StopListView: {
 				codes_only: true
@@ -1914,9 +1932,9 @@ __p+='<div data-role="header" data-id="tap-header" data-position="fixed">\n\t<a 
 ;__p+='\n\t<div id=\'index-selector\' data-role="controlgroup" data-type="horizontal" data-mini="true">\n\t\t';
  _.each(nav_menu, function(item) { 
 ;__p+='\n\t\t<a data-role="button" '+
-( (active_index == item.prefix) ? 'data-theme="b"' : "" )+
+( (active_index == item.endpoint) ? 'data-theme="b"' : "" )+
 ' href=\'#'+
-( item.prefix )+
+( item.endpoint )+
 '/'+
 ( tour_id )+
 '\'>'+
@@ -1930,13 +1948,13 @@ __p+='<div data-role="header" data-id="tap-header" data-position="fixed">\n\t<a 
 '</h1>\n\t';
  } 
 ;__p+='\n</div>\n<div data-role="content">\n</div>\n';
- if (!header_nav) { 
+ if (footer_nav) { 
 ;__p+='\n<div data-role="footer" data-id="tap-footer" data-position="fixed">\n\t<div data-role="navbar">\n\t\t<ul>\n\t\t\t';
  _.each(nav_menu, function(item) { 
 ;__p+='\n\t\t\t<li><a '+
-( (active_index == item.prefix) ? 'data-theme="b"' : "" )+
+( (active_index == item.endpoint) ? 'data-theme="b"' : "" )+
 ' href=\'#'+
-( item.prefix )+
+( item.endpoint )+
 '/'+
 ( tour_id )+
 '\'>'+
