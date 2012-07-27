@@ -541,7 +541,7 @@ function tap_default_formatter_settings_form($field, $instance, $view_mode, $for
         '#type' => 'select',
         '#options' => $styles,
         '#default_value' => $settings['image_styles'],
-        '#description' => t('Specify the image style(s) to add to the asset when exporting tourml.'),
+        '#description' => t('Specify optional image style(s) to add to the asset when exporting tourml.'),
         '#multiple' => true,
         '#weight' => 0,
     );
