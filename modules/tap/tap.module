@@ -513,19 +513,20 @@ function tap_field_formatter_info_alter(&$info) {
  * Implements hook_field_formatter_settings_form().
  */
 function tap_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
-    $display_form = false;
+    $display_form = FALSE;
     $display = $instance['display'][$view_mode];
     $formatter = $display['type'];
 
     if ($formatter === 'tap_tourml_multipart_asset' && $field['type'] === 'image') {
-        $display_form = true;
-    } else if ($field['type'] === 'field_collection') {
+        $display_form = TRUE;
+    } 
+    elseif ($field['type'] === 'field_collection') {
         // retrieve the field instances for this field collection
         $instances = field_info_instances('field_collection_item', $field['field_name']);
         foreach ($instances as $field_instance) {
             $field_info = field_info_field($field_instance['field_name']);
             if ($field_info['type'] === 'image') {
-                $display_form = true;
+                $display_form = TRUE;
             }
         }
     }
@@ -545,7 +546,7 @@ function tap_default_formatter_settings_form($field, $instance, $view_mode, $for
     $formatter = $display['type'];
 
     $styles = array();
-    foreach(image_styles() as $key => $style) {
+    foreach (image_styles() as $key => $style) {
         $styles[$key] = $style['name'];
     }
     $styles['original'] = 'original';
@@ -557,7 +558,7 @@ function tap_default_formatter_settings_form($field, $instance, $view_mode, $for
         '#options' => $styles,
         '#default_value' => $settings['image_styles'],
         '#description' => t('Specify optional image style(s) to add to the asset when exporting tourml.'),
-        '#multiple' => true,
+        '#multiple' => TRUE,
         '#weight' => 0,
     );
     return $form;
@@ -572,7 +573,8 @@ function tap_field_formatter_settings_summary($field, $instance, $view_mode) {
 
     if ($display['type'] === 'tap_tourml_multipart_asset' && $field['type'] === 'image') {
         return t('Select image styles.');
-    } else if ($field['type'] === 'field_collection') {
+    } 
+    elseif ($field['type'] === 'field_collection') {
         // retrieve the field instances for this field collection
         $instances = field_info_instances('field_collection_item', $field['field_name']);
         foreach ($instances as $field_instance) {
@@ -903,8 +905,7 @@ function _clean_file_text($text) {
     return preg_replace('/\s+/', '', check_plain($text));
 }
 
-function tourml_display_error($error)
-{
+function tourml_display_error($error) {
   $return = "<br/>\n";
   switch ($error->level) {
     case LIBXML_ERR_WARNING:

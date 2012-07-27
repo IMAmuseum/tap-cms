@@ -42,9 +42,9 @@ class TourML {
 
         if ($node->type === 'tour') {
             $nids  = array();
-            $field = variable_get('tap_connection_field', null);
+            $field = variable_get('tap_connection_field', NULL);
 
-            if ($field == null) {
+            if ($field == NULL) {
                 drupal_set_message(t('The TAP connection field is not configured'), 'warning');
             }
 
@@ -132,7 +132,8 @@ class TourML {
 
         if ($changed && $changed > $node->changed) {
             $stop['last_modified'] = $changed;
-        } else {
+        } 
+        else {
             $stop['last_modified'] = $node->changed;
         }
 
@@ -174,7 +175,7 @@ class TourML {
                                 $instances = field_info_instances('field_collection_item', $field['#field_name']);
                                 // iterate over all the fields attached to the entity
                                 foreach ($instances as $field_name => $settings) {
-                                    if(empty($entity->{$field_name})) continue;
+                                    if (empty($entity->{$field_name})) continue;
                                     foreach ($entity->{$field_name}['und'] as $key => $item) {
                                         $uid = (isset($item['fid'])) ? $item['fid'] : $key;
                                         // unique key for field in set
