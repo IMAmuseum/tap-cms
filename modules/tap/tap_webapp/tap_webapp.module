@@ -24,14 +24,14 @@ function tap_webapp_menu() {
 
 function tap_webapp_theme() {
 
-    $module_path = url(drupal_get_path('module', 'tap_webapp'), array('absolute' => true));
+    $module_path = url(drupal_get_path('module', 'tap_webapp'), array('absolute' => TRUE));
     $webapp_version = '0.1.0';
     $tap_version = '0.1.0';
 
     return array(
         'tap_webapp_preview' => array(
             'variables' => array(
-                'tourml_path' => null,
+                'tourml_path' => NULL,
                 'webapp_css_path' => "$module_path/tap-webapp-$webapp_version/Tap-$tap_version.css",
                 'webapp_dependencies_path' => "$module_path/tap-webapp-$webapp_version/Tap-$tap_version-dependencies.min.js",
                 'webapp_js_path' => "$module_path/tap-webapp-$webapp_version/Tap-$tap_version.min.js",
@@ -50,7 +50,8 @@ function tap_webapp_preview($node) {
             dpm('non-numeric tour id');
             return;
         } 
-    } else {
+    }
+    else {
         $tour_nid = $node->nid;
     }
 
@@ -75,7 +76,7 @@ function tap_webapp_preprocess_tap_webapp_preview(&$vars) {
         'tourmap' => 'tourmap'
     ));
 
-    foreach($default_navbar_items as $key=>$val) {
+    foreach ($default_navbar_items as $key => $val) {
         $vars['default_navbar_items'][] = array(
             'endpoint' => $key,
             'label' => $navbar_labels[$key]
