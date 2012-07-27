@@ -184,6 +184,23 @@ class TourML {
                                         if (!isset($this->multipart_assets[$id]['items'][$part_id])) {
                                             drupal_alter('tourml_multipart_asset', $this, $item);
                                             $this->multipart_assets[$id]['items'][$part_id] = $item;
+
+                                            // handle an asset part's image styles
+                                            if (!empty($item['type']) && $item['type'] == 'image' && !empty($field['image_styles'])) {
+                                                // setup a cloned asset part with the appropriate image styles
+                                                foreach ($field['image_styles'] as $style) {
+                                                    theme('image_style', array('style_name' => $style, 'path' => $item['uri']));
+                                                    // set properties on new asset part
+                                                    $new_asset = $item;
+                                                    $new_asset['name'] = $style;
+                                                    $new_asset['uri'] = image_style_url($style, $item['uri']);
+                                                    // get image properties
+                                                    $image_info = getimagesize($new_asset['uri']);
+                                                    $new_asset['properties']['width'] = $image_info[0];
+                                                    $new_asset['properties']['height'] = $image_info[1];
+                                                    $this->multipart_assets[$id]['items'][$part_id . '_' . $style] = $new_asset;
+                                                }
+                                            }
                                         }
                                     }
                                 }
