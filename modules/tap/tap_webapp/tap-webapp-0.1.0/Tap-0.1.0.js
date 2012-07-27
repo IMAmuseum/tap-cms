@@ -877,6 +877,7 @@ jQuery(function() {
 			this.map = null;
 			this.stop_markers = {};
 			this.stop_popups = {};
+			this.stop_bounds = null;
 			this.position_marker = null;
 			this.view_initialized = false;
 			this.LocationIcon = L.Icon.extend({
@@ -894,10 +895,11 @@ jQuery(function() {
 			this.marker_icon = new this.MarkerIcon();
 
 			_.defaults(this.options, {
-				'init-lat': 39.829104,
-				'init-lon': -86.189504,
+				'init-lat': null,
+				'init-lon': null,
 				'init-zoom': 2
 			});
+
 		},
 
 		renderContent: function() {
@@ -930,30 +932,6 @@ jQuery(function() {
 
 			this.map.addLayer(this.tile_layer);
 
-			// First, try to set the view by locating the device
-			//this.map.locateAndSetView(this.options['init-zoom']);
-			if (TapAPI.geoLocation !== null) {
-				if (TapAPI.geoLocation.latest_location !== null) {
-
-					this.options['init-lat'] = TapAPI.geoLocation.latest_location.coords.latitude;
-					this.options['init-lon'] = TapAPI.geoLocation.latest_location.coords.longitude;
-
-					if (this.position_marker === null) {
-						this.position_marker = new L.Marker(
-							new L.LatLng(this.options['init-lat'], this.options['init-lon']),
-							{icon: new this.LocationIcon()}
-						);
-						this.map.addLayer(this.position_marker);
-					}
-
-				}
-			}
-
-			this.map.setView(
-				new L.LatLng(this.options['init-lat'], this.options['init-lon']),
-				this.options['init-zoom']
-			);
-
 			// Find stops with geo coordinate assets
 			for (var i = 0; i<this.options.stops.size(); i++) {
 
@@ -968,6 +946,28 @@ jQuery(function() {
 					}
 				);
 
+			}
+
+			// Determine the bounding region
+			_.each(this.stop_markers, function(marker) {
+
+				var l = marker.getLatLng();
+				if (this.stop_bounds === null) {
+					this.stop_bounds = new L.LatLngBounds(l,l);
+				} else {
+					this.stop_bounds.extend(l);
+				}
+
+			}, this);
+
+			// Set the viewport based on settings
+			if ((this.options['init-lat'] === null) || (this.options['init-lon'] === null)) {
+				this.map.fitBounds(this.stop_bounds);
+			} else {
+				this.map.setView(
+					new L.LatLng(this.options['init-lat'], this.options['init-lon']),
+					this.options['init-zoom']
+				);
 			}
 
 			TapAPI.geoLocation.on("gotlocation", this.onLocationFound, this);
@@ -1059,6 +1059,7 @@ jQuery(function() {
 			if (this.position_marker === null) {
 
 				this.position_marker = new L.Marker(latlng, {icon: new this.LocationIcon()});
+				this.position_marker.bindPopup('You are here');
 				this.map.addLayer(this.position_marker);
 
 			} else {
