@@ -77,7 +77,7 @@ function tap_webapp_preprocess_tap_webapp_preview(&$vars) {
 
     foreach($default_navbar_items as $key=>$val) {
         $vars['default_navbar_items'][] = array(
-            'prefix' => $key,
+            'endpoint' => $key,
             'label' => $navbar_labels[$key]
         );
     }
