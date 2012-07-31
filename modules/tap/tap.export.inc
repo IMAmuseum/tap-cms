@@ -217,6 +217,7 @@ function tap_tourml_export_form_submit(&$form, &$form_state) {
         $file->status = 0;
         file_field_delete_file($node->field_tour_bundle[$node->language][0], 'field_tour_bundle', 'node', $node->nid);
         unset($node->field_tour_bundle[$node->language][0]);
+        field_attach_update('node', $node);
     }
 
     $path = file_directory_temp() . "/$title-bundle.zip";
@@ -254,7 +255,7 @@ function tap_tourml_export_form_submit(&$form, &$form_state) {
             }
         }
         foreach($tourml->multipart_assets as $asset) {
-            foreach($asset as $part) {
+            foreach($asset['items'] as $part) {
                 if(isset($part['fid'])) {
                     $operations[] = array('tap_export_bundle_asset', array($path, $asset_dir, $part['uri']));
                 }
@@ -324,7 +325,6 @@ function tap_export_bundle_asset($path, $dir, $uri, &$context) {
     list($schema, $file_path) = explode('://', $uri);
     $real_path = drupal_realpath($uri);
     $bundle->addFile($real_path, $dir . '/' . $file_path);
-
     $context['results'][] = $file_path;
 }
 
