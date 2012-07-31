@@ -335,13 +335,13 @@ function tap_preprocess_tap_tourml_asset_rights(&$vars) {
     $file = file_view($vars['file'], 'tourml_xml');
     foreach (element_children($file) as $field_name) {
         $field = $file[$field_name];
-        if(empty($field['#formatter'])) continue;
+        if (empty($field['#formatter'])) continue;
 
-        switch($field['#formatter']) {
+        switch ($field['#formatter']) {
             case 'tap_tourml_copyright':
             case 'tap_tourml_credit_line':
             case 'tap_tourml_expiration':
-                if(empty($field['#items'])) continue;
+                if (empty($field['#items'])) continue;
                 $vars['items'][] = drupal_render($field);
                 break;
         }

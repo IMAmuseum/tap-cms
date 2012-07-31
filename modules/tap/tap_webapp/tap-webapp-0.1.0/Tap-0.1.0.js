@@ -1,5 +1,5 @@
 /*
- * TAP - v0.1.0 - 2012-07-26
+ * TAP - v0.1.0 - 2012-07-27
  * http://tapintomuseums.org/
  * Copyright (c) 2011-2012 Indianapolis Museum of Art
  * GPLv3
@@ -537,10 +537,19 @@ jQuery(function() {
 				navbar_items = tap.config.navbar_items;
 			} else {
 				navbar_items = [
-					{ label: 'Menu', prefix: 'tourstoplist' },
-					{ label: 'Keypad', prefix: 'tourkeypad' },
-					{ label: 'Map', prefix: 'tourmap'}
+					{ label: 'Menu', endpoint: 'tourstoplist' },
+					{ label: 'Keypad', endpoint: 'tourkeypad' },
+					{ label: 'Map', endpoint: 'tourmap'}
 				];
+			}
+
+			var header_nav_default = true;
+			var footer_nav_default = false;
+			if (tap.config.navbar_location !== undefined) {
+				if (tap.config.navbar_location == 'footer') {
+					header_nav_default = false;
+					footer_nav_default = true;
+				}
 			}
 
 			_.defaults(this.options, {
@@ -548,7 +557,8 @@ jQuery(function() {
 				back_label: 'Back',
 				nav_menu: navbar_items,
 				active_index: null,
-				header_nav: (tap.config.header_nav !== undefined) ? tap.config.header_nav : true
+				header_nav: header_nav_default,
+				footer_nav: footer_nav_default
 			});
 
 			if (this.onInit) {
@@ -572,6 +582,7 @@ jQuery(function() {
 				title: this.options.page_title,
 				back_label: this.options.back_label,
 				header_nav: this.options.header_nav,
+				footer_nav: this.options.footer_nav,
 				nav_menu: this.options.nav_menu,
 				active_index: this.options.active_index,
 				tour_id: tap.currentTour
@@ -612,9 +623,25 @@ jQuery(function() {
 			var content_template = TapAPI.templateManager.get('audio-stop');
 			var contentContainer = this.$el.find(":jqmData(role='content')");
 
+			var assets = this.model.getAssetsByUsage("transcription");
+			var transcription = null;
+			if (assets.length) {
+				transcription = assets[0].get('content').at(0).get('data');
+			}
+
 			contentContainer.append(content_template({
-				tourStopTitle: this.model.get('title')
+				tourStopTitle: this.model.get('title'),
+				transcription: transcription
 			}));
+
+			this.$el.find('#trans-button').click(function() {
+				var t = $('.transcription').toggleClass('hidden');
+				if (t.hasClass('hidden')) {
+					$('.ui-btn-text', this).text('Show Transcription');
+				} else {
+					$('.ui-btn-text', this).text('Hide Transcription');
+				}
+			});
 
 			var assets = this.model.getAssetsByType(["tour_audio", "tour_video"]);
 
@@ -850,6 +877,7 @@ jQuery(function() {
 			this.map = null;
 			this.stop_markers = {};
 			this.stop_popups = {};
+			this.stop_bounds = null;
 			this.position_marker = null;
 			this.view_initialized = false;
 			this.LocationIcon = L.Icon.extend({
@@ -867,10 +895,11 @@ jQuery(function() {
 			this.marker_icon = new this.MarkerIcon();
 
 			_.defaults(this.options, {
-				'init-lat': 39.829104,
-				'init-lon': -86.189504,
+				'init-lat': null,
+				'init-lon': null,
 				'init-zoom': 2
 			});
+
 		},
 
 		renderContent: function() {
@@ -903,30 +932,6 @@ jQuery(function() {
 
 			this.map.addLayer(this.tile_layer);
 
-			// First, try to set the view by locating the device
-			//this.map.locateAndSetView(this.options['init-zoom']);
-			if (TapAPI.geoLocation !== null) {
-				if (TapAPI.geoLocation.latest_location !== null) {
-
-					this.options['init-lat'] = TapAPI.geoLocation.latest_location.coords.latitude;
-					this.options['init-lon'] = TapAPI.geoLocation.latest_location.coords.longitude;
-
-					if (this.position_marker === null) {
-						this.position_marker = new L.Marker(
-							new L.LatLng(this.options['init-lat'], this.options['init-lon']),
-							{icon: new this.LocationIcon()}
-						);
-						this.map.addLayer(this.position_marker);
-					}
-
-				}
-			}
-
-			this.map.setView(
-				new L.LatLng(this.options['init-lat'], this.options['init-lon']),
-				this.options['init-zoom']
-			);
-
 			// Find stops with geo coordinate assets
 			for (var i = 0; i<this.options.stops.size(); i++) {
 
@@ -941,6 +946,28 @@ jQuery(function() {
 					}
 				);
 
+			}
+
+			// Determine the bounding region
+			_.each(this.stop_markers, function(marker) {
+
+				var l = marker.getLatLng();
+				if (this.stop_bounds === null) {
+					this.stop_bounds = new L.LatLngBounds(l,l);
+				} else {
+					this.stop_bounds.extend(l);
+				}
+
+			}, this);
+
+			// Set the viewport based on settings
+			if ((this.options['init-lat'] === null) || (this.options['init-lon'] === null)) {
+				this.map.fitBounds(this.stop_bounds);
+			} else {
+				this.map.setView(
+					new L.LatLng(this.options['init-lat'], this.options['init-lon']),
+					this.options['init-zoom']
+				);
 			}
 
 			TapAPI.geoLocation.on("gotlocation", this.onLocationFound, this);
@@ -1032,6 +1059,7 @@ jQuery(function() {
 			if (this.position_marker === null) {
 
 				this.position_marker = new L.Marker(latlng, {icon: new this.LocationIcon()});
+				this.position_marker.bindPopup('You are here');
 				this.map.addLayer(this.position_marker);
 
 			} else {
@@ -1238,13 +1266,14 @@ jQuery(function() {
 		onInit: function() {
 			this.options.page_title = this.model.get('title');
 			this.options.header_nav = false;
+			this.options.footer_nav = false;
 		},
 
 		renderContent: function() {
 			var content_template = TapAPI.templateManager.get('tour-details');
 
 			this.$el.find(":jqmData(role='content')").append(content_template({
-				tour_index: tap.config.default_index,
+				tour_index: tap.config.default_nav_item,
 				tour_id: this.model.id,
 				publishDate: this.model.get('publishDate') ? this.model.get('publishDate') : undefined,
 				description: this.model.get('description') ? this.model.get('description') : undefined,
@@ -1272,6 +1301,7 @@ jQuery(function() {
 		onInit: function() {
 			this.options.page_title = 'Tour List';
 			this.options.header_nav = false;
+			this.options.footer_nav = false;
 		},
 
 		renderContent: function() {
@@ -1325,11 +1355,27 @@ jQuery(function() {
 		renderContent: function() {
 			var content_template = TapAPI.templateManager.get('video-stop');
 
+			var assets = this.model.getAssetsByUsage("transcription");
+			var transcription = null;
+			if (assets.length) {
+				transcription = assets[0].get('content').at(0).get('data');
+			}
+
 			this.$el.find(":jqmData(role='content')").append(content_template({
-				tourStopTitle: this.model.get('title')
+				tourStopTitle: this.model.get('title'),
+				transcription: transcription
 			}));
 
-			var assets = this.model.getAssetsByType("tour_video");
+			this.$el.find('#trans-button').click(function() {
+				var t = $('.transcription').toggleClass('hidden');
+				if (t.hasClass('hidden')) {
+					$('.ui-btn-text', this).text('Show Transcription');
+				} else {
+					$('.ui-btn-text', this).text('Hide Transcription');
+				}
+			});
+
+			assets = this.model.getAssetsByType("tour_video");
 			if (assets.length) {
 				var videoContainer = this.$el.find('video');
 				_.each(assets, function(asset) {
@@ -1339,6 +1385,7 @@ jQuery(function() {
 					});
 				});
 			}
+
 
 			return this;
 		}
@@ -1578,14 +1625,19 @@ if (!tap) {
 		tap.url = url;
 
 		if (config === undefined) config = {};
+
+		/*
+		 * When editing the default configuration, the documentation should be updated.
+		 * https://github.com/IMAmuseum/tap-web-app/wiki/Configuring-the-web-app
+		 */
 		tap.config = _.defaults(config, {
 			navbar_items: [
-				{ label: 'Menu', prefix: 'tourstoplist' },
-				{ label: 'Keypad', prefix: 'tourkeypad' },
-				{ label: 'Map', prefix: 'tourmap'}
+				{ label: 'Menu', endpoint: 'tourstoplist' },
+				{ label: 'Keypad', endpoint: 'tourkeypad' },
+				{ label: 'Map', endpoint: 'tourmap'}
 			],
-			header_nav: true,
-			default_index: 'tourstoplist',
+			navbar_location: 'header',
+			default_nav_item: 'tourstoplist',
 			units: 'si',
 			StopListView: {
 				codes_only: true
@@ -1860,7 +1912,13 @@ var __p='';var print=function(){__p+=Array.prototype.join.call(arguments, '')};
 with(obj||{}){
 __p+='<div class=\'tour-stop audio\'>\n\t<div class=\'title\'>'+
 ( tourStopTitle )+
-'</div>\n\t<audio id="audio-player" autoplay controls="controls">\n\t\t<p>Your browser does not support the audio element.</p>\n\t</audio>\t\n\t<video id="video-player" autoplay controls="controls" style=\'display:none;\'>\n\t\t<p>Your browser does not support the video element.</p>\n\t</video>\n</div>';
+'</div>\n\t<audio id="audio-player" autoplay controls="controls">\n\t\t<p>Your browser does not support the audio element.</p>\n\t</audio>\t\n\t<video id="video-player" autoplay controls="controls" style=\'display:none;\'>\n\t\t<p>Your browser does not support the video element.</p>\n\t</video>\n\t';
+ if (transcription !== null) { 
+;__p+='\n\t\t<div id=\'trans-button\' data-role=\'button\' class=\'ui-mini\'>Show Transcription</div>\n\t\t<div class=\'transcription hidden\'><p>'+
+( transcription )+
+'</p></div>\n\t';
+ } 
+;__p+='\t\n</div>';
 }
 return __p;
 }
@@ -1914,9 +1972,9 @@ __p+='<div data-role="header" data-id="tap-header" data-position="fixed">\n\t<a 
 ;__p+='\n\t<div id=\'index-selector\' data-role="controlgroup" data-type="horizontal" data-mini="true">\n\t\t';
  _.each(nav_menu, function(item) { 
 ;__p+='\n\t\t<a data-role="button" '+
-( (active_index == item.prefix) ? 'data-theme="b"' : "" )+
+( (active_index == item.endpoint) ? 'data-theme="b"' : "" )+
 ' href=\'#'+
-( item.prefix )+
+( item.endpoint )+
 '/'+
 ( tour_id )+
 '\'>'+
@@ -1930,13 +1988,13 @@ __p+='<div data-role="header" data-id="tap-header" data-position="fixed">\n\t<a 
 '</h1>\n\t';
  } 
 ;__p+='\n</div>\n<div data-role="content">\n</div>\n';
- if (!header_nav) { 
+ if (footer_nav) { 
 ;__p+='\n<div data-role="footer" data-id="tap-footer" data-position="fixed">\n\t<div data-role="navbar">\n\t\t<ul>\n\t\t\t';
  _.each(nav_menu, function(item) { 
 ;__p+='\n\t\t\t<li><a '+
-( (active_index == item.prefix) ? 'data-theme="b"' : "" )+
+( (active_index == item.endpoint) ? 'data-theme="b"' : "" )+
 ' href=\'#'+
-( item.prefix )+
+( item.endpoint )+
 '/'+
 ( tour_id )+
 '\'>'+
@@ -2066,7 +2124,13 @@ var __p='';var print=function(){__p+=Array.prototype.join.call(arguments, '')};
 with(obj||{}){
 __p+='<div class=\'tour-stop video\'>\n\t<div class=\'title\'>'+
 ( tourStopTitle )+
-'</div>\n\t<video id="video-player" poster="assets/images/tapPoster.png" controls="controls" autoplay="autoplay">\n\t\t<p>Your browser does not support the video tag.</p>\n\t</video>\n</div>\n';
+'</div>\n\t<video id="video-player" poster="assets/images/tapPoster.png" controls="controls" autoplay="autoplay">\n\t\t<p>Your browser does not support the video tag.</p>\n\t</video>\n\t';
+ if (transcription !== null) { 
+;__p+='\n\t\t<div id=\'trans-button\' data-role=\'button\' class=\'ui-mini\'>Show Transcription</div>\n\t\t<div class=\'transcription hidden\'><p>'+
+( transcription )+
+'</p></div>\n\t';
+ } 
+;__p+='\n</div>\n';
 }
 return __p;
 }

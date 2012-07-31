@@ -11,7 +11,7 @@ function tap_webapp_admin_form() {
         '#title'            => t('System of units'),
         '#description'      => t('Which system of units should be used in the UI?'),
         '#options'          => array('si' => t('SI'), 'english' => t('English')),
-        '#required'         => true,
+        '#required'         => TRUE,
         '#default_value'    => variable_get('tap_webapp_units', 'si')
     );
 
@@ -25,8 +25,8 @@ function tap_webapp_admin_form() {
         '#type'             => 'select',
         '#title'            => t('Default navigation bar items'),
         '#description'      => t('Which items should be shown by default?'),
-        '#required'         => true,
-        '#multiple'         => true,
+        '#required'         => TRUE,
+        '#multiple'         => TRUE,
         '#options'          => array('tourstoplist' => t('Menu'), 'tourkeypad' => t('Keypad'), 'tourmap' => t('Map')),
         '#default_value'    => $default
     );

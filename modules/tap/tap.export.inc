@@ -77,7 +77,8 @@ function tap_tourml_export_form($form, &$form_state) {
             '#prefix' => '<div id="separate-languages-option">',
             '#suffix' => '</div>',
         );
-    } else {
+    }
+    else {
         $form['export_options']['separate_languages'] = array(
             '#type' => 'hidden',
             '#value' => 0,
@@ -337,7 +338,7 @@ function tap_export_bundle_tour_save($node, $file_path, &$context) {
     try {
         $bundle_dir = drupal_realpath('public://' . $settings['settings']['file_directory']);
         // create bundle directory if it doesn't already exist
-        if(!is_dir($bundle_dir)) {
+        if (!is_dir($bundle_dir)) {
             mkdir($bundle_dir);
         }
 
