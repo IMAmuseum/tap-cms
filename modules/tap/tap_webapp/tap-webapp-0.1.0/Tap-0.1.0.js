@@ -1,5 +1,5 @@
 /*
- * TAP - v0.1.0 - 2012-07-27
+ * TAP - v0.1.0 - 2012-08-03
  * http://tapintomuseums.org/
  * Copyright (c) 2011-2012 Indianapolis Museum of Art
  * GPLv3
@@ -876,23 +876,19 @@ jQuery(function() {
 
 			this.map = null;
 			this.stop_markers = {};
+			this.stop_icons = {};
 			this.stop_popups = {};
 			this.stop_bounds = null;
 			this.position_marker = null;
 			this.view_initialized = false;
-			this.LocationIcon = L.Icon.extend({
-				iconUrl: tap.base_path + 'images/icon-locate.png',
-				shadowUrl: null,
-				iconSize: new L.Point(24, 24),
-				iconAnchor: new L.Point(12, 12)
+
+			this.location_icon = L.divIcon({
+				className: 'location-icon'
 			});
-			this.MarkerIcon = L.Icon.extend({
-				iconUrl: tap.base_path + 'images/marker.png',
-				shadowUrl: tap.base_path + 'images/marker-shadow.png',
-				iconSize: new L.Point(25,41),
-				iconAnchor: new L.Point(12,41)
+
+			this.stop_icon = L.divIcon({
+				className: 'stop-icon'
 			});
-			this.marker_icon = new this.MarkerIcon();
 
 			_.defaults(this.options, {
 				'init-lat': null,
@@ -991,23 +987,27 @@ jQuery(function() {
 
 			if (data.type == 'Point') {
 
+				var stop_icon = L.divIcon({
+					className: 'stop-icon ' + this.stop.id
+				});
+
 				var marker_location = new L.LatLng(data.coordinates[1], data.coordinates[0]);
-				var marker = new L.Marker(marker_location, { icon: this.map_view.marker_icon });
+				var marker = new L.Marker(marker_location, { icon: stop_icon });
 				var template = TapAPI.templateManager.get('tour-map-marker-bubble');
 
 				var popup = new L.Popup();
 				popup.setLatLng(marker_location);
 
-				var d_content = '';
+				var formatted_distance = null;
 				if (this.stop.get('distance')) {
-					d_content = 'Distance: ' + this.map_view.formatStopDistance(this.stop.get('distance'));
+					formatted_distance = TapAPI.geoLocation.formatDistance(this.stop.get('distance'));
 				}
 
 				popup.setContent(template({
 					'title': this.stop.get('title'),
 					'tour_id': tap.currentTour,
 					'stop_id': this.stop.id,
-					'distance': d_content,
+					'distance': (formatted_distance === null) ? '' : 'Distance: ' + formatted_distance,
 					'stop_lat': data.coordinates[1],
 					'stop_lon': data.coordinates[0]
 				}));
@@ -1017,6 +1017,7 @@ jQuery(function() {
 				marker.stop_id = this.stop.id;
 				marker.addEventListener('click', this.map_view.onMarkerSelected, this.map_view);
 
+				this.map_view.stop_icons[this.stop.id] = stop_icon;
 				this.map_view.stop_markers[this.stop.id] = marker;
 				this.map_view.map.addLayer(marker);
 
@@ -1025,19 +1026,33 @@ jQuery(function() {
 			// Update the marker bubble when the distance to a stop changes
 			this.stop.on('change:distance', function(stop) {
 
-				var d_content = '';
+				var formatted_distance = null;
 				if (stop.get('distance')) {
-					d_content = 'Distance: ' + this.formatStopDistance(stop.get('distance'));
+					formatted_distance = TapAPI.geoLocation.formatDistance(stop.get('distance'));
 				}
 
+				var template = TapAPI.templateManager.get('tour-map-marker-bubble');
 				this.stop_popups[stop.id].setContent(template({
 					'title': stop.get('title'),
 					'tour_id': tap.currentTour,
 					'stop_id': stop.get('id'),
-					'distance': d_content,
+					'distance': (formatted_distance === null) ? '' : 'Distance: ' + formatted_distance,
 					'stop_lat': stop.get('location').lat,
 					'stop_lon': stop.get('location').lng
 				}));
+
+				// Update the stop icon
+				var distance_label = $('.stop-icon.' + stop.id + ' .distance-label');
+
+				if (distance_label.length === 0) {
+					template = TapAPI.templateManager.get('tour-map-distance-label');
+					$('.stop-icon.' + stop.id).append(template({
+						distance: formatted_distance
+					}));
+				} else {
+					distance_label.html(formatted_distance);
+				}
+
 
 			}, this.map_view);
 
@@ -1058,7 +1073,7 @@ jQuery(function() {
 
 			if (this.position_marker === null) {
 
-				this.position_marker = new L.Marker(latlng, {icon: new this.LocationIcon()});
+				this.position_marker = new L.Marker(latlng, {icon: this.location_icon});
 				this.position_marker.bindPopup('You are here');
 				this.map.addLayer(this.position_marker);
 
@@ -1076,35 +1091,6 @@ jQuery(function() {
 			console.log('onLocationError', e);
 
 			// TODO: hide the position marker?
-
-		},
-
-
-		formatStopDistance: function(d) {
-
-			if (tap.config.units == 'si') {
-
-				if (d < 100) {
-					return parseInt(d) + ' m';
-				} else if (d < 10000) {
-					return (d/1000).toFixed(2) + ' km';
-				} else {
-					return parseInt(d/1000) + ' km';
-				}
-
-			} else {
-				
-				// Assume it's English
-				var feet = 3.28084 * d;
-				if (feet > 52800) { // > 10 miles
-					return parseInt(feet/5280) + ' mi';
-				} if (feet > 528) { // > .1 miles
-					return (feet/5280).toFixed(2) + ' mi';
-				} else {
-					return parseInt(feet) + ' ft';
-				}
-
-			}
 
 		},
 
@@ -1204,33 +1190,166 @@ jQuery(function() {
 	// Define the stop list view
 	TapAPI.views.StopList = TapAPI.views.Page.extend({
 
+		events: {
+			'change #proximity-toggle': 'onToggleProximity'
+		},
+
 		onInit: function() {
-			this.options.active_index = 'tourstoplist';
+
+			this.options = _.defaults(this.options, {
+				active_index: 'tourstoplist',
+				codes_only: true,
+				enable_proximity_order: true,
+				sort: 'default'
+			});
+
+			// Turn off proximity ordering if the tour has no geolocated stops
+			var geo = false;
+			_.each(tap.tourStops.models, function(stop) {
+				if (stop.getAssetsByUsage('geo') !== undefined) {
+					geo = true;
+				}
+			});
+			if (geo === false) {
+				this.options.enable_proximity_order = false;
+			}
+
+			if (this.options.enable_proximity_order) {
+				TapAPI.geoLocation.on("gotlocation", this.onLocationFound, this);
+			}
+
+			this.stoplistitems = {};
+
+			tap.tourStops.comparator = this.sortByCode;
+			tap.tourStops.sort();
+
 		},
 
 		renderContent: function() {
 			var content_template = TapAPI.templateManager.get('tour-stop-list');
 
-			this.$el.find(":jqmData(role='content')").append(content_template());
+			this.$el.find(":jqmData(role='content')").append(content_template({
+				enable_proximity_order: this.options.enable_proximity_order
+			}));
 
 			// TODO: figure out a better way to avoid rendering again
 			//if ($('li', this.$el).length == tap.tourStops.models.length) return;
 
 			var listContainer = this.$el.find('#tour-stop-list');
 			
+			this.addStopsToList(listContainer);
+
+			if (this.options.enable_proximity_order) {
+				TapAPI.geoLocation.startLocating();
+			}
+
+		},
+
+
+		addStopsToList: function(listContainer) {
+
 			_.each(tap.tourStops.models, function(stop) {
 
 				// If in codes-only mode, abort if the stop does not have a code
-				if (tap.config.StopListView.codes_only) {
+				if (this.options.codes_only) {
 					var code = stop.get('propertySet').where({"name":"code"});
 					if (!code.length) return;
 				}
 
-				var item = new TapAPI.views.StopListItem({model: stop});
-				listContainer.append(item.render().el);
-				
+				var item = this.stoplistitems[stop.id];
+				if (item === undefined) {
+					item = new TapAPI.views.StopListItem({model: stop});
+					this.stoplistitems[stop.id] = item;
+					listContainer.append(item.render().el);
+
+					if (stop.get('nearest')) {
+						item.$el.addClass('nearest');
+					}
+
+					if (this.options.enable_proximity_order) {
+						stop.on("change:distance", this.onStopDistanceChanged, item);
+						stop.on("change:nearest", this.onNearestStopChanged, item);
+					}
+
+				} else {
+					listContainer.append(item.render().el);
+				}
+	
 			}, this);
 
+			$('#tour-stop-list').listview('refresh');
+
+		},
+
+
+		sortByCode: function(stop) {
+			var code = stop.get('propertySet').where({"name":"code"});
+			if (!code.length) return 10000;
+			return code[0].get('value');
+		},
+
+		sortByDistance: function(stop) {
+			var d = stop.get('distance');
+			return (d === undefined) ? -1 : d;
+		},
+
+		onToggleProximity: function() {
+
+			if (this.options.sort == 'default') {
+				this.options.sort = 'proximity';
+				tap.tourStops.comparator = this.sortByDistance;
+				tap.tourStops.sort();
+			} else {
+				this.options.sort = 'default';
+				tap.tourStops.comparator = this.sortByCode;
+				tap.tourStops.sort();
+			}
+
+			var listContainer = this.$el.find('#tour-stop-list');
+			for (var view in this.stoplistitems) {
+				this.stoplistitems[view].remove();
+				delete this.stoplistitems[view]; // Force recreation
+				this.stoplistitems[view] = undefined;
+			}
+
+			this.addStopsToList(listContainer);
+
+		},
+
+		onStopDistanceChanged: function(stop, distance) {
+
+			var item = $('#stoplistitem-' + stop.get('id') + ' .ui-btn-text a', '#tour-stop-list');
+			var span = $('span.distance', item);
+			if (span.length) {
+				span.html(TapAPI.geoLocation.formatDistance(distance));
+			} else {
+				item.append("<span class='distance'>" + TapAPI.geoLocation.formatDistance(distance) + "</span>");
+			}
+
+		},
+
+
+		onNearestStopChanged: function(stop) {
+
+			if (stop.get('nearest')) {
+				this.$el.addClass('nearest');
+			} else {
+				this.$el.removeClass('nearest');
+			}
+
+		},
+
+
+		onLocationFound: function(position) {
+
+			//console.log('onLocationFound', position);
+			var latlng = new L.LatLng(position.coords.latitude, position.coords.longitude);
+
+		},
+
+
+		onClose: function() {
+			TapAPI.geoLocation.stopLocating();
 		}
 
 	});
@@ -1241,11 +1360,14 @@ jQuery(function() {
 		tagName: 'li',
 		template: TapAPI.templateManager.get('tour-stop-list-item'),
 		render: function() {
-			$(this.el).html(this.template({
+			this.$el.attr('id', 'stoplistitem-' + this.model.get('id'));
+			this.$el.html(this.template({
 				title: this.model.get('title') ? this.model.get('title') : undefined,
 				stop_id: this.model.get('id'),
-				tour_id: tap.currentTour
+				tour_id: tap.currentTour,
+				distance: TapAPI.geoLocation.formatDistance(this.model.get('distance'))
 			}));
+			$('#tour-stop-list').listview('refresh');
 			return this;
 		}
 
@@ -1500,7 +1622,13 @@ jQuery(function() {
 
 			// set the selected tour
 			tap.tours.selectTour(id);
-			this.changePage(new TapAPI.views.StopList({model: tap.tours.get(tap.currentTour)}));
+			var options = {
+				model: tap.tours.get(tap.currentTour)
+			};
+			if (tap.config.StopListView !== undefined) {
+				options = _.extend(options, tap.config.StopListView);
+			}
+			this.changePage(new TapAPI.views.StopList(options));
 
 		},
 
@@ -1638,10 +1766,7 @@ if (!tap) {
 			],
 			navbar_location: 'header',
 			default_nav_item: 'tourstoplist',
-			units: 'si',
-			StopListView: {
-				codes_only: true
-			}
+			units: 'si'
 		});
 
 		// configure any events
@@ -1798,6 +1923,7 @@ jQuery(function() {
 
 		latest_location: null,
 		interval: null,
+		nearest_stop: null,
 
 		locate: function() {
 
@@ -1850,15 +1976,30 @@ jQuery(function() {
 
 			var latlon = new L.LatLng(position.coords.latitude, position.coords.longitude);
 
+
+			var nearest = null;
 			_.each(tap.tourStops.models, function(stop) {
 
 				var stop_location = stop.get('location');
 				if (stop_location !== undefined) {
 					var d = latlon.distanceTo(stop_location);
 					stop.set('distance', d);
+					if ((nearest === null) || (d < nearest.get('distance'))) {
+						nearest = stop;
+					}
 				}
 
 			});
+
+			if (nearest !== null) {
+				if (this.nearest_stop === null) {
+					this.nearest_stop = nearest;
+				} else if (this.nearest_stop != nearest) {
+					// update
+					this.nearest_stop.set('nearest', false);
+				}
+				nearest.set('nearest', true);
+			}
 
 		},
 
@@ -1873,6 +2014,41 @@ jQuery(function() {
 		stopLocating: function() {
 			clearInterval(TapAPI.geoLocation.interval);
 			TapAPI.geoLocation.interval = null;
+			if (this.nearest_stop !== null) {
+				this.nearest_stop.set('nearest', false);
+				this.nearest_stop = null;
+			}
+		},
+
+
+		formatDistance: function(d) {
+
+			if (d === undefined) return '';
+
+			if (tap.config.units == 'si') {
+
+				if (d < 100) {
+					return parseInt(d) + ' m';
+				} else if (d < 10000) {
+					return (d/1000).toFixed(2) + ' km';
+				} else {
+					return parseInt(d/1000) + ' km';
+				}
+
+			} else {
+				
+				// Assume it's English
+				var feet = 3.28084 * d;
+				if (feet > 52800) { // > 10 miles
+					return parseInt(feet/5280) + ' mi';
+				} if (feet > 528) { // > .1 miles
+					return (feet/5280).toFixed(2) + ' mi';
+				} else {
+					return parseInt(feet) + ' ft';
+				}
+
+			}
+
 		}
 
 	};
@@ -2073,6 +2249,15 @@ __p+='<ul id="tour-list" class="ui-listview" data-inset="true" data-role="listvi
 }
 return __p;
 }
+TapAPI.templates['tour-map-distance-label'] = function(obj){
+var __p='';var print=function(){__p+=Array.prototype.join.call(arguments, '')};
+with(obj||{}){
+__p+='<div class=\'distance-label-container\'>\n<div class=\'distance-label\'>'+
+( distance )+
+'</div>\n</div>';
+}
+return __p;
+}
 TapAPI.templates['tour-map-marker-bubble'] = function(obj){
 var __p='';var print=function(){__p+=Array.prototype.join.call(arguments, '')};
 with(obj||{}){
@@ -2108,14 +2293,24 @@ __p+='<a href=\'#tourstop/'+
 ( stop_id )+
 '\'>'+
 ( title )+
-'</a>';
+'\n';
+ if (distance !== '') { 
+;__p+='\n<span class=\'distance\'>'+
+( distance )+
+'</span>\n';
+ } 
+;__p+='\n</a>';
 }
 return __p;
 }
 TapAPI.templates['tour-stop-list'] = function(obj){
 var __p='';var print=function(){__p+=Array.prototype.join.call(arguments, '')};
 with(obj||{}){
-__p+='<ul id="tour-stop-list" class="ui-listview" data-inset="true" data-role="listview"></ul>';
+__p+='<ul id="tour-stop-list" class="ui-listview" data-inset="true" data-role="listview"></ul>\n';
+ if (enable_proximity_order) { 
+;__p+='\n<div data-role="fieldcontain" id=\'proximity-container\'>\n<label for="proximity-toggle">Distance ordering:</label>\n<select name="proximity-toggle" id="proximity-toggle" data-role="slider">\n\t<option value="off">Off</option>\n\t<option value="on">On</option>\n</select> \n</div>\n';
+}
+;__p+='';
 }
 return __p;
 }
