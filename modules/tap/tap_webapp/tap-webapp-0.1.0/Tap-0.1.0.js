@@ -1,5 +1,5 @@
 /*
- * TAP - v0.1.0 - 2012-08-03
+ * TAP - v0.1.0 - 2012-08-09
  * http://tapintomuseums.org/
  * Copyright (c) 2011-2012 Indianapolis Museum of Art
  * GPLv3
@@ -495,6 +495,9 @@ TapAPI.collections.Tours = Backbone.Collection.extend({
 	model: TapAPI.models.Tour,
 	localStorage: new Backbone.LocalStorage('tours'),
 	selectTour: function(id) { // load data for the selected tour
+
+		if (tap.currentTour == id) return;
+
 		// set the current tour
 		tap.currentTour = id;
 
@@ -623,17 +626,28 @@ jQuery(function() {
 			var content_template = TapAPI.templateManager.get('audio-stop');
 			var contentContainer = this.$el.find(":jqmData(role='content')");
 
+			// Find the transcription if one exists
 			var assets = this.model.getAssetsByUsage("transcription");
 			var transcription = null;
-			if (assets.length) {
+			if (assets !== undefined) {
 				transcription = assets[0].get('content').at(0).get('data');
 			}
 
+			// Find the poster image if one exists
+			var poster_image_path = null;
+			assets = this.model.getAssetsByUsage("image");
+			if (assets !== undefined) {
+				poster_image_path = assets[0].get('source').at(0).get('uri');
+			}
+
+			// Render from the template
 			contentContainer.append(content_template({
-				tourStopTitle: this.model.get('title'),
-				transcription: transcription
+				tour_stop_title: this.model.get('title'),
+				transcription: transcription,
+				poster_image_path: poster_image_path
 			}));
 
+			// Add click handler on the transcription toggle button
 			this.$el.find('#trans-button').click(function() {
 				var t = $('.transcription').toggleClass('hidden');
 				if (t.hasClass('hidden')) {
@@ -643,9 +657,10 @@ jQuery(function() {
 				}
 			});
 
-			var assets = this.model.getAssetsByType(["tour_audio", "tour_video"]);
+			assets = this.model.getAssetsByType(["tour_audio", "tour_video"]);
 
 			if (assets) {
+
 				var audioPlayer = this.$el.find('#audio-player');
 				var videoPlayer = this.$el.find('#video-player');
 				var videoAspect;
@@ -653,6 +668,7 @@ jQuery(function() {
 				_.each(assets, function(asset) {
 					var sources = asset.get('source');
 
+					// Add sources to the media elements
 					sources.each(function(source){
 						var source_str = "<source src='" + source.get('uri') + "' type='" + source.get('format') + "' />";
 
@@ -672,21 +688,28 @@ jQuery(function() {
 
 				var mediaOptions = {};
 				var mediaElement = null;
+
 				// If there are video sources and no audio sources, switch to the video element
 				if (videoPlayer.find('source').length && !audioPlayer.find('source').length) {
+
 					audioPlayer.remove();
+					this.$el.find('.poster-image').remove();
 					videoPlayer.show();
 					mediaOptions.defaultVideoWidth = '100%';
-					// mediaOptions.defaultVideoHeight = 270;
+					mediaOptions.defaultVideoHeight = 270;
 
 					mediaElement = videoPlayer;
+
 				} else {
+
 					videoPlayer.remove();
 					mediaOptions.defaultAudioWidth = '100%';
 					//mediaOptions.defaultAudioHeight = 270;
 
 					mediaElement = audioPlayer;
+
 				}
+
 				mediaElement.mediaelementplayer(mediaOptions);
 			}
 
@@ -744,7 +767,7 @@ jQuery(function() {
 			if (asset_refs) {
 				this.$el.find(":jqmData(role='content')").append(content_template());
 
-				var gallery = this.$el.find("#gallery");
+				var gallery = this.$el.find("#Gallery");
 
 				$.each(asset_refs, function(assetRef) {
 					var asset = tap.tourAssets.get(this.id);
@@ -752,20 +775,18 @@ jQuery(function() {
 					if (this.usage === "image_asset") {
 						var templateData = {};
 						var sources = asset.get('source');
+						var content = asset.get('content');
 						sources.each(function(source) {
-							switch (source.get('format').substring(0,5)) {
-								case "image":
+							switch (source.get('part')) {
+								case "image_asset_image":
 									templateData.fullImageUri = source.get("uri");
-									templateData.thumbUri = source.get("uri");
 									break;
-								//TODO: this needs to be figured out how it will get passed in
 								case "thumbnail":
+									//templateData.fullImageUri = "somewhere.jpg";
 									templateData.thumbUri = source.get("uri");
 									break;
 							}
 						});
-
-						var content = asset.get('content');
 						content.each(function(contentItem) {
 							console.log(contentItem);
 							switch(contentItem.get("part")) {
@@ -782,8 +803,7 @@ jQuery(function() {
 					}
 				});
 
-
-				var photoSwipe = gallery.photoSwipe({
+				var photoSwipe = this.$el.find('#Gallery a').photoSwipe({
 					enableMouseWheel: false,
 					enableKeyboard: true,
 					doubleTapZoomLevel : 0,
@@ -798,6 +818,7 @@ jQuery(function() {
 		}
 	});
 });
+
 // TapAPI Namespace Initialization //
 if (typeof TapAPI === 'undefined'){TapAPI = {};}
 if (typeof TapAPI.views === 'undefined'){TapAPI.views = {};}
@@ -865,7 +886,6 @@ jQuery(function() {
 	TapAPI.views.Map = TapAPI.views.Page.extend({
 
 		onInit: function() {
-			console.log('MapView.initialize');
 
 			this.options.active_index = 'tourmap';
 
@@ -916,33 +936,19 @@ jQuery(function() {
 			});
 
 			$(window).bind('orientationchange resize', this.resizeContentArea);
-			//$(":jqmData(role='page')").bind('updatelayout', function() { alert('x'); });
 
 		},
 
 
 		initMap: function() {
 
-			//$(this.el).html(this.template());
 			this.map = new L.Map('tour-map');
 
 			this.map.addLayer(this.tile_layer);
 
-			// Find stops with geo coordinate assets
-			for (var i = 0; i<this.options.stops.size(); i++) {
-
-				var tour_stop = this.options.stops.at(i);
-				var asset_refs = tour_stop.get('assetRef');
-				var result = _.each(
-					asset_refs,
-					this.plotTourStopMarker,
-					{
-						stop: tour_stop,
-						map_view: this
-					}
-				);
-
-			}
+			// Add the stop markers
+			_.each(this.options['stops'].models, this.plotTourStopMarker, this);
+			TapAPI.geoLocation.active_stop_collection = this.options['stops'];
 
 			// Determine the bounding region
 			_.each(this.stop_markers, function(marker) {
@@ -958,7 +964,11 @@ jQuery(function() {
 
 			// Set the viewport based on settings
 			if ((this.options['init-lat'] === null) || (this.options['init-lon'] === null)) {
-				this.map.fitBounds(this.stop_bounds);
+				if (this.stop_bounds !== null) {
+					this.map.fitBounds(this.stop_bounds);
+				} else {
+					this.map.setView(L.latLng(0,0), this.options['init-zoom']);
+				}
 			} else {
 				this.map.setView(
 					new L.LatLng(this.options['init-lat'], this.options['init-lon']),
@@ -966,95 +976,109 @@ jQuery(function() {
 				);
 			}
 
+			// At this point the stop markers should be added to the map
+			// We can augment them with the distance labels
+			_.each(this.options['stops'].models, function(stop) {
+				tap.tours.selectTour(stop.get('tour'));
+				if (stop.getAssetsByUsage('geo') === undefined) return;
+				this.updateStopMarker(stop);
+			}, this);
+
+			if (TapAPI.geoLocation.latest_location !== null) {
+				this.onLocationFound(TapAPI.geoLocation.latest_location);
+			}
 			TapAPI.geoLocation.on("gotlocation", this.onLocationFound, this);
 
 			return this;
 		},
 
 
+		generateBubbleContent: function(stop, formatted_distance) {
+
+			if (formatted_distance === undefined) {
+				if (stop.get('distance')) {
+					formatted_distance = TapAPI.geoLocation.formatDistance(stop.get('distance'));
+				}
+			}
+
+			var template = TapAPI.templateManager.get('tour-map-marker-bubble');
+			return template({
+				'title': stop.get('title'),
+				'tour_id': stop.get('tour'),
+				'stop_id': stop.get('id'),
+				'distance': (formatted_distance === undefined) ? '' : 'Distance: ' + formatted_distance,
+				'stop_lat': stop.get('location').lat,
+				'stop_lon': stop.get('location').lng
+			});
+
+		},
+
+
 		// Plot a single tour stop marker on the map
 		// @note Assumes that the context is set to { stop: (StopModel), map_view: (MapView) }
-		plotTourStopMarker: function(asset_ref) {
+		plotTourStopMarker: function(stop) {
 
-			// Make sure this is a geo asset reference
-			if ((asset_ref === undefined) || (asset_ref.usage != 'geo')) return;
+			// Make sure the proper tour is active
+			tap.tours.selectTour(stop.get('tour'));
 
-			// Parse the contents of the asset
-			asset = tap.tourAssets.get(asset_ref.id);
-			var content = asset.get('content');
+			// Find the geo assets for this stop
+			var geo_assets = stop.getAssetsByUsage('geo');
+			if (geo_assets === undefined) return;
+
+			// Parse the contents of the first geo asset
+			var content = geo_assets[0].get('content');
 			if (content === undefined) return;
 			var data = $.parseJSON(content.at(0).get('data'));
 
 			if (data.type == 'Point') {
 
 				var stop_icon = L.divIcon({
-					className: 'stop-icon ' + this.stop.id
+					className: 'stop-icon ' + stop.id
 				});
 
 				var marker_location = new L.LatLng(data.coordinates[1], data.coordinates[0]);
 				var marker = new L.Marker(marker_location, { icon: stop_icon });
-				var template = TapAPI.templateManager.get('tour-map-marker-bubble');
 
 				var popup = new L.Popup();
 				popup.setLatLng(marker_location);
+				popup.setContent(this.generateBubbleContent(stop));
+				this.stop_popups[stop.id] = popup;
 
-				var formatted_distance = null;
-				if (this.stop.get('distance')) {
-					formatted_distance = TapAPI.geoLocation.formatDistance(this.stop.get('distance'));
-				}
+				marker.stop_id = stop.id;
+				marker.addEventListener('click', this.onMarkerSelected, this);
 
-				popup.setContent(template({
-					'title': this.stop.get('title'),
-					'tour_id': tap.currentTour,
-					'stop_id': this.stop.id,
-					'distance': (formatted_distance === null) ? '' : 'Distance: ' + formatted_distance,
-					'stop_lat': data.coordinates[1],
-					'stop_lon': data.coordinates[0]
-				}));
-
-				this.map_view.stop_popups[this.stop.id] = popup;
-
-				marker.stop_id = this.stop.id;
-				marker.addEventListener('click', this.map_view.onMarkerSelected, this.map_view);
-
-				this.map_view.stop_icons[this.stop.id] = stop_icon;
-				this.map_view.stop_markers[this.stop.id] = marker;
-				this.map_view.map.addLayer(marker);
+				this.stop_icons[stop.id] = stop_icon;
+				this.stop_markers[stop.id] = marker;
+				this.map.addLayer(marker);
 
 			}
 
 			// Update the marker bubble when the distance to a stop changes
-			this.stop.on('change:distance', function(stop) {
+			stop.on('change:distance', this.updateStopMarker, this);
 
-				var formatted_distance = null;
-				if (stop.get('distance')) {
-					formatted_distance = TapAPI.geoLocation.formatDistance(stop.get('distance'));
-				}
+		},
 
-				var template = TapAPI.templateManager.get('tour-map-marker-bubble');
-				this.stop_popups[stop.id].setContent(template({
-					'title': stop.get('title'),
-					'tour_id': tap.currentTour,
-					'stop_id': stop.get('id'),
-					'distance': (formatted_distance === null) ? '' : 'Distance: ' + formatted_distance,
-					'stop_lat': stop.get('location').lat,
-					'stop_lon': stop.get('location').lng
+
+		updateStopMarker: function(stop) {
+
+			var formatted_distance = undefined;
+			if (stop.get('distance')) {
+				formatted_distance = TapAPI.geoLocation.formatDistance(stop.get('distance'));
+			}
+
+			this.stop_popups[stop.id].setContent(this.generateBubbleContent(stop), formatted_distance);
+
+			// Update the stop icon
+			var distance_label = $('.stop-icon.' + stop.id + ' .distance-label');
+
+			if (distance_label.length === 0) {
+				template = TapAPI.templateManager.get('tour-map-distance-label');
+				$('.stop-icon.' + stop.id).append(template({
+					distance: formatted_distance
 				}));
-
-				// Update the stop icon
-				var distance_label = $('.stop-icon.' + stop.id + ' .distance-label');
-
-				if (distance_label.length === 0) {
-					template = TapAPI.templateManager.get('tour-map-distance-label');
-					$('.stop-icon.' + stop.id).append(template({
-						distance: formatted_distance
-					}));
-				} else {
-					distance_label.html(formatted_distance);
-				}
-
-
-			}, this.map_view);
+			} else {
+				distance_label.html(formatted_distance);
+			}
 
 		},
 
@@ -1475,19 +1499,31 @@ jQuery(function() {
 	TapAPI.views.VideoStop = TapAPI.views.Page.extend({
 
 		renderContent: function() {
+
 			var content_template = TapAPI.templateManager.get('video-stop');
 
+			// Find the transcription if one exists
 			var assets = this.model.getAssetsByUsage("transcription");
 			var transcription = null;
-			if (assets.length) {
+			if (assets !== undefined) {
 				transcription = assets[0].get('content').at(0).get('data');
 			}
 
+			// Find the poster image if one exists
+			var poster_image_path = tap.config['default_video_poster'];
+			assets = this.model.getAssetsByUsage("image");
+			if (assets !== undefined) {
+				poster_image_path = assets[0].get('source').at(0).get('uri');
+			}
+
+			// Render from the template
 			this.$el.find(":jqmData(role='content')").append(content_template({
 				tourStopTitle: this.model.get('title'),
-				transcription: transcription
+				transcription: transcription,
+				poster_image_path: poster_image_path
 			}));
 
+			// Add click handler on the transcription toggle button
 			this.$el.find('#trans-button').click(function() {
 				var t = $('.transcription').toggleClass('hidden');
 				if (t.hasClass('hidden')) {
@@ -1520,6 +1556,7 @@ jQuery(function() {
 		views: {},
 		routes: {
 			'': 'list',
+			'map': 'map',
 			'tour/:tour_id': 'tourDetails',
 			'tourkeypad/:tour_id': 'tourKeypad',
 			'tourstop/:tour_id/:stop_id': 'tourStopById',
@@ -1540,11 +1577,44 @@ jQuery(function() {
 			this.firstPage = true;
 		},
 
+
+		/**
+		 * Route to the tour listing
+		 */
 		list: function() {
 
 			this.changePage(new TapAPI.views.TourList({model: tap.tours}));
 
 		},
+
+
+		/**
+		 * Route to the overall map view
+		 */
+		map: function() {
+
+			var map_options = {
+				stops: new TapAPI.collections.Stops()
+			};
+
+			// Find all of the geolocated stops in the tour set
+			_.each(tap.tours.models, function(tour) {
+				tap.tours.selectTour(tour.id);
+				_.each(tap.tourStops.models, function(stop) {
+					var assets = stop.getAssetsByUsage('geo');
+					if (assets !== undefined) {
+						map_options['stops'].add(stop);
+					}
+				});
+			});
+
+			// Set the current view
+			this.changePage(new TapAPI.views.Map(map_options));
+
+			$('#index-selector').replaceWith("<h1 id='page-title' class='ui-title'>Map</h2>");
+
+		},
+
 
 		/**
 		 * Route to the tour details
@@ -1640,7 +1710,6 @@ jQuery(function() {
 		 */
 		tourMap: function(id) {
 
-
 			// Determine which stops to display
 			tap.tours.selectTour(id);
 			var map_options = {
@@ -1687,9 +1756,9 @@ jQuery(function() {
 
 			tap.currentView = page;
 
-			$(page.el).attr('data-role', 'page');
+			page.$el.attr('data-role', 'page');
 			page.render();
-			$('body').append($(page.el));
+			$('body').append(page.$el);
 			var transition = $.mobile.defaultPageTransition;
 
 			// We don't want to slide the first page
@@ -1697,7 +1766,7 @@ jQuery(function() {
 				transition = 'none';
 				this.firstPage = false;
 			}
-			$.mobile.changePage($(page.el), {changeHash:false, transition: transition});
+			$.mobile.changePage(page.$el, {changeHash:false, transition: transition});
 
 			// The old page is removed from the DOM by an event handler in jqm-config.js
 
@@ -1766,6 +1835,7 @@ if (!tap) {
 			],
 			navbar_location: 'header',
 			default_nav_item: 'tourstoplist',
+			default_video_poster: 'assets/images/tapPoster.png',
 			units: 'si'
 		});
 
@@ -1868,7 +1938,8 @@ if (!tap) {
 				description: objectToArray(data.stop[i].description),
 				propertySet: data.stop[i].propertySet ? objectToArray(data.stop[i].propertySet.property) : undefined,
 				assetRef: objectToArray(data.stop[i].assetRef),
-				title: objectToArray(data.stop[i].title)
+				title: objectToArray(data.stop[i].title),
+				tour: data.id
 			});
 		}
 
@@ -1924,6 +1995,7 @@ jQuery(function() {
 		latest_location: null,
 		interval: null,
 		nearest_stop: null,
+		active_stop_collection: null,
 
 		locate: function() {
 
@@ -1978,7 +2050,12 @@ jQuery(function() {
 
 
 			var nearest = null;
-			_.each(tap.tourStops.models, function(stop) {
+			var stops = tap.tourStops;
+			if (this.active_stop_collection !== null) {
+				stops = this.active_stop_collection;
+			}
+
+			_.each(stops.models, function(stop) {
 
 				var stop_location = stop.get('location');
 				if (stop_location !== undefined) {
@@ -2087,8 +2164,20 @@ TapAPI.templates['audio-stop'] = function(obj){
 var __p='';var print=function(){__p+=Array.prototype.join.call(arguments, '')};
 with(obj||{}){
 __p+='<div class=\'tour-stop audio\'>\n\t<div class=\'title\'>'+
-( tourStopTitle )+
-'</div>\n\t<audio id="audio-player" autoplay controls="controls">\n\t\t<p>Your browser does not support the audio element.</p>\n\t</audio>\t\n\t<video id="video-player" autoplay controls="controls" style=\'display:none;\'>\n\t\t<p>Your browser does not support the video element.</p>\n\t</video>\n\t';
+( tour_stop_title )+
+'</div>\n\t<audio id="audio-player" autoplay controls="controls">\n\t\t<p>Your browser does not support the audio element.</p>\n\t</audio>\t\n\t<video id="video-player" autoplay controls="controls" style=\'display:none;\'\n\t';
+ if (poster_image_path !== null) { 
+;__p+='\n\t\tposter=\''+
+( poster_image_path )+
+'\'\n\t';
+ } 
+;__p+='\n\t>\n\t\t<p>Your browser does not support the video element.</p>\n\t</video>\n\t';
+ if (poster_image_path !== null) { 
+;__p+='\n\t\t<img class="poster-image" src="'+
+( poster_image_path )+
+'" />\n\t';
+ } 
+;__p+='\n\t';
  if (transcription !== null) { 
 ;__p+='\n\t\t<div id=\'trans-button\' data-role=\'button\' class=\'ui-mini\'>Show Transcription</div>\n\t\t<div class=\'transcription hidden\'><p>'+
 ( transcription )+
@@ -2112,7 +2201,7 @@ return __p;
 TapAPI.templates['image-stop-item'] = function(obj){
 var __p='';var print=function(){__p+=Array.prototype.join.call(arguments, '')};
 with(obj||{}){
-__p+='<li>\n\t<a href="'+
+__p+='\t<li>\n\t\t<a href="'+
 ( fullImageUri )+
 '"><img src="'+
 ( thumbUri )+
@@ -2120,14 +2209,16 @@ __p+='<li>\n\t<a href="'+
 ( title )+
 '" title="'+
 ( title )+
-'" /></a>\n</li>';
+'" /></a>\n\t\t<div>'+
+( title )+
+'</div>\n\t</li>\n';
 }
 return __p;
 }
 TapAPI.templates['image-stop'] = function(obj){
 var __p='';var print=function(){__p+=Array.prototype.join.call(arguments, '')};
 with(obj||{}){
-__p+='<ul id="gallery">\n</ul>';
+__p+='<ul id="Gallery" class="ui-grid-b">\n</ul>\n';
 }
 return __p;
 }
@@ -2319,7 +2410,13 @@ var __p='';var print=function(){__p+=Array.prototype.join.call(arguments, '')};
 with(obj||{}){
 __p+='<div class=\'tour-stop video\'>\n\t<div class=\'title\'>'+
 ( tourStopTitle )+
-'</div>\n\t<video id="video-player" poster="assets/images/tapPoster.png" controls="controls" autoplay="autoplay">\n\t\t<p>Your browser does not support the video tag.</p>\n\t</video>\n\t';
+'</div>\n\t<video id="video-player" controls="controls" autoplay="autoplay"\n\t';
+ if (poster_image_path !== null) { 
+;__p+='\n\t\tposter=\''+
+( poster_image_path )+
+'\'\n\t';
+ } 
+;__p+='\n\t>\n\t\t<p>Your browser does not support the video tag.</p>\n\t</video>\n\t';
  if (transcription !== null) { 
 ;__p+='\n\t\t<div id=\'trans-button\' data-role=\'button\' class=\'ui-mini\'>Show Transcription</div>\n\t\t<div class=\'transcription hidden\'><p>'+
 ( transcription )+
