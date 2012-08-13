@@ -1,5 +1,5 @@
 /*
- * TAP - v0.1.0 - 2012-08-10
+ * TAP - v0.1.0 - 2012-08-13
  * http://tapintomuseums.org/
  * Copyright (c) 2011-2012 Indianapolis Museum of Art
  * GPLv3
@@ -183,7 +183,7 @@ TapAPI.models.Content = Backbone.Model.extend({
 		//parse never gets called due to this not being in localstorage as its own record
 		this.set('propertySet', new TapAPI.collections.PropertySet(
 			this.get('propertySet'),
-			this.id
+			{id: this.id}
 		));
 
 		if (this.get('data').value) {
@@ -231,7 +231,7 @@ TapAPI.models.Source = Backbone.Model.extend({
 		//parse never gets called due to this not being in localstorage as its own record
 		this.set('propertySet', new TapAPI.collections.PropertySet(
 			this.get('propertySet'),
-			this.id
+			{id: this.id}
 		));
 	},
 	getAsset: function() {
@@ -294,7 +294,7 @@ TapAPI.models.Stop = Backbone.Model.extend({
 	parse: function(response) {
 		response.propertySet = new TapAPI.collections.PropertySet(
 			response.propertySet,
-			response.id
+			{id: response.id}
 		);
 
 		return response;
@@ -395,7 +395,7 @@ TapAPI.models.Tour = Backbone.Model.extend({
 	parse: function(response) {
 		response.propertySet = new TapAPI.collections.PropertySet(
 			response.propertySet,
-			this.id
+			{id: response.id}
 		);
 
 		return response;
@@ -779,11 +779,10 @@ jQuery(function() {
 						sources.each(function(source) {
 							switch (source.get('part')) {
 								case "image_asset_image":
-									templateData.fullImageUri = source.get("uri");
+									templateData.fullImageUri = source.get("uri") ? source.get("uri") : '';
 									break;
 								case "thumbnail":
-									//templateData.fullImageUri = "somewhere.jpg";
-									templateData.thumbUri = source.get("uri");
+									templateData.thumbUri = source.get("uri") ? source.get("uri") : '';
 									break;
 							}
 						});
@@ -2203,7 +2202,7 @@ var __p='';var print=function(){__p+=Array.prototype.join.call(arguments, '')};
 with(obj||{}){
 __p+='\t<li>\n\t\t<a href="'+
 ( fullImageUri )+
-'"><img src="'+
+'" rel="external"><img src="'+
 ( thumbUri )+
 '" alt="'+
 ( title )+
