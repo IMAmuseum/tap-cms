@@ -4,7 +4,7 @@
  * Admin settings for TAP Webapp
  */
 
-function tap_webapp_admin_form() {
+function tap_webapp_admin_form($form, &$form_state) {
 
     $form['tap_webapp_units'] = array(
         '#type'             => 'select',
@@ -31,6 +31,45 @@ function tap_webapp_admin_form() {
         '#default_value'    => $default
     );
 
-    return system_settings_form($form);
+    $default = variable_get('tap_webapp_default_theme', null);
+    $custom_theme = t('none');
+    if ($default !== null) {
+        $file = file_load($default);
+        if (!empty($file)) $custom_theme = $file->filename;
+    }
+
+    $form['tap_webapp_default_theme'] = array(
+        '#type'             => 'file',
+        '#title'            => t('Upload custom default theme'),
+        '#description'      => t('Replaces the current custom default theme'),
+        '#prefix'           => t('Current custom default theme:') . ' ' . $custom_theme
+    );
+
+    $form['#submit'][] = 'tap_webapp_admin_form_submit';
+
+    return system_settings_form($form, $form_state);
+
+}
+
+
+function tap_webapp_admin_form_submit($form, &$form_state) {
+
+    $dest = 'public://';
+    $file = file_save_upload(
+        'tap_webapp_default_theme', 
+        array('file_validate_extensions' => array('css')), 
+        $dest
+    );
+
+    if (is_object($file)) {
+
+        // Remove the previous file
+        $old_file = file_load(variable_get('tap_webapp_default_theme', -1));
+        if (!empty($old_file)) file_delete($old_file);
+
+        $form_state['values']['tap_webapp_default_theme'] = $file->fid;
+        variable_set('tap_webapp_default_theme', $file->fid);
+
+    }    
 
 }

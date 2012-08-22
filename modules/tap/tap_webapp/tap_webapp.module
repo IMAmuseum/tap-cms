@@ -34,7 +34,7 @@ function tap_webapp_theme() {
                 'tourml_path' => NULL,
                 'webapp_css_path' => "$module_path/tap-webapp-$webapp_version/Tap-$tap_version.css",
                 'webapp_dependencies_path' => "$module_path/tap-webapp-$webapp_version/Tap-$tap_version-dependencies.min.js",
-                'webapp_js_path' => "$module_path/tap-webapp-$webapp_version/Tap-$tap_version.min.js",
+                'webapp_js_path' => "$module_path/tap-webapp-$webapp_version/Tap-$tap_version.min.js"
             ),
             'template'  => 'templates/tap-webapp-preview',
         ),
@@ -63,6 +63,13 @@ function tap_webapp_preview($node) {
 }
 
 function tap_webapp_preprocess_tap_webapp_preview(&$vars) {
+
+    if (($default_theme = variable_get('tap_webapp_default_theme', null)) !== null) {
+        $file = file_load($default_theme);
+        if (!empty($file)) {
+            $vars['webapp_default_theme'] = file_create_url($file->uri);
+        }
+    }
 
     $navbar_labels = array(
         'tourstoplist' => t('Menu'),

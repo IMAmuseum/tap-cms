@@ -2029,7 +2029,7 @@ jQuery(function() {
 	TapAPI.geoLocation = {
 
 		latest_location: null,
-		interval: null,
+		watch: null,
 		nearest_stop: null,
 		active_stop_collection: null,
 
@@ -2121,15 +2121,20 @@ jQuery(function() {
 
 		startLocating: function(delay) {
 
-			if (delay === undefined) delay = 5000;
-			TapAPI.geoLocation.locate();
-			TapAPI.geoLocation.interval = setInterval(TapAPI.geoLocation.locate, 5000);
+			this.watch = navigator.geolocation.watchPosition(
+				TapAPI.geoLocation.locationReceived,
+				TapAPI.geoLocation.locationError,
+				{
+					enableHighAccuracy: tap.config.geolocation.enableHighAccuracy
+				}
+			);
 
 		},
 
 		stopLocating: function() {
-			clearInterval(TapAPI.geoLocation.interval);
-			TapAPI.geoLocation.interval = null;
+
+			navigator.geolocation.clearWatch(this.watch);
+
 			if (this.nearest_stop !== null) {
 				this.nearest_stop.set('nearest', false);
 				this.nearest_stop = null;
