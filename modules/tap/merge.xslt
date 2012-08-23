@@ -253,3 +253,4 @@
 <xslt:template match="processing-instruction()" mode="m:detect-type">pi</xslt:template>
 
 </xslt:transform>
+
