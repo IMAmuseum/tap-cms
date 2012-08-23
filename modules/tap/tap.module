@@ -104,13 +104,13 @@ function tap_menu() {
         'type' => MENU_DEFAULT_LOCAL_TASK,
     );
 
-    $items['node/%node/tourmlval'] = array(
-        'title'             => 'Validate XML',
-        'page callback'     => 'tap_tourml_validate',
-        'page arguments'    => array(1),
-        'access arguments'  => array('administer tap'),
-        'type'              => MENU_LOCAL_TASK,
-    );
+//  $items['node/%node/tourmlval'] = array(
+//      'title'             => 'Validate XML',
+//      'page callback'     => 'tap_tourml_validate',
+//      'page arguments'    => array(1),
+//      'access arguments'  => array('administer tap'),
+//      'type'              => MENU_LOCAL_TASK,
+//  );
 
 
     return $items;

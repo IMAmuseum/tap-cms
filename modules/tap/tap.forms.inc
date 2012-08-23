@@ -18,6 +18,11 @@ function tap_export_tourml_form($form, &$form_state, $node) {
         '#value'    => t('Export TourML'),
     );
 
+    $form['export_tourml_ml'] = array(
+        '#type'     => 'submit',
+        '#value'    => t('Export TourML Multi-lingual'),
+    );
+
     $form['export_bundle'] = array(
         '#type'     => 'submit',
         '#value'    => t('Export Bundle'),
@@ -37,6 +42,11 @@ function tap_export_tourml_form_submit($form, &$form_state) {
     // Export a downloadable xml file
     if ($form_state['clicked_button']['#value'] == t('Export TourML')) {
         tap_export_tourml($node);
+    }
+
+    // Export a downloadable xml file
+    if ($form_state['clicked_button']['#value'] == t('Export TourML Multi-lingual')) {
+        tap_export_tourml_multi($node);
     }
 
     // Export a downloadable zip file with all assets

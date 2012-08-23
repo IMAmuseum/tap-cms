@@ -297,6 +297,43 @@ function tap_export_tourml($node, $download = TRUE) {
 }
 
 /**
+ *
+ * Export a downloadable tourml file
+ * @param unknown_type $node
+ */
+function tap_export_tourml_multi($node, $download = TRUE) {
+    global $language;
+
+    $language_list = language_list();
+
+    $settings = array(
+        'return_object' => TRUE,
+        'absolute'      => FALSE,
+        'base_path'     => 'assets',
+    );
+
+    foreach ($language_list as $lang) {
+        $language = $lang;
+        $tourml_ml = tap_tourml_render($node);
+        $mlfile = file_directory_temp() . "/tourml_" . $lang->language . '.xml';
+        file_put_contents($mlfile, $tourml_ml);
+    }
+
+    $title = _clean_file_text($node->title);
+
+    $tourml = tap_tourml_render($node);
+
+    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+    header('Content-Type: text/xml');
+
+    if ($download) {
+        header('Content-Disposition: attachment; filename="' . $title . '.xml"');
+    }
+
+    die(print $tourml);
+}
+
+/**
  * Bundle a string into a file inside of a zip archive
  *
  * @param $path
