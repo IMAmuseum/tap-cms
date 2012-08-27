@@ -14,8 +14,6 @@ Installation
 
 Installing TAP via drush will download drupal, all contributed modules, and the TAP module.
 
-NOTE: To install TAP via this method you must be running the latest 5.x branch of drush.
-
     # pear channel-discover pear.drush.org
     # pear install drush/drush
 
@@ -33,7 +31,7 @@ Once Drupal is installed and configured visit http://mytapsite.com/admin/modules
 If you already have an existing drupal site that you would like to install TAP on follow the directions below.
 
     # cd /PATH_TO_DRUPAL_SITE/sites/all/modules
-    # wget https://github.com/IMAmuseum/tap-cms/tarball/v2.0-beta1
-    # tar zxvf v2.0-beta1
+    # wget http://tapintomuseums.org/releases/tap-2.x-latest.tar.gz 
+    # tar zxvf tap-2.x-latest.tar.gz 
 
 Once you have unpackaged the TAP CMS visit http://mysite.com/admin/modules and enable the TAP module.

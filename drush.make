@@ -2,57 +2,56 @@
 core = 7.x
 
 api = 2
-projects[drupal][version] = "7.13"
+projects[drupal][version] = "7.x"
 
 ; Modules
-projects[admin_menu][version] = "3.0-rc2"
+projects[admin_menu][version] = "3.0-rc3"
 
-projects[ctools][version] = "1.0"
+projects[ctools][version] = "1.2"
 
-projects[date][version] = "2.5"
+projects[coder][version] = "1.0"
 
-projects[devel][version] = "1.2"
+projects[date][version] = "2.6"
 
-projects[entity][version] = "1.0-rc2"
+projects[devel][version] = "1.3"
 
-projects[entity_translation][version] = "1.0-alpha1"
+projects[entity][version] = "1.0-rc3"
 
-projects[entityreference][version] = "1.0-rc1"
+projects[entity_translation][version] = "1.0-alpha2"
 
-projects[features][version] = "1.0-rc2"
+projects[entityreference][version] = "1.0-rc3"
 
-projects[file_entity][version] = "2.0-unstable3"
+projects[features][version] = "1.0"
+
+projects[field_collection][version] = "1.0-beta4"
+
+projects[file_entity][version] = "2.0-unstable6"
 
 projects[styles][version] = "2.0-alpha8"
 
-projects[geofield][version] = "1.0"
-
-projects[strongarm][version] = "2.0-rc1"
-
-projects[jplayer][version] = "2.x-dev"
-
-projects[field_collection][version] = "7.x-1.0-beta4"
+projects[geofield][version] = "1.1"
 
 ; Libraries
 ; Please fill the following out. Type may be one of get, git, bzr or svn,
 ; and url is the url of the download.
-libraries[jplayer][download][type] = "get"
-libraries[jplayer][download][url] = "http://jplayer.org/latest/jQuery.jPlayer.2.1.0.zip"
+libraries[jplayer][download][type] = ""
+libraries[jplayer][download][url] = ""
 libraries[jplayer][directory_name] = "jplayer"
 libraries[jplayer][type] = "library"
 
 ; Modules
 projects[libraries][version] = "1.0"
 
-projects[media][version] = "1.0"
+projects[media][version] = "1.2"
 
-projects[media_flickr][version] = "1.0-alpha1"
+projects[media_flickr][version] = "1.0-alpha3"
 
 projects[media_youtube][version] = "1.0-beta3"
 
 projects[openlayers][version] = "2.0-beta1"
 
-projects[syntaxhighlighter][version] = "2.x-dev"
+projects[strongarm][version] = "2.0"
+
 
 ; Please fill the following out. Type may be one of get, git, bzr or svn,
 ; and url is the url of the download.
@@ -60,7 +59,7 @@ projects[tap_features][download][type] = ""
 projects[tap_features][download][url] = ""
 projects[tap_features][type] = "module"
 projects[tap_features][subdir] = "tap-cms/modules/tap"
-projects[tap_features][version] = "1.1-dev"
+projects[tap_features][version] = "2.0-dev"
 
 ; Please fill the following out. Type may be one of get, git, bzr or svn,
 ; and url is the url of the download.
@@ -70,45 +69,53 @@ projects[tap_geo][type] = "module"
 projects[tap_geo][subdir] = "tap-cms/modules/tap"
 projects[tap_geo][version] = "1.1-dev"
 
-projects[title][version] = "1.0-alpha2"
+; Please fill the following out. Type may be one of get, git, bzr or svn,
+; and url is the url of the download.
+projects[tap_graphviz][download][type] = ""
+projects[tap_graphviz][download][url] = ""
+projects[tap_graphviz][type] = "module"
+projects[tap_graphviz][subdir] = "tap-cms/modules/tap"
+projects[tap_graphviz][version] = "1.0-dev"
 
-projects[token][version] = "1.0"
+; Please fill the following out. Type may be one of get, git, bzr or svn,
+; and url is the url of the download.
+projects[tap_webapp][download][type] = ""
+projects[tap_webapp][download][url] = ""
+projects[tap_webapp][type] = "module"
+projects[tap_webapp][subdir] = "tap-cms/modules/tap"
+projects[tap_webapp][version] = "1.1-dev"
 
-projects[transliteration][version] = "3.0"
+projects[title][version] = "1.0-alpha4"
 
-projects[views][version] = "3.3"
+projects[token][version] = "1.2"
+
+projects[transliteration][version] = "3.1"
+
+projects[views][version] = "3.5"
 
 projects[wysiwyg][version] = "2.1"
 
 projects[tap-cms][type] = "module"
 projects[tap-cms][download][type] = "get"
 projects[tap-cms][download][url] = "http://www.tapintomuseums.org/tap-2.x-latest.tar.gz"
-;projects[tap-cms][download][revision] = "029ff23a71f5ba4fe74d3630aac2445664662584"
 
 ; Libraries
-; Please fill the following out. Type may be one of get, git, bzr or svn,
-; and url is the url of the download.
+
 libraries[geoPHP][download][type] = "get"
 libraries[geoPHP][download][url] = "https://github.com/downloads/phayes/geoPHP/geoPHP.tar.gz"
 libraries[geoPHP][directory_name] = "geoPHP"
 libraries[geoPHP][type] = "library"
 
-; Please fill the following out. Type may be one of get, git, bzr or svn,
-; and url is the url of the download.
 libraries[FirePHPCore][download][type] = ""
 libraries[FirePHPCore][download][url] = ""
 libraries[FirePHPCore][directory_name] = "FirePHPCore"
 libraries[FirePHPCore][type] = "library"
 
-; Please fill the following out. Type may be one of get, git, bzr or svn,
-; and url is the url of the download.
 libraries[syntaxhighlighter_3.0.83][download][type] = ""
 libraries[syntaxhighlighter_3.0.83][download][url] = ""
 libraries[syntaxhighlighter_3.0.83][directory_name] = "syntaxhighlighter_3.0.83"
 libraries[syntaxhighlighter_3.0.83][type] = "library"
 
-; Please fill the following out. Type may be one of get, git, bzr or svn,
-; and url is the url of the download.
 libraries[ckeditor][download][type] = "get"
 libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%203.6.2/ckeditor_3.6.2.tar.gz"
 libraries[ckeditor][directory_name] = "ckeditor"
