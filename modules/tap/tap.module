@@ -136,6 +136,7 @@ function tap_node_view_full(&$node, $lang) {
         $view = views_get_view('tour_stops');
         $view->use_ajax = TRUE;
         $view->args[] = $node->nid;
+        $view->pre_execute();
         $node->content['tour_stops'] = array(
             '#markup'   => $view->render(),
         );
