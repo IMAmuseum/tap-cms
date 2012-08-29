@@ -1,10 +1,64 @@
 /*
- * TAP - v0.1.0 - 2012-08-22
+ * TAP - v0.1.0 - 2012-08-28
  * http://tapintomuseums.org/
  * Copyright (c) 2011-2012 Indianapolis Museum of Art
  * GPLv3
  */
 
+function AnalyticsTimer(category, variable, opt_label) {
+  this.category = category;
+  this.variable = variable;
+  this.label = opt_label ? opt_label : undefined;
+  this.start_time = null;
+  this.elapsed = 0;
+  this.min_threshold = null;
+  this.max_threshold = null;
+  this.min_clamp = false;
+  this.max_clamp = true;
+  return this;
+}
+
+AnalyticsTimer.prototype.start = function() {
+  this.start_time = new Date().getTime();
+  return this;
+};
+
+AnalyticsTimer.prototype.stop = function() {
+  if (this.start_time !== null) {
+    this.elapsed = this.elapsed + (new Date().getTime()) - this.start_time;
+    this.start_time = null;
+  }
+  return this;
+};
+
+AnalyticsTimer.prototype.reset = function() {
+  this.elapsed = 0;
+  return this;
+};
+
+AnalyticsTimer.prototype.send = function() {
+
+  this.stop(); // update the timer
+
+  // If threshold criteria are not met, do not send
+  if (
+    ((this.min_threshold === null) || this.min_clamp || (this.elapsed >= this.min_threshold)) &&
+    ((this.max_threshold === null) || this.max_clamp || (this.elapsed <= this.max_threshold))
+  ) {
+
+    // At this point, we should clamp
+    if ((this.min_threshold !== null) && (this.elapsed < this.min_threshold)) this.elapsed = this.min_threshold;
+    if ((this.max_threshold !== null) && (this.elapsed > this.max_threshold)) this.elapsed = this.max_threshold;
+
+    window._gaq.push(['_trackTiming', this.category, this.variable, this.elapsed, this.label]);
+
+  }
+
+  this.start(); // keep the timer running
+
+  return this;
+
+};
 String.prototype.replaceArray = function(find, replace) {
 	var replaceString = this;
 	for (var i = 0; i < find.length; i++) {
@@ -591,6 +645,16 @@ jQuery(function() {
 				tour_id: tap.currentTour
 			}));
 			this.renderContent();
+
+			// Set width on the index selector control group so that it can center
+			$(document).ready(function() {
+				var w = 0;
+				$items = $('#index-selector a').each(function() {
+					w += $(this).outerWidth();
+				});
+				$('#index-selector .ui-controlgroup-controls').width(w);
+			});
+
 			return this;
 
 		},
@@ -620,6 +684,16 @@ jQuery(function() {
 
 	// Define the AudioStop View
 	TapAPI.views.AudioStop = TapAPI.views.Page.extend({
+
+		onInit: function() {
+
+			if (tap.audio_timer === undefined) {
+				tap.audio_timer = new AnalyticsTimer('AudioStop', 'played_for', tap.currentStop.id);
+			}
+			tap.audio_timer.reset();
+			console.log('init');
+
+		},
 
 		renderContent: function() {
 
@@ -652,8 +726,10 @@ jQuery(function() {
 				var t = $('.transcription').toggleClass('hidden');
 				if (t.hasClass('hidden')) {
 					$('.ui-btn-text', this).text('Show Transcription');
+					_gaq.push(['_trackEvent', 'AudioStop', 'hide_transcription']);
 				} else {
 					$('.ui-btn-text', this).text('Hide Transcription');
+					_gaq.push(['_trackEvent', 'AudioStop', 'show_transcription']);
 				}
 			});
 
@@ -711,10 +787,37 @@ jQuery(function() {
 				}
 
 				mediaElement.mediaelementplayer(mediaOptions);
+
+				mediaElement[0].addEventListener('loadedmetadata', function() {
+					tap.audio_timer.max_threshold = mediaElement[0].duration * 1000;
+				});
+
+				mediaElement[0].addEventListener('play', function() {
+					_gaq.push(['_trackEvent', 'AudioStop', 'media_started']);
+					tap.audio_timer.start();
+				});
+
+				mediaElement[0].addEventListener('pause', function() {
+					_gaq.push(['_trackEvent', 'AudioStop', 'media_paused']);
+					tap.audio_timer.stop();
+				});
+
+				mediaElement[0].addEventListener('ended', function() {
+					_gaq.push(['_trackEvent', 'AudioStop', 'media_ended']);
+				});
+
 			}
 
 			return this;
+		},
+
+		onClose: function() {
+
+			// Send information about playback duration when the view closes
+			tap.audio_timer.send();
+
 		}
+
 	});
 });
 
@@ -1085,7 +1188,15 @@ jQuery(function() {
 		// When a marker is selected, show the popup
 		// Assumes that the context is set to (MapView)
 		onMarkerSelected: function(e) {
+
+			_gaq.push(['_trackEvent', 'Map', 'marker_clicked', e.target.stop_id]);
+
 			this.map.openPopup(this.stop_popups[e.target.stop_id]);
+
+			$('.marker-bubble-content .directions a').on('click', function() {
+				_gaq.push(['_trackEvent', 'Map', 'get_directions', e.target.stop_id]);
+			});
+
 		},
 
 
@@ -1099,6 +1210,10 @@ jQuery(function() {
 				this.position_marker = new L.Marker(latlng, {icon: this.location_icon});
 				this.position_marker.bindPopup('You are here');
 				this.map.addLayer(this.position_marker);
+
+				this.position_marker.addEventListener('click', function() {
+					_gaq.push(['_trackEvent', 'Map', 'you_are_here_clicked']);
+				});
 
 			} else {
 
@@ -1497,6 +1612,15 @@ jQuery(function() {
 	// Define the VideoStop View
 	TapAPI.views.VideoStop = TapAPI.views.Page.extend({
 
+		onInit: function() {
+
+			if (tap.video_timer === undefined) {
+				tap.video_timer = new AnalyticsTimer('VideoStop', 'played_for', tap.currentStop.id);
+			}
+			tap.video_timer.reset();
+
+		},
+
 		renderContent: function() {
 
 			var content_template = TapAPI.templateManager.get('video-stop');
@@ -1527,13 +1651,17 @@ jQuery(function() {
 				var t = $('.transcription').toggleClass('hidden');
 				if (t.hasClass('hidden')) {
 					$('.ui-btn-text', this).text('Show Transcription');
+					_gaq.push(['_trackEvent', 'VideoStop', 'hide_transcription']);
 				} else {
 					$('.ui-btn-text', this).text('Hide Transcription');
+					_gaq.push(['_trackEvent', 'VideoStop', 'show_transcription']);
 				}
 			});
 
 			assets = this.model.getAssetsByType("tour_video");
+			
 			if (assets.length) {
+
 				var videoContainer = this.$el.find('video');
 				_.each(assets, function(asset) {
 					var sources = asset.get("source");
@@ -1541,11 +1669,37 @@ jQuery(function() {
 						videoContainer.append("<source src='" + source.get('uri') + "' type='" + source.get('format') + "' />");
 					});
 				});
+
+				videoContainer[0].addEventListener('loadedmetadata', function() {
+					tap.video_timer.max_threshold = videoContainer[0].duration * 1000;
+				});
+
+				videoContainer[0].addEventListener('play', function() {
+					_gaq.push(['_trackEvent', 'VideoStop', 'media_started']);
+					tap.video_timer.start();
+				}, this);
+
+				videoContainer[0].addEventListener('pause', function() {
+					_gaq.push(['_trackEvent', 'VideoStop', 'media_paused']);
+					tap.video_timer.stop();
+				});
+
+				videoContainer[0].addEventListener('ended', function() {
+					_gaq.push(['_trackEvent', 'VideoStop', 'playback_ended']);
+				});
+
 			}
 
-
 			return this;
+		},
+
+		onClose: function() {
+
+			// Send information about playback duration when the view closes
+			tap.video_timer.send();
+
 		}
+
 	});
 });
 
