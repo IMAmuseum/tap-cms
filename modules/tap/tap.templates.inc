@@ -300,6 +300,7 @@ function _theme_tap_tourml_description($vars) {
     $properties = '';
     foreach ($vars['items'] as $item) {
         $item['language'] = $language->language;
+        $item['value'] = check_markup($item['value'], $item['format']);
         $properties .= theme('tap_tourml_description', $item);
     }
 
