@@ -1,5 +1,5 @@
 /*
- * TAP - v0.1.0 - 2012-08-28
+ * TAP - v0.1.0 - 2012-08-29
  * http://tapintomuseums.org/
  * Copyright (c) 2011-2012 Indianapolis Museum of Art
  * GPLv3
@@ -647,7 +647,7 @@ jQuery(function() {
 			this.renderContent();
 
 			// Set width on the index selector control group so that it can center
-			$(document).ready(function() {
+			$(document).live('pageshow', function() {
 				var w = 0;
 				$items = $('#index-selector a').each(function() {
 					w += $(this).outerWidth();
