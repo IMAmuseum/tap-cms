@@ -226,7 +226,7 @@ class TourML {
                                             $new_asset = $item;
                                             $new_asset['name'] = $style;
                                             $new_asset['uri'] = image_style_url($style, $item['uri']);
-                                            // get image properties
+                                         // get image properties
                                             $image_info = getimagesize($new_asset['uri']);
                                             $new_asset['properties']['width'] = $image_info[0];
                                             $new_asset['properties']['height'] = $image_info[1];
@@ -260,12 +260,18 @@ class TourML {
                     case 'tap_tourml_connection':
                         $ConnectionPriority = 0;
                         foreach ($field['#items'] as $k => $v) {
-                            // add referenced node to tourml
-                            $target_node = node_load($v['target_id']);
-                            $this->processStop($target_node);
+                            // add referenced node to tourml.  Entity Reference
+                            // doesn't clean up so we also need to take precaution
+                            // to make sure the node actually exists
+                            if ($target_node = node_load($v['target_id'])) {
+                            
+                                $this->processStop($target_node);
 
-                            $field['#items'][$k]['priority'] = ++$ConnectionPriority;
-                            $field['#items'][$k]['srcId'] = $node->nid;
+                                $field['#items'][$k]['priority'] = ++$ConnectionPriority;
+                                $field['#items'][$k]['srcId'] = $node->nid;
+                            } else {
+                                unset($field['#items'][$k]);
+                            }
                         }
                         $this->connections[] = drupal_render($field);
                         break;
