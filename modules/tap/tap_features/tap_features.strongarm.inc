@@ -847,5 +847,12 @@ function tap_features_strongarm() {
   $strongarm->value = 1;
   $export['node_submitted_tour_video_stop'] = $strongarm;
 
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'tap_connection_field';
+  $strongarm->value = 'field_tour';
+  $export['tap_connection_field'] = $strongarm;
+
   return $export;
 }
