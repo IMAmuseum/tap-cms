@@ -195,10 +195,13 @@ class TourML {
                                                     $new_asset = $item;
                                                     $new_asset['name'] = $style;
                                                     $new_asset['uri'] = image_style_url($style, $item['uri']);
-                                                    // get image properties
-                                                    $image_info = getimagesize($new_asset['uri']);
-                                                    $new_asset['properties']['width'] = $image_info[0];
-                                                    $new_asset['properties']['height'] = $image_info[1];
+                                                    $dimensions = array(
+                                                        'width' => $item['width'],
+                                                        'height' => $item['height'],
+                                                    );
+                                                    image_style_transform_dimensions($style, $dimensions);
+                                                    $new_asset['properties']['width'] = $dimensions['width'];
+                                                    $new_asset['properties']['height'] = $dimensions['height'];
                                                     $this->multipart_assets[$id]['items'][$part_id . '_' . $style] = $new_asset;
                                                 }
                                             }
@@ -226,10 +229,14 @@ class TourML {
                                             $new_asset = $item;
                                             $new_asset['name'] = $style;
                                             $new_asset['uri'] = image_style_url($style, $item['uri']);
-                                         // get image properties
-                                            $image_info = getimagesize($new_asset['uri']);
-                                            $new_asset['properties']['width'] = $image_info[0];
-                                            $new_asset['properties']['height'] = $image_info[1];
+
+                                            $dimensions = array(
+                                                'width' => $item['width'],
+                                                'height' => $item['height'],
+                                            );
+                                            image_style_transform_dimensions($style, $dimensions); 
+                                            $new_asset['properties']['width'] = $dimensions['width'];
+                                            $new_asset['properties']['height'] = $dimensions['height'];
                                             $this->multipart_assets[$item['id']]['items'][$part_id . '_' . $style] = $new_asset;
                                         }
                                     }
