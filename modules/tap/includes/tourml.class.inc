@@ -5,12 +5,12 @@
  */
 
 class TourML {
+    public $tour                = array();
     public $assets              = array();
     public $multipart_assets    = array();
     public $stops               = array();
     public $connections         = array();
     public $nid                 = NULL;
-    public $tour                = NULL;
     public $tourml              = NULL;
     public $settings            = array();
 
@@ -20,6 +20,10 @@ class TourML {
         $this->settings += array(
             'absolute'  => TRUE,
             'base_path' => '',
+        );
+        $this->tour     = array(
+            'real_id'       => '',
+            'last_modified' => NULL,
         );
     }
 
@@ -125,16 +129,9 @@ class TourML {
         $properties         = array();
         $hasTitleField      = FALSE;
 
-        $query = db_select('node', 'n');
-        $query->addExpression('MAX(n.changed)', 'changed');
-        $query->join('field_data_field_tour', 't', 'n.nid = t.entity_id');
-        $changed = $query->execute()->fetchField();
-
-        if ($changed && $changed > $node->changed) {
-            $stop['last_modified'] = $changed;
-        } 
-        else {
-            $stop['last_modified'] = $node->changed;
+        // Keep track of the tour last modified date
+        if (empty($this->tour['last_modified']) || $this->tour['last_modified'] < $node->changed) {
+            $this->tour['last_modified'] = $node->changed;
         }
 
         // Loop thru renderable fields
