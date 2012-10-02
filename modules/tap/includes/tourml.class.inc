@@ -271,14 +271,13 @@ class TourML {
                             // doesn't clean up so we also need to take precaution
                             // to make sure the node actually exists
                             if ($target_node = node_load($v['target_id'])) {
-                            
                                 $this->processStop($target_node);
 
                                 $field['#items'][$k]['priority'] = ++$ConnectionPriority;
                                 $field['#items'][$k]['srcId'] = $node->nid;
                             } else {
                                 unset($field['#items'][$k]);
-                            }
+                            }   
                         }
                         $this->connections[] = drupal_render($field);
                         break;

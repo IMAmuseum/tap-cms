@@ -83,7 +83,7 @@ function tap_graphviz_settings() {
 
 function tap_graphviz_view($node) {
     return theme('image', array(
-        'path'  => 'node/' . $node->nid . '/graphviz.svg',
+        'path'  => url('node/' . $node->nid . '/graphviz.svg'),
     ));
 }
 
