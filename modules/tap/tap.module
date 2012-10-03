@@ -117,6 +117,22 @@ function tap_menu() {
 }
 
 /**
+ * Implements hook_node_presave().
+ */
+function tap_node_presave($node) {
+    // attempt to clear the node's tourml cache
+    cache_clear_all('tourml-' . $node->nid, 'cache');
+    $field = variable_get('tap_connection_field', NULL);
+    // if sibling stop, attempt to clear out the tour cache
+    if ($field && !empty($node->$field)) {
+        $tour = $node->$field;
+        if (!empty($tour['und'])) {
+            cache_clear_all('tourml-' . $tour['und'][0]['target_id'], 'cache');
+        }
+    }
+}
+
+/**
  * Implements hook_node_view()
  */
 function tap_node_view($node, $view_mode, $lang) {
@@ -693,6 +709,29 @@ function tap_block_save($delta = '', $edit = array()) {
  ****************************/
 
 /**
+ * Retrieves the cached tourml for a particular node
+ * @param  object $node The node being displayed
+ * @return string       The rendered tourml
+ */
+function tap_get_tourml_cache($node) {
+    $cid = 'tourml-' . $node->nid;
+
+    // get the cached tourml
+    $cache = cache_get($cid, 'cache');
+    // check if tourml document has been updated
+    if (empty($cache->data)) {
+        // render the tourml
+        $tourml = tap_tourml_render($node);
+        // cache the tourml
+        cache_set($cid, $tourml, 'cache');
+    } else {
+        // retrieve the cached tourml
+        $tourml = $cache->data;
+    } 
+    return $tourml;
+}
+
+/**
  * @param $node
  * A node object
  * @param $settings
@@ -730,7 +769,8 @@ function tap_tourml_render($node, $settings = array()) {
  * Returns a rendered TourML page
  */
 function tap_tourml_preview($node) {
-    $tourml = tap_tourml_render($node);
+    $tourml = tap_get_tourml_cache($node);
+
     $output = l('XML', 'node/' . $node->nid . '/tourml.xml');
     $output .= '<pre class="brush: xml">' . htmlentities($tourml) . '</pre>';
     return $output;

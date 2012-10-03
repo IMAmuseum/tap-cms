@@ -283,8 +283,7 @@ function tap_tourml_export_form_submit(&$form, &$form_state) {
  */
 function tap_export_tourml($node, $download = TRUE) {
     $title = _clean_file_text($node->title);
-
-    $tourml = tap_tourml_render($node);
+    $tourml = tap_get_tourml_cache($node);
 
     header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
     header('Content-Type: text/xml');
