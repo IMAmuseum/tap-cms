@@ -24,7 +24,7 @@ function tap_webapp_menu() {
 
 function tap_webapp_theme() {
 
-    $module_path = url(drupal_get_path('module', 'tap_webapp'), array('absolute' => TRUE));
+    $module_path = url('', array('absolute' => TRUE)) . drupal_get_path('module', 'tap_webapp');
     $webapp_version = '0.1.0';
     $tap_version = '0.1.0';
 

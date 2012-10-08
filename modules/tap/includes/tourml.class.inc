@@ -5,12 +5,12 @@
  */
 
 class TourML {
+    public $tour                = array();
     public $assets              = array();
     public $multipart_assets    = array();
     public $stops               = array();
     public $connections         = array();
     public $nid                 = NULL;
-    public $tour                = NULL;
     public $tourml              = NULL;
     public $settings            = array();
 
@@ -20,6 +20,10 @@ class TourML {
         $this->settings += array(
             'absolute'  => TRUE,
             'base_path' => '',
+        );
+        $this->tour     = array(
+            'real_id'       => '',
+            'last_modified' => NULL,
         );
     }
 
@@ -50,10 +54,10 @@ class TourML {
 
             if (db_table_exists('field_data_' . $field)) {
                 // Find all referenced nodes to this tour
-                $results = db_select('field_data_field_tour', 'ref')
+                $results = db_select('field_data_' . $field, 'ref')
                     ->fields('ref', array('entity_id'))
                     ->condition('entity_type', 'node')
-                    ->condition('field_tour_target_id', $node->nid)
+                    ->condition($field . '_target_id', $node->nid)
                     ->execute()
                     ->fetchAll();
 
@@ -125,16 +129,9 @@ class TourML {
         $properties         = array();
         $hasTitleField      = FALSE;
 
-        $query = db_select('node', 'n');
-        $query->addExpression('MAX(n.changed)', 'changed');
-        $query->join('field_data_field_tour', 't', 'n.nid = t.entity_id');
-        $changed = $query->execute()->fetchField();
-
-        if ($changed && $changed > $node->changed) {
-            $stop['last_modified'] = $changed;
-        } 
-        else {
-            $stop['last_modified'] = $node->changed;
+        // Keep track of the tour last modified date
+        if (empty($this->tour['last_modified']) || $this->tour['last_modified'] < $node->changed) {
+            $this->tour['last_modified'] = $node->changed;
         }
 
         // Loop thru renderable fields
@@ -195,10 +192,13 @@ class TourML {
                                                     $new_asset = $item;
                                                     $new_asset['name'] = $style;
                                                     $new_asset['uri'] = image_style_url($style, $item['uri']);
-                                                    // get image properties
-                                                    $image_info = getimagesize($new_asset['uri']);
-                                                    $new_asset['properties']['width'] = $image_info[0];
-                                                    $new_asset['properties']['height'] = $image_info[1];
+                                                    $dimensions = array(
+                                                        'width' => $item['width'],
+                                                        'height' => $item['height'],
+                                                    );
+                                                    image_style_transform_dimensions($style, $dimensions);
+                                                    $new_asset['properties']['width'] = $dimensions['width'];
+                                                    $new_asset['properties']['height'] = $dimensions['height'];
                                                     $this->multipart_assets[$id]['items'][$part_id . '_' . $style] = $new_asset;
                                                 }
                                             }
@@ -226,10 +226,14 @@ class TourML {
                                             $new_asset = $item;
                                             $new_asset['name'] = $style;
                                             $new_asset['uri'] = image_style_url($style, $item['uri']);
-                                            // get image properties
-                                            $image_info = getimagesize($new_asset['uri']);
-                                            $new_asset['properties']['width'] = $image_info[0];
-                                            $new_asset['properties']['height'] = $image_info[1];
+
+                                            $dimensions = array(
+                                                'width' => $item['width'],
+                                                'height' => $item['height'],
+                                            );
+                                            image_style_transform_dimensions($style, $dimensions); 
+                                            $new_asset['properties']['width'] = $dimensions['width'];
+                                            $new_asset['properties']['height'] = $dimensions['height'];
                                             $this->multipart_assets[$item['id']]['items'][$part_id . '_' . $style] = $new_asset;
                                         }
                                     }
@@ -264,7 +268,6 @@ class TourML {
                             // doesn't clean up so we also need to take precaution
                             // to make sure the node actually exists
                             if ($target_node = node_load($v['target_id'])) {
-    
                                 $this->processStop($target_node);
 
                                 $field['#items'][$k]['priority'] = ++$ConnectionPriority;
