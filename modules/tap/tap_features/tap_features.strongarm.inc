@@ -35,7 +35,7 @@ function tap_features_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'additional_settings__active_tab_tour_stop_group';
-  $strongarm->value = 'edit-menu';
+  $strongarm->value = 'edit-workflow';
   $export['additional_settings__active_tab_tour_stop_group'] = $strongarm;
 
   $strongarm = new stdClass();
@@ -642,7 +642,7 @@ function tap_features_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'language_content_type_tour_stop_group';
-  $strongarm->value = '0';
+  $strongarm->value = '4';
   $export['language_content_type_tour_stop_group'] = $strongarm;
 
   $strongarm = new stdClass();
@@ -846,6 +846,13 @@ function tap_features_strongarm() {
   $strongarm->name = 'node_submitted_tour_video_stop';
   $strongarm->value = 1;
   $export['node_submitted_tour_video_stop'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'tap_connection_field';
+  $strongarm->value = 'field_tour';
+  $export['tap_connection_field'] = $strongarm;
 
   return $export;
 }

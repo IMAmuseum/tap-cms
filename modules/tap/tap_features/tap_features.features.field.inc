@@ -2227,7 +2227,7 @@ function tap_features_field_default_fields() {
       'bundle' => 'poll_stop',
       'default_value' => NULL,
       'deleted' => '0',
-      'description' => 'A field replacing node title.',
+      'description' => 'Title of the poll stop.',
       'display' => array(
         'default' => array(
           'label' => 'above',
@@ -2723,7 +2723,7 @@ function tap_features_field_default_fields() {
       'bundle' => 'tour_audio_stop',
       'default_value' => NULL,
       'deleted' => '0',
-      'description' => 'A field replacing node title.',
+      'description' => 'Title of the audio stop.',
       'display' => array(
         'default' => array(
           'label' => 'above',
@@ -3107,7 +3107,7 @@ function tap_features_field_default_fields() {
       'bundle' => 'tour_image_stop',
       'default_value' => NULL,
       'deleted' => '0',
-      'description' => 'A field replacing node title.',
+      'description' => 'Title of the image stop.',
       'display' => array(
         'default' => array(
           'label' => 'above',
@@ -3674,7 +3674,7 @@ function tap_features_field_default_fields() {
       'bundle' => 'tour_stop_group',
       'default_value' => NULL,
       'deleted' => '0',
-      'description' => 'A field replacing node title.',
+      'description' => 'Title of the stop group.',
       'display' => array(
         'default' => array(
           'label' => 'above',
@@ -4169,7 +4169,7 @@ function tap_features_field_default_fields() {
       'bundle' => 'tour_video_stop',
       'default_value' => NULL,
       'deleted' => '0',
-      'description' => 'A field replacing node title.',
+      'description' => 'Title of the video stop',
       'display' => array(
         'default' => array(
           'label' => 'above',
@@ -4213,7 +4213,11 @@ function tap_features_field_default_fields() {
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('A field replacing node title.');
+  t('Title of the audio stop.');
+  t('Title of the video stop.');
+  t('Title of the image stop.');
+  t('Title of the poll stop.');
+  t('Title of the stop group.');
   t('Answer');
   t('Audio');
   t('Body');
