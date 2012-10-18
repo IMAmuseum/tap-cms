@@ -1,5 +1,5 @@
 /*
- * TAP - v0.1.0 - 2012-08-29
+ * TAP - v0.1.0 - 2012-10-18
  * http://tapintomuseums.org/
  * Copyright (c) 2011-2012 Indianapolis Museum of Art
  * GPLv3
@@ -137,6 +137,18 @@ function xmlToJson(xml, namespace) {
 		}
 	}
 	return(result);
+}
+
+
+/**
+ * Returns the base path
+ */
+function tapBasePath() {
+	if (script_src.indexOf('Init.js') >= 0) {
+		return '';
+	} else {
+		return 'dist/';
+	}
 }
 // TapAPI Namespace Initialization //
 if (typeof TapAPI === 'undefined'){TapAPI = {};}
@@ -754,7 +766,7 @@ jQuery(function() {
 								break;
 							case 'video':
 								videoPlayer.append(source_str);
-								
+
 								break;
 							default:
 								console.log('Unsupported format for audio asset:', assetSource);
@@ -762,7 +774,11 @@ jQuery(function() {
 					});
 				});
 
-				var mediaOptions = {};
+				var mediaOptions = {
+					flashName: tapBasePath() + mejs.MediaElementDefaults.flashName,
+					silverlightName: tapBasePath() + mejs.MediaElementDefaults.flashName
+				};
+
 				var mediaElement = null;
 
 				// If there are video sources and no audio sources, switch to the video element
@@ -786,7 +802,7 @@ jQuery(function() {
 
 				}
 
-				mediaElement.mediaelementplayer(mediaOptions);
+				var player = new MediaElementPlayer(mediaElement, mediaOptions);
 
 				mediaElement[0].addEventListener('loadedmetadata', function() {
 					tap.audio_timer.max_threshold = mediaElement[0].duration * 1000;
@@ -806,6 +822,7 @@ jQuery(function() {
 					_gaq.push(['_trackEvent', 'AudioStop', 'media_ended']);
 				});
 
+				player.play();
 			}
 
 			return this;
@@ -815,6 +832,7 @@ jQuery(function() {
 
 			// Send information about playback duration when the view closes
 			tap.audio_timer.send();
+			$('.me-plugin').remove();
 
 		}
 
@@ -2363,7 +2381,7 @@ var __p='';var print=function(){__p+=Array.prototype.join.call(arguments, '')};
 with(obj||{}){
 __p+='<div class=\'tour-stop audio\'>\n\t<div class=\'title\'>'+
 ( tour_stop_title )+
-'</div>\n\t<audio id="audio-player" autoplay controls="controls">\n\t\t<p>Your browser does not support the audio element.</p>\n\t</audio>\t\n\t<video id="video-player" autoplay controls="controls" style=\'display:none;\'\n\t';
+'</div>\n\t<audio id="audio-player" controls="controls">\n\t\t<p>Your browser does not support the audio element.</p>\n\t</audio>\n\t<video id="video-player" autoplay controls="controls" style=\'display:none;\'\n\t';
  if (poster_image_path !== null) { 
 ;__p+='\n\t\tposter=\''+
 ( poster_image_path )+
@@ -2381,7 +2399,7 @@ __p+='<div class=\'tour-stop audio\'>\n\t<div class=\'title\'>'+
 ( transcription )+
 '</p></div>\n\t';
  } 
-;__p+='\t\n</div>';
+;__p+='\n</div>';
 }
 return __p;
 }
@@ -2407,9 +2425,7 @@ __p+='\t<li>\n\t\t<a href="'+
 ( title )+
 '" title="'+
 ( title )+
-'" /></a>\n\t\t<div>'+
-( title )+
-'</div>\n\t</li>\n';
+'" /></a>\n\t</li>\n';
 }
 return __p;
 }
