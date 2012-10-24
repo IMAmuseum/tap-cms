@@ -31,13 +31,6 @@ projects[styles][version] = "2.0-alpha8"
 
 projects[geofield][version] = "1.1"
 
-; Libraries
-; Please fill the following out. Type may be one of get, git, bzr or svn,
-; and url is the url of the download.
-libraries[jplayer][download][type] = ""
-libraries[jplayer][download][url] = ""
-libraries[jplayer][directory_name] = "jplayer"
-libraries[jplayer][type] = "library"
 
 ; Modules
 projects[libraries][version] = "1.0"
@@ -100,6 +93,12 @@ projects[tap-cms][download][type] = "get"
 projects[tap-cms][download][url] = "http://www.tapintomuseums.org/tap-2.x-latest.tar.gz"
 
 ; Libraries
+; Please fill the following out. Type may be one of get, git, bzr or svn,
+; and url is the url of the download.
+libraries[jplayer][download][type] = "get"
+libraries[jplayer][download][url] = "http://www.jplayer.org/latest/jQuery.jPlayer.2.2.0.zip"
+libraries[jplayer][directory_name] = "jplayer"
+libraries[jplayer][type] = "library"
 
 libraries[geoPHP][download][type] = "get"
 libraries[geoPHP][download][url] = "https://github.com/downloads/phayes/geoPHP/geoPHP.tar.gz"
