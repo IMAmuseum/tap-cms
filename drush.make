@@ -82,7 +82,7 @@ projects[tap_webapp][version] = "1.1-dev"
 
 projects[title][version] = "1.0-alpha4"
 
-projects[token][version] = "1.2"
+projects[token][version] = "1.4"
 
 projects[transliteration][version] = "3.1"
 
