@@ -31,8 +31,6 @@ projects[styles][version] = "2.0-alpha8"
 
 projects[geofield][version] = "1.1"
 
-
-; Modules
 projects[libraries][version] = "1.0"
 
 projects[media][version] = "1.2"
@@ -44,6 +42,10 @@ projects[media_youtube][version] = "1.0-beta3"
 projects[openlayers][version] = "2.0-beta1"
 
 projects[strongarm][version] = "2.0"
+
+projects[jplayer][version] = "7.2.0-beta1"
+
+projects[geophp][version] = "7.1.6"
 
 
 ; Please fill the following out. Type may be one of get, git, bzr or svn,
