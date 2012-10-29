@@ -723,10 +723,10 @@ function tap_get_tourml_cache($node) {
         // render the tourml
         $tourml = tap_tourml_render($node);
         // cache the tourml
-        cache_set($cid, $tourml, 'cache');
+        cache_set($cid, serialize($tourml), 'cache', CACHE_PERMANENT);
     } else {
         // retrieve the cached tourml
-        $tourml = $cache->data;
+        $tourml = unserialize($cache->data);
     } 
     return $tourml;
 }
