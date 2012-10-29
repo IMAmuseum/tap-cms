@@ -1,10 +1,10 @@
 <?php print '<?xml version="1.0" encoding="UTF-8"?>'; ?>
-<tourml:Tour xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<tourml:Tour  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	xmlns:tourml="http://www.imamuseum.org/TourML/2011/11"
+	xmlns:tourml="http://tapintomuseums.org/TourML"
 	xmlns:xml="http://www.w3.org/XML/1998/namespace"
 	xmlns:gml="http://www.opengis.net/gml"
-	xsi:schemaLocation="http://www.imamuseum.org/TourML/2011/11 TourML.xsd"
+	xsi:schemaLocation="http://tapintomuseums.org/TourML TourML.xsd"
 	tourml:id="tour-<?php print $tour->tour['real_id']; ?>"
 	tourml:lastModified="<?php print date('c', $tour->tour['last_modified']); ?>">
 <tourml:TourMetadata>
