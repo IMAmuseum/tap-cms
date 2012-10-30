@@ -2,7 +2,7 @@
 core = 7.x
 
 api = 2
-projects[drupal][version] = "7.x"
+projects[] = "drupal"
 
 ; Modules
 projects[admin_menu][version] = "3.0-rc3"
@@ -32,10 +32,10 @@ projects[styles][version] = "2.0-alpha8"
 projects[geofield][version] = "1.1"
 
 ; Libraries
-; Please fill the following out. Type may be one of get, git, bzr or svn,
+; Type may be one of get, git, bzr or svn,
 ; and url is the url of the download.
-libraries[jplayer][download][type] = ""
-libraries[jplayer][download][url] = ""
+libraries[jplayer][download][type] = "get"
+libraries[jplayer][download][url] = "http://www.jplayer.org/latest/jQuery.jPlayer.2.2.0.zip"
 libraries[jplayer][directory_name] = "jplayer"
 libraries[jplayer][type] = "library"
 
@@ -102,7 +102,7 @@ projects[tap-cms][download][url] = "http://www.tapintomuseums.org/tap-2.x-latest
 ; Libraries
 
 libraries[geoPHP][download][type] = "get"
-libraries[geoPHP][download][url] = "https://github.com/downloads/phayes/geoPHP/geoPHP.tar.gz"
+libraries[geoPHP][download][url] = "http://github.com/downloads/phayes/geoPHP/geoPHP.tar.gz"
 libraries[geoPHP][directory_name] = "geoPHP"
 libraries[geoPHP][type] = "library"
 
