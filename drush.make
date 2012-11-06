@@ -67,10 +67,12 @@ libraries[jplayer][download][url] = "http://www.jplayer.org/latest/jQuery.jPlaye
 libraries[jplayer][directory_name] = "jplayer"
 libraries[jplayer][type] = "library"
 
-libraries[geoPHP][download][type] = "get"
-libraries[geoPHP][download][url] = "http://github.com/downloads/phayes/geoPHP/geoPHP.tar.gz"
-libraries[geoPHP][directory_name] = "geoPHP"
-libraries[geoPHP][type] = "library"
+
+; GeoPHP cannot be downloaded with drush due to github forcing https
+;libraries[geoPHP][download][type] = "get"
+;libraries[geoPHP][download][url] = "http://github.com/downloads/phayes/geoPHP/geoPHP.tar.gz"
+;libraries[geoPHP][directory_name] = "geoPHP"
+;libraries[geoPHP][type] = "library"
 
 libraries[FirePHPCore][download][type] = ""
 libraries[FirePHPCore][download][url] = ""
