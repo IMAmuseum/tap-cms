@@ -72,7 +72,8 @@ function tap_preprocess_tap_tourml_asset(&$vars) {
             $vars['path'] = $file_path;
         }
         $vars['source'] = TRUE;
-        $vars['source_rights'] = theme('tap_tourml_asset_rights', array('file' => file_load($vars['asset']['fid'])));
+        $file = file_load($vars['asset']['fid']);
+        $vars['source_rights'] = theme('tap_tourml_asset_rights', array('file' => $file));
     }
 
     // Handle text fields
