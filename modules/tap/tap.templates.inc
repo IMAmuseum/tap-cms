@@ -140,7 +140,8 @@ function tap_preprocess_tap_tourml_multipart_asset(&$vars) {
                 $asset['path'] = $file_path;
             }
             $asset['source'] = TRUE;
-            $asset['source_rights'] = theme('tap_tourml_asset_rights', array('file' => file_load($asset['fid'])));
+            $file = file_load($asset['fid']);
+            $asset['source_rights'] = theme('tap_tourml_asset_rights', array('file' => $file));
         }
         // Handle text fields
         if (isset($asset['value'])) {
