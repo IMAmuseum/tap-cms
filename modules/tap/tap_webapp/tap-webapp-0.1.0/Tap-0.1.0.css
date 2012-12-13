@@ -2628,7 +2628,7 @@ span.ui-slider-label-b { z-index: 0; right: 0; text-indent: 1.5em;}
 	display:block;
 	width: 80px;
 	height: 80px;
-	background: transparent url(loading.gif) 50% 50% no-repeat;
+	background: transparent url(images/loader.gif) 50% 50% no-repeat;
 }
 
 /* End: LAYERS */

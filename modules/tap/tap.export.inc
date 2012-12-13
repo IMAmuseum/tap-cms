@@ -8,25 +8,28 @@
 /*
  * Export form for TourML Tour/TourSets
  */
-function tap_tourml_export_form($form, &$form_state) {
-    $form['entity_id'] = array(
-        '#title' => t('TourSet/Tour'),
-        '#type' => 'textfield',
-        '#description' => t('Specify the TourSet/Tour to export'),
-        '#required' => TRUE,
-        '#default_value' => isset($form_state['build_info']['args'][0]) ? $form_state['build_info']['args'][0] : '',
-        '#autocomplete_path' => 'admin/content/tourml-export/autocomplete',
-        '#element_validate' => array('tap_export_entity_autocomplete_validate'),
-        '#value_callback' => 'tap_export_entity_autocomplete_value',
-    );
-
+function tap_tourml_export_form($form, &$form_state, $node = NULL) {
     $default_bundle_name = '';
-    if (isset($form_state['build_info']['args'][0]) && is_numeric($form_state['build_info']['args'][0])) {
-        $node = node_load($form_state['build_info']['args'][0]);
-        if ($node) {
-            $default_bundle_name = _clean_bundle_id($node->title);
-        }
+
+    if (!is_object($node)) {
+        $form['entity_id'] = array(
+            '#title' => t('TourSet/Tour'),
+            '#type' => 'textfield',
+            '#description' => t('Specify the TourSet/Tour to export'),
+            '#required' => TRUE,
+            '#autocomplete_path' => 'admin/content/tourml-export/autocomplete',
+            '#element_validate' => array('tap_export_entity_autocomplete_validate'),
+            '#value_callback' => 'tap_export_entity_autocomplete_value',
+        );
     }
+    else {
+        $form['entity_id'] = array(
+            '#type' => 'hidden',
+            '#value' => $node->nid
+        );
+        $default_bundle_name = _clean_bundle_id($node->title);
+    }
+
 
     $form['bundle_name'] = array(
         '#title' => t('Bundle Name'),
@@ -46,7 +49,10 @@ function tap_tourml_export_form($form, &$form_state) {
         '#title' => t('Bundle Type'),
         '#type' => 'select',
         '#description' => t('Select the bundle type to use for exporting.'),
-        '#options' => array('zip' => 'Zip', 'ios' => 'iOS'),
+        '#options' => array(
+            'zip' => t('Zip'),
+            'ios' => t('iOS Bundle'),
+        ), 
         '#default_value' => 'zip',
         '#ajax' => array(
             'callback' => 'tap_export_separate_languages_callback',
@@ -125,8 +131,8 @@ function tap_export_entity_autocomplete($string) {
  */
 function tap_export_entity_autocomplete_value($element, $input = FALSE, $form_state) {
     if ($input === FALSE) {
-        $nid = $element['#default_value'];
-        if (!empty($nid) && is_numeric($nid)) {
+        $nid = isset($element['#default_value']) ? $element['#default_value'] : NULL;
+        if (is_numeric($nid)) {
             $node = node_load($nid);
             if ($node && $node->type == 'tour') {
                 $value = $node->title;
@@ -196,7 +202,6 @@ function tap_tourml_export_form_submit(&$form, &$form_state) {
     $settings = array(
         'return_object' => TRUE,
         'absolute'      => FALSE,
-        'base_path'     => 'assets',
     );
 
     // set default language if none were provided
@@ -212,15 +217,6 @@ function tap_tourml_export_form_submit(&$form, &$form_state) {
         return;
     }
 
-    // Delete old bundle from node
-    if (isset($node->field_tour_bundle[$node->language][0]['fid'])) {
-        $file = file_load($node->field_tour_bundle[$node->language][0]['fid']);
-        $file->status = 0;
-        file_field_delete_file($node->field_tour_bundle[$node->language][0], 'field_tour_bundle', 'node', $node->nid);
-        unset($node->field_tour_bundle[$node->language][0]);
-        field_attach_update('node', $node);
-    }
-
     $path = file_directory_temp() . "/$title-bundle.zip";
 
     // If we have a stale tmp file delete it
@@ -230,19 +226,28 @@ function tap_tourml_export_form_submit(&$form, &$form_state) {
 
     $bundle = _zip_init($path, ZIPARCHIVE::CREATE);
 
-    $bdir = "$title.bundle";
-    $bundle->addEmptyDir($bdir);
-    // generate plist file
-    tap_export_bundle_plist_file($bundle, $bdir, $bundle_name);
+    $bdir = $title;
+
+    if ($bundle_type == 'ios') {
+        $bdir .= ".bundle";
+        $bundle->addEmptyDir($bdir);
+        // generate plist file
+        tap_export_bundle_plist_file($bundle, $bdir, $bundle_name);
+    }
 
     // iterate over languages
     foreach ($form_state['values']['languages'] as $lang) {
-        // set current language
-        $language = $language_list[$lang];
 
-        // setup language directory for ios
-        $lang_dir = $bdir . '/' . $lang . '.lproj';
+        $lang_dir = $bdir . '/' . $lang;
+
+        if ($bundle_type == 'ios') {
+            // setup language directory for ios
+            $lang_dir .= '.lproj';
+        }
+
         $asset_dir = $lang_dir . '/assets';
+        $settings['base_path'] = '/' . $asset_dir;
+
         $bundle->addEmptyDir($lang_dir);
         $bundle->addEmptyDir($asset_dir);
 
@@ -255,16 +260,16 @@ function tap_tourml_export_form_submit(&$form, &$form_state) {
                 $operations[] = array('tap_export_bundle_asset', array($path, $asset_dir, $asset['uri']));
             }
         }
-        foreach($tourml->multipart_assets as $asset) {
-            foreach($asset['items'] as $part) {
-                if(isset($part['fid'])) {
+        foreach ($tourml->multipart_assets as $asset) {
+            foreach ($asset['items'] as $part) {
+                if (isset($part['fid'])) {
                     $operations[] = array('tap_export_bundle_asset', array($path, $asset_dir, $part['uri']));
                 }
             }
         }
     }
 
-    $operations[]   = array('tap_export_bundle_tour_save', array($node, $path));
+    $operations[]   = array('tap_export_bundle_tour_save', array($node, $path, $bundle_name));
 
     $batch = array(
         'title'         => t('TourML Bundle Export'),
@@ -365,7 +370,7 @@ function tap_export_bundle_asset($path, $dir, $uri, &$context) {
     $context['results'][] = $file_path;
 }
 
-function tap_export_bundle_tour_save($node, $file_path, &$context) {
+function tap_export_bundle_tour_save($node, $file_path, $bundle_name, &$context) {
     global $user;
     $settings       = field_info_instance('node', 'field_tour_bundle', 'tour');
     $dest           = 'public://' . $settings['settings']['file_directory'] . '/' . basename($file_path);
@@ -378,30 +383,32 @@ function tap_export_bundle_tour_save($node, $file_path, &$context) {
             mkdir($bundle_dir);
         }
 
-        // Begin building file object.
-        $file           = new stdClass();
-        $file->uid      = $user->uid;
-        $file->status   = 0;
-        $file->filename = trim(basename($file_path, '.'));
-        $file->uri      = $file_path;
-        $file->filemime = file_get_mimetype($file->filename);
-        $file->filesize = filesize($file_path);
-
-        if (rename($file_path, drupal_realpath($dest))) {
-            $file->uri      = $dest;
-
-            drupal_chmod($file->uri);
-            if ($file = file_save($file)) {
-                $node->field_tour_bundle[$node->language][0] = (array)$file;
-                $node->field_tour_bundle[$node->language][0]['display'] = 1;
-                field_attach_update('node', $node);
-
-                $context['results']['bundle'] = file_create_url($dest);
-            }
+        // Delete old bundle from node
+        if (isset($node->field_tour_bundle['und'][0]['fid'])) {
+            $file = file_load($node->field_tour_bundle['und'][0]['fid']);
+            $file->status = 0;
+            file_field_delete_file($node->field_tour_bundle['und'][0], 'field_tour_bundle', 'node', $node->nid);
+            unset($node->field_tour_bundle['und'][0]);
+            field_attach_update('node', $node);
+        }  
+        
+        $file = file_save_data(file_get_contents($file_path), $dest, FILE_EXISTS_REPLACE);
+        if ($file) {
+            $file->display = 1;
+            $node->field_tour_bundle['und'][0] = (array)$file;
+        
+            node_save($node);
+            $context['results']['bundle'] = $dest;
         }
         else {
             throw new Exception('Unable to move uploaded file');
         }
+
+        // Pass the bundle name along to context
+        $context['results']['bundle_name'] = $bundle_name;
+
+        // Remove temp file
+        unlink($file_path);
     }
     catch (Exception $e) {
         $message = check_plain('Error creating bundle: ' . basename($file_path));
@@ -413,8 +420,9 @@ function tap_export_bundle_tour_save($node, $file_path, &$context) {
 
 function tap_export_bundle_finish($success, $results, $operations) {
     if ($success && isset($results['bundle'])) {
+        drupal_alter('export_bundle', $results['bundle_name'], $results['bundle']);
         $message = 'Bundle has been created with ' . format_plural(count($results), 'One file included.', '@count files included.');
-        $message .= ' ' . l(t('Download bundle'), $results['bundle']);
+        $message .= ' ' . l(t('Download bundle'), file_create_url($results['bundle']));
     }
     else {
         $message = t('An error occurred');

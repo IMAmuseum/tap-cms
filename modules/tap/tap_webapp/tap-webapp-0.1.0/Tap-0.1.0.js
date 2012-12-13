@@ -898,6 +898,14 @@ jQuery(function() {
 						var sources = asset.get('source');
 						var content = asset.get('content');
 						sources.each(function(source) {
+                            // Provide default data
+                            templateData = {
+                                fullImageUri: '',
+                                thumbUri: '',
+                                title: '',
+                                caption: ''
+                            };
+
 							switch (source.get('part')) {
 								case "image_asset_image":
 									templateData.fullImageUri = source.get("uri") ? source.get("uri") : '';
@@ -908,7 +916,6 @@ jQuery(function() {
 							}
 						});
 						content.each(function(contentItem) {
-							console.log(contentItem);
 							switch(contentItem.get("part")) {
 								case "title":
 									templateData.title = contentItem.get("data");

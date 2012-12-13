@@ -272,7 +272,8 @@ class TourML {
 
                                 $field['#items'][$k]['priority'] = ++$ConnectionPriority;
                                 $field['#items'][$k]['srcId'] = $node->nid;
-                            } else {
+                            }
+                            else {
                                 unset($field['#items'][$k]);
                             }   
                         }

@@ -23,11 +23,6 @@ function tap_export_tourml_form($form, &$form_state, $node) {
         '#value'    => t('Export TourML Multi-lingual'),
     );
 
-    $form['export_bundle'] = array(
-        '#type'     => 'submit',
-        '#value'    => t('Export Bundle'),
-    );
-
     return $form;
 }
 

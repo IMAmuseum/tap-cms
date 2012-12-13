@@ -58,12 +58,12 @@ function tap_menu() {
         'file'              => 'tap.export.inc',
     );
 
-    $items['admin/content/%/tourml-export'] = array(
+    $items['node/%node/tourml-export'] = array(
         'title'             => 'TourML Export',
         'page callback'     => 'drupal_get_form',
-        'page arguments'    => array('tap_tourml_export_form', 2),
+        'page arguments'    => array('tap_tourml_export_form', 1),
         'access arguments'  => array('administer tap'),
-        'type'              => MENU_CALLBACK,
+        'type'              => MENU_LOCAL_TASK,
         'file'              => 'tap.export.inc',
     );
 
@@ -666,9 +666,9 @@ function tap_block_contents($delta) {
             $options = (arg(0) == 'node' && is_numeric(arg(1))) ? array('query' => array('destination' => $_GET['q'], 'tourNid' => arg(1))) : array();
             $links = array();
 
-            foreach ($types as $k => $v) {
+            foreach ($types as $v) {
                 if ($v) {
-                    $links[] = l($allTypes[$k]->name, 'node/add/' . str_replace("_", "-", $k), $options);
+                    $links[] = l($allTypes[$v]->name, 'node/add/' . str_replace("_", "-", $v), $options);
                 }
             }
 
@@ -724,7 +724,8 @@ function tap_get_tourml_cache($node) {
         $tourml = tap_tourml_render($node);
         // cache the tourml
         cache_set($cid, $tourml, 'cache', CACHE_PERMANENT);
-    } else {
+    }
+    else {
         // retrieve the cached tourml
         $tourml = $cache->data;
     } 
@@ -870,6 +871,19 @@ function _tap_asset_audio(&$item) {
 }
 
 /**
+ * Returns bundle options in a form api friendly array
+ */
+function _tap_bundle_form_options() {
+    $values = array();
+    $options = tap_get_bundle_options_info();
+    foreach ($options as $key => $option) {
+        $values[$key] = $options[$key]['title'];
+    }
+
+    return $values;
+}
+
+/**
  *
  * Initiate an instance of ZipArchive
  * .
@@ -976,4 +990,3 @@ function tourml_display_errors() {
   libxml_clear_errors();
   return $output;
 }
-

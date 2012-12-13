@@ -1,5 +1,7 @@
 <?php
 
+define('TAP_WEBAPP_VERSION', '0.1.0');
+
 function tap_webapp_menu() {
 
     $items['admin/tap/webapp'] = array(
@@ -24,21 +26,31 @@ function tap_webapp_menu() {
 
 function tap_webapp_theme() {
 
-    $module_path = url('', array('absolute' => TRUE)) . drupal_get_path('module', 'tap_webapp');
-    $webapp_version = '0.1.0';
-    $tap_version = '0.1.0';
-
-    return array(
+    $items = array(
         'tap_webapp_preview' => array(
             'variables' => array(
                 'tourml_path' => NULL,
-                'webapp_css_path' => "$module_path/tap-webapp-$webapp_version/Tap-$tap_version.css",
-                'webapp_dependencies_path' => "$module_path/tap-webapp-$webapp_version/Tap-$tap_version-dependencies.js",
-                'webapp_js_path' => "$module_path/tap-webapp-$webapp_version/Tap-$tap_version.js"
             ),
             'template'  => 'templates/tap-webapp-preview',
         ),
     );
+
+    $items['tap_webapp_preview']['variables'] += tap_webapp_dependencies();
+
+    return $items;
+}
+
+function tap_webapp_dependencies() {
+    $module_path = url('', array('absolute' => TRUE)) . drupal_get_path('module', 'tap_webapp');
+    $webapp_version = TAP_WEBAPP_VERSION;
+    $tap_version = TAP_WEBAPP_VERSION;
+
+    return array(
+        'webapp_css_path' => "$module_path/tap-webapp-$webapp_version/Tap-$tap_version.css",
+        'webapp_dependencies_path' => "$module_path/tap-webapp-$webapp_version/Tap-$tap_version-dependencies.js",
+        'webapp_js_path' => "$module_path/tap-webapp-$webapp_version/Tap-$tap_version.js"
+   ); 
+
 }
 
 function tap_webapp_preview($node) {
@@ -47,7 +59,6 @@ function tap_webapp_preview($node) {
     if ($node->type != 'tour') {
         $tour_nid = $node->field_tour['und'][0]['target_id'];
         if (!is_numeric($tour_nid)) {
-            dpm('non-numeric tour id');
             return;
         } 
     }
@@ -64,7 +75,7 @@ function tap_webapp_preview($node) {
 
 function tap_webapp_preprocess_tap_webapp_preview(&$vars) {
 
-    if (($default_theme = variable_get('tap_webapp_default_theme', null)) !== null) {
+    if (($default_theme = variable_get('tap_webapp_default_theme', NULL)) !== NULL) {
         $file = file_load($default_theme);
         if (!empty($file)) {
             $vars['webapp_default_theme'] = file_create_url($file->uri);

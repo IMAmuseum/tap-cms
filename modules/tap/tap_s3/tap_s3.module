@@ -1,0 +1,208 @@
+<?php
+
+/**
+ * Implements hook_menu()
+ */
+function tap_s3_menu() {
+    $items['admin/tap/s3'] = array(
+        'title'             => 'Amazon S3 Export',
+        'page callback'     => 'drupal_get_form',
+        'page arguments'    => array('tap_s3_admin_form'),
+        'access arguments'  => array('administer tap'),
+        'type'              => MENU_LOCAL_TASK,
+    );  
+
+    return $items;
+}
+
+function tap_s3_admin_form($form, &$form_state) {
+
+    $form['tap_s3_bucket'] = array(
+        '#type'             => 'textfield',
+        '#title'            => t('Amazon S3 Bucket'),
+        '#default_value'    => variable_get('tap_s3_bucket'),
+    );
+
+    return system_settings_form($form, $form_state);
+}
+
+/**
+ * Implements hook_export_bundle_alter()
+ */
+function tap_s3_export_bundle_alter($bundle_name, $bundle) {
+    $path   = drupal_realpath($bundle);
+    $bundle = _zip_init($path);
+    $s3     = _tap_s3_init();
+
+    // Loop thru zip file and upload files to s3
+    for ($i = 0; $i < $bundle->numFiles; $i++) {
+        $file = $bundle->getFromIndex($i);
+        if ($file) {
+            $filename = $bundle->getNameIndex($i);
+
+            _tap_s3_upload($file, $filename);       
+
+            // Package the web app
+            if (strpos($filename, 'tour.xml') !== FALSE) {
+                // Determine the dependencies that are needed to pass to theme function
+                $dependencies = tap_webapp_dependencies();
+                foreach ($dependencies as $k => $f) {
+                    $vars[$k] = '/' . $bundle_name . '/' . basename($f);
+                }
+
+                $webapp_dir = drupal_get_path('module', 'tap_webapp') . '/tap-webapp-' . TAP_WEBAPP_VERSION;
+
+                _tap_s3_upload_tap_webapp($bundle_name, $webapp_dir);
+
+                $vars['tourml_path'] = '/' . $filename;
+                $webapp = theme('tap_webapp_preview', $vars);
+                _tap_s3_upload($webapp, $bundle_name . '/index.html');
+            }
+        }
+    }
+
+    $url = 'http://' . variable_get('tap_s3_bucket') . '.s3-website-us-east-1.amazonaws.com/' . $bundle_name;
+    drupal_set_message('Bundle saved to S3.  You can view the tour <a target="_blank" href="' . $url . '">here</a>');
+}
+
+/**
+ * Recursively upload all files in the tap webapp directory
+ */
+function _tap_s3_upload_tap_webapp($bundle_name, $dir, $base_path = NULL) {
+    $files = scandir($dir);
+    foreach ($files as $file) {
+        if ($file == '.' || $file == '..') continue;
+
+        $fullpath = $dir . '/' . $file;
+        if (is_dir($fullpath)) {
+            _tap_s3_upload_tap_webapp($bundle_name, $fullpath, $file);
+        }
+        else {
+            if ($base_path) {
+                $path = $bundle_name . '/' . $base_path . '/' . $file;
+            }
+            else {
+                $path = $bundle_name . '/' . $file;
+            }
+            _tap_s3_upload(file_get_contents($fullpath), $path);
+        }
+    }
+
+
+}
+
+/**
+ * Initialize connection to S3
+ */
+function _tap_s3_init() {
+    static $s3;
+
+    if ($s3 == NULL) {
+        $bucket = variable_get('tap_s3_bucket', '');
+
+        if (!libraries_load('awssdk') && empty($bucket)) {
+            drupal_set_message(t('Unable to load the AWS SDK. Please check you have installed the library correctly and configured your S3 credentials.'), 'error');
+        }    
+        elseif (empty($bucket)) {
+            drupal_set_message(('Bucket name not configured.'), 'error');
+        }    
+        else {
+            try {
+                $s3 = new AmazonS3();
+            }    
+            catch (RequestCore_Exception $e) { 
+                drupal_set_message(t('There was a problem connecting to S3'), 'error');
+            }    
+            catch (Exception $e) {
+                drupal_set_message(t('There was a problem using S3: ' . $e->getMessage()), 'error');
+            }    
+        }    
+    }    
+    return $s3;
+}
+
+function _tap_s3_upload($file, $dest) {
+    $s3 = _tap_s3_init();
+    $bucket = variable_get('tap_s3_bucket', '');
+
+    $req = $s3->create_object($bucket, $dest, array(
+        'body' => $file,
+        'acl' => AmazonS3::ACL_PUBLIC,
+        'contentType' => mime_content_type_replacement($dest),
+    )); 
+}
+
+/**
+ * Determine the mimetype by filename
+ */
+function mime_content_type_replacement($filename) {
+
+    $mime_types = array(
+            'txt' => 'text/plain',
+            'htm' => 'text/html',
+            'html' => 'text/html',
+            'php' => 'text/html',
+            'css' => 'text/css',
+            'js' => 'application/javascript',
+            'json' => 'application/json',
+            'xml' => 'application/xml',
+            'swf' => 'application/x-shockwave-flash',
+            'flv' => 'video/x-flv',
+
+            // images
+            'png' => 'image/png',
+            'jpe' => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'jpg' => 'image/jpeg',
+            'gif' => 'image/gif',
+            'bmp' => 'image/bmp',
+            'ico' => 'image/vnd.microsoft.icon',
+            'tiff' => 'image/tiff',
+            'tif' => 'image/tiff',
+            'svg' => 'image/svg+xml',
+            'svgz' => 'image/svg+xml',
+
+            // archives
+            'zip' => 'application/zip',
+            'rar' => 'application/x-rar-compressed',
+            'exe' => 'application/x-msdownload',
+            'msi' => 'application/x-msdownload',
+            'cab' => 'application/vnd.ms-cab-compressed',
+
+            // audio/video
+            'mp3' => 'audio/mpeg',
+            'qt' => 'video/quicktime',
+            'mov' => 'video/quicktime',
+
+            // adobe
+            'pdf' => 'application/pdf',
+            'psd' => 'image/vnd.adobe.photoshop',
+            'ai' => 'application/postscript',
+            'eps' => 'application/postscript',
+            'ps' => 'application/postscript',
+
+            // ms office
+            'doc' => 'application/msword',
+            'rtf' => 'application/rtf',
+            'xls' => 'application/vnd.ms-excel',
+            'ppt' => 'application/vnd.ms-powerpoint',
+
+            // open office
+            'odt' => 'application/vnd.oasis.opendocument.text',
+            'ods' => 'application/vnd.oasis.opendocument.spreadsheet' 
+    );
+
+    $ext = pathinfo($filename, PATHINFO_EXTENSION);
+    if (array_key_exists($ext, $mime_types)) {
+        return $mime_types [$ext];
+    } 
+    elseif (function_exists('finfo_open')) {
+        $finfo = finfo_open(FILEINFO_MIME);
+        $mimetype = finfo_file($finfo, $filename);
+        finfo_close($finfo);
+        return $mimetype;
+    } 
+    else {
+        return 'application/octet-stream';
+    }
+}

@@ -31,9 +31,9 @@ function tap_webapp_admin_form($form, &$form_state) {
         '#default_value'    => $default
     );
 
-    $default = variable_get('tap_webapp_default_theme', null);
+    $default = variable_get('tap_webapp_default_theme', NULL);
     $custom_theme = t('none');
-    if ($default !== null) {
+    if ($default !== NULL) {
         $file = file_load($default);
         if (!empty($file)) $custom_theme = $file->filename;
     }
