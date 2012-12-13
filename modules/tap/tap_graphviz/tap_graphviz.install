@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the user module.
+ */
+
+function tap_graphviz_update_7001() {
+    // Move all variables into the tap_graphviz namespace
+    variable_set('tap_graphviz_bundle_domain', variable_get('tap_bundle_domain'));
+    variable_del('tap_bundle_domain');
+    variable_set('tap_graphviz_tour_shape', variable_get('tour_shape'));
+    variable_del('tour_shape');
+    variable_set('tap_graphviz_tour_fillcolor', variable_get('tour_fillcolor'));
+    variable_del('tour_fillcolor');
+    variable_set('tap_graphviz_stop_shape', variable_get('stop_shape'));
+    variable_del('stop_shape');
+    variable_set('tap_graphviz_stop_fillcolor', variable_get('stop_fillcolor'));
+    variable_del('stop_fillcolor');
+    variable_set('tap_graphviz_asset_shape', variable_get('asset_shape'));
+    variable_del('asset_shape');
+    variable_set('tap_graphviz_asset_fillcolor', variable_get('asset_fillcolor'));
+    variable_del('asset_fillcolor');
+}
+
+/**
+ * Implements hook_uninstall()
+ */
+function tap_graphviz_uninstall() {
+    db_query("DELETE FROM {variable} WHERE name LIKE '%s%%'", 'tap_graphviz');
+}

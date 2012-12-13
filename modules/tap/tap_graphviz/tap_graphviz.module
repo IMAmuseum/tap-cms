@@ -63,20 +63,20 @@ function tap_graphviz_settings() {
     return array(
         'tour' => array(
             'style'     => 'filled',
-            'shape'     => variable_get('tour_shape', 'box'),
-            'fillcolor' => variable_get('tour_fillcolor', '#FFFFFF'),
+            'shape'     => variable_get('tap_graphviz_tour_shape', 'box'),
+            'fillcolor' => variable_get('tap_graphviz_tour_fillcolor', '#FFFFFF'),
         ),
         'stop' => array(
             'style'     => 'filled',
-            'shape'     => variable_get('stop_shape', 'box'),
-            'fillcolor' => variable_get('stop_fillcolor', '#CCFFFF'),
+            'shape'     => variable_get('tap_graphviz_stop_shape', 'box'),
+            'fillcolor' => variable_get('tap_graphviz_stop_fillcolor', '#CCFFFF'),
         ),
         'connection' => array(
         ),
         'asset' => array(
             'style'     => 'filled',
-            'shape'     => variable_get('asset_shape', 'box'),
-            'fillcolor' => variable_get('asset_fillcolor', '#ff0000'),
+            'shape'     => variable_get('tap_graphviz_asset_shape', 'box'),
+            'fillcolor' => variable_get('tap_graphviz_asset_fillcolor', '#ff0000'),
         ),
     );
 }

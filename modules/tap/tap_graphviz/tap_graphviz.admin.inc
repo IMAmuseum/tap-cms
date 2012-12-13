@@ -81,18 +81,18 @@ function tap_graphviz_admin_settings_form($form, &$form_state) {
 }
 
 function _tap_graphviz_admin_settings($type) {
-    $form[$type . '_shape'] = array(
+    $form['tap_graphviz_' . $type . '_shape'] = array(
         '#type'             => 'select',
         '#title'            => t('Shape'),
         '#options'          => _shape_options(),
-        '#default_value'    => variable_get($type . '_shape', 'box'),
+        '#default_value'    => variable_get('tap_graphviz_' . $type . '_shape', 'box'),
     );
 
-    $form[$type . '_fillcolor'] = array(
+    $form['tap_graphviz_' . $type . '_fillcolor'] = array(
         '#type'             => 'textfield',
         '#title'            => t('Fill Color'),
         '#size'             => 8,
-        '#default_value'    => variable_get($type . '_fillcolor', '#FFFFFF'),
+        '#default_value'    => variable_get('tap_graphviz_' . $type . '_fillcolor', '#FFFFFF'),
     );
 
     return $form;

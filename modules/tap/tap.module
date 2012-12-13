@@ -14,6 +14,13 @@ module_load_include('inc', 'tap', 'tap.forms');
  */
 
 /**
+ * Implements hook_uninstall()
+ */
+function tap_uninstall() {
+    db_query("DELETE FROM {variable} WHERE name LIKE '%s%%'", 'tap_');
+}
+
+/**
  * Implements hook_requirements()
  */
 function tap_requirements($phase) {

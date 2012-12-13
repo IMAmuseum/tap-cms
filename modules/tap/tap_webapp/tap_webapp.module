@@ -2,6 +2,16 @@
 
 define('TAP_WEBAPP_VERSION', '0.1.0');
 
+/**
+ * Implements hook_uninstall
+ */
+function tap_webapp_uninstall() {
+    db_query("DELETE FROM {variable} WHERE name LIKE '%s%%'", 'tap_webapp');
+}
+
+/**
+ * Implements hook_menu()
+ */
 function tap_webapp_menu() {
 
     $items['admin/tap/webapp'] = array(
@@ -24,6 +34,9 @@ function tap_webapp_menu() {
     return $items;
 }
 
+/**
+ * Implements hook_theme()
+ */
 function tap_webapp_theme() {
 
     $items = array(
@@ -40,6 +53,9 @@ function tap_webapp_theme() {
     return $items;
 }
 
+/**
+ * Utility function to define dependencies of the webapp
+ */
 function tap_webapp_dependencies() {
     $module_path = url('', array('absolute' => TRUE)) . drupal_get_path('module', 'tap_webapp');
     $webapp_version = TAP_WEBAPP_VERSION;

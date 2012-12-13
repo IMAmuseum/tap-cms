@@ -1,6 +1,13 @@
 <?php
 
 /**
+ * Implements hook_uninstall()
+ */
+function tap_s3_uninstall() {
+    db_query("DELETE FROM {variable} WHERE name LIKE '%s%%'", 'tap_s3');
+}
+
+/**
  * Implements hook_menu()
  */
 function tap_s3_menu() {
