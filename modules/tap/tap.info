@@ -28,7 +28,6 @@ features[field][] = node-tour-field_initial_map_zoom
 features[field][] = node-tour-field_root_stop
 features[field][] = node-tour-field_tour_bundle
 features[field][] = node-tour-title_field
-features[field][] = node-tour_set-body
 features[field][] = node-tour_set-field_tourset_tour
 features[field][] = node-tour_set-title_field
 features[node][] = tour

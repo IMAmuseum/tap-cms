@@ -361,13 +361,6 @@ function tap_features_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'language_content_type_poll_stop';
-  $strongarm->value = '4';
-  $export['language_content_type_poll_stop'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
   $strongarm->name = 'language_content_type_stop_group';
   $strongarm->value = '4';
   $export['language_content_type_stop_group'] = $strongarm;
@@ -628,14 +621,6 @@ function tap_features_strongarm() {
     'web_stop' => 'web_stop',
     'tour' => 0,
     'tour_set' => 0,
-    'poll_stop' => 0,
-    'tour_audio_stop' => 0,
-    'tour_image_stop' => 0,
-    'tour_stop_group' => 0,
-    'tour_video_stop' => 0,
-    'geo_stop' => 0,
-    'article' => 0,
-    'page' => 0,
   );
   $export['tap_addstop_block_content_types'] = $strongarm;
 
