@@ -2,7 +2,6 @@ name = TAP Extras
 description = The glue of tap. This module sets up all of the requirements for TAP
 core = 7.x
 package = TAP
-php = 5.2.4
 version = 7.x-2.0-dev
 project = tap_features
 dependencies[] = ctools
