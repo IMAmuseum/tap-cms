@@ -26,15 +26,7 @@ function tap_features_views_api() {
  */
 function tap_features_node_info() {
   $items = array(
-    'poll_stop' => array(
-      'name' => t('Poll Stop'),
-      'base' => 'node_content',
-      'description' => t('A poll stop on a tour.'),
-      'has_title' => '1',
-      'title_label' => t('Title'),
-      'help' => '',
-    ),
-    'tour_audio_stop' => array(
+    'audio_stop' => array(
       'name' => t('Audio Stop'),
       'base' => 'node_content',
       'description' => t('An audio stop on a tour.'),
@@ -42,7 +34,7 @@ function tap_features_node_info() {
       'title_label' => t('Title'),
       'help' => '',
     ),
-    'tour_image_stop' => array(
+    'image_stop' => array(
       'name' => t('Image Stop'),
       'base' => 'node_content',
       'description' => t('An image stop on a tour.'),
@@ -50,7 +42,7 @@ function tap_features_node_info() {
       'title_label' => t('Title'),
       'help' => '',
     ),
-    'tour_stop_group' => array(
+    'stop_group' => array(
       'name' => t('Stop Group'),
       'base' => 'node_content',
       'description' => t('A collection of stops.'),
@@ -58,10 +50,18 @@ function tap_features_node_info() {
       'title_label' => t('Title'),
       'help' => '',
     ),
-    'tour_video_stop' => array(
+    'video_stop' => array(
       'name' => t('Video Stop'),
       'base' => 'node_content',
       'description' => t('A video stop on a tour.'),
+      'has_title' => '1',
+      'title_label' => t('Title'),
+      'help' => '',
+    ),
+    'web_stop' => array(
+      'name' => t('Web Stop'),
+      'base' => 'node_content',
+      'description' => t('A web stop on a tour.'),
       'has_title' => '1',
       'title_label' => t('Title'),
       'help' => '',

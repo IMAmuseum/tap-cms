@@ -13,352 +13,149 @@ function tap_features_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'additional_settings__active_tab_poll_stop';
+  $strongarm->name = 'additional_settings__active_tab_audio_stop';
+  $strongarm->value = 'edit-menu';
+  $export['additional_settings__active_tab_audio_stop'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'additional_settings__active_tab_image_stop';
+  $strongarm->value = 'edit-submission';
+  $export['additional_settings__active_tab_image_stop'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'additional_settings__active_tab_stop_group';
   $strongarm->value = 'edit-workflow';
-  $export['additional_settings__active_tab_poll_stop'] = $strongarm;
+  $export['additional_settings__active_tab_stop_group'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'additional_settings__active_tab_tour_audio_stop';
+  $strongarm->name = 'additional_settings__active_tab_video_stop';
   $strongarm->value = 'edit-workflow';
-  $export['additional_settings__active_tab_tour_audio_stop'] = $strongarm;
+  $export['additional_settings__active_tab_video_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'additional_settings__active_tab_tour_image_stop';
+  $strongarm->name = 'additional_settings__active_tab_web_stop';
   $strongarm->value = 'edit-workflow';
-  $export['additional_settings__active_tab_tour_image_stop'] = $strongarm;
+  $export['additional_settings__active_tab_web_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'additional_settings__active_tab_tour_stop_group';
-  $strongarm->value = 'edit-workflow';
-  $export['additional_settings__active_tab_tour_stop_group'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'additional_settings__active_tab_tour_video_stop';
-  $strongarm->value = 'edit-workflow';
-  $export['additional_settings__active_tab_tour_video_stop'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'comment_anonymous_poll_stop';
+  $strongarm->name = 'comment_anonymous_image_stop';
   $strongarm->value = 0;
-  $export['comment_anonymous_poll_stop'] = $strongarm;
+  $export['comment_anonymous_image_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'comment_anonymous_tour_audio_stop';
-  $strongarm->value = 0;
-  $export['comment_anonymous_tour_audio_stop'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'comment_anonymous_tour_image_stop';
-  $strongarm->value = 0;
-  $export['comment_anonymous_tour_image_stop'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'comment_anonymous_tour_stop_group';
-  $strongarm->value = 0;
-  $export['comment_anonymous_tour_stop_group'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'comment_anonymous_tour_video_stop';
-  $strongarm->value = 0;
-  $export['comment_anonymous_tour_video_stop'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'comment_default_mode_poll_stop';
+  $strongarm->name = 'comment_default_mode_image_stop';
   $strongarm->value = 1;
-  $export['comment_default_mode_poll_stop'] = $strongarm;
+  $export['comment_default_mode_image_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'comment_default_mode_tour_audio_stop';
-  $strongarm->value = 1;
-  $export['comment_default_mode_tour_audio_stop'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'comment_default_mode_tour_image_stop';
-  $strongarm->value = 1;
-  $export['comment_default_mode_tour_image_stop'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'comment_default_mode_tour_stop_group';
-  $strongarm->value = 1;
-  $export['comment_default_mode_tour_stop_group'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'comment_default_mode_tour_video_stop';
-  $strongarm->value = 1;
-  $export['comment_default_mode_tour_video_stop'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'comment_default_per_page_poll_stop';
+  $strongarm->name = 'comment_default_per_page_image_stop';
   $strongarm->value = '50';
-  $export['comment_default_per_page_poll_stop'] = $strongarm;
+  $export['comment_default_per_page_image_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'comment_default_per_page_tour_audio_stop';
-  $strongarm->value = '50';
-  $export['comment_default_per_page_tour_audio_stop'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'comment_default_per_page_tour_image_stop';
-  $strongarm->value = '50';
-  $export['comment_default_per_page_tour_image_stop'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'comment_default_per_page_tour_stop_group';
-  $strongarm->value = '50';
-  $export['comment_default_per_page_tour_stop_group'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'comment_default_per_page_tour_video_stop';
-  $strongarm->value = '50';
-  $export['comment_default_per_page_tour_video_stop'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'comment_form_location_poll_stop';
+  $strongarm->name = 'comment_form_location_image_stop';
   $strongarm->value = 1;
-  $export['comment_form_location_poll_stop'] = $strongarm;
+  $export['comment_form_location_image_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'comment_form_location_tour_audio_stop';
-  $strongarm->value = 1;
-  $export['comment_form_location_tour_audio_stop'] = $strongarm;
+  $strongarm->name = 'comment_image_stop';
+  $strongarm->value = '2';
+  $export['comment_image_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'comment_form_location_tour_image_stop';
-  $strongarm->value = 1;
-  $export['comment_form_location_tour_image_stop'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'comment_form_location_tour_stop_group';
-  $strongarm->value = 1;
-  $export['comment_form_location_tour_stop_group'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'comment_form_location_tour_video_stop';
-  $strongarm->value = 1;
-  $export['comment_form_location_tour_video_stop'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'comment_poll_stop';
-  $strongarm->value = '0';
-  $export['comment_poll_stop'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'comment_preview_poll_stop';
+  $strongarm->name = 'comment_preview_image_stop';
   $strongarm->value = '1';
-  $export['comment_preview_poll_stop'] = $strongarm;
+  $export['comment_preview_image_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'comment_preview_tour_audio_stop';
-  $strongarm->value = '1';
-  $export['comment_preview_tour_audio_stop'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'comment_preview_tour_image_stop';
-  $strongarm->value = '1';
-  $export['comment_preview_tour_image_stop'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'comment_preview_tour_stop_group';
-  $strongarm->value = '1';
-  $export['comment_preview_tour_stop_group'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'comment_preview_tour_video_stop';
-  $strongarm->value = '1';
-  $export['comment_preview_tour_video_stop'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'comment_subject_field_poll_stop';
+  $strongarm->name = 'comment_subject_field_image_stop';
   $strongarm->value = 1;
-  $export['comment_subject_field_poll_stop'] = $strongarm;
+  $export['comment_subject_field_image_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'comment_subject_field_tour_audio_stop';
-  $strongarm->value = 1;
-  $export['comment_subject_field_tour_audio_stop'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'comment_subject_field_tour_image_stop';
-  $strongarm->value = 1;
-  $export['comment_subject_field_tour_image_stop'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'comment_subject_field_tour_stop_group';
-  $strongarm->value = 1;
-  $export['comment_subject_field_tour_stop_group'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'comment_subject_field_tour_video_stop';
-  $strongarm->value = 1;
-  $export['comment_subject_field_tour_video_stop'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'comment_tour_audio_stop';
-  $strongarm->value = '0';
-  $export['comment_tour_audio_stop'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'comment_tour_image_stop';
-  $strongarm->value = '0';
-  $export['comment_tour_image_stop'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'comment_tour_stop_group';
-  $strongarm->value = '0';
-  $export['comment_tour_stop_group'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'comment_tour_video_stop';
-  $strongarm->value = '0';
-  $export['comment_tour_video_stop'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'entity_translation_comment_filter_poll_stop';
+  $strongarm->name = 'entity_translation_hide_translation_links_image_stop';
   $strongarm->value = 0;
-  $export['entity_translation_comment_filter_poll_stop'] = $strongarm;
+  $export['entity_translation_hide_translation_links_image_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'entity_translation_comment_filter_tour_audio_stop';
+  $strongarm->name = 'entity_translation_hide_translation_links_stop_group';
   $strongarm->value = 0;
-  $export['entity_translation_comment_filter_tour_audio_stop'] = $strongarm;
+  $export['entity_translation_hide_translation_links_stop_group'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'entity_translation_comment_filter_tour_image_stop';
+  $strongarm->name = 'entity_translation_hide_translation_links_video_stop';
   $strongarm->value = 0;
-  $export['entity_translation_comment_filter_tour_image_stop'] = $strongarm;
+  $export['entity_translation_hide_translation_links_video_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'entity_translation_comment_filter_tour_stop_group';
+  $strongarm->name = 'entity_translation_hide_translation_links_web_stop';
   $strongarm->value = 0;
-  $export['entity_translation_comment_filter_tour_stop_group'] = $strongarm;
+  $export['entity_translation_hide_translation_links_web_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'entity_translation_comment_filter_tour_video_stop';
-  $strongarm->value = 0;
-  $export['entity_translation_comment_filter_tour_video_stop'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'entity_translation_node_metadata_poll_stop';
+  $strongarm->name = 'entity_translation_node_metadata_audio_stop';
   $strongarm->value = '0';
-  $export['entity_translation_node_metadata_poll_stop'] = $strongarm;
+  $export['entity_translation_node_metadata_audio_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'entity_translation_node_metadata_tour_audio_stop';
+  $strongarm->name = 'entity_translation_node_metadata_image_stop';
   $strongarm->value = '0';
-  $export['entity_translation_node_metadata_tour_audio_stop'] = $strongarm;
+  $export['entity_translation_node_metadata_image_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'entity_translation_node_metadata_tour_image_stop';
+  $strongarm->name = 'entity_translation_node_metadata_stop_group';
   $strongarm->value = '0';
-  $export['entity_translation_node_metadata_tour_image_stop'] = $strongarm;
+  $export['entity_translation_node_metadata_stop_group'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'entity_translation_node_metadata_tour_stop_group';
+  $strongarm->name = 'entity_translation_node_metadata_video_stop';
   $strongarm->value = '0';
-  $export['entity_translation_node_metadata_tour_stop_group'] = $strongarm;
+  $export['entity_translation_node_metadata_video_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'entity_translation_node_metadata_tour_video_stop';
+  $strongarm->name = 'entity_translation_node_metadata_web_stop';
   $strongarm->value = '0';
-  $export['entity_translation_node_metadata_tour_video_stop'] = $strongarm;
+  $export['entity_translation_node_metadata_web_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
@@ -428,32 +225,7 @@ function tap_features_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'field_bundle_settings_file__image';
   $strongarm->value = array(
-    'view_modes' => array(
-      'media_link' => array(
-        'custom_settings' => TRUE,
-      ),
-      'media_preview' => array(
-        'custom_settings' => TRUE,
-      ),
-      'media_small' => array(
-        'custom_settings' => TRUE,
-      ),
-      'media_large' => array(
-        'custom_settings' => TRUE,
-      ),
-      'media_original' => array(
-        'custom_settings' => TRUE,
-      ),
-      'tourml_xml' => array(
-        'custom_settings' => TRUE,
-      ),
-      'full' => array(
-        'custom_settings' => FALSE,
-      ),
-      'token' => array(
-        'custom_settings' => FALSE,
-      ),
-    ),
+    'view_modes' => array(),
     'extra_fields' => array(
       'form' => array(),
       'display' => array(
@@ -461,18 +233,6 @@ function tap_features_strongarm() {
           'media_small' => array(
             'weight' => 0,
             'visible' => FALSE,
-          ),
-          'tourml_xml' => array(
-            'weight' => '0',
-            'visible' => TRUE,
-          ),
-          'default' => array(
-            'weight' => '0',
-            'visible' => TRUE,
-          ),
-          'media_original' => array(
-            'weight' => '0',
-            'visible' => TRUE,
           ),
         ),
       ),
@@ -503,7 +263,71 @@ function tap_features_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'field_bundle_settings_node__poll_stop';
+  $strongarm->name = 'field_bundle_settings_node__audio_stop';
+  $strongarm->value = array(
+    'view_modes' => array(),
+    'extra_fields' => array(
+      'form' => array(
+        'title' => array(
+          'weight' => '-5',
+        ),
+      ),
+      'display' => array(),
+    ),
+  );
+  $export['field_bundle_settings_node__audio_stop'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'field_bundle_settings_node__image_stop';
+  $strongarm->value = array(
+    'view_modes' => array(),
+    'extra_fields' => array(
+      'form' => array(
+        'language' => array(
+          'weight' => '4',
+        ),
+      ),
+      'display' => array(),
+    ),
+  );
+  $export['field_bundle_settings_node__image_stop'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'field_bundle_settings_node__stop_group';
+  $strongarm->value = array(
+    'view_modes' => array(),
+    'extra_fields' => array(
+      'form' => array(),
+      'display' => array(),
+    ),
+  );
+  $export['field_bundle_settings_node__stop_group'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'field_bundle_settings_node__video_stop';
+  $strongarm->value = array(
+    'view_modes' => array(),
+    'extra_fields' => array(
+      'form' => array(
+        'language' => array(
+          'weight' => '6',
+        ),
+      ),
+      'display' => array(),
+    ),
+  );
+  $export['field_bundle_settings_node__video_stop'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'field_bundle_settings_node__web_stop';
   $strongarm->value = array(
     'view_modes' => array(),
     'extra_fields' => array(
@@ -511,341 +335,294 @@ function tap_features_strongarm() {
         'title' => array(
           'weight' => '0',
         ),
+        'language' => array(
+          'weight' => '3',
+        ),
       ),
       'display' => array(),
     ),
   );
-  $export['field_bundle_settings_node__poll_stop'] = $strongarm;
+  $export['field_bundle_settings_node__web_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'field_bundle_settings_node__tour_audio_stop';
-  $strongarm->value = array(
-    'view_modes' => array(
-      'teaser' => array(
-        'custom_settings' => TRUE,
-      ),
-      'tourml_xml' => array(
-        'custom_settings' => TRUE,
-      ),
-      'full' => array(
-        'custom_settings' => FALSE,
-      ),
-      'rss' => array(
-        'custom_settings' => FALSE,
-      ),
-      'token' => array(
-        'custom_settings' => FALSE,
-      ),
-    ),
-    'extra_fields' => array(
-      'form' => array(),
-      'display' => array(),
-    ),
-  );
-  $export['field_bundle_settings_node__tour_audio_stop'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'field_bundle_settings_node__tour_image_stop';
-  $strongarm->value = array(
-    'view_modes' => array(),
-    'extra_fields' => array(
-      'form' => array(),
-      'display' => array(),
-    ),
-  );
-  $export['field_bundle_settings_node__tour_image_stop'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'field_bundle_settings_node__tour_stop_group';
-  $strongarm->value = array(
-    'view_modes' => array(
-      'teaser' => array(
-        'custom_settings' => TRUE,
-      ),
-      'tourml_xml' => array(
-        'custom_settings' => TRUE,
-      ),
-      'full' => array(
-        'custom_settings' => FALSE,
-      ),
-      'rss' => array(
-        'custom_settings' => FALSE,
-      ),
-      'token' => array(
-        'custom_settings' => FALSE,
-      ),
-    ),
-    'extra_fields' => array(
-      'form' => array(),
-      'display' => array(),
-    ),
-  );
-  $export['field_bundle_settings_node__tour_stop_group'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'field_bundle_settings_node__tour_video_stop';
-  $strongarm->value = array(
-    'view_modes' => array(
-      'teaser' => array(
-        'custom_settings' => TRUE,
-      ),
-      'tourml_xml' => array(
-        'custom_settings' => TRUE,
-      ),
-      'full' => array(
-        'custom_settings' => FALSE,
-      ),
-      'rss' => array(
-        'custom_settings' => FALSE,
-      ),
-      'token' => array(
-        'custom_settings' => FALSE,
-      ),
-    ),
-    'extra_fields' => array(
-      'form' => array(),
-      'display' => array(),
-    ),
-  );
-  $export['field_bundle_settings_node__tour_video_stop'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'language_content_type_poll_stop';
+  $strongarm->name = 'language_content_type_audio_stop';
   $strongarm->value = '4';
-  $export['language_content_type_poll_stop'] = $strongarm;
+  $export['language_content_type_audio_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'language_content_type_tour_audio_stop';
+  $strongarm->name = 'language_content_type_image_stop';
   $strongarm->value = '4';
-  $export['language_content_type_tour_audio_stop'] = $strongarm;
+  $export['language_content_type_image_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'language_content_type_tour_image_stop';
+  $strongarm->name = 'language_content_type_stop_group';
   $strongarm->value = '4';
-  $export['language_content_type_tour_image_stop'] = $strongarm;
+  $export['language_content_type_stop_group'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'language_content_type_tour_stop_group';
+  $strongarm->name = 'language_content_type_video_stop';
   $strongarm->value = '4';
-  $export['language_content_type_tour_stop_group'] = $strongarm;
+  $export['language_content_type_video_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'language_content_type_tour_video_stop';
+  $strongarm->name = 'language_content_type_web_stop';
   $strongarm->value = '4';
-  $export['language_content_type_tour_video_stop'] = $strongarm;
+  $export['language_content_type_web_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'menu_options_poll_stop';
+  $strongarm->name = 'menu_options_audio_stop';
   $strongarm->value = array(
     0 => 'main-menu',
   );
-  $export['menu_options_poll_stop'] = $strongarm;
+  $export['menu_options_audio_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'menu_options_tour_audio_stop';
+  $strongarm->name = 'menu_options_image_stop';
   $strongarm->value = array(
     0 => 'main-menu',
   );
-  $export['menu_options_tour_audio_stop'] = $strongarm;
+  $export['menu_options_image_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'menu_options_tour_image_stop';
+  $strongarm->name = 'menu_options_stop_group';
   $strongarm->value = array(
     0 => 'main-menu',
   );
-  $export['menu_options_tour_image_stop'] = $strongarm;
+  $export['menu_options_stop_group'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'menu_options_tour_stop_group';
+  $strongarm->name = 'menu_options_video_stop';
   $strongarm->value = array(
     0 => 'main-menu',
   );
-  $export['menu_options_tour_stop_group'] = $strongarm;
+  $export['menu_options_video_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'menu_options_tour_video_stop';
+  $strongarm->name = 'menu_options_web_stop';
   $strongarm->value = array(
     0 => 'main-menu',
   );
-  $export['menu_options_tour_video_stop'] = $strongarm;
+  $export['menu_options_web_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'menu_parent_poll_stop';
+  $strongarm->name = 'menu_parent_audio_stop';
   $strongarm->value = 'main-menu:0';
-  $export['menu_parent_poll_stop'] = $strongarm;
+  $export['menu_parent_audio_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'menu_parent_tour_audio_stop';
+  $strongarm->name = 'menu_parent_image_stop';
   $strongarm->value = 'main-menu:0';
-  $export['menu_parent_tour_audio_stop'] = $strongarm;
+  $export['menu_parent_image_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'menu_parent_tour_image_stop';
+  $strongarm->name = 'menu_parent_stop_group';
   $strongarm->value = 'main-menu:0';
-  $export['menu_parent_tour_image_stop'] = $strongarm;
+  $export['menu_parent_stop_group'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'menu_parent_tour_stop_group';
+  $strongarm->name = 'menu_parent_video_stop';
   $strongarm->value = 'main-menu:0';
-  $export['menu_parent_tour_stop_group'] = $strongarm;
+  $export['menu_parent_video_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'menu_parent_tour_video_stop';
+  $strongarm->name = 'menu_parent_web_stop';
   $strongarm->value = 'main-menu:0';
-  $export['menu_parent_tour_video_stop'] = $strongarm;
+  $export['menu_parent_web_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'node_options_poll_stop';
+  $strongarm->name = 'node_options_audio_stop';
   $strongarm->value = array(
     0 => 'status',
   );
-  $export['node_options_poll_stop'] = $strongarm;
+  $export['node_options_audio_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'node_options_tour_audio_stop';
+  $strongarm->name = 'node_options_image_stop';
   $strongarm->value = array(
     0 => 'status',
   );
-  $export['node_options_tour_audio_stop'] = $strongarm;
+  $export['node_options_image_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'node_options_tour_image_stop';
+  $strongarm->name = 'node_options_stop_group';
   $strongarm->value = array(
     0 => 'status',
   );
-  $export['node_options_tour_image_stop'] = $strongarm;
+  $export['node_options_stop_group'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'node_options_tour_stop_group';
+  $strongarm->name = 'node_options_video_stop';
   $strongarm->value = array(
     0 => 'status',
   );
-  $export['node_options_tour_stop_group'] = $strongarm;
+  $export['node_options_video_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'node_options_tour_video_stop';
+  $strongarm->name = 'node_options_web_stop';
   $strongarm->value = array(
     0 => 'status',
   );
-  $export['node_options_tour_video_stop'] = $strongarm;
+  $export['node_options_web_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'node_preview_poll_stop';
+  $strongarm->name = 'node_preview_audio_stop';
   $strongarm->value = '1';
-  $export['node_preview_poll_stop'] = $strongarm;
+  $export['node_preview_audio_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'node_preview_tour_audio_stop';
+  $strongarm->name = 'node_preview_image_stop';
   $strongarm->value = '1';
-  $export['node_preview_tour_audio_stop'] = $strongarm;
+  $export['node_preview_image_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'node_preview_tour_image_stop';
+  $strongarm->name = 'node_preview_stop_group';
   $strongarm->value = '1';
-  $export['node_preview_tour_image_stop'] = $strongarm;
+  $export['node_preview_stop_group'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'node_preview_tour_stop_group';
+  $strongarm->name = 'node_preview_video_stop';
   $strongarm->value = '1';
-  $export['node_preview_tour_stop_group'] = $strongarm;
+  $export['node_preview_video_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'node_preview_tour_video_stop';
+  $strongarm->name = 'node_preview_web_stop';
   $strongarm->value = '1';
-  $export['node_preview_tour_video_stop'] = $strongarm;
+  $export['node_preview_web_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'node_submitted_poll_stop';
+  $strongarm->name = 'node_submitted_audio_stop';
   $strongarm->value = 1;
-  $export['node_submitted_poll_stop'] = $strongarm;
+  $export['node_submitted_audio_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'node_submitted_tour_audio_stop';
+  $strongarm->name = 'node_submitted_image_stop';
   $strongarm->value = 1;
-  $export['node_submitted_tour_audio_stop'] = $strongarm;
+  $export['node_submitted_image_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'node_submitted_tour_image_stop';
+  $strongarm->name = 'node_submitted_stop_group';
   $strongarm->value = 1;
-  $export['node_submitted_tour_image_stop'] = $strongarm;
+  $export['node_submitted_stop_group'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'node_submitted_tour_stop_group';
+  $strongarm->name = 'node_submitted_video_stop';
   $strongarm->value = 1;
-  $export['node_submitted_tour_stop_group'] = $strongarm;
+  $export['node_submitted_video_stop'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'node_submitted_tour_video_stop';
+  $strongarm->name = 'node_submitted_web_stop';
   $strongarm->value = 1;
-  $export['node_submitted_tour_video_stop'] = $strongarm;
+  $export['node_submitted_web_stop'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'save_continue_audio_stop';
+  $strongarm->value = 'Save and add fields';
+  $export['save_continue_audio_stop'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'save_continue_image_stop';
+  $strongarm->value = 'Save and add fields';
+  $export['save_continue_image_stop'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'save_continue_stop_group';
+  $strongarm->value = 'Save and add fields';
+  $export['save_continue_stop_group'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'save_continue_video_stop';
+  $strongarm->value = 'Save and add fields';
+  $export['save_continue_video_stop'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'save_continue_web_stop';
+  $strongarm->value = 'Save and add fields';
+  $export['save_continue_web_stop'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'tap_addstop_block_content_types';
+  $strongarm->value = array(
+    'audio_stop' => 'audio_stop',
+    'image_stop' => 'image_stop',
+    'stop_group' => 'stop_group',
+    'video_stop' => 'video_stop',
+    'web_stop' => 'web_stop',
+    'tour' => 0,
+    'tour_set' => 0,
+  );
+  $export['tap_addstop_block_content_types'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
