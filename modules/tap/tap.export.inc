@@ -246,7 +246,7 @@ function tap_tourml_export_form_submit(&$form, &$form_state) {
         }
 
         $asset_dir = $lang_dir . '/assets';
-        $settings['base_path'] = '/' . $asset_dir;
+        $settings['base_path'] = 'assets';
 
         $bundle->addEmptyDir($lang_dir);
         $bundle->addEmptyDir($asset_dir);
