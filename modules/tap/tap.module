@@ -997,3 +997,28 @@ function tourml_display_errors() {
   libxml_clear_errors();
   return $output;
 }
+
+function tap_tourml_property_alter(&$field) {
+    switch ($field['#field_type']) {
+        case 'date':
+            $items = $field['#items'];
+            $newItems = array();
+            foreach($items as $k => $v) {
+                if (isset($v['value'])) {
+                    $newItems[] = array(
+                        'value' => $v['value'],
+                        'name' => $v['name'] . '_start_' . $k
+                    );
+                }
+
+                if (isset($v['value2'])) {
+                    $newItems[] = array(
+                        'value' => $v['value2'],
+                        'name' => $v['name'] . '_end_' . $k
+                    );
+                }
+            }
+            $field['#items'] = $newItems;
+            break;
+    }
+}
