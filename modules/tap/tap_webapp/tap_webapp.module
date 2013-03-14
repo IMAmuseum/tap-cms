@@ -43,30 +43,13 @@ function tap_webapp_theme() {
         'tap_webapp_preview' => array(
             'variables' => array(
                 'tourml_path' => NULL,
+                'webapp_endpoint' => NULL
             ),
             'template'  => 'templates/tap-webapp-preview',
         ),
     );
 
-    $items['tap_webapp_preview']['variables'] += tap_webapp_dependencies();
-
     return $items;
-}
-
-/**
- * Utility function to define dependencies of the webapp
- */
-function tap_webapp_dependencies() {
-    $module_path = url('', array('absolute' => TRUE)) . drupal_get_path('module', 'tap_webapp');
-    $webapp_version = TAP_WEBAPP_VERSION;
-    $tap_version = TAP_WEBAPP_VERSION;
-
-    return array(
-        'webapp_css_path' => "$module_path/tap-webapp-$webapp_version/Tap-$tap_version.css",
-        'webapp_dependencies_path' => "$module_path/tap-webapp-$webapp_version/Tap-$tap_version-dependencies.js",
-        'webapp_js_path' => "$module_path/tap-webapp-$webapp_version/Tap-$tap_version.js"
-   ); 
-
 }
 
 function tap_webapp_preview($node) {
@@ -82,40 +65,7 @@ function tap_webapp_preview($node) {
         $tour_nid = $node->nid;
     }
 
-    $tourMLuri = url('node/' . $tour_nid . '/tourml.xml');
+    $tourMLuri = url('node/' . $tour_nid . '/tourml.xml', array('absolute' => true));
 
-    print theme('tap_webapp_preview', array('tourml_path' => $tourMLuri));
-
-    die();
+    return theme('tap_webapp_preview', array('tourml_path' => $tourMLuri, 'webapp_endpoint' => variable_get('tap_webapp_endpoint', '')));
 }
-
-function tap_webapp_preprocess_tap_webapp_preview(&$vars) {
-
-    if (($default_theme = variable_get('tap_webapp_default_theme', NULL)) !== NULL) {
-        $file = file_load($default_theme);
-        if (!empty($file)) {
-            $vars['webapp_default_theme'] = file_create_url($file->uri);
-        }
-    }
-
-    $navbar_labels = array(
-        'tourstoplist' => t('Menu'),
-        'tourkeypad' => t('Keypad'),
-        'tourmap' => t('Map')
-    );
-    
-    $default_navbar_items = variable_get('tap_webapp_navbar_items', array(
-        'tourstoplist' => 'tourstoplist', 
-        'tourkeypad' => 'tourkeypad', 
-        'tourmap' => 'tourmap'
-    ));
-
-    foreach ($default_navbar_items as $key => $val) {
-        $vars['default_navbar_items'][] = array(
-            'endpoint' => $key,
-            'label' => $navbar_labels[$key]
-        );
-    }
-
-}
-
