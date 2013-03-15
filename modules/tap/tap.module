@@ -397,7 +397,8 @@ function tap_theme() {
  */
 function tap_form_alter(&$form, &$form_state, $form_id) {
     if (strpos($form_id, 'node_form') && isset($form['field_tour']) && isset($_GET['tourNid'])) {
-        $form['field_tour']['und']['#default_value'] = array($_GET['tourNid']);
+        $targetNode = node_load($_GET['tourNid']);
+        $form['field_tour']['und'][0]['target_id']['#default_value'] = array($targetNode->title . ' (' . $targetNode->vid . ')');
     }
 }
 
