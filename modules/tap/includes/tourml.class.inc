@@ -151,7 +151,7 @@ class TourML {
                     case 'tap_tourml_property':
                         // Build an array of rendered properties that can be added to a propertySet later
                         if (!empty($field['#items'])) {
-                            module_invoke_all('tourml_property', $field);
+                            drupal_alter('tourml_property', $field);
                             $properties[] = drupal_render($field);
                         }
                         break;
