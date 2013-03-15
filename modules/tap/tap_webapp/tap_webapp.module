@@ -55,7 +55,7 @@ function tap_webapp_theme() {
 function tap_webapp_preview($node) {
 
     // First, find the tour that this node is in
-    if ($node->type != 'tour') {
+    if ($node->type != 'tour' && $node->type != 'tour_set') {
         $tour_nid = $node->field_tour['und'][0]['target_id'];
         if (!is_numeric($tour_nid)) {
             return;

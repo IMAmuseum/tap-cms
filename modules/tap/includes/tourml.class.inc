@@ -25,17 +25,29 @@ class TourML {
             'real_id'       => '',
             'last_modified' => NULL,
         );
+        $this->tourml = '';
     }
 
     public function getTourML() {
-        $stopNodes = $this->loadStopNodes();
+        $node = node_load($this->nid);
 
-        $this->processStops($stopNodes);
+        switch($node->type) {
+            case 'tour':
+                $stopNodes = $this->loadStopNodes();
 
-        // Stops have been rendered, now render assets
-        $this->processAssets();
+                $this->processStops($stopNodes);
 
-        $this->tourml = theme('tap_tourml_tour', array('tour' => $this));
+                // Stops have been rendered, now render assets
+                $this->processAssets();
+
+                $this->tourml = theme('tap_tourml_tour', array('tour' => $this));
+                break;
+
+            case 'tour_set':
+                $this->processTourSet();
+                $this->tourml = theme('tap_tourml_tour_set', array('tour_set' => $this));
+                break;
+        }
 
         return $this->tourml;
     }
@@ -302,6 +314,18 @@ class TourML {
         }
 
         return $stop;
+    }
+
+    protected function processTourSet() {
+        $node = node_load($this->nid);
+
+        foreach($node->field_tourset_tour['und'] as $k => $v) {
+            $this->tours[$k]['rendered'] = theme('tap_tourml_tourmlref', array(
+               'tour_nid' => $v['target_id'],
+               'absolute' => $this->settings['absolute'],
+               'base_path' => $this->settings['base_path']
+            ));
+        }
     }
 
     public function validate() {

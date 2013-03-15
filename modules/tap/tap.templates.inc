@@ -416,3 +416,19 @@ function theme_tap_tourml_expiration_datetime(&$vars) {
  */
 function tap_preprocess_ios_tourml_xml(&$vars) {
 }
+
+function tap_preprocess_tap_tourml_tourmlref(&$vars) {
+    $node = node_load($vars['tour_nid']);
+
+    $vars['last_modified'] = date('c', $node->changed);
+
+    if ($vars['absolute']) {
+        $vars['tourPath'] = url('node/' . $vars['tour_nid'] . '/tourml.xml', array('absolute' => true));
+    } else {
+        $vars['tourPath'] = $vars['base_path'] . $vars['tour_nid'] . '_tourml.xml';
+    }
+}
+
+function tap_preprocess_tap_tourml_tour_set(&$vars) {
+
+}

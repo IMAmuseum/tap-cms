@@ -1,0 +1,1 @@
+<tourml:TourMLRef tourml:uri="<?php print $tourPath; ?>" tourml:lastModified="<?php print $last_modified; ?>"/>

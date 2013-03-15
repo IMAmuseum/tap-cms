@@ -389,6 +389,25 @@ function tap_theme() {
             'file' => 'tap.templates.inc',
             'template' => 'templates/ios-plist-xml',
         ),
+        /**
+         * Tour Set
+         */
+        'tap_tourml_tourmlref' => array(
+            'variables' => array(
+                'tour_nid'  => '',
+                'absolute'  => TRUE,
+                'base_path' => '',
+            ),
+            'file'  => 'tap.templates.inc',
+            'template'  => 'templates/tap-tourml-tourmlref',
+        ),
+        'tap_tourml_tour_set' => array(
+            'variables' => array(
+                'tour_set'  => '',
+            ),
+            'file'  => 'tap.templates.inc',
+            'template'  => 'templates/tap-tourml-tour-set',
+        )
     );
 }
 
