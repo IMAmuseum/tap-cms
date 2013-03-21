@@ -54,6 +54,8 @@ function tap_webapp_theme() {
 
 function tap_webapp_preview($node) {
 
+    drupal_add_css(drupal_get_path('module', 'tap_webapp') . '/css/webapp_style.css');
+
     // First, find the tour that this node is in
     if ($node->type != 'tour' && $node->type != 'tour_set') {
         $tour_nid = $node->field_tour['und'][0]['target_id'];
