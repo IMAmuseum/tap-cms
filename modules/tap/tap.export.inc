@@ -393,10 +393,27 @@ function tap_export_bundle_tour_save($node, $file_path, $bundle_name, &$context)
             unset($node->field_tour_bundle['und'][0]);
             field_attach_update('node', $node);
         }  
+
+        $cmd = 'mv "' . $file_path . '" "' . drupal_realpath($dest) . '"';
+        exec($cmd, $output, $return_val);
+
+        $file = new stdClass();
+        $file->fid = NULL;
+        $file->uri = $dest;
+        $file->filename = drupal_basename($dest);
+        $file->filemime = file_get_mimetype($file->uri);
+        $file->uid = $user->uid;
+        $file->status = FILE_STATUS_PERMANENT;
+        $file->display = 1;
+        $existing_files = file_load_multiple(array(), array('uri' => $dest));
+        if (count($existing_files)) {
+            $existing = reset($existing_files);
+            $file->fid = $existing->fid;
+            $file->filename = $existing->filename;
+        }
+        file_save($file);
         
-        $file = file_save_data(file_get_contents($file_path), $dest, FILE_EXISTS_REPLACE);
         if ($file) {
-            $file->display = 1;
             $node->field_tour_bundle['und'][0] = (array)$file;
         
             node_save($node);
