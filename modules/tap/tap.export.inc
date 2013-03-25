@@ -366,8 +366,10 @@ function tap_export_bundle_asset($path, $dir, $uri, &$context) {
     $bundle = _zip_init($path);
     list($schema, $file_path) = explode('://', $uri);
     $real_path = drupal_realpath($uri);
-    $bundle->addFile($real_path, $dir . '/' . $file_path);
-    $context['results'][] = $file_path;
+    if ($real_path) {
+        $bundle->addFile($real_path, $dir . '/' . $file_path);
+        $context['results'][] = $file_path;
+    }
 }
 
 function tap_export_bundle_tour_save($node, $file_path, $bundle_name, &$context) {

@@ -194,7 +194,6 @@ class TourML {
                                         if (!isset($this->multipart_assets[$id]['items'][$part_id])) {
                                             drupal_alter('tourml_multipart_asset', $this, $item);
                                             $this->multipart_assets[$id]['items'][$part_id] = $item;
-
                                             // handle an asset part's image styles
                                             if (!empty($item['type']) && $item['type'] == 'image' && !empty($field['image_styles'])) {
                                                 // setup a cloned asset part with the appropriate image styles
@@ -203,7 +202,7 @@ class TourML {
                                                     // set properties on new asset part
                                                     $new_asset = $item;
                                                     $new_asset['name'] = $style;
-                                                    $new_asset['uri'] = image_style_url($style, $item['uri']);
+                                                    $new_asset['uri'] = image_style_path($style, $item['uri']);
                                                     $dimensions = array(
                                                         'width' => $item['width'],
                                                         'height' => $item['height'],
@@ -237,7 +236,7 @@ class TourML {
                                             // set properties on new asset part
                                             $new_asset = $item;
                                             $new_asset['name'] = $style;
-                                            $new_asset['uri'] = image_style_url($style, $item['uri']);
+                                            $new_asset['uri'] = image_style_path($style, $item['uri']);
 
                                             $dimensions = array(
                                                 'width' => $item['width'],
