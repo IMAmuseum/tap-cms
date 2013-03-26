@@ -65,7 +65,7 @@ function tap_preprocess_tap_tourml_asset(&$vars) {
             $vars['path'] = file_create_url($vars['asset']['uri']);
         } 
         else {
-            $file_path = array_pop(explode('/', $vars['asset']['uri']));
+            $file_path = array_pop(explode('://', $vars['asset']['uri']));
             if (!empty($vars['base_path'])) {
                 $file_path = $vars['base_path'] . '/' . $file_path; 
             }
@@ -133,7 +133,7 @@ function tap_preprocess_tap_tourml_multipart_asset(&$vars) {
                 $asset['path'] = file_create_url($asset['uri']);
             } 
             else {
-                $parts = explode('/', $asset['uri']);
+                $parts = explode('://', $asset['uri']);
                 $file_path = array_pop($parts);
                 if (!empty($vars['base_path'])) {
                     $file_path = $vars['base_path'] . '/' . $file_path; 
