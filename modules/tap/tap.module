@@ -98,6 +98,22 @@ function tap_menu() {
         'file'              => 'tap.export.inc',
     );
 
+    $items['node/%node/validate'] = array(
+        'title'             => 'TourML Validate',
+        'page callback'     => 'tap_tourml_node_validate',
+        'page arguments'    => array(1),
+        'access arguments'  => array('administer tap'),
+        'type'              => MENU_LOCAL_TASK,
+    );
+
+    $items['tourml/validate'] = array(
+        'title'             => 'Validate TourML',
+        'page callback'     => 'drupal_get_form',
+        'page arguments'    => array('tap_tourml_validate_form'),
+        'access arguments'  => array('access content'),
+        'type'              => MENU_LOCAL_TASK,
+    );  
+
     $items['admin/tap'] = array(
         'title'             => 'Tap',
         'page callback'     => 'drupal_get_form',
@@ -110,15 +126,6 @@ function tap_menu() {
         'title' => 'Settings',
         'type' => MENU_DEFAULT_LOCAL_TASK,
     );
-
-//  $items['node/%node/tourmlval'] = array(
-//      'title'             => 'Validate XML',
-//      'page callback'     => 'tap_tourml_validate',
-//      'page arguments'    => array(1),
-//      'access arguments'  => array('administer tap'),
-//      'type'              => MENU_LOCAL_TASK,
-//  );
-
 
     return $items;
 }
@@ -805,12 +812,35 @@ function tap_tourml_preview($node) {
 }
 
 /**
+ * @param $tourml
+ * an xml string
+ */
+function _tap_tourml_validate($tourml) {
+    $doc = new DOMDocument();
+    $doc->formatOutout = TRUE;
+    $doc->preserveWhiteSpate = FALSE;
+    $doc->loadXML($tourml);
+
+    // Enable user error handling
+    libxml_use_internal_errors(true);
+
+    if (!$doc->schemaValidate(drupal_get_path('module', 'tap') . '/TourML.xsd')) {
+      $output = tourml_display_errors();
+    }
+    else {
+      $output = 'TourML is Valid';
+    }
+
+    return $output;
+
+}
+/**
  * @param $node
  * A node object
  * @return
  * Validates a rendered TourML file
  */
-function tap_tourml_validate($node) {
+function tap_tourml_node_validate($node) {
     $settings = array(
         'return_object' => FALSE,
         'absolute'  => TRUE,
@@ -818,22 +848,56 @@ function tap_tourml_validate($node) {
 
     module_load_include('inc', 'tap', 'includes/tourml.class');
     $tourml = new TourML($node->nid, $settings);
-    $doc = new DOMDocument();
-    $doc->formatOutout = TRUE;
-    $doc->preserveWhiteSpate = FALSE;
-    $doc->loadXML($tourml->getTourML());
 
-    // Enable user error handling
-    libxml_use_internal_errors(true);
+    return _tap_tourml_validate($tourml->getTourML());
+}
 
-    if (!$doc->schemaValidate('/var/www/tourml.bpoc.org/sites/all/modules/tap-cms/TourML.xsd')) {
-      $output = tourml_display_errors();
+/**
+ * Form to validate any uploaded TourML file
+ */
+function tap_tourml_validate_form(&$form, &$form_state) {
+    $form['tourml'] = array(
+        '#type'         => 'file',
+        '#title'        => t('TourML File'),
+        '#description'  => t('Upload the TourML document you would like to validate'),
+    );
+
+    $form['or'] = array(
+        '#type'     => 'item',
+        '#markup'   => 'OR',
+    );
+
+    $form['tourml_url'] = array(
+        '#type'     => 'textfield',
+        '#title'    => t('URL to Tourml File'),
+    );
+
+    $form['submit'] = array(
+        '#type'     => 'submit',
+        '#value'    => t('Validate'),
+    );
+
+    return $form;
+}
+
+function tap_tourml_validate_form_validate(&$form, &$form_state) {
+    if (!empty($_FILES['files']['tmp_name']['tourml'])) {
+        if ($_FILES['files']['type']['tourml'] != 'text/xml') {
+            form_set_error('tourml', 'Please upload a valid XML file');
+        }
     }
-    else {
-      $output = 'Valid';
-    }
+}
 
-    return  $output;
+function tap_tourml_validate_form_submit(&$form, &$form_state) {
+    if (!empty($form_state['values']['tourml_url'])) {
+        $tourml = file_get_contents($form_state['values']['tourml_url']);
+    }
+    elseif (!empty($_FILES['files']['tmp_name']['tourml'])) {
+        $tourml = file_get_contents($_FILES['files']['tmp_name']['tourml']);
+    }
+    $output = check_plain(_tap_tourml_validate($tourml));
+
+    drupal_set_message($output);
 }
 
 /**
@@ -1023,7 +1087,7 @@ function tap_tourml_property_alter(&$field) {
         case 'date':
             $items = $field['#items'];
             $newItems = array();
-            foreach($items as $k => $v) {
+            foreach ($items as $k => $v) {
                 if (isset($v['value'])) {
                     $newItems[] = array(
                         'value' => $v['value'],

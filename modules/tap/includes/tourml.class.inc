@@ -31,7 +31,7 @@ class TourML {
     public function getTourML() {
         $node = node_load($this->nid);
 
-        switch($node->type) {
+        switch ($node->type) {
             case 'tour':
                 $stopNodes = $this->loadStopNodes();
 
@@ -318,7 +318,7 @@ class TourML {
     protected function processTourSet() {
         $node = node_load($this->nid);
 
-        foreach($node->field_tourset_tour['und'] as $k => $v) {
+        foreach ($node->field_tourset_tour['und'] as $k => $v) {
             $this->tours[$k]['rendered'] = theme('tap_tourml_tourmlref', array(
                'tour_nid' => $v['target_id'],
                'absolute' => $this->settings['absolute'],
