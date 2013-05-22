@@ -67,7 +67,7 @@ function tap_webapp_preview($node) {
         $tour_nid = $node->nid;
     }
 
-    $tourMLuri = url('node/' . $tour_nid . '/tourml.xml', array('absolute' => true));
+    $tourMLuri = url('node/' . $tour_nid . '/tourml.xml', array('absolute' => TRUE));
 
     return theme('tap_webapp_preview', array('tourml_path' => $tourMLuri, 'webapp_endpoint' => variable_get('tap_webapp_endpoint', '')));
 }

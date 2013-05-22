@@ -107,7 +107,7 @@ function tap_menu() {
     );
 
     $items['tourml/validate'] = array(
-        'title'             => t('Validate TourML'),
+        'title'             => 'Validate TourML',
         'page callback'     => 'drupal_get_form',
         'page arguments'    => array('tap_tourml_validate_form'),
         'access arguments'  => array('access content'),
@@ -891,10 +891,11 @@ function tap_tourml_validate_form_validate(&$form, &$form_state) {
 function tap_tourml_validate_form_submit(&$form, &$form_state) {
     if (!empty($form_state['values']['tourml_url'])) {
         $tourml = file_get_contents($form_state['values']['tourml_url']);
-    } elseif (!empty($_FILES['files']['tmp_name']['tourml'])) {
+    }
+    elseif (!empty($_FILES['files']['tmp_name']['tourml'])) {
         $tourml = file_get_contents($_FILES['files']['tmp_name']['tourml']);
     }
-    $output = _tap_tourml_validate($tourml);
+    $output = check_plain(_tap_tourml_validate($tourml));
 
     drupal_set_message($output);
 }
@@ -1086,7 +1087,7 @@ function tap_tourml_property_alter(&$field) {
         case 'date':
             $items = $field['#items'];
             $newItems = array();
-            foreach($items as $k => $v) {
+            foreach ($items as $k => $v) {
                 if (isset($v['value'])) {
                     $newItems[] = array(
                         'value' => $v['value'],

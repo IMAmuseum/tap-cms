@@ -424,8 +424,9 @@ function tap_preprocess_tap_tourml_tourmlref(&$vars) {
     $vars['last_modified'] = date('c', $node->changed);
 
     if ($vars['absolute']) {
-        $vars['tourPath'] = url('node/' . $vars['tour_nid'] . '/tourml.xml', array('absolute' => true));
-    } else {
+        $vars['tourPath'] = url('node/' . $vars['tour_nid'] . '/tourml.xml', array('absolute' => TRUE));
+    }
+    else {
         $vars['tourPath'] = $vars['base_path'] . $vars['tour_nid'] . '_tourml.xml';
     }
 }
