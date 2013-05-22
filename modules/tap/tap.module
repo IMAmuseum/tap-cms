@@ -1042,3 +1042,9 @@ function tap_tourml_property_alter(&$field) {
             break;
     }
 }
+
+function tap_redirect_parse_url_alter(&$parsed, &$original_url) {
+    if (substr($parsed['path'], -1) === "/") {
+        $parsed['url'] = $parsed['url'] . "/";
+    }
+}
