@@ -27,7 +27,7 @@ function tap_tourml_export_form($form, &$form_state, $node = NULL) {
             '#type' => 'hidden',
             '#value' => $node->nid
         );
-        $default_bundle_name = _clean_bundle_id($node->title);
+        $default_bundle_name = _tap_clean_bundle_id($node->title);
     }
 
 
@@ -178,7 +178,7 @@ function tap_export_entity_autocomplete_validate($element, &$form_state, $form) 
  * Validate bundle id
  */
 function tap_export_bundle_id_validate($element, &$form_state, $form) {
-    $cleaned_bundle_id = _clean_bundle_id($form_state['values']['bundle_name']);
+    $cleaned_bundle_id = _tap_clean_bundle_id($form_state['values']['bundle_name']);
     if ($form_state['values']['bundle_name'] != $cleaned_bundle_id) {
         form_set_error('bundle_name', t('Invalid Bundle Name. Only alphanumeric characters and underscores are allowed.'));
     }
@@ -209,7 +209,7 @@ function tap_tourml_export_form_submit(&$form, &$form_state) {
         $form_state['values']['languages'][] = 'en';
     }
 
-    $title = _clean_file_text($node->title);
+    $title = _tap_clean_file_text($node->title);
 
     // Check for presense of zip extension
     if (!class_exists('ZipArchive')) {
@@ -224,7 +224,7 @@ function tap_tourml_export_form_submit(&$form, &$form_state) {
         unlink($path);
     }
 
-    $bundle = _zip_init($path, ZIPARCHIVE::CREATE);
+    $bundle = _tap_zip_init($path, ZIPARCHIVE::CREATE);
 
     $bdir = $title;
 
@@ -287,7 +287,7 @@ function tap_tourml_export_form_submit(&$form, &$form_state) {
  * @param unknown_type $node
  */
 function tap_export_tourml($node, $download = TRUE) {
-    $title = _clean_file_text($node->title);
+    $title = _tap_clean_file_text($node->title);
     $tourml = tap_get_tourml_cache($node);
 
     header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
@@ -323,7 +323,7 @@ function tap_export_tourml_multi($node, $download = TRUE) {
         file_put_contents($mlfile, $tourml_ml);
     }
 
-    $title = _clean_file_text($node->title);
+    $title = _tap_clean_file_text($node->title);
 
     $tourml = tap_tourml_render($node);
 
@@ -348,7 +348,7 @@ function tap_export_tourml_multi($node, $download = TRUE) {
  * The string to insert into the file
  */
 function tap_export_bundle_string($path, $dir, $string, &$context) {
-    $bundle = _zip_init($path);
+    $bundle = _tap_zip_init($path);
     $bundle->addFromString("$dir/tour.xml" , $string);
 }
 
@@ -363,7 +363,7 @@ function tap_export_bundle_string($path, $dir, $string, &$context) {
  * the uri of the file to store in the zip file
  */
 function tap_export_bundle_asset($path, $dir, $uri, &$context) {
-    $bundle = _zip_init($path);
+    $bundle = _tap_zip_init($path);
     list($schema, $file_path) = explode('://', $uri);
     $real_path = drupal_realpath($uri);
     if ($real_path) {
@@ -466,6 +466,6 @@ function tap_export_bundle_plist_file($bundle, $dir, $bundle_name) {
     $bundle->addFromString("$dir/Info.plist" , $plist_file);
 }
 
-function _clean_bundle_id($text) {
+function _tap_clean_bundle_id($text) {
     return preg_replace('/[^A-Za-z0-9_]/', '', $text);
 }

@@ -38,7 +38,7 @@ function tap_s3_admin_form($form, &$form_state) {
  */
 function tap_s3_export_bundle_alter($bundle_name, $bundle) {
     $path   = drupal_realpath($bundle);
-    $bundle = _zip_init($path);
+    $bundle = _tap_zip_init($path);
     $s3     = _tap_s3_init();
 
     // Loop thru zip file and upload files to s3
@@ -135,14 +135,14 @@ function _tap_s3_upload($file, $dest) {
     $req = $s3->create_object($bucket, $dest, array(
         'body' => $file,
         'acl' => AmazonS3::ACL_PUBLIC,
-        'contentType' => mime_content_type_replacement($dest),
+        'contentType' => _tap_mime_content_type_replacement($dest),
     )); 
 }
 
 /**
  * Determine the mimetype by filename
  */
-function mime_content_type_replacement($filename) {
+function _tap_mime_content_type_replacement($filename) {
 
     $mime_types = array(
             'txt' => 'text/plain',

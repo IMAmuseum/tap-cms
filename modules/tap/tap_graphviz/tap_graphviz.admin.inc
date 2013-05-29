@@ -84,7 +84,7 @@ function _tap_graphviz_admin_settings($type) {
     $form['tap_graphviz_' . $type . '_shape'] = array(
         '#type'             => 'select',
         '#title'            => t('Shape'),
-        '#options'          => _shape_options(),
+        '#options'          => _tap_graphviz_shape_options(),
         '#default_value'    => variable_get('tap_graphviz_' . $type . '_shape', 'box'),
     );
 
@@ -98,7 +98,7 @@ function _tap_graphviz_admin_settings($type) {
     return $form;
 }
 
-function _shape_options() {
+function _tap_graphviz_shape_options() {
     return array(
         'box'               => t('Box'),
         'polygon'           => t('Polygon'),
