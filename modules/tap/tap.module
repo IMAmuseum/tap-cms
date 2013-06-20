@@ -1033,9 +1033,7 @@ function _tap_duration($secs) {
  * @return
  * The parsed text minue "field_"
  */
-function _anti_field($text) {
-    //return str_replace('field_', '', $text);
-
+function _tap_anti_field($text) {
     $field_map_new = array(
         'field_tap_image'
     );
@@ -1045,6 +1043,8 @@ function _anti_field($text) {
     );
 
     $text = str_replace($field_map_new, $field_map_old, $text);
+
+    return str_replace('field_', '', $text);
 }
 
 /**
