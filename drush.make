@@ -58,7 +58,7 @@ projects[tap_webapp][version] = "1.1-dev"
 
 projects[tap-cms][type] = "module"
 projects[tap-cms][download][type] = "get"
-projects[tap-cms][download][url] = "http://www.tapintomuseums.org/tap-2.x-latest.tar.gz"
+projects[tap-cms][download][url] = "https://github.com/IMAmuseum/tap-cms/archive/master.zip"
 
 
 ; Libraries

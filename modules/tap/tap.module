@@ -825,7 +825,7 @@ function _tap_tourml_validate($tourml) {
     libxml_use_internal_errors(true);
 
     if (!$doc->schemaValidate(drupal_get_path('module', 'tap') . '/TourML.xsd')) {
-      $output = tourml_display_errors();
+      $output = tap_tourml_display_errors();
     }
     else {
       $output = 'TourML is Valid';
@@ -933,7 +933,7 @@ function _tap_asset_video(&$item) {
     $path = drupal_realpath($item['uri']);
     $movie = new ffmpeg_movie($path);
     $item['properties'] = array(
-        'duration'      => duration($movie->getDuration()),
+        'duration'      => _tap_duration($movie->getDuration()),
         'width'         => $movie->getFrameWidth(),
         'height'        => $movie->getFrameHeight(),
         'video_codec'   => $movie->getVideoCodec(),
@@ -956,7 +956,7 @@ function _tap_asset_audio(&$item) {
     $path = drupal_realpath($item['uri']);
     $audio = new ffmpeg_movie($path);
     $item['properties'] = array(
-        'duration'      => duration($audio->getDuration()),
+        'duration'      => _tap_duration($audio->getDuration()),
         'audio_codec'   => $audio->getAudioCodec(),
     );
 }
@@ -983,7 +983,7 @@ function _tap_bundle_form_options() {
  * @param $flag
  * Optional flags to be passed to open()
  */
-function _zip_init($path, $flag = ZIPARCHIVE::CHECKCONS) {
+function _tap_zip_init($path, $flag = ZIPARCHIVE::CHECKCONS) {
     $bundle = new ZipArchive();
     if ($bundle->open($path, $flag) !== TRUE) {
         drupal_set_message(check_plain("Could not use file $path"), 'error');
@@ -1000,7 +1000,7 @@ function _zip_init($path, $flag = ZIPARCHIVE::CHECKCONS) {
  * @return
  * Returns the duration formatted in HH:MM:SS
  */
-function duration($secs) {
+function _tap_duration($secs) {
     $vals = array(
         'h' => $secs / 3600 % 24,
         'm' => $secs / 60 % 60,
@@ -1045,8 +1045,6 @@ function _anti_field($text) {
     );
 
     $text = str_replace($field_map_new, $field_map_old, $text);
-
-    return str_replace('field_', '', $text);
 }
 
 /**
@@ -1058,11 +1056,11 @@ function _anti_field($text) {
  * @return
  * The cleaned up text
  */
-function _clean_file_text($text) {
+function _tap_clean_file_text($text) {
     return preg_replace('/\s+/', '', check_plain($text));
 }
 
-function tourml_display_error($error) {
+function tap_tourml_display_error($error) {
   $return = "<br/>\n";
   switch ($error->level) {
     case LIBXML_ERR_WARNING:
@@ -1084,11 +1082,11 @@ function tourml_display_error($error) {
   return $return;
 }
 
-function tourml_display_errors() {
+function tap_tourml_display_errors() {
   $errors = libxml_get_errors();
   $output = '';
   foreach ($errors as $error) {
-    $output .= tourml_display_error($error);
+    $output .= tap_tourml_display_error($error);
   }
   libxml_clear_errors();
   return $output;
