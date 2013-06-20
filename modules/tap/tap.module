@@ -1034,6 +1034,18 @@ function duration($secs) {
  * The parsed text minue "field_"
  */
 function _anti_field($text) {
+    //return str_replace('field_', '', $text);
+
+    $field_map_new = array(
+        'field_tap_image'
+    );
+
+    $field_map_old = array(
+        'field_image'
+    );
+
+    $text = str_replace($field_map_new, $field_map_old, $text);
+
     return str_replace('field_', '', $text);
 }
 

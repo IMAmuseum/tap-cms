@@ -1,12 +1,5 @@
 <?php
 /**
- * @file
- * Code for the TAP Geo feature.
- */
-
-include_once('tap_geo.features.inc');
-
-/**
  * Implements hook_theme()
  *
  * To implement TourML for a new field a theme function
