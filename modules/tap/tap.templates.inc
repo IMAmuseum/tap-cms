@@ -55,22 +55,11 @@ function tap_preprocess_tap_tourml_asset(&$vars) {
 
     // Handle File fields
     if (isset($vars['asset']['fid'])) {
-        // Media fields nest the file object inside of the asset.
-        // So if we run into one we need to merge it into the 
-        // parent array.
-        if (isset($vars['asset']['file'])) {
-            $vars['asset'] = array_merge($vars['asset'], (array)$vars['asset']['file']);
-        }
-        if ($vars['absolute']) {
-            $vars['path'] = file_create_url($vars['asset']['uri']);
-        } 
-        else {
-            $file_path = array_pop(explode('://', $vars['asset']['uri']));
-            if (!empty($vars['base_path'])) {
-                $file_path = $vars['base_path'] . '/' . $file_path; 
-            }
-            $vars['path'] = $file_path;
-        }
+
+        _tap_file_url($vars['asset'], $vars['absolute']);
+        // Keep continuity in the api.  maybe this isnt needed
+        $vars['path'] = $vars['asset']['path'];
+
         $vars['source'] = TRUE;
         $file = file_load($vars['asset']['fid']);
         $vars['source_rights'] = theme('tap_tourml_asset_rights', array('file' => $file));
@@ -123,23 +112,7 @@ function tap_preprocess_tap_tourml_multipart_asset(&$vars) {
         $vars['asset'][$key]['content']     = FALSE;
 
         if (isset($asset['fid'])) {
-            // Media fields nest the file object inside of the asset.
-            // So if we run into one we need to merge it into the 
-            // parent array.
-            if (isset($asset['file'])) {
-                $asset = array_merge($asset, (array)$asset['file']);
-            }
-            if ($vars['absolute']) {
-                $asset['path'] = file_create_url($asset['uri']);
-            } 
-            else {
-                $parts = explode('://', $asset['uri']);
-                $file_path = array_pop($parts);
-                if (!empty($vars['base_path'])) {
-                    $file_path = $vars['base_path'] . '/' . $file_path; 
-                }
-                $asset['path'] = $file_path;
-            }
+            _tap_file_url($asset, $vars['absolute']);
 
             $asset['source'] = TRUE;
             $file = file_load($asset['fid']);

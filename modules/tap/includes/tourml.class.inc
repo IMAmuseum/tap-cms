@@ -198,11 +198,10 @@ class TourML {
                                             if (!empty($item['type']) && $item['type'] == 'image' && !empty($field['image_styles'])) {
                                                 // setup a cloned asset part with the appropriate image styles
                                                 foreach ($field['image_styles'] as $style) {
-                                                    theme('image_style', array('style_name' => $style, 'path' => $item['uri']));
                                                     // set properties on new asset part
                                                     $new_asset = $item;
                                                     $new_asset['name'] = $style;
-                                                    $new_asset['uri'] = image_style_path($style, $item['uri']);
+                                                    $new_asset['uri'] = image_style_url($style, $item['uri']);
                                                     $dimensions = array(
                                                         'width' => $item['width'],
                                                         'height' => $item['height'],
@@ -232,11 +231,10 @@ class TourML {
                                     if (!empty($item['field']['image_styles'])) {
                                         // setup a cloned asset part with the appropriate image styles
                                         foreach ($item['field']['image_styles'] as $style) {
-                                            theme('image_style', array('style_name' => $style, 'path' => $item['uri']));
                                             // set properties on new asset part
                                             $new_asset = $item;
                                             $new_asset['name'] = $style;
-                                            $new_asset['uri'] = image_style_path($style, $item['uri']);
+                                            $new_asset['uri'] = image_style_url($style, $item['uri']);
 
                                             $dimensions = array(
                                                 'width' => $item['width'],
