@@ -1,0 +1,28 @@
+<?php 
+
+/**
+ * Implements hook_uninstall()
+ */
+function tap_uninstall() {
+    db_query("DELETE FROM {variable} WHERE name LIKE '%s%%'", 'tap_');
+}
+
+/**
+ * Implements hook_requirements()
+ */
+function tap_requirements($phase) {
+    if ($phase == 'runtime') {
+        $severity   = (extension_loaded('ffmpeg')) ? REQUIREMENT_OK : REQUIREMENT_WARNING;
+        $value      = ($severity == REQUIREMENT_OK) ? 'Enabled' : 'Disabled';
+
+        $requirements['tap_ffmpeg'] = array(
+            'title'         => t('Tap FFMPEG'),
+            'description'   => t('To retrieve information about videos TAP requires that the ffmpeg extension be installed.
+                you can download it from <a href="http://http://ffmpeg-php.sourceforge.net/">here</a>'),
+            'severity'      => $severity,
+            'value'         => $value,
+        );   
+
+        return $requirements;
+    }    
+}
