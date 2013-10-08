@@ -331,10 +331,10 @@ class TourML {
         }
         //TODO: trying out validation, this needs some work and probably moved into the TourML class
         if ($doc->schemaValidate("https://raw.github.com/IMAmuseum/tourml/master/TourML.xsd")) {
-            drupal_set_message(check_plain("TourML is valid"), 'status');
+            drupal_set_message("TourML is valid", 'status');
         }
         else {
-            drupal_set_message(check_plain("TourML does not validate"), 'warning');
+            drupal_set_message("TourML does not validate", 'warning');
         }
     }
 }

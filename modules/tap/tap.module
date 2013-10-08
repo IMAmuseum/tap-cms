@@ -986,7 +986,7 @@ function _tap_bundle_form_options() {
 function _tap_zip_init($path, $flag = ZIPARCHIVE::CHECKCONS) {
     $bundle = new ZipArchive();
     if ($bundle->open($path, $flag) !== TRUE) {
-        drupal_set_message(check_plain("Could not use file $path"), 'error');
+        drupal_set_message("Could not use file $path", 'error');
         return FALSE;
     }
 

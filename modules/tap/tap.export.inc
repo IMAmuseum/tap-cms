@@ -213,7 +213,7 @@ function tap_tourml_export_form_submit(&$form, &$form_state) {
 
     // Check for presense of zip extension
     if (!class_exists('ZipArchive')) {
-        drupal_set_message(check_plain("You must install the php zip extension to export bundles."), 'error');
+        drupal_set_message("You must install the php zip extension to export bundles.", 'error');
         return;
     }
 
