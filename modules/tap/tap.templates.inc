@@ -55,11 +55,23 @@ function tap_preprocess_tap_tourml_asset(&$vars) {
 
     // Handle File fields
     if (isset($vars['asset']['fid'])) {
-
-        _tap_file_url($vars['asset'], $vars['absolute']);
-        // Keep continuity in the api.  maybe this isnt needed
-        $vars['path'] = $vars['asset']['path'];
-
+        // Media fields nest the file object inside of the asset.
+        // So if we run into one we need to merge it into the
+        // parent array.
+        if (isset($vars['asset']['file'])) {
+            $vars['asset'] = array_merge($vars['asset'], (array)$vars['asset']['file']);
+        }
+        if ($vars['absolute']) {
+            $vars['path'] = file_create_url($vars['asset']['uri']);
+        }
+        else {
+            $parts = explode('://', $vars['asset']['uri']);
+            $file_path = array_pop($parts);
+            if (!empty($vars['base_path'])) {
+                $file_path = $vars['base_path'] . '/' . $file_path;
+            }
+            $vars['path'] = $file_path;
+        }
         $vars['source'] = TRUE;
         $file = file_load($vars['asset']['fid']);
         $vars['source_rights'] = theme('tap_tourml_asset_rights', array('file' => $file));
@@ -112,7 +124,24 @@ function tap_preprocess_tap_tourml_multipart_asset(&$vars) {
         $vars['asset'][$key]['content']     = FALSE;
 
         if (isset($asset['fid'])) {
-            _tap_file_url($asset, $vars['absolute']);
+            // Media fields nest the file object inside of the asset.
+            // So if we run into one we need to merge it into the
+            // parent array.
+            if (isset($asset['file'])) {
+                $asset = array_merge($asset, (array)$asset['file']);
+            }
+            if ($vars['absolute']) {
+                $asset['path'] = file_create_url($asset['uri']);
+            }
+            else {
+                dpm($asset['uri']);
+                $parts = explode('://', $asset['uri']);
+                $file_path = array_pop($parts);
+                if (!empty($vars['base_path'])) {
+                    $file_path = $vars['base_path'] . '/' . $file_path;
+                }
+                $asset['path'] = $file_path;
+            }
 
             $asset['source'] = TRUE;
             $file = file_load($asset['fid']);
@@ -130,7 +159,7 @@ function tap_preprocess_tap_tourml_multipart_asset(&$vars) {
                 }
             }
         }
-        $asset['properties'] = theme('tap_tourml_property_set', array('properties' => $properties));   
+        $asset['properties'] = theme('tap_tourml_property_set', array('properties' => $properties));
     }
 }
 
@@ -260,11 +289,11 @@ function _theme_tap_tourml_title($vars) {
 }
 
 function theme_tap_tourml_title_text(&$vars) {
-    return _theme_tap_tourml_title($vars); 
+    return _theme_tap_tourml_title($vars);
 }
 
 function theme_tap_tourml_title_text_long(&$vars) {
-    return _theme_tap_tourml_title($vars); 
+    return _theme_tap_tourml_title($vars);
 }
 
 /********************************

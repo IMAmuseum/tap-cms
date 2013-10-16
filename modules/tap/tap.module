@@ -1095,20 +1095,3 @@ function tap_redirect_parse_url_alter(&$parsed, &$original_url) {
         $parsed['url'] = $parsed['url'] . "/";
     }
 }
-
-function _tap_file_url(&$asset, $absolute) {
-    // Media fields nest the file object inside of the asset.
-    // So if we run into one we need to merge it into the 
-    // parent array.
-    if (isset($asset['file'])) {
-        $asset = array_merge($asset, (array)$asset['file']);
-    }
-
-    $asset['path'] = file_create_url($asset['uri']);
-
-    if (!$absolute) {
-        $path = parse_url($asset['path']);
-        $asset['path'] = $path['path'];
-    }   
-
-}
