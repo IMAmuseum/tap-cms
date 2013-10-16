@@ -134,7 +134,6 @@ function tap_preprocess_tap_tourml_multipart_asset(&$vars) {
                 $asset['path'] = file_create_url($asset['uri']);
             }
             else {
-                dpm($asset['uri']);
                 $parts = explode('://', $asset['uri']);
                 $file_path = array_pop($parts);
                 if (!empty($vars['base_path'])) {
