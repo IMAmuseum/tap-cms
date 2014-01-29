@@ -424,6 +424,14 @@ function tap_preprocess_tap_tourml_tourmlref(&$vars) {
 
     $vars['last_modified'] = date('c', $node->changed);
 
+    $query = "SELECT n.changed FROM {node} n INNER JOIN {field_data_field_tour} ft ON n.nid = ft.field_tour_target_id WHERE n.nid = :nid ORDER by n.changed LIMIT 0,1}";
+    $dateResult = db_query($query, array(":nid" => $vars['tour_nid']));
+    $date = $dateResult->fetchAssoc();
+
+    if (isset($date)  && $date > 0) {
+        $vars['last_modified'] = date('c', $date['changed']);
+    }
+
     if ($vars['absolute']) {
         $vars['tourPath'] = url('node/' . $vars['tour_nid'] . '/tourml.xml', array('absolute' => TRUE));
     }

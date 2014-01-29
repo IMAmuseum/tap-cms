@@ -79,7 +79,8 @@ class TourML {
                 }
             }
 
-            $this->tour = $this->processMetadata($node);
+            $tourMeta =  $this->processMetadata($node);
+            $this->tour = array_merge($this->tour, $tourMeta);
             $stopNodes  = node_load_multiple($nids);
         }
         else {
