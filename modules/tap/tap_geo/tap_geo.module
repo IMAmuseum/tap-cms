@@ -38,7 +38,7 @@ function theme_tap_tourml_asset_geofield(&$vars) {
  */
 function tap_geo_tourml_asset($asset) {
     // Handle geofield fields
-    if (isset($asset['wkt'])) {
+    if (isset($asset['wkt']) || isset($asset['geom'])) {
         
         $geophp = geophp_load();
         if (!$geophp) {
@@ -46,7 +46,10 @@ function tap_geo_tourml_asset($asset) {
             return $asset;
         }
 
-        $geometry = geoPHP::load($asset['wkt'], 'wkt');
+        $geom = isset($asset['wkt']) ? $asset['wkt'] : null;
+        $geom = isset($asset['geom']) ? $asset['geom'] : $geom;
+
+        $geometry = geoPHP::load($geom, 'wkt');
         if ($geometry) {
             $asset['value'] = $geometry->out('json');
         }
@@ -62,7 +65,7 @@ function tap_geo_tourml_asset($asset) {
  */
 function tap_geo_tourml_asset_alter(&$tour, &$item) {
     // Handle Geofields
-    if (isset($item['wkt'])) {
+    if (isset($item['wkt']) || $item['name'] == 'geo') {
         $item['properties'] = array(
             'centroid' => $item['lat'] . ',' . $item['lon'],
             'bbox' => $item['left'] . ',' . $item['right'] . ',' . $item['bottom'] . ',' . $item['top'],
