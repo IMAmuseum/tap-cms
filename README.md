@@ -10,4 +10,4 @@ TAP aims to provide tools to easily create and deliver mobile tour applications 
 Detailed documentation can be found on the [GitHub Wiki for this project](https://github.com/IMAmuseum/tap-cms/wiki).
 
 ### License
-TAP is released under the GPLv3 license.  See GPL.txt for more information
+TAP is released under the GPLv3 license.  See LICENSE.txt for more information.
