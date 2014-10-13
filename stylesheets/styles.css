@@ -278,6 +278,10 @@ footer {
   header ul {
     display:none;
   }
+
+  #tap-logo {
+    display: none;
+  }
 }
 
 @media print {
