@@ -164,6 +164,10 @@ header ul a {
   height:40px;
 }
 
+header p.view {
+  margin: 0 0 6px;
+}
+
 strong {
   color:#222;
   font-weight:700;
