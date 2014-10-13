@@ -172,6 +172,10 @@ header p.view {
   margin: 0 0 6px;
 }
 
+header p.view.last {
+  margin: 0 0 20px;
+}
+
 strong {
   color:#222;
   font-weight:700;
@@ -267,6 +271,10 @@ footer {
 
   pre, code {
     word-wrap:normal;
+  }
+
+  #tap-logo {
+    display: none;
   }
 }
 
