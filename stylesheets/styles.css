@@ -178,6 +178,7 @@ footer {
 .case-study-teaser {
   clear: both;
   margin: 0 0 40px;
+  overflow: hidden;
 }
 
 .case-study-teaser a {
