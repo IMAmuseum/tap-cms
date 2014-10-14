@@ -168,12 +168,14 @@ hr {
   margin:0 0 20px;
 }
 
-/*footer {
-  width:270px;
+footer {
+  /*width:270px;
   float:left;
   position:fixed;
-  bottom:50px;
-}*/
+  bottom:50px;*/
+  float: right;
+  max-width: 500px;
+}
 
 .case-study-teaser {
   clear: both;
