@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="chrome=1">
+        <title>TAP into Museums by IMAmuseum</title>
+
+        <link rel="stylesheet" href="../stylesheets/styles.css">
+        <link rel="stylesheet" href="../stylesheets/pygment_trac.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <script src="../javascripts/jquery.slides.min.js"></script>
+        <script>
+            $(function() {
+                $('#slides').slidesjs({
+                    width: 500,
+                    height: 888,
+                    play: {
+                        active: true,
+                        auto: true,
+                        interval: 4000,
+                        swap: true,
+                        pauseOnHover: true,
+                        restartDelay: 2500
+                    }
+                });
+            });
+        </script>
+        <!--[if lt IE 9]>
+        <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        <div class="wrapper">
+            <header>
+                <h1><a href="../index.html">TAP into Museums</a></h1>
+                <p>TAP is a collection of free and open-source tools which support the creation and delivery of mobile tours. </p>
+
+                <nav>
+                    <ul>
+                        <li><a href="../tap.html">About TAP</a>
+                        <li><a href="../imls.html">IMLS Grant</a>
+                        <li class="active"><a href="case-studies/index.html">Case Studies</a>
+                            <ul>
+                                <li class="active"><a href="../case-studies/nmai.html">National Museum of the American Indian</a></li>
+                                <li><a href="../case-studies/gemeen.html">Gemeentemuseum Den Haag</a></li>
+                                <li><a href="../case-studies/winona.html">Winona State University</a></li>
+                                <li><a href="../case-studies/mfab.html">Museum of Fine Arts Boston</a></li>
+                                <li><a href="../case-studies/ima-100.html">Indianapolis Museum of Art: 100 Acres</a></li>
+                                <li><a href="../case-studies/ima-exhibitions.html">Indianapolis Museum of Art: Special Exhibition Tours</a></li>
+                                <li><a href="../case-studies/bpoc.html">Balboa Park Online Collaborative</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+
+                <p class="view"><a href="https://github.com/IMAmuseum/tap-cms">View the TAP CMS on GitHub <small>IMAmuseum/tap-cms</small></a></p>
+                <p class="view"><a href="https://github.com/IMAmuseum/tap-ios">View the TAP iOS App on GitHub <small>IMAmuseum/tap-ios</small></a></p>
+                <p class="view last"><a href="https://github.com/IMAmuseum/tap-webapp">View the TAP Web App on GitHub <small>IMAmuseum/tap-web-app</small></a></p>
+
+                <p>Sign up for the <a href="http://groups.google.com/group/tap-discuss">TourML and Tap</a> mailing list to keep up to date with the recent developments and share your experiences about your own mobile projects.</p>
+            </header>
+            <section>
+                <h2>Art Institute of Chicago: Closer</h2>
+                <div>The Art Institute of Chicago has thousands of works of art on view—each with their own stories to tell. The AIC hired the IMA Lab to develop an iOS mobile application, Closer, to help bring these stories to life. The app’s was built on the TAP platform. The initial result is an elegant interface highlighting ten artworks in the museum's renowned collection of modern art and eventually encompassing other collections. Each artwork includes a range of multimedia materials including zoomable imagery, object information, multi-page stories, and share features. Closer provides an informative and engaging experience for visitors while offering a flexible design for expanding content.</div>
+                <div class="slide-container">
+                    <div id="slides">
+                        <img src="../images/case-studies/closer-1.png" />
+                        <img src="../images/case-studies/closer-2.png" />
+                        <img src="../images/case-studies/closer-3.png" />
+                        <img src="../images/case-studies/closer-4.png" />
+                        <img src="../images/case-studies/closer-5.png" />
+                    </div>
+                </div>
+            </section>
+            <footer>
+                <p>This project is maintained by <a href="https://github.com/IMAmuseum">IMAmuseum</a></p>
+                <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+            </footer>
+        </div>
+        <script src="../javascripts/scale.fix.js"></script>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-1868672-20', 'auto');
+            ga('send', 'pageview');
+        </script>
+    </body>
+</html>
