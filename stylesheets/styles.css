@@ -396,13 +396,15 @@ a:hover.slidesjs-stop {
 /* For smaller displays like laptops */
 @media (min-width: 768px) and (max-width: 979px) {
   .slide-container {
-    width: 500px
+    width: 380px;
+    margin: 0 auto;
   }
 }
 
 /* For larger displays */
 @media (min-width: 1200px) {
   .slide-container {
-    width: 500px
+    width: 380px;
+    margin: 0 auto;
   }
 }
