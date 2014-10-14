@@ -146,6 +146,10 @@ header p.view.last {
   margin: 0 0 20px;
 }
 
+header h3 {
+  margin: 0 0 10px;
+}
+
 strong {
   color:#222;
   font-weight:700;
