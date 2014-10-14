@@ -301,13 +301,13 @@ footer {
 /* For smaller displays like laptops */
 @media (min-width: 768px) and (max-width: 979px) {
   .slide-container {
-    width: 724px
+    width: 500px
   }
 }
 
 /* For larger displays */
 @media (min-width: 1200px) {
   .slide-container {
-    width: 1170px
+    width: 500px
   }
 }
