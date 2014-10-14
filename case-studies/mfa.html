@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="chrome=1">
+        <title>TAP into Museums by IMAmuseum</title>
+
+        <link rel="stylesheet" href="../stylesheets/styles.css">
+        <link rel="stylesheet" href="../stylesheets/pygment_trac.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <script src="../javascripts/jquery.slides.min.js"></script>
+        <script>
+            $(function() {
+                $('#slides').slidesjs({
+                    width: 500,
+                    height: 888,
+                    play: {
+                        active: true,
+                        auto: true,
+                        interval: 4000,
+                        swap: true,
+                        pauseOnHover: true,
+                        restartDelay: 2500
+                    }
+                });
+            });
+        </script>
+        <!--[if lt IE 9]>
+        <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        <div class="wrapper">
+            <header>
+                <h1><a href="../index.html">TAP into Museums</a></h1>
+                <p>TAP is a collection of free and open-source tools which support the creation and delivery of mobile tours. </p>
+
+                <nav>
+                    <ul>
+                        <li><a href="../tap.html">About TAP</a>
+                        <li><a href="../imls.html">IMLS Grant</a>
+                        <li class="active"><a href="../case-studies/index.html">Case Studies</a></li>
+                    </ul>
+                </nav>
+
+                <p class="view"><a href="https://github.com/IMAmuseum/tap-cms">View the TAP CMS on GitHub <small>IMAmuseum/tap-cms</small></a></p>
+                <p class="view"><a href="https://github.com/IMAmuseum/tap-ios">View the TAP iOS App on GitHub <small>IMAmuseum/tap-ios</small></a></p>
+                <p class="view last"><a href="https://github.com/IMAmuseum/tap-webapp">View the TAP Web App on GitHub <small>IMAmuseum/tap-web-app</small></a></p>
+
+                <p>Sign up for the <a href="http://groups.google.com/group/tap-discuss">TourML and Tap</a> mailing list to keep up to date with the recent developments and share your experiences about your own mobile projects.</p>
+            </header>
+            <section>
+                <h2>Museum of Fine Arts Boston</h2>
+                <div>
+                    <p>It's more than just an audio guide. Through video, images and animation, the Museum's new multimedia guide puts experts at your side as you browse the galleries. Watch a video clip of how furniture is made or see an artist at work. Get perspectives from curators, conservators, and community members.<p>
+                    <p>Read more: <a href="http://www.mfa.org/explore/multimedia-guide">http://www.mfa.org/explore/multimedia-guide</a></p>
+                </div>
+                <div class="slide-container">
+                    <div id="slides">
+                        <img src="../images/case-studies/mfa-1_0.png" />
+                        <img src="../images/case-studies/mfa-2_0.png" />
+                        <img src="../images/case-studies/mfa-3_0.png" />
+                    </div>
+                </div>
+            </section>
+            <footer>
+                <p>This project is maintained by <a href="https://github.com/IMAmuseum">IMAmuseum</a></p>
+                <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+            </footer>
+        </div>
+        <script src="../javascripts/scale.fix.js"></script>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-1868672-20', 'auto');
+            ga('send', 'pageview');
+        </script>
+    </body>
+</html>

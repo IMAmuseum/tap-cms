@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="chrome=1">
+        <title>TAP into Museums by IMAmuseum</title>
+
+        <link rel="stylesheet" href="../stylesheets/styles.css">
+        <link rel="stylesheet" href="../stylesheets/pygment_trac.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <script src="../javascripts/jquery.slides.min.js"></script>
+        <script>
+            $(function() {
+                $('#slides').slidesjs({
+                    width: 500,
+                    height: 888,
+                    play: {
+                        active: true,
+                        auto: true,
+                        interval: 4000,
+                        swap: true,
+                        pauseOnHover: true,
+                        restartDelay: 2500
+                    }
+                });
+            });
+        </script>
+        <!--[if lt IE 9]>
+        <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        <div class="wrapper">
+            <header>
+                <h1><a href="../index.html">TAP into Museums</a></h1>
+                <p>TAP is a collection of free and open-source tools which support the creation and delivery of mobile tours. </p>
+
+                <nav>
+                    <ul>
+                        <li><a href="../tap.html">About TAP</a>
+                        <li><a href="../imls.html">IMLS Grant</a>
+                        <li class="active"><a href="../case-studies/index.html">Case Studies</a></li>
+                    </ul>
+                </nav>
+
+                <p class="view"><a href="https://github.com/IMAmuseum/tap-cms">View the TAP CMS on GitHub <small>IMAmuseum/tap-cms</small></a></p>
+                <p class="view"><a href="https://github.com/IMAmuseum/tap-ios">View the TAP iOS App on GitHub <small>IMAmuseum/tap-ios</small></a></p>
+                <p class="view last"><a href="https://github.com/IMAmuseum/tap-webapp">View the TAP Web App on GitHub <small>IMAmuseum/tap-web-app</small></a></p>
+
+                <p>Sign up for the <a href="http://groups.google.com/group/tap-discuss">TourML and Tap</a> mailing list to keep up to date with the recent developments and share your experiences about your own mobile projects.</p>
+            </header>
+            <section>
+                <h2>Gemeentemuseum Den Haag</h2>
+                <div>The Gemeentemuseum Den Haag is a museum for modern and contemporary art, fashion, arts & crafts en even musical instruments. The museum's most prized asset however is the collection of works by Piet Mondrian, which is the biggest in the world, spanning his entire career. We are using TAP as our new multimediatour system. We added a different multi-language option and cross-bundle search (which was later rendered superfluous because we opted for putting everything in a single bundle, but still). On the usability side we have tried to make everything as simple as possible: Changing around the Enter and Back buttons on the keypad and locking video in landscape mode. We found this important because the users of our toursystem are - on average - 55+ and allthough they have little problems with using the iPods, they are not familiar with some of its more subtle functions like the automatic portrait-landscape switch when tilting the device.</div>
+                <div class="slide-container">
+                    <div id="slides">
+                        <img src="../images/case-studies/gdh-1_0.png" />
+                        <img src="../images/case-studies/gdh-2_0.png" />
+                        <img src="../images/case-studies/gdh-3_0.png" />
+                        <img src="../images/case-studies/gdh-4_0.png" />
+                    </div>
+                </div>
+            </section>
+            <footer>
+                <p>This project is maintained by <a href="https://github.com/IMAmuseum">IMAmuseum</a></p>
+                <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+            </footer>
+        </div>
+        <script src="../javascripts/scale.fix.js"></script>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-1868672-20', 'auto');
+            ga('send', 'pageview');
+        </script>
+    </body>
+</html>
