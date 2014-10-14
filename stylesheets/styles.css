@@ -366,6 +366,7 @@ a:hover.slidesjs-stop {
 /* Center the slideshow */
 .slide-container {
   margin: 20px auto 0;
+  width: 340px;
 }
 
 /* Show active item in the pagination */
@@ -396,15 +397,13 @@ a:hover.slidesjs-stop {
 /* For smaller displays like laptops */
 @media (min-width: 768px) and (max-width: 979px) {
   .slide-container {
-    width: 380px;
-    margin: 0 auto;
+    width: 340px;
   }
 }
 
 /* For larger displays */
 @media (min-width: 1200px) {
   .slide-container {
-    width: 380px;
-    margin: 0 auto;
+    width: 340px;
   }
 }
