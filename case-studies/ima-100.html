@@ -15,16 +15,13 @@
                 $('#slides').slidesjs({
                     width: 500,
                     height: 888,
-                    navigation: {
-                        effect: "fade"
-                    },
-                    pagination: {
-                        effect: "fade"
-                    },
-                    effect: {
-                        fade: {
-                            speed: 400
-                        }
+                    play: {
+                        active: true,
+                        auto: true,
+                        interval: 4000,
+                        swap: true,
+                        pauseOnHover: true,
+                        restartDelay: 2500
                     }
                 });
             });
