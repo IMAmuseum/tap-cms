@@ -8,6 +8,27 @@
         <link rel="stylesheet" href="../stylesheets/styles.css">
         <link rel="stylesheet" href="../stylesheets/pygment_trac.css">
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <script src="../javascripts/jquery.slides.min.js"></script>
+        <script>
+            $(function() {
+                $('#slides').slidesjs({
+                    width: 940,
+                    height: 528,
+                    navigation: {
+                        effect: "fade"
+                    },
+                    pagination: {
+                        effect: "fade"
+                    },
+                    effect: {
+                        fade: {
+                            speed: 400
+                        }
+                    }
+                });
+            });
+        </script>
         <!--[if lt IE 9]>
         <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
@@ -28,7 +49,7 @@
                                 <li><a href="../case-studies/gemeen.html">Gemeentemuseum Den Haag</a></li>
                                 <li><a href="../case-studies/winona.html">Winona State University</a></li>
                                 <li><a href="../case-studies/mfab.html">Museum of Fine Arts Boston</a></li>
-                                <li><a href="../case-studies/ima-100.html">Indianapolis Museum of Art: 100 Acres</a></li>
+                                <li class="active"><a href="../case-studies/ima-100.html">Indianapolis Museum of Art: 100 Acres</a></li>
                                 <li><a href="../case-studies/ima-exhibitions.html">Indianapolis Museum of Art: Special Exhibition Tours</a></li>
                                 <li><a href="../case-studies/bpoc.html">Balboa Park Online Collaborative</a></li>
                             </ul>
@@ -43,39 +64,18 @@
                 <p>Sign up for the <a href="http://groups.google.com/group/tap-discuss">TourML and Tap</a> mailing list to keep up to date with the recent developments and share your experiences about your own mobile projects.</p>
             </header>
             <section>
-                <h2>Case Studies</h2>
-                <p>Below you will find just some of the TAP based tours that museums are providing. If you have your own tour up and running, please share your experiences and screenshots on the mailing list.</p>
-
-                <div class="case-study-teaser">
-                    <a href="../case-studies/ima-100.html">
+                <h2>Indianapolis Museum of Art: 100 Acres</h2>
+                <div>The IMA uses TAP to drive a mobile web tour of the 100 Acres Virginia B. Fairbanks Art & Nature Park. Tour stops in TAP having a latitude and longitude are plotted on an OpenStreetMap. Visitors can touch any of the markers to be taken to a traditional TAP stop group.</div>
+                <div class="slide-container">
+                    <div id="slides">
                         <img src="../images/case-studies/ima-100-acres-1.png" />
-                        <h2>Indianapolis Museum of Art: 100 Acres</h2>
-                        <div>The IMA uses TAP to drive a mobile web tour of the 100 Acres Virginia B. Fairbanks Art & Nature Park. Tour stops in TAP having a latitude and longitude are plotted on an OpenStreetMap. Visitors can touch any of the markers to be taken to a traditional TAP stop group.</div>
-                    </a>
-                </div>
-
-                <div class="case-study-teaser">
-                    <a href="../case-studies/nmai.html">
-                        <img src="../images/case-studies/nmai-1.png" />
-                        <h2>National Museum of the American Indian</h2>
-                        <div>The NMAI-NY app has been created as a mothership app to deliver mobile exhibition tours of shows at the National Museum of the American Indian in New York. The initial release contains a simple ten stop tour of the C.Maxx Stevens: House of Memory exhibition. The tour delivers the artist's own perspective on the work on display along with a gallery of images from a curator's visit to her studio. Each stop has a scalable transcript of the artist's interpretation to make the tour ADA compliant.</div>
-                    </a>
-                </div>
-
-                <div class="case-study-teaser">
-                    <a href="../case-studies/nasm.html">
-                        <img src="../images/case-studies/nasm-1.png" />
-                        <h2>National Air and Space Museum: CoPilot</h2>
-                        <div>The NMAI-NY app has been created as a mothership app to deliver mobile exhibition tours of shows at the National Museum of the American Indian in New York. The initial release contains a simple ten stop tour of the C.Maxx Stevens: House of Memory exhibition. The tour delivers the artist's own perspective on the work on display along with a gallery of images from a curator's visit to her studio. Each stop has a scalable transcript of the artist's interpretation to make the tour ADA compliant.</div>
-                    </a>
-                </div>
-
-                <div class="case-study-teaser">
-                    <a href="../case-studies/naguide.html">
-                        <img src="../images/case-studies/naguide-1.png" />
-                        <h2>Nelson-Atkins Museum of Art: Mobile Guide</h2>
-                        <div>The NMAI-NY app has been created as a mothership app to deliver mobile exhibition tours of shows at the National Museum of the American Indian in New York. The initial release contains a simple ten stop tour of the C.Maxx Stevens: House of Memory exhibition. The tour delivers the artist's own perspective on the work on display along with a gallery of images from a curator's visit to her studio. Each stop has a scalable transcript of the artist's interpretation to make the tour ADA compliant.</div>
-                    </a>
+                        <img src="../images/case-studies/ima-100-acres-2.png" />
+                        <img src="../images/case-studies/ima-100-acres-3.png" />
+                        <img src="../images/case-studies/ima-100-acres-4.png" />
+                        <img src="../images/case-studies/ima-100-acres-5.png" />
+                        <img src="../images/case-studies/ima-100-acres-6.png" />
+                        <img src="../images/case-studies/ima-100-acres-7.png" />
+                    </div>
                 </div>
             </section>
             <footer>

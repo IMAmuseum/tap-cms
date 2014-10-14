@@ -250,6 +250,10 @@ footer {
   #tap-logo {
     display: none;
   }
+
+  .case-study-teaser img {
+    max-width: 100px;
+  }
 }
 
 @media print {
@@ -257,5 +261,53 @@ footer {
     padding:0.4in;
     font-size:12pt;
     color:#444;
+  }
+}
+
+#slides {
+  display: none
+}
+
+/* Center the slideshow */
+.slide-container {
+  margin: 0 auto
+}
+
+/* Show active item in the pagination */
+.slidesjs-pagination .active {
+  color:red;
+}
+
+/* Media quires for a responsive layout */
+
+/* For tablets & smart phones */
+@media (max-width: 767px) {
+  body {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .slide-container {
+    width: auto
+  }
+}
+
+/* For smartphones */
+@media (max-width: 480px) {
+  .slide-container {
+    width: auto
+  }
+}
+
+/* For smaller displays like laptops */
+@media (min-width: 768px) and (max-width: 979px) {
+  .slide-container {
+    width: 724px
+  }
+}
+
+/* For larger displays */
+@media (min-width: 1200px) {
+  .slide-container {
+    width: 1170px
   }
 }
