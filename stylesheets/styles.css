@@ -270,7 +270,7 @@ footer {
 
 /* Center the slideshow */
 .slide-container {
-  margin: 0 auto
+  margin: 20px auto 0;
 }
 
 /* Show active item in the pagination */
