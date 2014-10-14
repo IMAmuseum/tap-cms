@@ -174,7 +174,7 @@ footer {
   position:fixed;
   bottom:50px;*/
   float: right;
-  max-width: 500px;
+  width: 500px;
 }
 
 .case-study-teaser {
