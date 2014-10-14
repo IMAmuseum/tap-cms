@@ -177,6 +177,11 @@ footer {
 
 .case-study-teaser {
   clear: both;
+  margin: 0 0 20px;
+}
+
+.case-study-teaser a {
+  color: #777;
 }
 
 .case-study-teaser img {
