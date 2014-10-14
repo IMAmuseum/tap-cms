@@ -175,6 +175,11 @@ footer {
   bottom:50px;
 }
 
+.case-study-teaser img {
+  float: left;
+  max-width: 200px;
+}
+
 @media print, screen and (max-width: 960px) {
 
   div.wrapper {
