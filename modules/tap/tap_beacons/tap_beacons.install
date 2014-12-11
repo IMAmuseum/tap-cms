@@ -157,14 +157,12 @@ function tap_beacons_schema() {
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
-        'default' => 0,
       ),
       'beacon_id' => array(
         'description' => 'Beacon id reference.',
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
-        'default' => 0,
       ),
     ),
     'foreign keys' => array(
@@ -187,14 +185,12 @@ function tap_beacons_schema() {
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
-        'default' => 0,
       ),
       'region_id' => array(
         'description' => 'Region id reference.',
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
-        'default' => 0,
       ),
     ),
     'foreign keys' => array(
