@@ -169,8 +169,8 @@ function tap_beacons_schema() {
     ),
     'foreign keys' => array(
       'tap_stops' => array(
-        'table' => '',
-        'columns' => array('stop_nid' => 'stop_nid'),
+        'table' => 'node',
+        'columns' => array('stop_nid' => 'nid'),
       ),
       'tap_beacons' => array(
         'table' => 'tap_beacons',
@@ -199,8 +199,8 @@ function tap_beacons_schema() {
     ),
     'foreign keys' => array(
       'tap_stop_groups' => array(
-        'table' => '',
-        'columns' => array('stop_group_nid' => 'stop_group_nid'),
+        'table' => 'node',
+        'columns' => array('stop_group_nid' => 'nid'),
       ),
       'tap_regions' => array(
         'table' => 'tap_regions',
