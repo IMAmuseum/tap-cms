@@ -1,0 +1,223 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Tap Beacons module.
+ */
+
+function tap_beacons_schema() {
+  $schema['tap_beacons'] = array(
+
+    // Example (partial) specification for table "node".
+    'description' => 'The table to store individual beacon information.',
+    'fields' => array(
+      'beacon_id' => array(
+        'description' => 'The primary id used for a beacon.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'uuid' => array(
+        'description' => 'The universal id used for beacon association.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'minor_num' => array(
+        'description' => 'The location identifier for a beacon.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'major_num' => array(
+        'description' => 'The region identifier for a beacon.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'unique keys' => array(
+      'uuid_min_maj' => array('uuid', 'minor_num', 'major_num'),
+    ),
+    'primary key' => array('beacon_id'),
+  );
+
+  $schema['tap_regions'] = array(
+    'description' => 'The table to store region information.',
+    'fields' => array(
+      'region_id' => array(
+        'description' => 'The primary id used for a region.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'region_name' => array(
+        'description' => 'The name of the region.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'primary key' => array('region_id'),
+  );
+
+  $schema['tap_beacons_regions'] = array(
+    'description' => 'The table to store beacon/region relationship.',
+    'fields' => array(
+      'beacon_id' => array(
+        'description' => 'Stop group id reference.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'region_id' => array(
+        'description' => 'Region id reference.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+    ),
+    'foreign keys' => array(
+      'tap_beacons' => array(
+        'table' => 'tap_beacons',
+        'columns' => array('beacon_id' => 'beacon_id'),
+      ),
+      'tap_regions' => array(
+        'table' => 'tap_regions',
+        'columns' => array('region_id' => 'region_id'),
+      ),
+    ),
+  );
+
+  $schema['tap_event_data'] = array(
+    'description' => 'The table to store event analytics.',
+    'fields' => array(
+      'event_name' => array(
+        'description' => 'The name of the event.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'mobile_device_id' => array(
+        'description' => 'ID of mobile device signaling events.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'beacon_id' => array(
+        'description' => 'The event to beacon reference.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'beacon_tx_power' => array(
+        'description' => 'TX Power of beacon.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'beacon_battery' => array(
+        'description' => 'Battery life of beacon.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'region_id' => array(
+        'description' => 'Event to region reference.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+    ),
+    'foreign keys' => array(
+      'tap_beacons' => array(
+        'table' => 'tap_beacons',
+        'columns' => array('beacon_id' => 'beacon_id'),
+      ),
+      'tap_regions' => array(
+        'table' => 'tap_regions',
+        'columns' => array('region_id' => 'region_id'),
+      ),
+    ),
+  );
+
+  $schema['tap_stop_beacons'] = array(
+    'description' => 'The table to store stop/beacon relationship.',
+    'fields' => array(
+      'stop_nid' => array(
+        'description' => 'Stop node id reference.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'beacon_id' => array(
+        'description' => 'Beacon id reference.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'foreign keys' => array(
+      'tap_stops' => array(
+        'table' => '',
+        'columns' => array('stop_nid' => 'stop_nid'),
+      ),
+      'tap_beacons' => array(
+        'table' => 'tap_beacons',
+        'columns' => array('beacon_id' => 'beacon_id'),
+      ),
+    ),
+  );
+
+  $schema['tap_stop_group_regions'] = array(
+    'description' => 'The table to store stop group/region relationship.',
+    'fields' => array(
+      'stop_group_nid' => array(
+        'description' => 'Stop group id reference.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'region_id' => array(
+        'description' => 'Region id reference.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'foreign keys' => array(
+      'tap_stop_groups' => array(
+        'table' => '',
+        'columns' => array('stop_group_nid' => 'stop_group_nid'),
+      ),
+      'tap_regions' => array(
+        'table' => 'tap_regions',
+        'columns' => array('region_id' => 'region_id'),
+      ),
+    ),
+  );
+
+  return $schema;
+}
+
+function tap_beacons_install() {
+  // Create my tables.
+  drupal_install_schema('tap_beacons');
+}
+
+function tap_beacons_uninstall() {
+  // Drop my tables.
+  drupal_uninstall_schema('tap_beacons');
+}

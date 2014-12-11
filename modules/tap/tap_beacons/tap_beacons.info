@@ -1,0 +1,7 @@
+name = "TAP Beacons"
+description = "Provides beacon support for tap"
+core = "7.x"
+package = "TAP"
+version = "7.x-1.0-dev"
+project = "tap_beacons"
+dependencies[] = "tap"
