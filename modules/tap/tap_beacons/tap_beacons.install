@@ -6,9 +6,9 @@
  */
 
 function tap_beacons_schema() {
-  $schema['tap_beacons'] = array(
 
-    // Example (partial) specification for table "node".
+  // Beacon Data Table
+  $schema['tap_beacons'] = array(
     'description' => 'The table to store individual beacon information.',
     'fields' => array(
       'beacon_id' => array(
@@ -45,57 +45,15 @@ function tap_beacons_schema() {
     'primary key' => array('beacon_id'),
   );
 
-  $schema['tap_regions'] = array(
-    'description' => 'The table to store region information.',
-    'fields' => array(
-      'region_id' => array(
-        'description' => 'The primary id used for a region.',
-        'type' => 'serial',
-        'unsigned' => TRUE,
-        'not null' => TRUE,
-      ),
-      'region_name' => array(
-        'description' => 'The name of the region.',
-        'type' => 'varchar',
-        'length' => 255,
-        'not null' => TRUE,
-        'default' => '',
-      ),
-    ),
-    'primary key' => array('region_id'),
-  );
-
-  $schema['tap_beacons_regions'] = array(
-    'description' => 'The table to store beacon/region relationship.',
-    'fields' => array(
-      'beacon_id' => array(
-        'description' => 'Stop group id reference.',
-        'type' => 'int',
-        'unsigned' => TRUE,
-        'not null' => TRUE,
-      ),
-      'region_id' => array(
-        'description' => 'Region id reference.',
-        'type' => 'int',
-        'unsigned' => TRUE,
-        'not null' => TRUE,
-      ),
-    ),
-    'foreign keys' => array(
-      'tap_beacons' => array(
-        'table' => 'tap_beacons',
-        'columns' => array('beacon_id' => 'beacon_id'),
-      ),
-      'tap_regions' => array(
-        'table' => 'tap_regions',
-        'columns' => array('region_id' => 'region_id'),
-      ),
-    ),
-  );
-
+  // Event Data Table
   $schema['tap_event_data'] = array(
     'description' => 'The table to store event analytics.',
     'fields' => array(
+      'timestamp' => array(
+        'description' => 'Time of event.',
+        'type' => 'timestamp',
+        'not null' => TRUE,
+      ),
       'event_name' => array(
         'description' => 'The name of the event.',
         'type' => 'varchar',
@@ -123,18 +81,12 @@ function tap_beacons_schema() {
         'not null' => TRUE,
         'default' => 0,
       ),
-      'beacon_battery' => array(
-        'description' => 'Battery life of beacon.',
+      'beacon_range' => array(
+        'description' => 'Beacon to device range.',
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
         'default' => 0,
-      ),
-      'region_id' => array(
-        'description' => 'Event to region reference.',
-        'type' => 'int',
-        'unsigned' => TRUE,
-        'not null' => TRUE,
       ),
     ),
     'foreign keys' => array(
@@ -142,13 +94,10 @@ function tap_beacons_schema() {
         'table' => 'tap_beacons',
         'columns' => array('beacon_id' => 'beacon_id'),
       ),
-      'tap_regions' => array(
-        'table' => 'tap_regions',
-        'columns' => array('region_id' => 'region_id'),
-      ),
     ),
   );
 
+  // Stop to Beacon Relationship Table
   $schema['tap_stop_beacons'] = array(
     'description' => 'The table to store stop/beacon relationship.',
     'fields' => array(
@@ -173,34 +122,6 @@ function tap_beacons_schema() {
       'tap_beacons' => array(
         'table' => 'tap_beacons',
         'columns' => array('beacon_id' => 'beacon_id'),
-      ),
-    ),
-  );
-
-  $schema['tap_stop_group_regions'] = array(
-    'description' => 'The table to store stop group/region relationship.',
-    'fields' => array(
-      'stop_group_nid' => array(
-        'description' => 'Stop group id reference.',
-        'type' => 'int',
-        'unsigned' => TRUE,
-        'not null' => TRUE,
-      ),
-      'region_id' => array(
-        'description' => 'Region id reference.',
-        'type' => 'int',
-        'unsigned' => TRUE,
-        'not null' => TRUE,
-      ),
-    ),
-    'foreign keys' => array(
-      'tap_stop_groups' => array(
-        'table' => 'node',
-        'columns' => array('stop_group_nid' => 'nid'),
-      ),
-      'tap_regions' => array(
-        'table' => 'tap_regions',
-        'columns' => array('region_id' => 'region_id'),
       ),
     ),
   );
