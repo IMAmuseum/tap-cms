@@ -51,8 +51,10 @@ function tap_beacons_schema() {
     'fields' => array(
       'timestamp' => array(
         'description' => 'Time of event.',
-        'type' => 'timestamp',
+        'type' => 'varchar',
+        'length' => 255,
         'not null' => TRUE,
+        'default' => '',
       ),
       'event_name' => array(
         'description' => 'The name of the event.',
@@ -83,10 +85,10 @@ function tap_beacons_schema() {
       ),
       'beacon_range' => array(
         'description' => 'Beacon to device range.',
-        'type' => 'int',
-        'unsigned' => TRUE,
+        'type' => 'varchar',
+        'length' => 255,
         'not null' => TRUE,
-        'default' => 0,
+        'default' => '',
       ),
     ),
     'foreign keys' => array(
