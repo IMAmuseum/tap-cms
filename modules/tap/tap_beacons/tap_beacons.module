@@ -22,16 +22,36 @@ function tap_beacons_menu() {
  */
 function tap_beacons_theme() {
 
+    $beacons = tap_beacons_get_beacons();
+
     $items = array(
         'tap_beacons_admin_content' => array(
-            // 'variables' => array(
-            //     'beacons_endpoint' => NULL
-            // ),
+            'variables' => array(
+                'beacons_data' => $beacons,
+            ),
             'template'  => 'templates/tap_beacons_template',
         ),
     );
 
     return $items;
+}
+
+function tap_beacons_get_beacons(){
+    $query = "SELECT uuid, major_num, minor_num FROM {tap_beacons}";
+
+    $query_result = db_query($query);
+
+    foreach ($query_result as $row) {
+        $row_array[] = array($row->uuid, $row->major_num, $row->minor_num);
+    }
+
+    $table = array(
+        '#theme' => 'table',
+        '#header' => array(t('UUID'), t('Major Number'), t('Minor Number')),
+        '#rows' => $row_array
+    );
+
+    return $table;
 }
 
 function tap_beacons_admin_section() {

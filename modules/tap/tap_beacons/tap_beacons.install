@@ -25,14 +25,14 @@ function tap_beacons_schema() {
         'default' => '',
       ),
       'minor_num' => array(
-        'description' => 'The location identifier for a beacon.',
+        'description' => 'The minor identifier for a beacon.',
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
         'default' => 0,
       ),
       'major_num' => array(
-        'description' => 'The region identifier for a beacon.',
+        'description' => 'The major identifier for a beacon.',
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
