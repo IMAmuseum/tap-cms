@@ -1,3 +1,14 @@
 <?php
 
 
+function tap_beacons_menu() {
+    $items['admin/tap/beacons'] = array(
+        'title'             => 'Beacons',
+        'page callback'     => 'tap_beacons_admin_page',
+        'access arguments'  => array('administer tap'),
+        'type'              => MENU_LOCAL_TASK,
+        'file'              => 'tap_beacons.admin.inc',
+    );
+
+    return $items;
+}
