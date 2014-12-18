@@ -36,8 +36,11 @@ function tap_beacons_theme() {
     return $items;
 }
 
+/**
+* Gets beacon data from DB
+*/
 function tap_beacons_get_beacons(){
-    $query = "SELECT uuid, major_num, minor_num FROM {tap_beacons}";
+    $query = 'SELECT uuid, major_num, minor_num FROM {tap_beacons}';
 
     $query_result = db_query($query);
 
@@ -54,10 +57,11 @@ function tap_beacons_get_beacons(){
     return $table;
 }
 
+
 function tap_beacons_admin_section() {
 
     drupal_add_css(drupal_get_path('module', 'tap_beacons') . '/css/tap_beacons_style.css');
+    drupal_add_js(drupal_get_path('module', 'tap_beacons') . '/js/tap_beacons_main.js');
 
     return theme('tap_beacons_admin_content');
-
 }

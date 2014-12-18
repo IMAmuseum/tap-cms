@@ -1,6 +1,6 @@
 <div id="tap-beacons-admin">
     <div>
-        <form id="add-beacon-form">
+        <form action="/?q=admin/tap/beacons" method="post" id="tap-beacons-add-beacon-form">
             <label>
                 UUID<br />
                 <input type="text" value="" name="uuid" id="beacon-uuid" class="form-text" size="60" />
