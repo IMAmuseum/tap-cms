@@ -1,14 +1,43 @@
 <?php
 
+define('TAP_BEACONS_VERSION', '0.1.0');
 
+/**
+ * Implements hook_menu()
+ */
 function tap_beacons_menu() {
     $items['admin/tap/beacons'] = array(
         'title'             => 'Beacons',
-        'page callback'     => 'tap_beacons_admin_page',
+        'page callback'     => 'tap_beacons_admin_section',
         'access arguments'  => array('administer tap'),
         'type'              => MENU_LOCAL_TASK,
         'file'              => 'tap_beacons.admin.inc',
     );
 
     return $items;
+}
+
+/**
+ * Implements hook_theme()
+ */
+function tap_beacons_theme() {
+
+    $items = array(
+        'tap_beacons_admin_content' => array(
+            // 'variables' => array(
+            //     'beacons_endpoint' => NULL
+            // ),
+            'template'  => 'templates/tap_beacons_template',
+        ),
+    );
+
+    return $items;
+}
+
+function tap_beacons_admin_section() {
+
+    drupal_add_css(drupal_get_path('module', 'tap_beacons') . '/css/tap_beacons_style.css');
+
+    return theme('tap_beacons_admin_content');
+
 }
