@@ -14,6 +14,27 @@ function tap_beacons_menu() {
         'file'              => 'tap_beacons.admin.inc',
     );
 
+    $items['admin/tap/beacons/add'] = array(
+        'title'             => 'Add Beacons',
+        'page callback'     => 'tap_beacons_admin_add',
+        'access arguments'  => array('administer tap'),
+        'file'              => 'tap_beacons.admin.inc',
+    );
+
+    $items['admin/tap/beacons/delete'] = array(
+        'title'             => 'Delete Beacons',
+        'page callback'     => 'tap_beacons_admin_delete',
+        'access arguments'  => array('administer tap'),
+        'file'              => 'tap_beacons.admin.inc',
+    );
+
+    $items['admin/tap/beacons/update'] = array(
+        'title'             => 'Update Beacons',
+        'page callback'     => 'tap_beacons_admin_update',
+        'access arguments'  => array('administer tap'),
+        'file'              => 'tap_beacons.admin.inc',
+    );
+
     return $items;
 }
 
@@ -37,31 +58,29 @@ function tap_beacons_theme() {
 }
 
 /**
-* Gets beacon data from DB
+* Get beacon data from DB
 */
 function tap_beacons_get_beacons(){
-    $query = 'SELECT uuid, major_num, minor_num FROM {tap_beacons}';
 
-    $query_result = db_query($query);
+    // Get beacon data from DB
+    $result = db_select('tap_beacons', 'b')
+        ->fields('b', array('beacon_id', 'uuid', 'major_num', 'minor_num'))
+        ->execute();
 
-    foreach ($query_result as $row) {
-        $row_array[] = array($row->uuid, $row->major_num, $row->minor_num);
+    // Loop through each row and store the formatted data
+    foreach ($result as $row) {
+        $anchor = '<a href="#" data-id="'. $row->beacon_id .'" class="tap-beacons-update-btn">edit</a> | ';
+        $anchor .= '<a href="/?q=admin/tap/beacons/delete&id='. $row->beacon_id .'" class="tap-beacons-delete-btn">delete</a>';
+
+        $row_array[] = array($row->uuid, $row->major_num, $row->minor_num, $anchor);
     }
 
+    // Build table with data
     $table = array(
         '#theme' => 'table',
-        '#header' => array(t('UUID'), t('Major Number'), t('Minor Number')),
+        '#header' => array(t('UUID'), t('Major Number'), t('Minor Number'), t('Operations')),
         '#rows' => $row_array
     );
 
     return $table;
-}
-
-
-function tap_beacons_admin_section() {
-
-    drupal_add_css(drupal_get_path('module', 'tap_beacons') . '/css/tap_beacons_style.css');
-    drupal_add_js(drupal_get_path('module', 'tap_beacons') . '/js/tap_beacons_main.js');
-
-    return theme('tap_beacons_admin_content');
 }

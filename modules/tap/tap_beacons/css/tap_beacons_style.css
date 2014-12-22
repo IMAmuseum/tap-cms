@@ -1,3 +1,16 @@
-#tap-beacons_admin {
-
+.tap-beacons-admin {
 }
+
+.tap-beacons-add-beacon-form {
+    margin-bottom: 1em;
+}
+
+.table-input {
+    font-size: 12px;
+    width: 100%;
+}
+
+.beacon-add-submit{
+    margin-top: .5em;
+}
+
