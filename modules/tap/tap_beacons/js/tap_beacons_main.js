@@ -1,28 +1,23 @@
-jQuery(function(){
+jQuery(function($) {
 
     // Add data to DB
-    jQuery('#tap-beacons-add-beacon-form').submit(function(e){
+    $('#tap-beacons-add-beacon-form').submit(function(e){
         e.preventDefault();
 
-        var formData = jQuery(this).serializeArray();
-        var action = jQuery(this).attr("action");
+        // Get data and set up acton url
+        var formData = $(this).serialize();
+        var action = $(this).attr("action") + "&" + formData;
 
-        jQuery.ajax({
-            url: action,
-            type: "GET",
-            data: formData,
-            success: function(data){
-                location.reload();
-            }
-        });
+        // Send to ajax function
+        submitData(action);
     });
 
     // Delete data from DB
-    jQuery('.tap-beacons-delete-btn').click(function(e){
+    $('.tap-beacons-delete-btn').click(function(e){
         e.preventDefault();
 
         // Get href to set as ajax action
-        var action = jQuery(this).attr('href');
+        var action = $(this).attr('href');
 
         // Ask user to confirm their decision to delete the item.
         var choice = confirm("Are you sure you want to delete this item? This action cannot be undone.");
@@ -34,17 +29,17 @@ jQuery(function(){
     });
 
     // Update data to DB
-    jQuery('.tap-beacons-update-btn').click(function(e){
+    $('.tap-beacons-update-btn').click(function(e){
         e.preventDefault();
 
         // Hit cancel on any items that may be open, so only one item can be edited at a time
-        jQuery('.tap-beacons-cancel-btn').click();
+        $('.tap-beacons-cancel-btn').click();
 
         // Get action of item
-        var action = jQuery(this).attr('href');
+        var action = $(this).attr('href');
 
         // Store TR parent
-        var par = jQuery(this).parent().parent().parent();
+        var par = $(this).parent().parent().parent();
 
         // Store each cell element
         var cell_uuid = par.children('td:nth-child(1)'),
@@ -58,23 +53,23 @@ jQuery(function(){
             current_minor = cell_minor.html();
 
         // Convert values into inputs so user can make changes
-        cell_uuid.html('<input type="text" id="uuid" value="' + current_uuid + '" class="form-text table-input"/>');
-        cell_major.html('<input type="text" id="major" value="' + current_major + '" class="form-text table-input"/>');
-        cell_minor.html('<input type="text" id="minor" value="' + current_minor + '" class="form-text table-input"/>');
+        cell_uuid.html('<input type="text" id="uuid" value="' + current_uuid + '" class="form-text tap-beacons-table-input"/>');
+        cell_major.html('<input type="text" id="major" value="' + current_major + '" class="form-text tap-beacons-table-input"/>');
+        cell_minor.html('<input type="text" id="minor" value="' + current_minor + '" class="form-text tap-beacons-table-input"/>');
 
         // Add new operations for save and cancel
-        cell_save.append('<div class="tap-beacon-operations-2"><input type="submit" value="Save" class="form-submit tap-beacons-update-submit" /> | <a href="#cancel" class="tap-beacons-cancel-btn">cancel</a></div>');
+        cell_save.append('<div class="tap-beacons-operations-2"><input type="submit" value="Save" class="form-submit tap-beacons-update-submit" /> | <a href="#cancel" class="tap-beacons-cancel-btn">cancel</a></div>');
 
         // Hide initial operations
-        par.find('.tap-beacon-operations').hide();
+        par.find('.tap-beacons-operations').hide();
 
         // Set save button actions
         cell_save.find('.tap-beacons-update-submit').bind('click', function(){
 
             // Get new values of inputs
-            var uuid = jQuery('#uuid').val(),
-                major = jQuery('#major').val(),
-                minor = jQuery('#minor').val();
+            var uuid = $('#uuid').val(),
+                major = $('#major').val(),
+                minor = $('#minor').val();
 
             // Setup url to process new data
             action = action +
@@ -96,16 +91,16 @@ jQuery(function(){
             cell_minor.html(current_minor);
 
             // Show initial operations
-            jQuery('.tap-beacon-operations').show();
+            $('.tap-beacons-operations').show();
 
             // Remove unneeded save and cancel
-            jQuery('.tap-beacon-operations-2').remove();
+            $('.tap-beacons-operations-2').remove();
         });
     });
 
     // Function to submit ajax data
     function submitData(action) {
-        jQuery.ajax({
+        $.ajax({
             url: action,
             type: "GET",
             success: function(data){
@@ -113,5 +108,4 @@ jQuery(function(){
             }
         });
     }
-
 });

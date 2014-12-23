@@ -16,7 +16,7 @@
                 <input type="text" value="" name="minor_num" id="beacon-minor" class="form-text" size="60" />
             </label>
 
-            <input type="submit" value="Add Beacon" class="form-submit beacon-add-submit" />
+            <input type="submit" value="Add Beacon" class="form-submit tap-beacons-add-submit" />
         </form>
     </div>
 
