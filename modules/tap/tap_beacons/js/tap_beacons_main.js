@@ -4,6 +4,26 @@ jQuery(function($) {
     $('#tap-beacons-add-beacon-form').submit(function(e){
         e.preventDefault();
 
+        // TODO: Add validation to form.
+        $(".tap-beacons-error-message").html("");
+        $(".has-error").removeClass("has-error");
+        var hasError = false;
+
+        // Check if required fields are filled in
+        $('input[data-required=true]').each(function(){
+            if( !$(this).val() ){
+                $(this).siblings(".error-message").html('Please fill out this field.');
+                $(this).parent().parent().addClass("has-error");
+                hasError = true;
+            }
+        });
+
+        // Return false if any errors exist
+        if(hasError == true) {
+            $(".has-error").first().find('input').first().focus();
+            return false;
+        }
+
         // Get data and set up acton url
         var formData = $(this).serialize();
         var action = $(this).attr("action") + "&" + formData;
@@ -39,13 +59,13 @@ jQuery(function($) {
         var action = $(this).attr('href');
 
         // Store TR parent
-        var par = $(this).parent().parent().parent();
+        var tr = $(this).parent().parent().parent();
 
         // Store each cell element
-        var cell_uuid = par.children('td:nth-child(1)'),
-            cell_major = par.children('td:nth-child(2)'),
-            cell_minor = par.children('td:nth-child(3)'),
-            cell_save = par.children('td:nth-child(4)');
+        var cell_uuid = tr.children('td:nth-child(1)'),
+            cell_major = tr.children('td:nth-child(2)'),
+            cell_minor = tr.children('td:nth-child(3)'),
+            cell_save = tr.children('td:nth-child(4)');
 
         // Store initial value of cells
         var current_uuid = cell_uuid.html(),
@@ -53,15 +73,20 @@ jQuery(function($) {
             current_minor = cell_minor.html();
 
         // Convert values into inputs so user can make changes
-        cell_uuid.html('<input type="text" id="uuid" value="' + current_uuid + '" class="form-text tap-beacons-table-input"/>');
-        cell_major.html('<input type="text" id="major" value="' + current_major + '" class="form-text tap-beacons-table-input"/>');
-        cell_minor.html('<input type="text" id="minor" value="' + current_minor + '" class="form-text tap-beacons-table-input"/>');
+        cell_uuid.html('<input type="text" id="uuid" value="' + current_uuid +
+            '" class="form-text tap-beacons-table-input"/>');
+        cell_major.html('<input type="text" id="major" value="' + current_major +
+            '" class="form-text tap-beacons-table-input"/>');
+        cell_minor.html('<input type="text" id="minor" value="' + current_minor +
+            '" class="form-text tap-beacons-table-input"/>');
 
         // Add new operations for save and cancel
-        cell_save.append('<div class="tap-beacons-operations-2"><input type="submit" value="Save" class="form-submit tap-beacons-update-submit" /> | <a href="#cancel" class="tap-beacons-cancel-btn">cancel</a></div>');
+        cell_save.append('<div class="tap-beacons-operations-save">' +
+            '<input type="submit" value="Save" class="form-submit tap-beacons-update-submit" /> | ' +
+            '<a href="#cancel" class="tap-beacons-cancel-btn">cancel</a></div>');
 
         // Hide initial operations
-        par.find('.tap-beacons-operations').hide();
+        tr.find('.tap-beacons-operations').hide();
 
         // Set save button actions
         cell_save.find('.tap-beacons-update-submit').bind('click', function(){
@@ -70,6 +95,8 @@ jQuery(function($) {
             var uuid = $('#uuid').val(),
                 major = $('#major').val(),
                 minor = $('#minor').val();
+
+            // TODO: Add validation to data.
 
             // Setup url to process new data
             action = action +
@@ -94,7 +121,7 @@ jQuery(function($) {
             $('.tap-beacons-operations').show();
 
             // Remove unneeded save and cancel
-            $('.tap-beacons-operations-2').remove();
+            $('.tap-beacons-operations-save').remove();
         });
     });
 
@@ -105,6 +132,8 @@ jQuery(function($) {
             type: "GET",
             success: function(data){
                 location.reload();
+            },
+            error: function(data){
             }
         });
     }

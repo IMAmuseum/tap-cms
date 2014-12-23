@@ -98,3 +98,23 @@ function tap_beacons_query_execute($query, $message){
         drupal_set_message(t('There was an error saving your data. Please try again.'));
     }
 }
+
+/**
+* Function to set beacon references to certain content types.
+*/
+function tap_beacons_admin_form($form, &$form_state) {
+
+    // Get content types
+    $form['tap_beacons_content_types'] = array(
+        '#type' => 'checkboxes',
+        '#title' => t('Content types that can be referenced'),
+        '#description' => t('The available content types that can be added to this field.'),
+        '#default_value' => variable_get('tap_beacons_content_types'),
+        '#required' => TRUE,
+        '#mulitple' => true,
+        '#options' => array_map('check_plain', node_type_get_names())
+    );
+
+    return system_settings_form($form, $form_state);
+}
+

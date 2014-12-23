@@ -35,6 +35,15 @@ function tap_beacons_menu() {
         'file'              => 'tap_beacons.admin.inc',
     );
 
+    $items['admin/tap/beacons-reference'] = array(
+        'title'             => 'Beacons Reference',
+        'page callback'     => 'drupal_get_form',
+        'page arguments'    => array('tap_beacons_admin_form'),
+        'access arguments'  => array('administer tap'),
+        'type'              => MENU_LOCAL_TASK,
+        'file'              => 'tap_beacons.admin.inc',
+    );
+
     return $items;
 }
 
@@ -85,4 +94,45 @@ function tap_beacons_get_beacons(){
     );
 
     return $table;
+}
+
+/**
+* Function to add beacon multiselect to set content types
+*/
+function tap_beacons_form_alter(&$form, &$form_state, $form_id) {
+
+    // Get set content types
+    $var = variable_get('tap_beacons_content_types');
+
+    // Check if content type ites are set
+    if (isset($form['#node']) && isset($var)) {
+
+        // Get node content type
+        $type = $form['#node']->type;
+
+        // If the content type is one that is check in beacon references
+        if ($var[$type] !== 0) {
+
+            // Get the beacon that are set up
+            $result = db_select('tap_beacons', 'b')
+                ->fields('b', array('beacon_id', 'uuid', 'major_num', 'minor_num'))
+                ->execute();
+
+            // Loop through the beacons and store formatted data
+            foreach ($result as $row) {
+                $beacon_options[$row->beacon_id] = $row->uuid . " / " . $row->major_num . " / " . $row->minor_num;
+            }
+
+            // Use info to create multiselect box on edit page
+            $form['tap_beacons'] = array(
+                '#type' => 'select',
+                '#multiple' => TRUE,
+                '#title' => t('Associated Beacons (UUID / Major Number / Minor Number)'),
+                '#required' => FALSE,
+                '#options' => $beacon_options,
+                '#size' => 10
+            );
+        }
+    }
+
 }
