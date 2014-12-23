@@ -70,7 +70,7 @@ function tap_beacons_get_beacons(){
     // Loop through each row and store the formatted data
     foreach ($result as $row) {
         $anchor = '<div class="tap-beacon-operations">';
-        $anchor .= '<a href="#edit" data-id="'. $row->beacon_id .'" class="tap-beacons-update-btn">edit</a> | ';
+        $anchor .= '<a href="/?q=admin/tap/beacons/update&id='. $row->beacon_id .'" class="tap-beacons-update-btn">edit</a> | ';
         $anchor .= '<a href="/?q=admin/tap/beacons/delete&id='. $row->beacon_id .'" class="tap-beacons-delete-btn">delete</a>';
         $anchor .= '</div>';
 
