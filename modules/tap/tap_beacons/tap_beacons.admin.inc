@@ -17,9 +17,10 @@ function tap_beacons_admin_section() {
  * Function for adding beacon data
  */
 function tap_beacons_admin_add(){
-    $uuid       = $_POST['uuid'];
-    $major_num  = $_POST['major_num'];
-    $minor_num  = $_POST['minor_num'];
+    // Store query string values
+    $uuid       = $_GET['uuid'];
+    $major_num  = $_GET['major_num'];
+    $minor_num  = $_GET['minor_num'];
 
     // Create insert query to add items
     $query = db_insert('tap_beacons')
@@ -29,30 +30,36 @@ function tap_beacons_admin_add(){
           'minor_num' => $minor_num,
         ));
 
+    // Set message to be used for action
     $message = 'The beacon has been added.';
 
-    tap_beacons_query_execute($query, $type);
+    // Call function to execute query
+    tap_beacons_query_execute($query, $message);
 }
 
 /**
  * Function for delete beacon data
  */
 function tap_beacons_admin_delete(){
+    // Store query string values
     $id = $_GET['id'];
 
     // Create delete query to remove items
     $query = db_delete('tap_beacons')
         ->condition('beacon_id', $id);
 
+    // Set message to be used for action
     $message = 'The beacon has been deleted.';
 
-    tap_beacons_query_execute($query, $type);
+    // Call function to execute query
+    tap_beacons_query_execute($query, $message);
 }
 
 /**
  * Function for updating beacon data
  */
 function tap_beacons_admin_update(){
+    // Store query string values
     $id         = $_GET['id'];
     $uuid       = $_GET['uuid'];
     $major_num  = $_GET['major_num'];
@@ -67,8 +74,10 @@ function tap_beacons_admin_update(){
           'minor_num' => $minor_num,
         ));
 
+    // Set message to be used for action
     $message = 'The beacon has been updated.';
 
+    // Call function to execute query
     tap_beacons_query_execute($query, $message);
 }
 
@@ -77,13 +86,15 @@ function tap_beacons_admin_update(){
 */
 function tap_beacons_query_execute($query, $message){
 
-    // Use $success to check for errors.
+    // Check for errors on query submissions
     if ($success = $query->execute()) {
-        // Tell the user that the beacon has been deleted.
+        // Notify the user of the action taken
         drupal_set_message(t($message));
+
+        // Clear cache so new data will appear automatically
         cache_clear_all('theme_registry', 'cache', TRUE);
     } else {
-        // If there's an error, $success will evaluate to FALSE, and the following code will execute.
+        // If there's an error, let the user know
         drupal_set_message(t('There was an error saving your data. Please try again.'));
     }
 }

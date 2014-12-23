@@ -1,5 +1,6 @@
 jQuery(function(){
 
+    // Add data to DB
     jQuery('#tap-beacons-add-beacon-form').submit(function(e){
         e.preventDefault();
 
@@ -8,7 +9,7 @@ jQuery(function(){
 
         jQuery.ajax({
             url: action,
-            type: "POST",
+            type: "GET",
             data: formData,
             success: function(data){
                 location.reload();
@@ -16,79 +17,99 @@ jQuery(function(){
         });
     });
 
+    // Delete data from DB
     jQuery('.tap-beacons-delete-btn').click(function(e){
         e.preventDefault();
 
+        // Get href to set as ajax action
         var action = jQuery(this).attr("href");
 
+        // Ask user to confirm their decision to delete the item.
         var choice = confirm("Are you sure you want to delete this item? This action cannot be undone.");
 
+        // If confirmed, send ajax request.
         if (choice) {
-
-            jQuery.ajax({
-                url: action,
-                type: "GET",
-                success: function(data){
-                    location.reload();
-                }
-            });
+            submitData(action);
         }
     });
 
+    // Update data to DB
     jQuery('.tap-beacons-update-btn').click(function(e){
         e.preventDefault();
 
+        // Hit cancel on any items that may be open, so only one item can be edited at a time
         jQuery('.tap-beacons-cancel-btn').click();
 
+        // Get ID of item
         var id = jQuery(this).data("id");
 
-        var par = jQuery(this).parent().parent().parent(); //tr
-        var uuid = par.children("td:nth-child(1)");
-        var major = par.children("td:nth-child(2)");
-        var minor = par.children("td:nth-child(3)");
-        var save = par.children("td:nth-child(4)");
+        // Store TR parent
+        var par = jQuery(this).parent().parent().parent();
 
-        var currentUuid = uuid.html();
-        var currentMajor = major.html();
-        var currentMinor = minor.html();
+        // Store each cell element
+        var cell_uuid = par.children("td:nth-child(1)"),
+            cell_major = par.children("td:nth-child(2)"),
+            cell_minor = par.children("td:nth-child(3)"),
+            cell_save = par.children("td:nth-child(4)");
 
+        // Store initial value of cells
+        var current_uuid = cell_uuid.html(),
+            current_major = cell_major.html(),
+            current_minor = cell_minor.html();
 
-        uuid.html('<input type="text" id="uuid" value="' + currentUuid + '" class="form-text table-input"/>');
-        major.html('<input type="text" id="major" value="' + currentMajor + '" class="form-text table-input"/>');
-        minor.html('<input type="text" id="minor" value="' + currentMinor + '" class="form-text table-input"/>');
-        save.append('<div class="tap-beacon-operations-2"><input type="submit" value="Save" data-id="' + id + '" class="form-submit tap-beacons-update-submit" /> | <a href="#cancel" data-id="' + id + '" class="tap-beacons-cancel-btn">cancel</a></div>');
+        // Convert values into inputs so user can make changes
+        cell_uuid.html('<input type="text" id="uuid" value="' + current_uuid + '" class="form-text table-input"/>');
+        cell_major.html('<input type="text" id="major" value="' + current_major + '" class="form-text table-input"/>');
+        cell_minor.html('<input type="text" id="minor" value="' + current_minor + '" class="form-text table-input"/>');
+        cell_save.append('<div class="tap-beacon-operations-2"><input type="submit" value="Save" data-id="' + id + '" class="form-submit tap-beacons-update-submit" /> | <a href="#cancel" data-id="' + id + '" class="tap-beacons-cancel-btn">cancel</a></div>');
+
+        // Hide initial operations
         par.find('.tap-beacon-operations').hide();
 
-        save.find('.tap-beacons-update-submit').bind('click', function(){
-            var id = jQuery(this).data("id");
+        // Set save button actions
+        cell_save.find('.tap-beacons-update-submit').bind('click', function(){
 
-            var uuid = jQuery('#uuid').val();
-            var major = jQuery('#major').val();
-            var minor = jQuery('#minor').val();
+            // Get new values of inputs
+            var uuid = jQuery('#uuid').val(),
+                major = jQuery('#major').val(),
+                minor = jQuery('#minor').val();
 
+            // Setup url to process new data
             var action = "/?q=admin/tap/beacons/update&id=" + id +
                 "&uuid=" + uuid +
                 "&major_num=" + major +
                 "&minor_num=" + minor;
 
-            jQuery.ajax({
-                url: action,
-                type: "GET",
-                success: function(data){
-                    location.reload();
-                }
-            });
+            // Send to ajax function
+            submitData(action);
         });
 
-        save.find('.tap-beacons-cancel-btn').bind('click', function(e){
+        // Set cancel link actions
+        cell_save.find('.tap-beacons-cancel-btn').bind('click', function(e){
             e.preventDefault();
 
-            uuid.html(currentUuid);
-            major.html(currentMajor);
-            minor.html(currentMinor);
+            //Restore initial values
+            cell_uuid.html(current_uuid);
+            cell_major.html(current_major);
+            cell_minor.html(current_minor);
+
+            // Show initial operations
             jQuery('.tap-beacon-operations').show();
+
+            // Remove unneeded save and cancel
             jQuery('.tap-beacon-operations-2').remove();
         });
     });
+
+    // Function to submit ajax data
+    function submitData(action) {
+        jQuery.ajax({
+            url: action,
+            type: "GET",
+            success: function(data){
+                location.reload();
+            }
+        });
+    }
 
 });
