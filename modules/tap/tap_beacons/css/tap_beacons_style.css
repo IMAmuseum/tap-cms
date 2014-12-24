@@ -18,3 +18,11 @@
     margin: 0 !important;
 }
 
+.tap-beacons-error-message {
+    color: #c00;
+}
+
+.has-error {
+    border-color: #c00 !important;
+}
+

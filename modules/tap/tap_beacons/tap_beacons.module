@@ -76,6 +76,8 @@ function tap_beacons_get_beacons(){
         ->fields('b', array('beacon_id', 'uuid', 'major_num', 'minor_num'))
         ->execute();
 
+    $row_array = [];
+
     // Loop through each row and store the formatted data
     foreach ($result as $row) {
         $anchor = '<div class="tap-beacons-operations">';
@@ -104,35 +106,101 @@ function tap_beacons_form_alter(&$form, &$form_state, $form_id) {
     // Get set content types
     $var = variable_get('tap_beacons_content_types');
 
-    // Check if content type ites are set
+    // Check if content type items are set
     if (isset($form['#node']) && isset($var)) {
 
         // Get node content type
         $type = $form['#node']->type;
 
-        // If the content type is one that is check in beacon references
-        if ($var[$type] !== 0) {
+        $form_type = $type . "_node_form";
 
-            // Get the beacon that are set up
-            $result = db_select('tap_beacons', 'b')
-                ->fields('b', array('beacon_id', 'uuid', 'major_num', 'minor_num'))
-                ->execute();
+        // Check to make sure field only shows on form edit page
+        if($form_id == $form_type){
 
-            // Loop through the beacons and store formatted data
-            foreach ($result as $row) {
-                $beacon_options[$row->beacon_id] = $row->uuid . " / " . $row->major_num . " / " . $row->minor_num;
+            // If the content type is one that is check in beacon references
+            if ($var[$type] !== 0) {
+
+                // Get the beacon that are set up
+                $result = db_select('tap_beacons', 'b')
+                    ->fields('b', array('beacon_id', 'uuid', 'major_num', 'minor_num'))
+                    ->execute();
+
+                // Loop through the beacons and store formatted data
+                foreach ($result as $row) {
+                    $beacon_options[$row->beacon_id] = $row->uuid . " / " . $row->major_num . " / " . $row->minor_num;
+                }
+
+                // Call DB to get peviously selected values
+                $selected = db_select('tap_stop_beacons', 's')
+                    ->fields('s', array('beacon_id'))
+                    ->where('stop_nid = ' . $form['#node']->nid)
+                    ->execute();
+
+                // Set default items if they exist
+                $selected_options = [];
+                foreach ($selected as $row) {
+                    $selected_options[] = $row->beacon_id;
+                }
+
+                // Use info to create multiselect box on edit page
+                $form['tap_beacons'] = array(
+                    '#type' => 'select',
+                    '#multiple' => TRUE,
+                    '#title' => t('Associated Beacons (UUID / Major Number / Minor Number)'),
+                    '#required' => FALSE,
+                    '#options' => $beacon_options,
+                    '#size' => 10,
+                    '#default_value' => $selected_options,
+                );
             }
-
-            // Use info to create multiselect box on edit page
-            $form['tap_beacons'] = array(
-                '#type' => 'select',
-                '#multiple' => TRUE,
-                '#title' => t('Associated Beacons (UUID / Major Number / Minor Number)'),
-                '#required' => FALSE,
-                '#options' => $beacon_options,
-                '#size' => 10
-            );
         }
     }
+}
 
+/**
+* Function to add beacon to stop references into the database
+*/
+function tap_beacons_add_beacon_stop($node){
+    // Get set content types
+    $var = variable_get('tap_beacons_content_types');
+
+    // Get node content type
+    $type = $node->type;
+
+    if ($var[$type] !== 0) {
+        // Store selected beacons
+        $beacons = $_POST['tap_beacons'];
+
+        if (isset($node->nid)){
+            // Delete any existing beacon associations for the stop
+            tap_beacons_node_delete($node);
+
+            // Add new references in separate rows
+            foreach ($beacons as $beacon) {
+                $query = db_insert('tap_stop_beacons')
+                    ->fields(array(
+                      'stop_nid' => $node->nid,
+                      'beacon_id' => $beacon
+                    ))
+                    ->execute();
+            }
+        }
+    }
+}
+
+function tap_beacons_node_submit($node) {
+
+    tap_beacons_add_beacon_stop($node);
+}
+
+function tap_beacons_node_insert($node) {
+
+    tap_beacons_add_beacon_stop($node);
+}
+
+function tap_beacons_node_delete($node) {
+    // Delete any existing beacon associations for the stop
+    $query = db_delete('tap_stop_beacons')
+        ->condition('stop_nid', $node->nid)
+        ->execute();
 }

@@ -103,6 +103,12 @@ function tap_beacons_schema() {
   $schema['tap_stop_beacons'] = array(
     'description' => 'The table to store stop/beacon relationship.',
     'fields' => array(
+      'id' => array(
+        'description' => 'The unique id for table.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
       'stop_nid' => array(
         'description' => 'Stop node id reference.',
         'type' => 'int',
@@ -126,6 +132,7 @@ function tap_beacons_schema() {
         'columns' => array('beacon_id' => 'beacon_id'),
       ),
     ),
+    'primary key' => array('id'),
   );
 
   return $schema;

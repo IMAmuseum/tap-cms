@@ -11,16 +11,19 @@ jQuery(function($) {
 
         // Check if required fields are filled in
         $('input[data-required=true]').each(function(){
-            if( !$(this).val() ){
-                $(this).siblings(".error-message").html('Please fill out this field.');
-                $(this).parent().parent().addClass("has-error");
+
+            $this = $(this);
+
+            if( !$this.val() ){
+                $this.siblings(".tap-beacons-error-message").html('Please fill out this field.');
+                $this.addClass("has-error");
                 hasError = true;
             }
         });
 
         // Return false if any errors exist
         if(hasError == true) {
-            $(".has-error").first().find('input').first().focus();
+            $('.has-error').first().focus();
             return false;
         }
 

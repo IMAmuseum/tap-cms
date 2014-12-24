@@ -2,7 +2,7 @@
     <div>
         <form action="/?q=admin/tap/beacons/add" method="post" id="tap-beacons-add-beacon-form" class="tap-beacons-add-beacon-form">
             <div class="general-errors"></div>
-
+            <p>All fields are required to add a new beacon.</p>
             <label>
                 UUID<br />
                 <input type="text" value="" name="uuid" id="beacon-uuid" class="form-text" size="60" data-required="true" />
