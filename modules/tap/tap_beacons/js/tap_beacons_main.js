@@ -4,7 +4,7 @@ jQuery(function($) {
     $('#tap-beacons-add-beacon-form').submit(function(e){
         e.preventDefault();
 
-        // TODO: Add validation to form.
+        // Add validation to form.
         $(".tap-beacons-error-message").html("");
         $(".has-error").removeClass("has-error");
         var hasError = false;
@@ -99,7 +99,7 @@ jQuery(function($) {
                 major = $('#major').val(),
                 minor = $('#minor').val();
 
-            // TODO: Add validation to data.
+            // TODO: Add validation to edit data.
 
             // Setup url to process new data
             action = action +

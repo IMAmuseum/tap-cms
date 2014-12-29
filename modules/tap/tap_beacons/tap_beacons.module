@@ -112,10 +112,8 @@ function tap_beacons_form_alter(&$form, &$form_state, $form_id) {
         // Get node content type
         $type = $form['#node']->type;
 
-        $form_type = $type . "_node_form";
-
         // Check to make sure field only shows on form edit page
-        if($form_id == $form_type){
+        if (strpos($form_id, 'node_form') !== false) {
 
             // If the content type is one that is check in beacon references
             if ($var[$type] !== 0) {
@@ -130,16 +128,20 @@ function tap_beacons_form_alter(&$form, &$form_state, $form_id) {
                     $beacon_options[$row->beacon_id] = $row->uuid . " / " . $row->major_num . " / " . $row->minor_num;
                 }
 
-                // Call DB to get peviously selected values
-                $selected = db_select('tap_stop_beacons', 's')
-                    ->fields('s', array('beacon_id'))
-                    ->where('stop_nid = ' . $form['#node']->nid)
-                    ->execute();
-
-                // Set default items if they exist
                 $selected_options = [];
-                foreach ($selected as $row) {
-                    $selected_options[] = $row->beacon_id;
+
+                // Check if node ID has already been set
+                if (isset($form['#node']->nid)) {
+                    // Call DB to get peviously selected values
+                    $selected = db_select('tap_stop_beacons', 's')
+                        ->fields('s', array('beacon_id'))
+                        ->where('stop_nid = ' . $form['#node']->nid)
+                        ->execute();
+
+                    // Set default items if they exist
+                    foreach ($selected as $row) {
+                        $selected_options[] = $row->beacon_id;
+                    }
                 }
 
                 // Use info to create multiselect box on edit page
@@ -167,7 +169,7 @@ function tap_beacons_add_beacon_stop($node){
     // Get node content type
     $type = $node->type;
 
-    if ($var[$type] !== 0) {
+    if ($var[$type] !== 0 && isset($_POST['tap_beacons'])) {
         // Store selected beacons
         $beacons = $_POST['tap_beacons'];
 
