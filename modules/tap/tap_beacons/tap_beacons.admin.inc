@@ -48,6 +48,10 @@ function tap_beacons_admin_delete(){
     $query = db_delete('tap_beacons')
         ->condition('beacon_id', $id);
 
+    $rel_query = db_delete('tap_stop_beacons')
+        ->condition('beacon_id', $id)
+        ->execute();
+
     // Set message to be used for action
     $message = 'The beacon has been deleted.';
 
