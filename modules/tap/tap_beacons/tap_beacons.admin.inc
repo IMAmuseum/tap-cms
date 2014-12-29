@@ -6,6 +6,9 @@
 
 function tap_beacons_admin_section() {
 
+    // Clear cache so new data will appear automatically
+    cache_clear_all('theme_registry', 'cache', TRUE);
+
     // Set up styles and JS file to be used on beacon admin pages
     drupal_add_css(drupal_get_path('module', 'tap_beacons') . '/css/tap_beacons_style.css');
     drupal_add_js(drupal_get_path('module', 'tap_beacons') . '/js/tap_beacons_main.js');
@@ -95,9 +98,6 @@ function tap_beacons_query_execute($query, $message){
     if ($success = $query->execute()) {
         // Notify the user of the action taken
         drupal_set_message(t($message));
-
-        // Clear cache so new data will appear automatically
-        cache_clear_all('theme_registry', 'cache', TRUE);
     } else {
         // If there's an error, let the user know
         drupal_set_message(t('There was an error saving your data. Please try again.'));
