@@ -5,6 +5,10 @@
     margin-bottom: 1em;
 }
 
+table.tap-beacons-table td {
+    vertical-align: top !important;
+}
+
 .tap-beacons-table-input {
     font-size: 12px;
     width: 100%;

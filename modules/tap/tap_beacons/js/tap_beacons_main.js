@@ -65,10 +65,10 @@ jQuery(function($) {
         var tr = $(this).parent().parent().parent();
 
         // Store each cell element
-        var cell_uuid = tr.children('td:nth-child(1)'),
-            cell_major = tr.children('td:nth-child(2)'),
-            cell_minor = tr.children('td:nth-child(3)'),
-            cell_save = tr.children('td:nth-child(4)');
+        var cell_uuid   = tr.children('td:nth-child(1)').find('.uuid'),
+            cell_major  = tr.children('td:nth-child(2)'),
+            cell_minor  = tr.children('td:nth-child(3)'),
+            cell_save   = tr.children('td:nth-child(4)');
 
         // Store initial value of cells
         var current_uuid = cell_uuid.html(),
@@ -76,12 +76,9 @@ jQuery(function($) {
             current_minor = cell_minor.html();
 
         // Convert values into inputs so user can make changes
-        cell_uuid.html('<input type="text" id="uuid" value="' + current_uuid +
-            '" class="form-text tap-beacons-table-input"/>');
-        cell_major.html('<input type="text" id="major" value="' + current_major +
-            '" class="form-text tap-beacons-table-input"/>');
-        cell_minor.html('<input type="text" id="minor" value="' + current_minor +
-            '" class="form-text tap-beacons-table-input"/>');
+        cell_uuid.html( '<input type="text" id="uuid" value="'  + current_uuid  + '" class="form-text tap-beacons-table-input"/>');
+        cell_major.html('<input type="text" id="major" value="' + current_major + '" class="form-text tap-beacons-table-input"/>');
+        cell_minor.html('<input type="text" id="minor" value="' + current_minor + '" class="form-text tap-beacons-table-input"/>');
 
         // Add new operations for save and cancel
         cell_save.append('<div class="tap-beacons-operations-save">' +

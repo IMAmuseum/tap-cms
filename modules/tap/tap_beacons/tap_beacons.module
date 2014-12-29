@@ -80,19 +80,50 @@ function tap_beacons_get_beacons(){
 
     // Loop through each row and store the formatted data
     foreach ($result as $row) {
+
+        // Create anchors for edit and delete
         $anchor = '<div class="tap-beacons-operations">';
         $anchor .= '<a href="/?q=admin/tap/beacons/update&id='. $row->beacon_id .'" class="tap-beacons-update-btn">edit</a> | ';
         $anchor .= '<a href="/?q=admin/tap/beacons/delete&id='. $row->beacon_id .'" class="tap-beacons-delete-btn">delete</a>';
         $anchor .= '</div>';
 
-        $row_array[] = array($row->uuid, $row->major_num, $row->minor_num, $anchor);
+        // Query stop data to create links back to related stops
+        $stop_query = db_select('tap_stop_beacons', 's');
+        $stop_query->join('node', 'n', 'n.nid = s.stop_nid');
+        $stop_query->fields('s', array('stop_nid'))
+            ->fields('n', array('title'));
+        $stop_query->condition('s.beacon_id', $row->beacon_id, '=');
+        $stop_result = $stop_query->execute();
+
+        // Store uuid
+        $uuid = '<div class="uuid">' . $row->uuid . "</div>";
+
+        // If there are any associate stops
+        if (count($stop_result) !== 0){
+
+            // Create stop link array
+            $stop_link = [];
+
+            // Loop through those stops and create their links
+            foreach ($stop_result as $stop_row) {
+                $stop_link[] = '<a href="/?q=node/' . $stop_row->stop_nid . '">' . $stop_row->title . '</a>';
+            }
+
+            // Inject the stop links into the uuid variable and separate each stop by a comma.
+            $uuid .= '<small>' . implode(', ', $stop_link) . '</small>';
+        }
+
+        $row_array[] = array($uuid, $row->major_num, $row->minor_num, $anchor);
     }
 
     // Build table with data
     $table = array(
         '#theme' => 'table',
         '#header' => array(t('UUID'), t('Major Number'), t('Minor Number'), t('Operations')),
-        '#rows' => $row_array
+        '#rows' => $row_array,
+        '#attributes' => array (
+            'class' => array('tap-beacons-table')
+        ),
     );
 
     return $table;
