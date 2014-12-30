@@ -102,6 +102,7 @@ class TourML {
         foreach ($this->assets as $k => $asset) {
             $asset += module_invoke_all('tourml_asset', $asset);
             $asset['type'] = _tap_anti_field($asset['field']['#field_name']);
+            $asset['content_type'] = _tap_anti_field($asset['field']['#field_type']);
             $this->assets[$k]['rendered'] = theme('tap_tourml_asset', array(
                'asset' => $asset,
                'language' => $language->language,
@@ -145,6 +146,13 @@ class TourML {
         // Keep track of the tour last modified date
         if (empty($this->tour['last_modified']) || $this->tour['last_modified'] < $node->changed) {
             $this->tour['last_modified'] = $node->changed;
+        }
+
+        // Check if type is tour to call specific hook for adding beacons
+        if ($node->type == "tour"){
+            drupal_alter('tourml_tour', $node);
+        } else {
+            drupal_alter('tourml_stop_meta', $node);
         }
 
         // Loop thru renderable fields

@@ -221,6 +221,15 @@ function tap_beacons_add_beacon_stop($node){
     }
 }
 
+/**
+* Function to delete beacon to stop references in the database
+*/
+function tap_beacons_node_delete($node) {
+    $query = db_delete('tap_stop_beacons')
+        ->condition('stop_nid', $node->nid)
+        ->execute();
+}
+
 function tap_beacons_node_submit($node) {
 
     tap_beacons_add_beacon_stop($node);
@@ -231,9 +240,95 @@ function tap_beacons_node_insert($node) {
     tap_beacons_add_beacon_stop($node);
 }
 
-function tap_beacons_node_delete($node) {
-    // Delete any existing beacon associations for the stop
-    $query = db_delete('tap_stop_beacons')
+/**
+* Function to alter node (tour) object and add beacons to tourml as asset
+*/
+function tap_beacons_tourml_tour_alter(&$node){
+
+    // Run select query for beacons
+    $result = db_select('tap_beacons', 'b')
+        ->fields('b', array('beacon_id', 'uuid', 'major_num', 'minor_num'))
+        ->execute()
+        ->fetchAll();
+
+    if (!empty($result)) {
+
+        // Build XML snippet for TourML
+        $doc = '<beacons>';
+
+        foreach($result as $row){
+            $doc .= '<beacon id="'. $row->beacon_id .
+                    '" uuid="' . $row->uuid .
+                    '" major="' . $row->major_num .
+                    '" minor="'. $row->minor_num .
+                    '" />';
+        }
+
+        $doc .= '</beacons>';
+
+        // Set up node field attributes in content object
+        $node->content['field_beacons'] = array();
+        $node->content['field_beacons']['#field_name'] = 'beacons';
+        $node->content['field_beacons']['#theme'] = 'tap_tourml_asset_text_long';
+        $node->content['field_beacons']['#formatter'] = 'tap_tourml_asset';
+        $node->content['field_beacons']['#view_mode'] = 'tourml_xml';
+        $node->content['field_beacons']['#title'] = 'beacons';
+        $node->content['field_beacons']['#weight'] = 0;
+        $node->content['field_beacons']['#access'] = TRUE;
+        $node->content['field_beacons']['#language'] = 'und';
+        $node->content['field_beacons']['#field_type'] = 'xml';
+        $node->content['field_beacons']['#field_translatable'] = 0;
+        $node->content['field_beacons']['#entity_type'] = "node";
+        $node->content['field_beacons']['#bundle'] = "tour";
+        $node->content['field_beacons']['image_style'] = array();
+        $node->content['field_beacons']['#object'] = $node;
+        $node->content['field_beacons']['#items'] = array();
+        $node->content['field_beacons']['#items'][0]['value'] = $doc;
+        $node->content['field_beacons']['#items'][0]['format'] = null;
+        $node->content['field_beacons']['#items'][0]['safe_value'] = $doc;
+    }
+}
+
+/**
+* Function to alter node (stop) objects and add beacons to tourml as properties
+*/
+function tap_beacons_tourml_stop_meta_alter(&$node){
+
+    // Run select query for beacons to stop references
+    $result = db_select('tap_stop_beacons', 's')
+        ->fields('s', array('beacon_id'))
         ->condition('stop_nid', $node->nid)
-        ->execute();
+        ->execute()
+        ->fetchAll();
+
+    if (!empty($result)) {
+
+        // Add properties to stop with beacons
+        $node->content['field_beacon_id'] = array();
+        $node->content['field_beacons']['#items'] = array();
+        $node->content['field_beacon_id']['image_style'] = array();
+
+        $i = 0;
+        foreach($result as $row){
+            $id = $row->beacon_id;
+
+            $node->content['field_beacon_id']['#field_name'] = 'field_beacon_id';
+            $node->content['field_beacon_id']['#theme'] = 'tap_tourml_property_text';
+            $node->content['field_beacon_id']['#formatter'] = 'tap_tourml_property';
+            $node->content['field_beacon_id']['#view_mode'] = 'tourml_xml';
+            $node->content['field_beacon_id']['#title'] = 'beacons';
+            $node->content['field_beacon_id']['#weight'] = 0;
+            $node->content['field_beacon_id']['#access'] = TRUE;
+            $node->content['field_beacon_id']['#language'] = 'und';
+            $node->content['field_beacon_id']['#field_type'] = 'text';
+            $node->content['field_beacon_id']['#field_translatable'] = 0;
+            $node->content['field_beacon_id']['#entity_type'] = "node";
+            $node->content['field_beacon_id']['#object'] = $node;
+            $node->content['field_beacon_id']['#items'][$i]['value'] = $id;
+            $node->content['field_beacon_id']['#items'][$i]['format'] = null;
+            $node->content['field_beacon_id']['#items'][$i]['safe_value'] = $id;
+
+            $i++;
+        }
+    }
 }

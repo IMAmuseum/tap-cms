@@ -85,7 +85,7 @@ function tap_menu() {
         'page arguments'    => array('tap_tourml_validate_form'),
         'access arguments'  => array('access content'),
         'type'              => MENU_LOCAL_TASK,
-    );  
+    );
 
     $items['admin/tap'] = array(
         'title'             => 'Tap',
@@ -190,7 +190,7 @@ function tap_theme() {
             ),
             'file'      => 'tap.templates.inc',
             'template'  => 'templates/tap-tourml-root-stop-entityreference',
-        ), 
+        ),
         /**
          * Stop
          */
@@ -542,7 +542,7 @@ function tap_field_formatter_settings_form($field, $instance, $view_mode, $form,
 
     if ($formatter === 'tap_tourml_multipart_asset' && $field['type'] === 'image') {
         $display_form = TRUE;
-    } 
+    }
     elseif ($field['type'] === 'field_collection') {
         // retrieve the field instances for this field collection
         $instances = field_info_instances('field_collection_item', $field['field_name']);
@@ -596,7 +596,7 @@ function tap_field_formatter_settings_summary($field, $instance, $view_mode) {
 
     if ($display['type'] === 'tap_tourml_multipart_asset' && $field['type'] === 'image') {
         return t('Select image styles.');
-    } 
+    }
     elseif ($field['type'] === 'field_collection') {
         // retrieve the field instances for this field collection
         $instances = field_info_instances('field_collection_item', $field['field_name']);
@@ -695,7 +695,7 @@ function tap_block_configure($delta = '') {
             $form['tap_addstop_block_content_types'] = array(
                 '#type' => 'checkboxes',
                 '#title' => t('The content types to display in the block.'),
-                '#default_value' => variable_get('tap_addstop_block_content_types', array('tour_audio_stop', 'tour_image_stop', 'tour_stop_group', 'tour_video_stop')), 
+                '#default_value' => variable_get('tap_addstop_block_content_types', array('tour_audio_stop', 'tour_image_stop', 'tour_stop_group', 'tour_video_stop')),
                 '#options' => $selectValues,
             );
             break;
@@ -735,7 +735,7 @@ function tap_get_tourml_cache($node) {
     else {
         // retrieve the cached tourml
         $tourml = $cache->data;
-    } 
+    }
     return $tourml;
 }
 
@@ -1039,7 +1039,7 @@ function tap_tourml_display_error($error) {
     case LIBXML_ERR_WARNING:
       $return .= "<b>Warning $error->code</b>: ";
       break;
-    case LIBXML_ERR_ERROR: 
+    case LIBXML_ERR_ERROR:
       $return .= "<b>Error $error->code</b>: ";
       break;
     case LIBXML_ERR_FATAL:
