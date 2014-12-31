@@ -103,19 +103,17 @@ function tap_beacons_get_beacons(){
         // Store uuid
         $uuid = '<div class="uuid">' . $row->uuid . "</div>";
 
-        // If there are any associate stops
-        if (count($stop_result) !== 0){
+        // Create stop link array
+        $stop_link = array();
 
-            // Create stop link array
-            $stop_link = array();
+        // Loop through those stops and create their links
+        foreach ($stop_result as $stop_row) {
+            $stop_url = url('node/' . $stop_row->stop_nid);
+            $stop_link[] = '<a href="' . $stop_url . '">' . $stop_row->title . '</a>';
+        }
 
-            // Loop through those stops and create their links
-            foreach ($stop_result as $stop_row) {
-                $stop_url = url('node/' . $stop_row->stop_nid);
-                $stop_link[] = '<a href="' . $stop_url . '">' . $stop_row->title . '</a>';
-            }
-
-            // Inject the stop links into the uuid variable and separate each stop by a comma.
+        if (!empty($stop_link)) {
+            // Add the stop links into the uuid variable and separate each stop by a comma.
             $uuid .= '<small>' . implode(', ', $stop_link) . '</small>';
         }
 
