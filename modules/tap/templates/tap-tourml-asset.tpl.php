@@ -1,6 +1,6 @@
 <tourml:Asset tourml:id="asset-<?php print $asset['id']; ?>" tourml:type="<?php print $asset['type']; ?>">
     <?php if ($content): ?>
-    <tourml:Content tourml:format="<?php if (isset($asset['filemime'])) print $asset['filemime']; ?>" xml:lang="<?php print $language; ?>">
+    <tourml:Content <?php if (isset($asset['filemime'])) print 'tourml:format="' . $asset['filemime'] . '"'; ?> xml:lang="<?php print $language; ?>">
         <?php if (isset($asset['filemime']) && $asset['filemime'] == 'text/xml'): ?>
             <tourml:Data><?php print $asset['value']; ?></tourml:Data>
         <?php else : ?>
