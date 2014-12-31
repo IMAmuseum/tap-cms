@@ -102,7 +102,6 @@ class TourML {
         foreach ($this->assets as $k => $asset) {
             $asset += module_invoke_all('tourml_asset', $asset);
             $asset['type'] = _tap_anti_field($asset['field']['#field_name']);
-            $asset['content_type'] = _tap_anti_field($asset['field']['#field_type']);
             $this->assets[$k]['rendered'] = theme('tap_tourml_asset', array(
                'asset' => $asset,
                'language' => $language->language,

@@ -292,6 +292,7 @@ function tap_beacons_tourml_tour_alter(&$node){
         $node->content['field_beacons']['#items'][0]['value'] = $doc;
         $node->content['field_beacons']['#items'][0]['format'] = null;
         $node->content['field_beacons']['#items'][0]['safe_value'] = $doc;
+        $node->content['field_beacons']['#items'][0]['filemime'] = 'text/xml';
     }
 }
 
