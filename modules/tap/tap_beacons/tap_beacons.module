@@ -76,15 +76,20 @@ function tap_beacons_get_beacons(){
         ->fields('b', array('beacon_id', 'uuid', 'major_num', 'minor_num'))
         ->execute();
 
-    $row_array = [];
+    $row_array = array();
+
+    $baseUpdateUrl = url("admin/tap/beacons/update");
+    $baseUpdateUrl = (strpos($baseUpdateUrl, "?") === false) ? $baseUpdateUrl . "?" : $baseUpdateUrl . "&";
+    $baseDeleteUrl = url("admin/tap/beacons/delete");
+    $baseDeleteUrl = (strpos($baseDeleteUrl, "?") === false) ? $baseDeleteUrl . "?" : $baseDeleteUrl . "&";
 
     // Loop through each row and store the formatted data
     foreach ($result as $row) {
 
         // Create anchors for edit and delete
         $anchor = '<div class="tap-beacons-operations">';
-        $anchor .= '<a href="/?q=admin/tap/beacons/update&id='. $row->beacon_id .'" class="tap-beacons-update-btn">edit</a> | ';
-        $anchor .= '<a href="/?q=admin/tap/beacons/delete&id='. $row->beacon_id .'" class="tap-beacons-delete-btn">delete</a>';
+        $anchor .= '<a href="' . $baseUpdateUrl . 'id='. $row->beacon_id .'" class="tap-beacons-update-btn">edit</a> | ';
+        $anchor .= '<a href="' . $baseDeleteUrl . 'id='. $row->beacon_id .'" class="tap-beacons-delete-btn">delete</a>';
         $anchor .= '</div>';
 
         // Query stop data to create links back to related stops
@@ -102,11 +107,12 @@ function tap_beacons_get_beacons(){
         if (count($stop_result) !== 0){
 
             // Create stop link array
-            $stop_link = [];
+            $stop_link = array();
 
             // Loop through those stops and create their links
             foreach ($stop_result as $stop_row) {
-                $stop_link[] = '<a href="/?q=node/' . $stop_row->stop_nid . '">' . $stop_row->title . '</a>';
+                $stop_url = url('node/' . $stop_row->stop_nid);
+                $stop_link[] = '<a href="' . $stop_url . '">' . $stop_row->title . '</a>';
             }
 
             // Inject the stop links into the uuid variable and separate each stop by a comma.
@@ -159,7 +165,7 @@ function tap_beacons_form_alter(&$form, &$form_state, $form_id) {
                     $beacon_options[$row->beacon_id] = $row->uuid . " / " . $row->major_num . " / " . $row->minor_num;
                 }
 
-                $selected_options = [];
+                $selected_options = array();
 
                 // Check if node ID has already been set
                 if (isset($form['#node']->nid)) {

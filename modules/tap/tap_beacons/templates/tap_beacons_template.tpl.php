@@ -1,6 +1,6 @@
 <div class="tap-beacons-admin">
     <div>
-        <form action="/?q=admin/tap/beacons/add" method="post" id="tap-beacons-add-beacon-form" class="tap-beacons-add-beacon-form">
+        <form action="<?php print url("admin/tap/beacons/add"); ?>" method="post" id="tap-beacons-add-beacon-form" class="tap-beacons-add-beacon-form">
             <div class="general-errors"></div>
             <p>All fields are required to add a new beacon.</p>
             <label>

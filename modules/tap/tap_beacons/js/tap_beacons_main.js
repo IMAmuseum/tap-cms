@@ -29,7 +29,12 @@ jQuery(function($) {
 
         // Get data and set up acton url
         var formData = $(this).serialize();
-        var action = $(this).attr("action") + "&" + formData;
+        var action = $(this).attr("action");
+        if (action.indexOf("?") === -1) {
+            action = action + "?" + formData;
+        } else {
+            action = action + "&" + formData;
+        }
 
         // Send to ajax function
         submitData(action);
@@ -99,8 +104,14 @@ jQuery(function($) {
             // TODO: Add validation to edit data.
 
             // Setup url to process new data
+            if (action.indexOf("?") === -1) {
+                action = action + "?";
+            } else {
+                action = action + "&";
+            }
+
             action = action +
-                "&uuid=" + uuid +
+                "uuid=" + uuid +
                 "&major_num=" + major +
                 "&minor_num=" + minor;
 
