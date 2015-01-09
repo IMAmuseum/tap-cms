@@ -9,7 +9,7 @@ function tap_beacons_schema() {
 
   // Beacon Data Table
   $schema['tap_beacons'] = array(
-    'description' => 'The table to store individual beacon information.',
+    'description' => 'The table to store individual beacon identity information.',
     'fields' => array(
       'beacon_id' => array(
         'description' => 'The primary id used for a beacon.',
@@ -45,18 +45,17 @@ function tap_beacons_schema() {
     'primary key' => array('beacon_id'),
   );
 
-  // Event Data Table
-  $schema['tap_event_data'] = array(
-    'description' => 'The table to store event analytics.',
+  // Beacon Event Table
+  $schema['tap_beacons_beacon_event'] = array(
+    'description' => 'The table to store beacon event data.',
     'fields' => array(
-      'timestamp' => array(
-        'description' => 'Time of event.',
-        'type' => 'varchar',
-        'length' => 255,
+      'beacon_event_id' => array(
+        'description' => 'The primary id used for an event.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
         'not null' => TRUE,
-        'default' => '',
       ),
-      'event_name' => array(
+      'event' => array(
         'description' => 'The name of the event.',
         'type' => 'varchar',
         'length' => 255,
@@ -70,21 +69,8 @@ function tap_beacons_schema() {
         'not null' => TRUE,
         'default' => '',
       ),
-      'beacon_id' => array(
-        'description' => 'The event to beacon reference.',
-        'type' => 'int',
-        'unsigned' => TRUE,
-        'not null' => TRUE,
-      ),
-      'beacon_tx_power' => array(
-        'description' => 'TX Power of beacon.',
-        'type' => 'int',
-        'unsigned' => TRUE,
-        'not null' => TRUE,
-        'default' => 0,
-      ),
-      'beacon_range' => array(
-        'description' => 'Beacon to device range.',
+      'timestamp' => array(
+        'description' => 'Time of event.',
         'type' => 'varchar',
         'length' => 255,
         'not null' => TRUE,
@@ -92,15 +78,63 @@ function tap_beacons_schema() {
       ),
     ),
     'foreign keys' => array(
-      'tap_beacons' => array(
-        'table' => 'tap_beacons',
-        'columns' => array('beacon_id' => 'beacon_id'),
+      'tap_beacons_beacon_event_beacon_status' => array(
+        'table' => 'tap_beacons_beacon_event_beacon_status',
+        'columns' => array('beacon_event_id' => 'beacon_event_id'),
       ),
     ),
+    'primary key' => array('beacon_event_id'),
+  );
+
+  // Interaction Event Table
+  $schema['tap_beacons_interaction_event'] = array(
+    'description' => 'The table to store interaction event data.',
+    'fields' => array(
+      'event_id' => array(
+        'description' => 'The primary id used for an event.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'event' => array(
+        'description' => 'Interaction event name.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'stop_nid' => array(
+        'description' => 'Stop id where event takes place.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'mobile_device_id' => array(
+        'description' => 'ID of mobile device signaling events.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'timestamp' => array(
+        'description' => 'Time of event.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'foreign keys' => array(
+      'tap_beacons_stop_beacon' => array(
+        'table' => 'tap_beacons_stop_beacon',
+        'columns' => array('stop_nid' => 'stop_nid'),
+      ),
+    ),
+    'primary key' => array('event_id'),
   );
 
   // Stop to Beacon Relationship Table
-  $schema['tap_stop_beacons'] = array(
+  $schema['tap_beacons_stop_beacon'] = array(
     'description' => 'The table to store stop/beacon relationship.',
     'fields' => array(
       'id' => array(
@@ -123,7 +157,7 @@ function tap_beacons_schema() {
       ),
     ),
     'foreign keys' => array(
-      'tap_stops' => array(
+      'node' => array(
         'table' => 'node',
         'columns' => array('stop_nid' => 'nid'),
       ),
@@ -133,6 +167,108 @@ function tap_beacons_schema() {
       ),
     ),
     'primary key' => array('id'),
+  );
+
+  // Beacon Status Table
+  $schema['tap_beacons_beacon_status'] = array(
+    'description' => 'The table to store beacon status.',
+    'fields' => array(
+      'beacon_status_id' => array(
+        'description' => 'The unique id for table.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'beacon_id' => array(
+        'description' => 'The event to beacon reference.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'beacon_tx_power' => array(
+        'description' => 'TX Power of beacon.',
+        'type' => 'int',
+        'unsigned' => FALSE,
+      ),
+      'beacon_range' => array(
+        'description' => 'Beacon to device range.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'beacon_accuracy' => array(
+        'description' => 'Beacon accuracy in meters.',
+        'type' => 'numeric',
+        'size' => 'normal',
+        'precision' => '30',
+        'scale' => '20',
+      ),
+    ),
+    'foreign keys' => array(
+      'tap_beacons_beacon_event_beacon_status' => array(
+        'table' => 'tap_beacons_beacon_event_beacon_status',
+        'columns' => array('beacon_status_id' => 'beacon_status_id'),
+      ),
+    ),
+    'primary key' => array('beacon_status_id'),
+  );
+
+  // Beacon Event to Beacon Status Relationship Table
+  $schema['tap_beacons_beacon_event_beacon_status'] = array(
+    'description' => 'The table to store beacon event/beacon status relationships.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'The unique id for table.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'beacon_event_id' => array(
+        'description' => 'Beacon event id reference.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'beacon_status_id' => array(
+        'description' => 'Beacon status id reference.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+    ),
+    'foreign keys' => array(
+      'tap_beacons_beacon_event' => array(
+        'table' => 'tap_beacons_beacon_event',
+        'columns' => array('beacon_event_id' => 'beacon_event_id'),
+      ),
+      'tap_beacons_beacon_status' => array(
+        'table' => 'tap_beacons_beacon_status',
+        'columns' => array('beacon_status_id' => 'beacon_status_id'),
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+
+  // Table to store token for authentication
+  $schema['tap_beacons_tokens'] = array(
+    'description' => 'The table to store tokens for authentication.',
+    'fields' => array(
+      'token_id' => array(
+        'description' => 'The unique id for table.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'token' => array(
+        'description' => 'Token set for authentication.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'primary key' => array('token_id'),
   );
 
   return $schema;

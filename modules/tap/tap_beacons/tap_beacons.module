@@ -44,6 +44,27 @@ function tap_beacons_menu() {
         'file'              => 'tap_beacons.admin.inc',
     );
 
+    $items['admin/tap/beacons/tokens'] = array(
+        'title'             => 'Beacons Token',
+        'page callback'     => 'tap_beacons_admin_set_token',
+        'access arguments'  => array('administer tap'),
+        'file'              => 'tap_beacons.admin.inc',
+    );
+
+    $items['beacons/api/beacons'] = array(
+        'title'             => 'Get Beacon Events',
+        'page callback'     => 'tap_beacons_api_beacon_events',
+        'access arguments'  => array('administer tap'),
+        'file'              => 'tap_beacons.api.inc',
+    );
+
+    $items['beacons/api/interactions'] = array(
+        'title'             => 'Get Interaction Events',
+        'page callback'     => 'tap_beacons_api_interaction_events',
+        'access arguments'  => array('administer tap'),
+        'file'              => 'tap_beacons.api.inc',
+    );
+
     return $items;
 }
 
@@ -53,11 +74,13 @@ function tap_beacons_menu() {
 function tap_beacons_theme() {
 
     $beacons = tap_beacons_get_beacons();
+    $token = tap_beacons_get_tokens();
 
     $items = array(
         'tap_beacons_admin_content' => array(
             'variables' => array(
                 'beacons_data' => $beacons,
+                'token_data' => $token,
             ),
             'template'  => 'templates/tap_beacons_template',
         ),
@@ -67,14 +90,24 @@ function tap_beacons_theme() {
 }
 
 /**
-* Get beacon data from DB
+* Function to fetch beacons from DB
+*/
+function tap_beacons_fetch_beacon_data(){
+    $result = db_select('tap_beacons', 'b')
+        ->fields('b', array('beacon_id', 'uuid', 'major_num', 'minor_num'))
+        ->execute()
+        ->fetchAll();
+
+    return $result;
+}
+
+/**
+* Function to display beacon data
 */
 function tap_beacons_get_beacons(){
 
     // Get beacon data from DB
-    $result = db_select('tap_beacons', 'b')
-        ->fields('b', array('beacon_id', 'uuid', 'major_num', 'minor_num'))
-        ->execute();
+    $result = tap_beacons_fetch_beacon_data();
 
     $row_array = array();
 
@@ -93,7 +126,7 @@ function tap_beacons_get_beacons(){
         $anchor .= '</div>';
 
         // Query stop data to create links back to related stops
-        $stop_query = db_select('tap_stop_beacons', 's');
+        $stop_query = db_select('tap_beacons_stop_beacon', 's');
         $stop_query->join('node', 'n', 'n.nid = s.stop_nid');
         $stop_query->fields('s', array('stop_nid'))
             ->fields('n', array('title'));
@@ -154,9 +187,7 @@ function tap_beacons_form_alter(&$form, &$form_state, $form_id) {
             if ($var[$type] !== 0) {
 
                 // Get the beacon that are set up
-                $result = db_select('tap_beacons', 'b')
-                    ->fields('b', array('beacon_id', 'uuid', 'major_num', 'minor_num'))
-                    ->execute();
+                $result = tap_beacons_fetch_beacon_data();
 
                 // Loop through the beacons and store formatted data
                 foreach ($result as $row) {
@@ -168,7 +199,7 @@ function tap_beacons_form_alter(&$form, &$form_state, $form_id) {
                 // Check if node ID has already been set
                 if (isset($form['#node']->nid)) {
                     // Call DB to get peviously selected values
-                    $selected = db_select('tap_stop_beacons', 's')
+                    $selected = db_select('tap_beacons_stop_beacon', 's')
                         ->fields('s', array('beacon_id'))
                         ->where('stop_nid = ' . $form['#node']->nid)
                         ->execute();
@@ -214,7 +245,7 @@ function tap_beacons_add_beacon_stop($node){
 
             // Add new references in separate rows
             foreach ($beacons as $beacon) {
-                $query = db_insert('tap_stop_beacons')
+                $query = db_insert('tap_beacons_stop_beacon')
                     ->fields(array(
                       'stop_nid' => $node->nid,
                       'beacon_id' => $beacon
@@ -229,17 +260,23 @@ function tap_beacons_add_beacon_stop($node){
 * Function to delete beacon to stop references in the database
 */
 function tap_beacons_node_delete($node) {
-    $query = db_delete('tap_stop_beacons')
+    $query = db_delete('tap_beacons_stop_beacon')
         ->condition('stop_nid', $node->nid)
         ->execute();
 }
 
-function tap_beacons_node_submit($node) {
+/**
+* Function to add beacon reference on node creation
+*/
+function tap_beacons_node_insert($node) {
 
     tap_beacons_add_beacon_stop($node);
 }
 
-function tap_beacons_node_insert($node) {
+/**
+* Function to add beacon reference on node update
+*/
+function tap_beacons_node_submit($node) {
 
     tap_beacons_add_beacon_stop($node);
 }
@@ -250,10 +287,7 @@ function tap_beacons_node_insert($node) {
 function tap_beacons_tourml_tour_alter(&$node){
 
     // Run select query for beacons
-    $result = db_select('tap_beacons', 'b')
-        ->fields('b', array('beacon_id', 'uuid', 'major_num', 'minor_num'))
-        ->execute()
-        ->fetchAll();
+    $result = tap_beacons_fetch_beacon_data();
 
     if (!empty($result)) {
 
@@ -301,7 +335,7 @@ function tap_beacons_tourml_tour_alter(&$node){
 function tap_beacons_tourml_stop_meta_alter(&$node){
 
     // Run select query for beacons to stop references
-    $result = db_select('tap_stop_beacons', 's')
+    $result = db_select('tap_beacons_stop_beacon', 's')
         ->fields('s', array('beacon_id'))
         ->condition('stop_nid', $node->nid)
         ->execute()
@@ -337,4 +371,24 @@ function tap_beacons_tourml_stop_meta_alter(&$node){
             $i++;
         }
     }
+}
+
+/**
+* Function to get token data from DB
+*/
+function tap_beacons_get_tokens(){
+
+    // Get beacon data from DB
+    $result = db_select('tap_beacons_tokens', 't')
+        ->fields('t', array('token_id', 'token'))
+        ->execute();
+
+    $token = array();
+
+    foreach ($result as $row) {
+        $token['id'] = $row->token_id;
+        $token['token'] = $row->token;
+    }
+
+    return $token;
 }

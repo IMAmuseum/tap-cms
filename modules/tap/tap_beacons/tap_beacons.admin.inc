@@ -4,6 +4,9 @@
  * Admin settings for beacons.
  */
 
+/**
+ * Function to create admin section for beacons
+ */
 function tap_beacons_admin_section() {
 
     // Clear cache so new data will appear automatically
@@ -21,9 +24,9 @@ function tap_beacons_admin_section() {
  */
 function tap_beacons_admin_add(){
     // Store query string values
-    $uuid       = $_GET['uuid'];
-    $major_num  = $_GET['major_num'];
-    $minor_num  = $_GET['minor_num'];
+    $uuid       = $_POST['uuid'];
+    $major_num  = $_POST['major_num'];
+    $minor_num  = $_POST['minor_num'];
 
     // Create insert query to add items
     $query = db_insert('tap_beacons')
@@ -52,7 +55,7 @@ function tap_beacons_admin_delete(){
         ->condition('beacon_id', $id);
 
     // Create delete query to remove stop -> beacon relationship
-    $rel_query = db_delete('tap_stop_beacons')
+    $rel_query = db_delete('tap_beacons_stop_beacon')
         ->condition('beacon_id', $id)
         ->execute();
 
@@ -68,10 +71,10 @@ function tap_beacons_admin_delete(){
  */
 function tap_beacons_admin_update(){
     // Store query string values
-    $id         = $_GET['id'];
-    $uuid       = $_GET['uuid'];
-    $major_num  = $_GET['major_num'];
-    $minor_num  = $_GET['minor_num'];
+    $id         = $_POST['id'];
+    $uuid       = $_POST['uuid'];
+    $major_num  = $_POST['major_num'];
+    $minor_num  = $_POST['minor_num'];
 
     // Create delete query to remove items
     $query = db_update('tap_beacons')
@@ -123,3 +126,25 @@ function tap_beacons_admin_form($form, &$form_state) {
     return system_settings_form($form, $form_state);
 }
 
+/**
+* Function to set token for API.
+*/
+function tap_beacons_admin_set_token() {
+
+    // Store query string values
+    $token = $_POST['token'];
+    $token_id = $_POST['token_id'];
+
+    // Create delete query to remove items
+    $query = db_merge('tap_beacons_tokens')
+        ->key(array('token_id' => $token_id))
+        ->fields(array(
+            'token' => $token,
+    ));
+
+    // Set message to be used for action
+    $message = 'The token has been added.';
+
+    // Call function to execute query
+    tap_beacons_query_execute($query, $message);
+}
