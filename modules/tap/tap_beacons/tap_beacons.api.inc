@@ -8,13 +8,20 @@
 *Function to create API endpoint for beacon events
 */
 function tap_beacons_api_beacon_events() {
+
+    // Grab sent JSON data
     $json = json_decode($_POST['data'], true);
 
+    // Get stored token
     $token = tap_beacons_get_tokens();
 
+    // Check if token matches token sent
     if($json['token'] == $token['token']) {
 
+        // Loop through each event
         foreach ($json['events'] as $key) {
+
+            // Store event data
             $event_query = db_insert('tap_beacons_beacon_event')
                 ->fields(array(
                   'event' => $key['event'],
@@ -23,7 +30,10 @@ function tap_beacons_api_beacon_events() {
                 ))
                 ->execute();
 
+                // Loop through each beacon associated with the event
                 foreach ($key['beacons'] as $beacon_key) {
+
+                    // Store the beacon statuses
                     $status_query = db_insert('tap_beacons_beacon_status')
                         ->fields(array(
                           'beacon_id' => $beacon_key['beacon_id'],
@@ -33,6 +43,7 @@ function tap_beacons_api_beacon_events() {
                         ))
                         ->execute();
 
+                    // Get the unique IDs of the event and beacon status. Then, store them in another table.
                     $event_status_query = db_insert('tap_beacons_beacon_event_beacon_status')
                         ->fields(array(
                           'beacon_event_id' => $event_query,
@@ -43,6 +54,7 @@ function tap_beacons_api_beacon_events() {
         }
 
     } else {
+        // If the tokens don't match, send a response
         echo '<p>You are not authorized to access this page.</p>';
     }
 }
@@ -52,13 +64,16 @@ function tap_beacons_api_beacon_events() {
 */
 function tap_beacons_api_interaction_events() {
 
+    // Grab sent JSON data
     $json = json_decode($_POST['data'], true);
 
+    // Get stored token
     $token = tap_beacons_get_tokens();
 
+    // Check if token matches token sent
     if($json['token'] == $token['token']) {
 
-        // Build insert query
+        // Build query to insert interaction event data
         $query = db_insert('tap_beacons_interaction_event')
             ->fields(array(
               'event',
@@ -67,7 +82,7 @@ function tap_beacons_api_interaction_events() {
               'timestamp',
             ));
 
-        // Build values for storage
+        // Store the values that need to be added to the table
         foreach ($json['events'] as $key) {
             $query->values(array(
                   $key['event'],
@@ -77,9 +92,11 @@ function tap_beacons_api_interaction_events() {
                 ));
         }
 
+        // Execute query to store all the data in bulk
         $query->execute();
 
     } else {
+        // If the tokens don't match, send a response
         echo '<p>You are not authorized to access this page.</p>';
     }
 }
