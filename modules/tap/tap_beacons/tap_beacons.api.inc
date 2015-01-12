@@ -84,6 +84,8 @@ function tap_beacons_api_interaction_events() {
 
         // Store the values that need to be added to the table
         foreach ($json['events'] as $key) {
+            $key['stop_id'] = str_replace("stop-","", $key['stop_id']);
+
             $query->values(array(
                   $key['event'],
                   $key['stop_id'],
