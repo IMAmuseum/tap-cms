@@ -24,6 +24,7 @@ function tap_beacons_admin_section() {
  */
 function tap_beacons_admin_add(){
     // Store query string values
+    $name       = $_POST['name'];
     $uuid       = $_POST['uuid'];
     $major_num  = $_POST['major_num'];
     $minor_num  = $_POST['minor_num'];
@@ -31,6 +32,7 @@ function tap_beacons_admin_add(){
     // Create insert query to add items
     $query = db_insert('tap_beacons')
         ->fields(array(
+          'name' => $name,
           'uuid' => $uuid,
           'major_num' => $major_num,
           'minor_num' => $minor_num,
@@ -72,6 +74,7 @@ function tap_beacons_admin_delete(){
 function tap_beacons_admin_update(){
     // Store query string values
     $id         = $_POST['id'];
+    $name       = $_POST['name'];
     $uuid       = $_POST['uuid'];
     $major_num  = $_POST['major_num'];
     $minor_num  = $_POST['minor_num'];
@@ -80,6 +83,7 @@ function tap_beacons_admin_update(){
     $query = db_update('tap_beacons')
         ->condition('beacon_id', $id)
         ->fields(array(
+          'name' => $name,
           'uuid' => $uuid,
           'major_num' => $major_num,
           'minor_num' => $minor_num,

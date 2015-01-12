@@ -18,6 +18,12 @@
             <div class="general-errors"></div>
             <p>All fields are required to add a new beacon.</p>
             <label>
+                Name<br />
+                <input type="text" name="name" id="beacon-name" class="form-text" size="60" data-required="true" />
+                <span class="tap-beacons-error-message"></span>
+            </label>
+
+            <label>
                 UUID<br />
                 <input type="text" name="uuid" id="beacon-uuid" class="form-text" size="60" data-required="true" />
                 <span class="tap-beacons-error-message"></span>

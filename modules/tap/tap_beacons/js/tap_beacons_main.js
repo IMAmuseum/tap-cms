@@ -67,20 +67,23 @@ jQuery(function($) {
         var tr = $(this).parent().parent().parent();
 
         // Store each cell element
-        var cell_uuid   = tr.children('td:nth-child(1)').find('.uuid'),
-            cell_major  = tr.children('td:nth-child(2)'),
-            cell_minor  = tr.children('td:nth-child(3)'),
-            cell_save   = tr.children('td:nth-child(4)');
+        var cell_name   = tr.children('td:nth-child(2)'),
+            cell_uuid   = tr.children('td:nth-child(3)').find('.uuid'),
+            cell_major  = tr.children('td:nth-child(4)'),
+            cell_minor  = tr.children('td:nth-child(5)'),
+            cell_save   = tr.children('td:nth-child(6)');
 
         // Store initial value of cells
-        var current_uuid = cell_uuid.html(),
+        var current_name = cell_name.html(),
+            current_uuid = cell_uuid.html(),
             current_major = cell_major.html(),
             current_minor = cell_minor.html();
 
         // Convert values into inputs so user can make changes
-        cell_uuid.html( '<input type="text" id="uuid" value="'  + current_uuid  + '" class="form-text tap-beacons-table-input"/>');
-        cell_major.html('<input type="text" id="major" value="' + current_major + '" class="form-text tap-beacons-table-input"/>');
-        cell_minor.html('<input type="text" id="minor" value="' + current_minor + '" class="form-text tap-beacons-table-input"/>');
+        cell_name.html( '<input type="text" id="name" name="name" value="'  + current_name  + '" class="form-text tap-beacons-table-input"/>');
+        cell_uuid.html( '<input type="text" id="uuid" name="uuid" value="'  + current_uuid  + '" class="form-text tap-beacons-table-input"/>');
+        cell_major.html('<input type="text" id="major" name="major_num" value="' + current_major + '" class="form-text tap-beacons-table-input"/>');
+        cell_minor.html('<input type="text" id="minor" name="minor_num" value="' + current_minor + '" class="form-text tap-beacons-table-input"/>');
 
         // Add new operations for save and cancel
         cell_save.append('<div class="tap-beacons-operations-save">' +
@@ -95,6 +98,7 @@ jQuery(function($) {
 
             // Get new values of inputs
             var id = action.match(/id=([0-9]+)/)[1],
+                name = $('#name').val(),
                 uuid = $('#uuid').val(),
                 major = $('#major').val(),
                 minor = $('#minor').val();
@@ -103,6 +107,7 @@ jQuery(function($) {
 
 
             var formData = "id=" + id +
+                "&name=" + name +
                 "&uuid=" + uuid +
                 "&major_num=" + major +
                 "&minor_num=" + minor;
@@ -116,6 +121,7 @@ jQuery(function($) {
             e.preventDefault();
 
             //Restore initial values
+            cell_name.html(current_name);
             cell_uuid.html(current_uuid);
             cell_major.html(current_major);
             cell_minor.html(current_minor);

@@ -14,6 +14,7 @@ function tap_beacons_menu() {
         'file'              => 'tap_beacons.admin.inc',
     );
 
+    // Beacon entries
     $items['admin/tap/beacons/add'] = array(
         'title'             => 'Add Beacons',
         'page callback'     => 'tap_beacons_admin_add',
@@ -35,6 +36,7 @@ function tap_beacons_menu() {
         'file'              => 'tap_beacons.admin.inc',
     );
 
+    // Content Type References
     $items['admin/tap/beacons-reference'] = array(
         'title'             => 'Beacons Reference',
         'page callback'     => 'drupal_get_form',
@@ -44,6 +46,7 @@ function tap_beacons_menu() {
         'file'              => 'tap_beacons.admin.inc',
     );
 
+    // Token
     $items['admin/tap/beacons/tokens'] = array(
         'title'             => 'Beacons Token',
         'page callback'     => 'tap_beacons_admin_set_token',
@@ -51,6 +54,7 @@ function tap_beacons_menu() {
         'file'              => 'tap_beacons.admin.inc',
     );
 
+    // API
     $items['beacons/api/beacons'] = array(
         'title'             => 'Get Beacon Events',
         'page callback'     => 'tap_beacons_api_beacon_events',
@@ -94,7 +98,7 @@ function tap_beacons_theme() {
 */
 function tap_beacons_fetch_beacon_data(){
     $result = db_select('tap_beacons', 'b')
-        ->fields('b', array('beacon_id', 'uuid', 'major_num', 'minor_num'))
+        ->fields('b', array('beacon_id', 'name', 'uuid', 'major_num', 'minor_num'))
         ->execute()
         ->fetchAll();
 
@@ -150,13 +154,13 @@ function tap_beacons_get_beacons(){
             $uuid .= '<small>' . implode(', ', $stop_link) . '</small>';
         }
 
-        $row_array[] = array($uuid, $row->major_num, $row->minor_num, $anchor);
+        $row_array[] = array($row->beacon_id, $row->name, $uuid, $row->major_num, $row->minor_num, $anchor);
     }
 
     // Build table with data
     $table = array(
         '#theme' => 'table',
-        '#header' => array(t('UUID'), t('Major Number'), t('Minor Number'), t('Operations')),
+        '#header' => array(t('ID'), t('Name'), t('UUID'), t('Major Number'), t('Minor Number'), t('Operations')),
         '#rows' => $row_array,
         '#attributes' => array (
             'class' => array('tap-beacons-table')
@@ -191,7 +195,7 @@ function tap_beacons_form_alter(&$form, &$form_state, $form_id) {
 
                 // Loop through the beacons and store formatted data
                 foreach ($result as $row) {
-                    $beacon_options[$row->beacon_id] = $row->uuid . " / " . $row->major_num . " / " . $row->minor_num;
+                    $beacon_options[$row->beacon_id] = $row->name . " - " . $row->uuid . " / " . $row->major_num . " / " . $row->minor_num;
                 }
 
                 $selected_options = array();
@@ -214,7 +218,7 @@ function tap_beacons_form_alter(&$form, &$form_state, $form_id) {
                 $form['tap_beacons'] = array(
                     '#type' => 'select',
                     '#multiple' => TRUE,
-                    '#title' => t('Associated Beacons (UUID / Major Number / Minor Number)'),
+                    '#title' => t('Associated Beacons (Name - UUID / Major Number / Minor Number)'),
                     '#required' => FALSE,
                     '#options' => $beacon_options,
                     '#size' => 10,
@@ -296,6 +300,7 @@ function tap_beacons_tourml_tour_alter(&$node){
 
         foreach($result as $row){
             $doc .= '<beacon id="'. $row->beacon_id .
+                    '" name="' . $row->name .
                     '" uuid="' . $row->uuid .
                     '" major="' . $row->major_num .
                     '" minor="'. $row->minor_num .
