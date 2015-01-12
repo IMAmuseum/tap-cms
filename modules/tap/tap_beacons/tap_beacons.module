@@ -37,8 +37,8 @@ function tap_beacons_menu() {
     );
 
     // Content Type References
-    $items['admin/tap/beacons-reference'] = array(
-        'title'             => 'Beacons Reference',
+    $items['admin/tap/beacons/reference'] = array(
+        'title'             => ' Beacons Reference',
         'page callback'     => 'drupal_get_form',
         'page arguments'    => array('tap_beacons_admin_form'),
         'access arguments'  => array('administer tap'),
@@ -67,6 +67,23 @@ function tap_beacons_menu() {
         'page callback'     => 'tap_beacons_api_interaction_events',
         'access arguments'  => array('administer tap'),
         'file'              => 'tap_beacons.api.inc',
+    );
+
+    // Analytics
+    $items['admin/tap/beacons/analytics'] = array(
+        'title'             => 'Beacon Analytics',
+        'page callback'     => 'tap_beacons_analytics_beacon_events',
+        'access arguments'  => array('administer tap'),
+        'type'              => MENU_LOCAL_TASK,
+        'file'              => 'tap_beacons.analytics.inc',
+    );
+
+    $items['admin/tap/beacons/interactions'] = array(
+        'title'             => 'Interactions Analytics',
+        'page callback'     => 'tap_beacons_analytics_interaction_events',
+        'access arguments'  => array('administer tap'),
+        'type'              => MENU_LOCAL_TASK,
+        'file'              => 'tap_beacons.analytics.inc',
     );
 
     return $items;
@@ -396,4 +413,27 @@ function tap_beacons_get_tokens(){
     }
 
     return $token;
+}
+
+/**
+* Function to build table with pagination
+*/
+function tap_beacons_table_pager($header, $rows){
+
+    // Set number of display items
+    $per_page = 10;
+
+    // Initialize the pager
+    $current_page = pager_default_initialize(count($rows), $per_page);
+
+    // Split your list into page sized chunks
+    $chunks = array_chunk($rows, $per_page, TRUE);
+
+    // Show the appropriate items from the list
+    $output = theme('table', array('header' => $header, 'rows' => $chunks[$current_page], 'attributes' => array('class' => array('tap-beacons-table'))));
+
+    // Show the pager
+    $output .= theme('pager', array('quantity', count($rows)));
+
+    return $output;
 }
