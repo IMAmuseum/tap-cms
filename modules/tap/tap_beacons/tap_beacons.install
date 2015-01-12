@@ -17,6 +17,13 @@ function tap_beacons_schema() {
         'unsigned' => TRUE,
         'not null' => TRUE,
       ),
+      'name' => array(
+        'description' => 'Name of beacon.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
       'uuid' => array(
         'description' => 'The universal id used for beacon association.',
         'type' => 'varchar',
@@ -38,9 +45,6 @@ function tap_beacons_schema() {
         'not null' => TRUE,
         'default' => 0,
       ),
-    ),
-    'unique keys' => array(
-      'uuid_min_maj' => array('uuid', 'minor_num', 'major_num'),
     ),
     'primary key' => array('beacon_id'),
   );
