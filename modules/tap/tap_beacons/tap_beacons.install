@@ -273,13 +273,3 @@ function tap_beacons_schema() {
 
   return $schema;
 }
-
-function tap_beacons_install() {
-  // Create my tables.
-  drupal_install_schema('tap_beacons');
-}
-
-function tap_beacons_uninstall() {
-  // Drop my tables.
-  drupal_uninstall_schema('tap_beacons');
-}
