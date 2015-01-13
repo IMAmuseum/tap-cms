@@ -422,18 +422,21 @@ function tap_beacons_table_pager($header, $rows){
 
     // Set number of display items
     $per_page = 10;
+    $output = "";
 
-    // Initialize the pager
-    $current_page = pager_default_initialize(count($rows), $per_page);
+    if(count($rows) > 0){
+        // Initialize the pager
+        $current_page = pager_default_initialize(count($rows), $per_page);
 
-    // Split your list into page sized chunks
-    $chunks = array_chunk($rows, $per_page, TRUE);
+        // Split your list into page sized chunks
+        $chunks = array_chunk($rows, $per_page, TRUE);
 
-    // Show the appropriate items from the list
-    $output = theme('table', array('header' => $header, 'rows' => $chunks[$current_page], 'attributes' => array('class' => array('tap-beacons-table'))));
+        // Show the appropriate items from the list
+        $output = theme('table', array('header' => $header, 'rows' => $chunks[$current_page], 'attributes' => array('class' => array('tap-beacons-table'))));
 
-    // Show the pager
-    $output .= theme('pager', array('quantity', count($rows)));
+        // Show the pager
+        $output .= theme('pager', array('quantity', count($rows)));
+    }
 
     return $output;
 }
