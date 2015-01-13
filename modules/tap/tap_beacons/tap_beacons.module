@@ -58,14 +58,14 @@ function tap_beacons_menu() {
     $items['beacons/api/beacons'] = array(
         'title'             => 'Get Beacon Events',
         'page callback'     => 'tap_beacons_api_beacon_events',
-        'access arguments'  => array('administer tap'),
+        'access arguments'  => array('access content'),
         'file'              => 'tap_beacons.api.inc',
     );
 
     $items['beacons/api/interactions'] = array(
         'title'             => 'Get Interaction Events',
         'page callback'     => 'tap_beacons_api_interaction_events',
-        'access arguments'  => array('administer tap'),
+        'access arguments'  => array('access content'),
         'file'              => 'tap_beacons.api.inc',
     );
 
