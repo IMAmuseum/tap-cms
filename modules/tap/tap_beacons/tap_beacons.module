@@ -78,8 +78,8 @@ function tap_beacons_menu() {
         'file'              => 'tap_beacons.analytics.inc',
     );
 
-    $items['admin/tap/beacons/stops'] = array(
-        'title'             => 'Stop Analytics',
+    $items['admin/tap/beacons/interactions'] = array(
+        'title'             => 'Interaction Analytics',
         'page callback'     => 'tap_beacons_analytics_interaction_events',
         'access arguments'  => array('administer tap'),
         'type'              => MENU_LOCAL_TASK,
