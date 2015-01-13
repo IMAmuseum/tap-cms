@@ -9,28 +9,59 @@
  */
 function tap_beacons_analytics_beacon_events() {
 
-    // Query stop data to create links back to related stops
-    $query = db_select('tap_beacons_beacon_event', 'e');
+    # configure the table header columns
+    $header = array(
+        array('data' => 'Event ID',         'field' => 'beacon_event_id',   'sort' => 'DESC'),
+        array('data' => 'Event',            'field' => 'event',             'sort' => 'DESC'),
+        array('data' => 'Mobile Device ID', 'field' => 'mobile_device_id',  'sort' => 'DESC'),
+        array('data' => 'Beacon Name',      'field' => 'name',              'sort' => 'DESC'),
+        array('data' => 'TX Power',         'field' => 'beacon_tx_power',   'sort' => 'DESC'),
+        array('data' => 'Range',            'field' => 'beacon_range',      'sort' => 'DESC'),
+        array('data' => 'Accuracy',         'field' => 'beacon_accuracy',   'sort' => 'DESC'),
+        array('data' => 'Timestamp',        'field' => 'timestamp',         'sort' => 'DESC'),
+    );
+
+    // Set number of display items
+    $per_page = 50;
+
+    $query = db_select('tap_beacons_beacon_event', 'e')
+        ->extend('PagerDefault')
+        ->extend('TableSort');
+
     $query->join('tap_beacons_beacon_event_beacon_status', 'j', 'e.beacon_event_id = j.beacon_event_id');
     $query->join('tap_beacons_beacon_status', 's', 's.beacon_status_id = j.beacon_status_id');
     $query->join('tap_beacons', 'b', 'b.beacon_id = s.beacon_id');
     $query->fields('e', array('beacon_event_id', 'event', 'mobile_device_id', 'timestamp'))
         ->fields('b', array('name'))
         ->fields('s', array('beacon_status_id', 'beacon_tx_power', 'beacon_range', 'beacon_accuracy'));
-    $result = $query->execute()->fetchall();
+    $query->limit($per_page)
+        ->orderByHeader($header);
 
-    $row_array = array();
+    # execute the query
+    $results = $query->execute()->fetchAll();
 
-    // Loop through each row and store the formatted data
-    foreach ($result as $row) {
+    # configure the table rows
+    $rows = array();
+    foreach ($results as $row) {
         $timestamp = format_date($row->timestamp, 'custom', 'm/d/Y H:i:s');
 
-        $row_array[] = array($row->beacon_event_id, $row->event, $row->mobile_device_id, $row->name, $row->beacon_tx_power, $row->beacon_range, $row->beacon_accuracy, $timestamp);
+        $rows[] = array(
+            $row->beacon_event_id,
+            $row->event,
+            $row->mobile_device_id,
+            $row->name,
+            $row->beacon_tx_power,
+            $row->beacon_range,
+            round($row->beacon_accuracy, 4),
+            $timestamp
+        );
     }
 
-    $header = array(t('Event ID'), t('Event'), t('Mobile Device ID'), t('Beacon Name'), t('TX Power'), t('Range'), t('Accuracy'), t('Timestamp'));
+    $output = theme('table', array('header' => $header,
+                                   'rows' => $rows));
 
-    $output = tap_beacons_table_pager($header, $row_array);
+    # add the pager
+    $output .= theme('pager');
 
     return $output;
 }
@@ -40,24 +71,47 @@ function tap_beacons_analytics_beacon_events() {
  */
 function tap_beacons_analytics_interaction_events() {
 
-    // Query interaction data to create table
-    $result = db_select('tap_beacons_interaction_event', 'i')
-        ->fields('i', array('event_id','event','stop_nid','mobile_device_id','timestamp'))
-        ->execute()
-        ->fetchAll();
+    # configure the table header columns
+    $header = array(
+        array('data' => 'Event ID',         'field' => 'event_id',          'sort' => 'DESC'),
+        array('data' => 'Event',            'field' => 'event',             'sort' => 'DESC'),
+        array('data' => 'Mobile Device ID', 'field' => 'mobile_device_id',  'sort' => 'DESC'),
+        array('data' => 'Stop ID',          'field' => 'stop_nid',          'sort' => 'DESC'),
+        array('data' => 'Timestamp',        'field' => 'timestamp',         'sort' => 'DESC'),
+    );
 
-    $row_array = array();
+    // Set number of display items
+    $per_page = 50;
 
-    // Loop through each row and store the formatted data
-    foreach ($result as $row) {
+    $query = db_select('tap_beacons_interaction_event', 'i')
+        ->extend('PagerDefault')
+        ->extend('TableSort');
+
+    $query->fields('i', array('event_id','event','stop_nid','mobile_device_id','timestamp'));
+    $query->limit($per_page)
+        ->orderByHeader($header);
+
+    # execute the query
+    $results = $query->execute()->fetchAll();
+
+    # configure the table rows
+    $rows = array();
+    foreach ($results as $row) {
         $timestamp = format_date($row->timestamp, 'custom', 'm/d/Y H:i:s');
 
-        $row_array[] = array($row->event_id, $row->event, $row->stop_nid, $row->mobile_device_id, $timestamp);
+        $rows[] = array(
+            $row->event_id,
+            $row->event,
+            $row->mobile_device_id,
+            $row->stop_nid, $timestamp
+        );
     }
 
-    $header = array(t('ID'), t('Event'), t('Stop ID'), t('Mobile Device ID'), t('Timestamp'));
+    $output = theme('table', array('header' => $header,
+                                   'rows' => $rows));
 
-    $output = tap_beacons_table_pager($header, $row_array);
+    # add the pager
+    $output .= theme('pager');
 
     return $output;
 }
