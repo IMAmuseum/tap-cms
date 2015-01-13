@@ -9,7 +9,10 @@
  */
 function tap_beacons_analytics_beacon_events() {
 
-    # configure the table header columns
+    // Set number of display items
+    $per_page = 50;
+
+    // Configure the table header columns
     $header = array(
         array('data' => 'Event ID',         'field' => 'beacon_event_id',   'sort' => 'DESC'),
         array('data' => 'Event',            'field' => 'event',             'sort' => 'DESC'),
@@ -21,9 +24,7 @@ function tap_beacons_analytics_beacon_events() {
         array('data' => 'Timestamp',        'field' => 'timestamp',         'sort' => 'DESC'),
     );
 
-    // Set number of display items
-    $per_page = 50;
-
+    // Build query
     $query = db_select('tap_beacons_beacon_event', 'e')
         ->extend('PagerDefault')
         ->extend('TableSort');
@@ -37,10 +38,10 @@ function tap_beacons_analytics_beacon_events() {
     $query->limit($per_page)
         ->orderByHeader($header);
 
-    # execute the query
+    // Execute the query
     $results = $query->execute()->fetchAll();
 
-    # configure the table rows
+    // Configure the table rows
     $rows = array();
     foreach ($results as $row) {
         $timestamp = format_date($row->timestamp, 'custom', 'm/d/Y H:i:s');
@@ -57,10 +58,11 @@ function tap_beacons_analytics_beacon_events() {
         );
     }
 
+    // Set up output as table
     $output = theme('table', array('header' => $header,
                                    'rows' => $rows));
 
-    # add the pager
+    // Add the pager
     $output .= theme('pager');
 
     return $output;
@@ -71,7 +73,10 @@ function tap_beacons_analytics_beacon_events() {
  */
 function tap_beacons_analytics_interaction_events() {
 
-    # configure the table header columns
+    // Set number of display items
+    $per_page = 50;
+
+    // Configure the table header columns
     $header = array(
         array('data' => 'Event ID',         'field' => 'event_id',          'sort' => 'DESC'),
         array('data' => 'Event',            'field' => 'event',             'sort' => 'DESC'),
@@ -80,9 +85,7 @@ function tap_beacons_analytics_interaction_events() {
         array('data' => 'Timestamp',        'field' => 'timestamp',         'sort' => 'DESC'),
     );
 
-    // Set number of display items
-    $per_page = 50;
-
+    // Build query
     $query = db_select('tap_beacons_interaction_event', 'i')
         ->extend('PagerDefault')
         ->extend('TableSort');
@@ -91,10 +94,10 @@ function tap_beacons_analytics_interaction_events() {
     $query->limit($per_page)
         ->orderByHeader($header);
 
-    # execute the query
+    // Execute the query
     $results = $query->execute()->fetchAll();
 
-    # configure the table rows
+    // Configure the table rows
     $rows = array();
     foreach ($results as $row) {
         $timestamp = format_date($row->timestamp, 'custom', 'm/d/Y H:i:s');
@@ -107,10 +110,11 @@ function tap_beacons_analytics_interaction_events() {
         );
     }
 
+    // Set up output as table
     $output = theme('table', array('header' => $header,
                                    'rows' => $rows));
 
-    # add the pager
+    // Add the pager
     $output .= theme('pager');
 
     return $output;
