@@ -2,6 +2,10 @@
 
 define('TAP_BEACONS_VERSION', '0.1.0');
 
+error_reporting(E_ALL);
+ini_set('display_errors', TRUE);
+ini_set('display_startup_errors', TRUE);
+
 /**
  * Implements hook_menu()
  */
@@ -72,7 +76,7 @@ function tap_beacons_menu() {
     // Analytics
     $items['admin/tap/beacons/analytics'] = array(
         'title'             => 'Beacon Analytics',
-        'page callback'     => 'tap_beacons_analytics_beacon_events',
+        'page callback'     => 'tap_beacons_analytics_section',
         'access arguments'  => array('administer tap'),
         'type'              => MENU_LOCAL_TASK,
         'file'              => 'tap_beacons.analytics.inc',
@@ -94,16 +98,23 @@ function tap_beacons_menu() {
  */
 function tap_beacons_theme() {
 
-    $beacons = tap_beacons_get_beacons();
+    $beacons_table = tap_beacons_get_beacons();
+    $beacons_data = tap_beacons_fetch_beacon_data();
     $token = tap_beacons_get_tokens();
 
     $items = array(
         'tap_beacons_admin_content' => array(
             'variables' => array(
-                'beacons_data' => $beacons,
+                'beacons_table' => $beacons_table,
                 'token_data' => $token,
             ),
             'template'  => 'templates/tap_beacons_template',
+        ),
+        'tap_beacons_analytics_content' => array(
+            'variables' => array(
+                'beacons_data' => $beacons_data,
+            ),
+            'template'  => 'templates/tap_beacons_analytics_template',
         ),
     );
 
@@ -179,6 +190,7 @@ function tap_beacons_get_beacons(){
         '#theme' => 'table',
         '#header' => array(t('ID'), t('Name'), t('UUID'), t('Major Number'), t('Minor Number'), t('Operations')),
         '#rows' => $row_array,
+        '#empty' => t('No beacons found.'),
         '#attributes' => array (
             'class' => array('tap-beacons-table')
         ),

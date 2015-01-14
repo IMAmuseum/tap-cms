@@ -147,4 +147,8 @@ jQuery(function($) {
             }
         });
     }
+
+    $('#tap-beacons-select-form select').change(function(){
+        $('#tap-beacons-select-form').submit();
+    });
 });
