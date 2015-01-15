@@ -89,13 +89,14 @@ function tap_beacons_menu() {
         'title'             => 'Get Chart Data',
         'page callback'     => 'tap_beacons_api_chart_data',
         'access arguments'  => array('access content'),
+        'type'              => MENU_CALLBACK,
         'file'              => 'tap_beacons.api.inc',
     );
 
     // Analytics
     $items['admin/tap/beacons/analytics'] = array(
         'title'             => 'Beacon Events',
-        'page callback'     => 'tap_beacons_analytics_beacon_events',
+        'page callback'     => 'tap_beacons_analytics_section',
         'access arguments'  => array('administer tap'),
         'type'              => MENU_LOCAL_TASK,
         'file'              => 'tap_beacons.analytics.inc',
