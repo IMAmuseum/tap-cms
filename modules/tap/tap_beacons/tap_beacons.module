@@ -37,10 +37,10 @@ function tap_beacons_menu() {
     );
 
     // Content Type References
-    $items['admin/tap/beacons/reference'] = array(
-        'title'             => ' Beacons Reference',
+    $items['admin/tap/beacons/settings'] = array(
+        'title'             => 'Settings',
         'page callback'     => 'drupal_get_form',
-        'page arguments'    => array('tap_beacons_admin_form'),
+        'page arguments'    => array('tap_beacons_settings_form'),
         'access arguments'  => array('administer tap'),
         'type'              => MENU_LOCAL_TASK,
         'file'              => 'tap_beacons.admin.inc',
