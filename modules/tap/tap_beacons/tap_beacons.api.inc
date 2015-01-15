@@ -102,3 +102,128 @@ function tap_beacons_api_interaction_events() {
         echo '<p>You are not authorized to access this page.</p>';
     }
 }
+
+/**
+*Function to create API endpoint for sending reporting data
+*/
+function tap_beacons_api_chart_data(){
+
+  $data = "";
+
+  switch ($_GET['type']) {
+    case 'ranges':
+      $data = tap_beacons_build_ranges_json();
+      break;
+
+    case 'devices':
+      $data = tap_beacons_build_devices_json();
+      break;
+
+    case 'events':
+      $data = tap_beacons_build_events_json();
+      break;
+  }
+
+  print $data;
+}
+
+function tap_beacons_build_ranges_json(){
+
+  // Build query
+  $query = db_select('tap_beacons_beacon_status', 's');
+  $query->fields('s', array('beacon_range'));
+  $query->addExpression('COUNT(s.beacon_range)', 'beacon_range_count');
+  $query->groupBy('s.beacon_range');
+
+  if(isset($_GET['beacon']) && ($_GET['beacon'] != "")){
+      $query->condition('s.beacon_id', $_GET['beacon'], '=');
+  }
+
+  $results = $query->execute();
+
+  // Configure the table rows
+  $rows = array();
+
+  $data = '{
+    "cols": [
+          {"label":"Ranges","type":"string"},
+          {"label":"Beacons","type":"string"}
+        ],
+    "rows": [';
+
+  foreach ($results as $row) {
+    $data .= '{"c":[{"v":"' . ucwords($row->beacon_range) . '"},{"v":' . $row->beacon_range_count .'}]},';
+  }
+
+  $data = rtrim($data, ",") . ']}';
+
+  return $data;
+}
+
+function tap_beacons_build_devices_json(){
+  // Configure the table rows
+  $rows = array();
+  $count = 0;
+
+  // Build query
+  $query = db_select('tap_beacons_beacon_event', 'e');
+  $query->join('tap_beacons_beacon_event_beacon_status', 'j', 'e.beacon_event_id = j.beacon_event_id');
+  $query->join('tap_beacons_beacon_status', 's', 's.beacon_status_id = j.beacon_status_id');
+  $query->join('tap_beacons', 'b', 'b.beacon_id = s.beacon_id');
+  $query->fields('b', array('name'));
+  $query->addExpression('COUNT(DISTINCT e.mobile_device_id)', 'mobile_device_count');
+  $query->groupBy('s.beacon_id');
+
+  $results = $query->execute();
+
+  $data = '{
+    "cols": [
+          {"label":"Beacons","type":"string"},
+          {"label":"Devices","type":"string"}
+        ],
+    "rows": [';
+
+  foreach ($results as $row) {
+    $data .= '{"c":[{"v":"' . ucwords($row->name) . '"},{"v":' . $row->mobile_device_count .'}]},';
+  }
+
+  $data = rtrim($data, ",") . ']}';
+
+  return $data;
+}
+
+function tap_beacons_build_events_json(){
+  // Configure the table rows
+  $rows = array();
+  $count = 0;
+
+  // Build query
+  $query = db_select('tap_beacons_beacon_event', 'e');
+  $query->join('tap_beacons_beacon_event_beacon_status', 'j', 'e.beacon_event_id = j.beacon_event_id');
+  $query->join('tap_beacons_beacon_status', 's', 's.beacon_status_id = j.beacon_status_id');
+  $query->join('tap_beacons', 'b', 'b.beacon_id = s.beacon_id');
+  $query->fields('e', array('event'));
+  $query->addExpression('COUNT(DISTINCT e.mobile_device_id)', 'mobile_device_count');
+  $query->groupBy('e.event');
+
+  if(isset($_GET['beacon']) && ($_GET['beacon'] != "")){
+      $query->condition('s.beacon_id', $_GET['beacon'], '=');
+  }
+
+  $results = $query->execute();
+
+  $data = '{
+    "cols": [
+          {"label":"Beacons","type":"string"},
+          {"label":"Devices","type":"string"}
+        ],
+    "rows": [';
+
+  foreach ($results as $row) {
+    $data .= '{"c":[{"v":"' . ucwords($row->event) . '"},{"v":' . $row->mobile_device_count .'}]},';
+  }
+
+  $data = rtrim($data, ",") . ']}';
+
+  return $data;
+}

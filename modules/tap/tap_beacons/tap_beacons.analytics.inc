@@ -1,8 +1,34 @@
 <?php
 /**
  * @file
- * Admin settings for beacons.
+ * Analytics for beacons.
  */
+
+/**
+ * Function to create admin section for beacons
+ */
+function tap_beacons_analytics_section() {
+
+    // Clear cache so new data will appear automatically
+    cache_clear_all('theme_registry', 'cache', TRUE);
+
+    drupal_add_js('https://www.google.com/jsapi');
+
+    // Set up styles and JS file to be used on beacon admin pages
+    drupal_add_css(drupal_get_path('module', 'tap_beacons') . '/css/tap_beacons_style.css');
+    drupal_add_js(drupal_get_path('module', 'tap_beacons') . '/js/tap_beacons_charts.js');
+
+
+
+    return theme('tap_beacons_analytics_content');
+}
+
+/**
+ * Implements hook_preprocess().
+ */
+function tap_beacons_preprocess(&$variables, $hook){
+    $variables['beacon_events_table'] = tap_beacons_analytics_beacon_events();
+}
 
 /**
  * Function to create admin section for beacons events
@@ -26,8 +52,8 @@ function tap_beacons_analytics_beacon_events() {
 
     // Build query
     $query = db_select('tap_beacons_beacon_event', 'e')
-        ->extend('PagerDefault')
-        ->extend('TableSort');
+        ->extend('TableSort')
+        ->extend('PagerDefault');
 
     $query->join('tap_beacons_beacon_event_beacon_status', 'j', 'e.beacon_event_id = j.beacon_event_id');
     $query->join('tap_beacons_beacon_status', 's', 's.beacon_status_id = j.beacon_status_id');
@@ -38,11 +64,18 @@ function tap_beacons_analytics_beacon_events() {
     $query->limit($per_page)
         ->orderByHeader($header);
 
+    if(isset($_GET['beacon']) && $_GET['beacon'] != ""){
+        $beacon = $_GET['beacon'];
+
+        $query->condition('b.beacon_id', $beacon, '=');
+    }
+
     // Execute the query
-    $results = $query->execute()->fetchAll();
+    $results = $query->execute();
 
     // Configure the table rows
     $rows = array();
+    $options = array();
     foreach ($results as $row) {
         $timestamp = format_date($row->timestamp, 'custom', 'm/d/Y H:i:s');
 
@@ -59,11 +92,20 @@ function tap_beacons_analytics_beacon_events() {
     }
 
     // Set up output as table
-    $output = theme('table', array('header' => $header,
-                                   'rows' => $rows));
+    $output['table']  = array(
+        '#theme' => 'table',
+        '#header' => $header,
+        '#rows' => $rows,
+        '#empty' => t('No data found'),
+        '#attributes' => array(
+            'class' => array('tap-beacons-table')
+        )
+    );
 
     // Add the pager
-    $output .= theme('pager');
+    $output['pager'] = array(
+        '#theme' => 'pager',
+    );
 
     return $output;
 }
@@ -111,11 +153,20 @@ function tap_beacons_analytics_user_events() {
     }
 
     // Set up output as table
-    $output = theme('table', array('header' => $header,
-                                   'rows' => $rows));
+    $output['table']  = array(
+        '#theme' => 'table',
+        '#header' => $header,
+        '#rows' => $rows,
+        '#empty' => t('No data found'),
+        '#attributes' => array(
+            'class' => array('tap-beacons-table')
+        )
+    );
 
     // Add the pager
-    $output .= theme('pager');
+    $output['pager'] = array(
+        '#theme' => 'pager',
+    );
 
     return $output;
 }

@@ -85,6 +85,13 @@ function tap_beacons_menu() {
         'file'              => 'tap_beacons.api.inc',
     );
 
+    $items['beacons/api/charts'] = array(
+        'title'             => 'Get Chart Data',
+        'page callback'     => 'tap_beacons_api_chart_data',
+        'access arguments'  => array('access content'),
+        'file'              => 'tap_beacons.api.inc',
+    );
+
     // Analytics
     $items['admin/tap/beacons/analytics'] = array(
         'title'             => 'Beacon Events',
@@ -112,16 +119,23 @@ function tap_beacons_menu() {
  */
 function tap_beacons_theme() {
 
-    $beacons = tap_beacons_get_beacons();
+    $beacons_table = tap_beacons_get_beacons();
+    $beacons_data = tap_beacons_fetch_beacon_data();
     $token = tap_beacons_get_tokens();
 
     $items = array(
         'tap_beacons_admin_content' => array(
             'variables' => array(
-                'beacons_data' => $beacons,
+                'beacons_table' => $beacons_table,
                 'token_data' => $token,
             ),
             'template'  => 'templates/tap_beacons_template',
+        ),
+        'tap_beacons_analytics_content' => array(
+            'variables' => array(
+                'beacons_data' => $beacons_data,
+            ),
+            'template'  => 'templates/tap_beacons_analytics_template',
         ),
     );
 
@@ -197,6 +211,7 @@ function tap_beacons_get_beacons(){
         '#theme' => 'table',
         '#header' => array(t('ID'), t('Name'), t('UUID'), t('Major Number'), t('Minor Number'), t('Operations')),
         '#rows' => $row_array,
+        '#empty' => t('No beacons found.'),
         '#attributes' => array (
             'class' => array('tap-beacons-table')
         ),

@@ -214,6 +214,10 @@ function tap_beacons_schema() {
         'table' => 'tap_beacons_beacon_event_beacon_status',
         'columns' => array('beacon_status_id' => 'beacon_status_id'),
       ),
+      'tap_beacons' => array(
+        'table' => 'tap_beacons',
+        'columns' => array('beacon_id' => 'beacon_id'),
+      ),
     ),
     'primary key' => array('beacon_status_id'),
   );

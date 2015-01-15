@@ -45,6 +45,6 @@
         </form>
     </div>
 
-    <?php print render($variables['beacons_data']); ?>
+    <?php print render($variables['beacons_table']); ?>
 
 </div>
