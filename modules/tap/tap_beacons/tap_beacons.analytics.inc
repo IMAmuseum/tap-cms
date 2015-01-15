@@ -18,8 +18,6 @@ function tap_beacons_analytics_section() {
     drupal_add_css(drupal_get_path('module', 'tap_beacons') . '/css/tap_beacons_style.css');
     drupal_add_js(drupal_get_path('module', 'tap_beacons') . '/js/tap_beacons_charts.js');
 
-
-
     return theme('tap_beacons_analytics_content');
 }
 
@@ -123,7 +121,7 @@ function tap_beacons_analytics_user_events() {
         array('data' => 'Event ID',         'field' => 'event_id',          'sort' => 'DESC'),
         array('data' => 'Event',            'field' => 'event',             'sort' => 'DESC'),
         array('data' => 'Mobile Device ID', 'field' => 'mobile_device_id',  'sort' => 'DESC'),
-        array('data' => 'Stop ID',          'field' => 'stop_nid',          'sort' => 'DESC'),
+        array('data' => 'Stop Name',        'field' => 'title',             'sort' => 'DESC'),
         array('data' => 'Timestamp',        'field' => 'timestamp',         'sort' => 'DESC'),
     );
 
@@ -131,8 +129,9 @@ function tap_beacons_analytics_user_events() {
     $query = db_select('tap_beacons_interaction_event', 'i')
         ->extend('PagerDefault')
         ->extend('TableSort');
-
-    $query->fields('i', array('event_id','event','stop_nid','mobile_device_id','timestamp'));
+    $query->join('node', 'n', 'n.nid = i.stop_nid');
+    $query->fields('i', array('event_id','event','mobile_device_id','timestamp'))
+        ->fields('n', array('title'));
     $query->limit($per_page)
         ->orderByHeader($header);
 
@@ -148,7 +147,8 @@ function tap_beacons_analytics_user_events() {
             $row->event_id,
             $row->event,
             $row->mobile_device_id,
-            $row->stop_nid, $timestamp
+            $row->title,
+            $timestamp
         );
     }
 
