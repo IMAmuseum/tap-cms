@@ -12,9 +12,13 @@ function tap_beacons_analytics_section() {
     // Clear cache so new data will appear automatically
     cache_clear_all('theme_registry', 'cache', TRUE);
 
+    drupal_add_js('https://www.google.com/jsapi');
+
     // Set up styles and JS file to be used on beacon admin pages
     drupal_add_css(drupal_get_path('module', 'tap_beacons') . '/css/tap_beacons_style.css');
-    drupal_add_js(drupal_get_path('module', 'tap_beacons') . '/js/tap_beacons_main.js');
+    drupal_add_js(drupal_get_path('module', 'tap_beacons') . '/js/tap_beacons_charts.js');
+
+
 
     return theme('tap_beacons_analytics_content');
 }
@@ -23,7 +27,7 @@ function tap_beacons_analytics_section() {
  * Implements hook_preprocess().
  */
 function tap_beacons_preprocess(&$variables, $hook){
-    $variables['beacon_events_data'] = tap_beacons_analytics_beacon_events();
+    $variables['beacon_events_table'] = tap_beacons_analytics_beacon_events();
 }
 
 /**

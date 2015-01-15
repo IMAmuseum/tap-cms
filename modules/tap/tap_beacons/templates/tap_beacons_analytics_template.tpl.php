@@ -17,8 +17,24 @@
                 </select>
             </label>
         </form>
+
+        <?php
+            foreach ($variables['beacons_data'] as $row) {
+                if(isset($_GET['beacon']) && ($_GET['beacon'] == $row->beacon_id)){
+                    $output = '<p><strong>UUID</strong>: ' . $row->uuid . '<br />';
+                    $output .= '<strong>Major Number</strong>: ' . $row->major_num . '<br />';
+                    $output .= '<strong>Minor Number</strong>: ' . $row->minor_num . '</p>';
+
+                    print $output;
+                }
+            }
+        ?>
+
+        <div id="events_pie_chart" class="tap-beacons-charts"></div>
+        <div id="devices_pie_chart" class="tap-beacons-charts"></div>
+        <div id="ranges_pie_chart" class="tap-beacons-charts"></div>
     </div>
 
-    <?php print render($variables['beacon_events_data']); ?>
+    <?php print render($variables['beacon_events_table']); ?>
 
 </div>

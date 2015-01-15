@@ -30,3 +30,9 @@ table.tap-beacons-table td {
     border-color: #c00 !important;
 }
 
+.tap-beacons-charts{
+    float: left;
+    height: 300px;
+    width: 33.3%;
+}
+
