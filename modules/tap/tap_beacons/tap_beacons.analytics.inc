@@ -71,7 +71,7 @@ function tap_beacons_analytics_beacon_events() {
 /**
  * Function to create admin section for interaction events
  */
-function tap_beacons_analytics_interaction_events() {
+function tap_beacons_analytics_user_events() {
 
     // Set number of display items
     $per_page = 50;

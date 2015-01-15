@@ -15,10 +15,20 @@ function tap_beacons_menu() {
     );
 
     // Beacon entries
+    $items['admin/tap/beacons/management'] = array(
+        'title'             => 'Management',
+        'page callback'     => 'tap_beacons_admin_section',
+        'access arguments'  => array('administer tap'),
+        'type'              => MENU_DEFAULT_LOCAL_TASK,
+        'file'              => 'tap_beacons.admin.inc',
+        'weight'            => 0
+    );
+
     $items['admin/tap/beacons/add'] = array(
         'title'             => 'Add Beacons',
         'page callback'     => 'tap_beacons_admin_add',
         'access arguments'  => array('administer tap'),
+        'type'              => MENU_CALLBACK,
         'file'              => 'tap_beacons.admin.inc',
     );
 
@@ -26,6 +36,7 @@ function tap_beacons_menu() {
         'title'             => 'Delete Beacons',
         'page callback'     => 'tap_beacons_admin_delete',
         'access arguments'  => array('administer tap'),
+        'type'              => MENU_CALLBACK,
         'file'              => 'tap_beacons.admin.inc',
     );
 
@@ -33,6 +44,7 @@ function tap_beacons_menu() {
         'title'             => 'Update Beacons',
         'page callback'     => 'tap_beacons_admin_update',
         'access arguments'  => array('administer tap'),
+        'type'              => MENU_CALLBACK,
         'file'              => 'tap_beacons.admin.inc',
     );
 
@@ -44,6 +56,7 @@ function tap_beacons_menu() {
         'access arguments'  => array('administer tap'),
         'type'              => MENU_LOCAL_TASK,
         'file'              => 'tap_beacons.admin.inc',
+        'weight'            => 10
     );
 
     // Token
@@ -51,6 +64,7 @@ function tap_beacons_menu() {
         'title'             => 'Beacons Token',
         'page callback'     => 'tap_beacons_admin_set_token',
         'access arguments'  => array('administer tap'),
+        'type'              => MENU_CALLBACK,
         'file'              => 'tap_beacons.admin.inc',
     );
 
@@ -59,6 +73,7 @@ function tap_beacons_menu() {
         'title'             => 'Get Beacon Events',
         'page callback'     => 'tap_beacons_api_beacon_events',
         'access arguments'  => array('access content'),
+        'type'              => MENU_CALLBACK,
         'file'              => 'tap_beacons.api.inc',
     );
 
@@ -66,24 +81,27 @@ function tap_beacons_menu() {
         'title'             => 'Get Interaction Events',
         'page callback'     => 'tap_beacons_api_interaction_events',
         'access arguments'  => array('access content'),
+        'type'              => MENU_CALLBACK,
         'file'              => 'tap_beacons.api.inc',
     );
 
     // Analytics
     $items['admin/tap/beacons/analytics'] = array(
-        'title'             => 'Beacon Analytics',
+        'title'             => 'Beacon Events',
         'page callback'     => 'tap_beacons_analytics_beacon_events',
         'access arguments'  => array('administer tap'),
         'type'              => MENU_LOCAL_TASK,
         'file'              => 'tap_beacons.analytics.inc',
+        'weight'            => 2
     );
 
     $items['admin/tap/beacons/interactions'] = array(
-        'title'             => 'Interaction Analytics',
-        'page callback'     => 'tap_beacons_analytics_interaction_events',
+        'title'             => 'User Events',
+        'page callback'     => 'tap_beacons_analytics_user_events',
         'access arguments'  => array('administer tap'),
         'type'              => MENU_LOCAL_TASK,
         'file'              => 'tap_beacons.analytics.inc',
+        'weight'            => 4
     );
 
     return $items;
