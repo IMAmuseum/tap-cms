@@ -114,13 +114,13 @@ function tap_beacons_query_execute($query, $message){
 /**
 * Function to set beacon references to certain content types.
 */
-function tap_beacons_admin_form($form, &$form_state) {
+function tap_beacons_settings_form($form, &$form_state) {
 
     // Get content types
     $form['tap_beacons_content_types'] = array(
         '#type' => 'checkboxes',
-        '#title' => t('Content types that can be referenced'),
-        '#description' => t('The available content types that can be added to this field.'),
+        '#title' => t('Content types that beacons can reference'),
+        '#description' => t('Select each content type that can be associated with a beacon.'),
         '#default_value' => variable_get('tap_beacons_content_types'),
         '#required' => TRUE,
         '#mulitple' => true,
