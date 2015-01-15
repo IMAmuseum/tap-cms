@@ -2,10 +2,6 @@
 
 define('TAP_BEACONS_VERSION', '0.1.0');
 
-error_reporting(E_ALL);
-ini_set('display_errors', TRUE);
-ini_set('display_startup_errors', TRUE);
-
 /**
  * Implements hook_menu()
  */
@@ -69,6 +65,13 @@ function tap_beacons_menu() {
     $items['beacons/api/interactions'] = array(
         'title'             => 'Get Interaction Events',
         'page callback'     => 'tap_beacons_api_interaction_events',
+        'access arguments'  => array('access content'),
+        'file'              => 'tap_beacons.api.inc',
+    );
+
+    $items['beacons/api/charts'] = array(
+        'title'             => 'Get Chart Data',
+        'page callback'     => 'tap_beacons_api_chart_data',
         'access arguments'  => array('access content'),
         'file'              => 'tap_beacons.api.inc',
     );
