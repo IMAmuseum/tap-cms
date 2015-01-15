@@ -19,7 +19,7 @@ function getChart() {
 }
 
 function drawPie(types) {
-    var action = '/beacons/api/charts?type=' + types + '&' + window.location.search.substring(1);
+    var action = Drupal.settings.basePath + 'beacons/api/charts?type=' + types + '&' + window.location.search.substring(1);
 
     var jsonData = jQuery.ajax({
               url: action,
