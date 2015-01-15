@@ -117,14 +117,21 @@ function tap_beacons_query_execute($query, $message){
 function tap_beacons_settings_form($form, &$form_state) {
 
     // Get content types
+    $form['tap_beacons_token'] = array(
+        '#type'             => 'textfield',
+        '#title'            => 'Beacon API Access Token',
+        '#description'      => 'The token required for applications to send data to the beacon API.',
+        '#default_value'    => variable_get('tap_beacons_token')
+    );
+
     $form['tap_beacons_content_types'] = array(
-        '#type' => 'checkboxes',
-        '#title' => t('Content types that beacons can reference'),
-        '#description' => t('Select each content type that can be associated with a beacon.'),
-        '#default_value' => variable_get('tap_beacons_content_types'),
-        '#required' => TRUE,
-        '#mulitple' => true,
-        '#options' => array_map('check_plain', node_type_get_names())
+        '#type'             => 'checkboxes',
+        '#title'            => t('Content types that beacons can reference'),
+        '#description'      => t('Select each content type that can be associated with a beacon.'),
+        '#default_value'    => variable_get('tap_beacons_content_types'),
+        '#required'         => TRUE,
+        '#mulitple'         => true,
+        '#options'          => array_map('check_plain', node_type_get_names())
     );
 
     return system_settings_form($form, $form_state);

@@ -122,13 +122,11 @@ function tap_beacons_theme() {
 
     $beacons_table = tap_beacons_get_beacons();
     $beacons_data = tap_beacons_fetch_beacon_data();
-    $token = tap_beacons_get_tokens();
 
     $items = array(
         'tap_beacons_admin_content' => array(
             'variables' => array(
                 'beacons_table' => $beacons_table,
-                'token_data' => $token,
             ),
             'template'  => 'templates/tap_beacons_template',
         ),
@@ -427,24 +425,4 @@ function tap_beacons_tourml_stop_meta_alter(&$node){
             $i++;
         }
     }
-}
-
-/**
-* Function to get token data from DB
-*/
-function tap_beacons_get_tokens(){
-
-    // Get beacon data from DB
-    $result = db_select('tap_beacons_tokens', 't')
-        ->fields('t', array('token_id', 'token'))
-        ->execute();
-
-    $token = array();
-
-    foreach ($result as $row) {
-        $token['id'] = $row->token_id;
-        $token['token'] = $row->token;
-    }
-
-    return $token;
 }

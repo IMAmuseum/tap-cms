@@ -258,26 +258,5 @@ function tap_beacons_schema() {
     'primary key' => array('id'),
   );
 
-  // Table to store token for authentication
-  $schema['tap_beacons_tokens'] = array(
-    'description' => 'The table to store tokens for authentication.',
-    'fields' => array(
-      'token_id' => array(
-        'description' => 'The unique id for table.',
-        'type' => 'serial',
-        'unsigned' => TRUE,
-        'not null' => TRUE,
-      ),
-      'token' => array(
-        'description' => 'Token set for authentication.',
-        'type' => 'varchar',
-        'length' => 255,
-        'not null' => TRUE,
-        'default' => '',
-      ),
-    ),
-    'primary key' => array('token_id'),
-  );
-
   return $schema;
 }

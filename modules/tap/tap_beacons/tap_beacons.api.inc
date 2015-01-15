@@ -13,10 +13,10 @@ function tap_beacons_api_beacon_events() {
     $json = json_decode($_POST['data'], true);
 
     // Get stored token
-    $token = tap_beacons_get_tokens();
+    $token = variable_get('tap_beacons_token', '');
 
     // Check if token matches token sent
-    if($json['token'] == $token['token']) {
+    if(empty($token) || $json['token'] == $token) {
 
         // Loop through each event
         foreach ($json['events'] as $key) {
@@ -68,10 +68,10 @@ function tap_beacons_api_interaction_events() {
     $json = json_decode($_POST['data'], true);
 
     // Get stored token
-    $token = tap_beacons_get_tokens();
+    $token = variable_get('tap_beacons_token', '');
 
     // Check if token matches token sent
-    if($json['token'] == $token['token']) {
+    if(empty($token) || $json['token'] == $token) {
 
         // Build query to insert interaction event data
         $query = db_insert('tap_beacons_interaction_event')
