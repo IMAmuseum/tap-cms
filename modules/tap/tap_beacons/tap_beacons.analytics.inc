@@ -16,8 +16,6 @@ function tap_beacons_events_beacon() {
     drupal_add_css(drupal_get_path('module', 'tap_beacons') . '/css/tap_beacons_style.css');
     drupal_add_js(drupal_get_path('module', 'tap_beacons') . '/js/tap_beacons_charts.js');
 
-    variable_set('beacon_events_table', tap_beacons_analytics_beacon_events());
-
     return theme('tap_beacons_analytics_content');
 }
 
@@ -98,7 +96,7 @@ function tap_beacons_analytics_beacon_events() {
         '#theme' => 'pager',
     );
 
-    return $output;
+    variable_set('beacon_events_table', $output);
 }
 
 /**

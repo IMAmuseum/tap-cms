@@ -41,6 +41,9 @@
         <div id="ranges_pie_chart" class="tap-beacons-charts"></div>
     </div>
 
-    <?php $event = variable_get('beacon_events_table'); print render($event); ?>
+    <?php
+        $event = variable_get('beacon_events_table');
+        print render($event);
+    ?>
 
 </div>
