@@ -9,9 +9,6 @@
  */
 function tap_beacons_events_beacon() {
 
-    // Clear cache so new data will appear automatically
-    cache_clear_all('theme_registry', 'cache', TRUE);
-
     // Add Google charts API script
     drupal_add_js('https://www.google.com/jsapi');
 
@@ -19,15 +16,9 @@ function tap_beacons_events_beacon() {
     drupal_add_css(drupal_get_path('module', 'tap_beacons') . '/css/tap_beacons_style.css');
     drupal_add_js(drupal_get_path('module', 'tap_beacons') . '/js/tap_beacons_charts.js');
 
-    return theme('tap_beacons_analytics_content');
-}
+    variable_set('beacon_events_table', tap_beacons_analytics_beacon_events());
 
-/**
- * Implements hook_preprocess().
- */
-function tap_beacons_preprocess(&$variables, $hook){
-    $events = tap_beacons_analytics_beacon_events();
-    $variables['beacon_events_table'] = $events;
+    return theme('tap_beacons_analytics_content');
 }
 
 /**
