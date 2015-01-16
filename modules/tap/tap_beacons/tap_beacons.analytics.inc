@@ -7,7 +7,7 @@
 /**
  * Function to create admin section for beacons
  */
-function tap_beacons_analytics_section() {
+function tap_beacons_events_beacon() {
 
     // Clear cache so new data will appear automatically
     cache_clear_all('theme_registry', 'cache', TRUE);
@@ -111,7 +111,7 @@ function tap_beacons_analytics_beacon_events() {
 /**
  * Function to create admin section for interaction events
  */
-function tap_beacons_analytics_user_events() {
+function tap_beacons_events_content() {
 
     // Set number of display items
     $per_page = 50;
