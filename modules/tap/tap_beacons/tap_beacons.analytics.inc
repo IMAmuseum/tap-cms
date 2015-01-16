@@ -12,6 +12,7 @@ function tap_beacons_events_beacon() {
     // Clear cache so new data will appear automatically
     cache_clear_all('theme_registry', 'cache', TRUE);
 
+    // Add Google charts API script
     drupal_add_js('https://www.google.com/jsapi');
 
     // Set up styles and JS file to be used on beacon admin pages
@@ -25,7 +26,8 @@ function tap_beacons_events_beacon() {
  * Implements hook_preprocess().
  */
 function tap_beacons_preprocess(&$variables, $hook){
-    $variables['beacon_events_table'] = tap_beacons_analytics_beacon_events();
+    $events = tap_beacons_analytics_beacon_events();
+    $variables['beacon_events_table'] = $events;
 }
 
 /**

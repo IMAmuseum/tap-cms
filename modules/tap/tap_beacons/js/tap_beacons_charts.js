@@ -12,13 +12,13 @@ google.setOnLoadCallback(getChart);
 
 function getChart() {
 
-    drawPie("events");
-    drawPie("ranges");
-    drawPie("devices");
+    drawPie("events", "Events");
+    drawPie("ranges", "Ranges");
+    drawPie("devices", "Devices Per Beacon");
 
 }
 
-function drawPie(types) {
+function drawPie(types, title) {
     var action = Drupal.settings.basePath + 'beacons/api/charts?type=' + types + '&' + window.location.search.substring(1);
 
     var jsonData = jQuery.ajax({
@@ -30,7 +30,7 @@ function drawPie(types) {
     var data = new google.visualization.DataTable(jsonData);
 
     var options = {
-        title: types.toUpperCase(),
+        title: title,
         is3D: true
     };
 
