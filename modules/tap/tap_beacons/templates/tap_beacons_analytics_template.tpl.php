@@ -23,8 +23,14 @@
                 if(isset($_GET['beacon']) && ($_GET['beacon'] == $row->beacon_id)){
                     $output = '<p><strong>UUID</strong>: ' . $row->uuid . '<br />';
                     $output .= '<strong>Major Number</strong>: ' . $row->major_num . '<br />';
-                    $output .= '<strong>Minor Number</strong>: ' . $row->minor_num . '</p>';
+                    $output .= '<strong>Minor Number</strong>: ' . $row->minor_num . '<br />';
+                    $output .= '<strong>Stops</strong>: ' . '<br />';
 
+                    $stops = tap_beacons_get_stops_as_links($row->beacon_id);
+
+                    $output .= implode('<br />', $stops) . '<br />';
+
+                    $output .= '</p>';
                     print $output;
                 }
             }
