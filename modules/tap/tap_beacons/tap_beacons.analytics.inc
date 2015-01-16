@@ -96,7 +96,7 @@ function tap_beacons_analytics_beacon_events() {
         '#theme' => 'pager',
     );
 
-    variable_set('beacon_events_table', $output);
+    return $output;
 }
 
 /**

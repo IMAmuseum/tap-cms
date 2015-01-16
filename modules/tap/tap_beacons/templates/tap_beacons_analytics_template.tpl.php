@@ -42,7 +42,7 @@
     </div>
 
     <?php
-        $event = variable_get('beacon_events_table');
+        $event = tap_beacons_analytics_beacon_events();
         print render($event);
     ?>
 
