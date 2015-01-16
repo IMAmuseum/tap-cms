@@ -77,9 +77,9 @@ function tap_beacons_menu() {
         'file'              => 'tap_beacons.api.inc',
     );
 
-    $items['beacons/api/interactions'] = array(
-        'title'             => 'Get Interaction Events',
-        'page callback'     => 'tap_beacons_api_interaction_events',
+    $items['beacons/api/content'] = array(
+        'title'             => 'Get Content Events',
+        'page callback'     => 'tap_beacons_api_content_events',
         'access arguments'  => array('access content'),
         'type'              => MENU_CALLBACK,
         'file'              => 'tap_beacons.api.inc',
@@ -94,18 +94,18 @@ function tap_beacons_menu() {
     );
 
     // Analytics
-    $items['admin/tap/beacons/analytics'] = array(
+    $items['admin/tap/beacons/events/beacon'] = array(
         'title'             => 'Beacon Events',
-        'page callback'     => 'tap_beacons_analytics_section',
+        'page callback'     => 'tap_beacons_events_beacon',
         'access arguments'  => array('administer tap'),
         'type'              => MENU_LOCAL_TASK,
         'file'              => 'tap_beacons.analytics.inc',
         'weight'            => 2
     );
 
-    $items['admin/tap/beacons/interactions'] = array(
-        'title'             => 'User Events',
-        'page callback'     => 'tap_beacons_analytics_user_events',
+    $items['admin/tap/beacons/events/content'] = array(
+        'title'             => 'Content Events',
+        'page callback'     => 'tap_beacons_events_content',
         'access arguments'  => array('administer tap'),
         'type'              => MENU_LOCAL_TASK,
         'file'              => 'tap_beacons.analytics.inc',

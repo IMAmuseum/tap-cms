@@ -62,7 +62,7 @@ function tap_beacons_api_beacon_events() {
 /**
 * Function to create API endpoint for interaction events
 */
-function tap_beacons_api_interaction_events() {
+function tap_beacons_api_content_events() {
 
     // Grab sent JSON data
     $json = json_decode($_POST['data'], true);
