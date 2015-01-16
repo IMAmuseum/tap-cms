@@ -1,6 +1,6 @@
 <div class="tap-beacons-admin">
     <div>
-        <form action="<?php print url("admin/tap/beacons/analytics") ?>" method="get" id="tap-beacons-select-form" class="tap-beacons-add-beacon-form">
+        <form action="<?php print url("admin/tap/beacons/events/beacon") ?>" method="get" id="tap-beacons-select-form" class="tap-beacons-add-beacon-form">
             <label>
                 Choose a beacon to reduce the results.<br />
                 <select name="beacon" id="beacon-select" class="form-select">
