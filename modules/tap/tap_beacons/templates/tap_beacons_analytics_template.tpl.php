@@ -21,10 +21,10 @@
         <?php
             foreach ($variables['beacons_data'] as $row) {
                 if(isset($_GET['beacon']) && ($_GET['beacon'] == $row->beacon_id)){
-                    $output = '<p><strong>UUID</strong>: ' . $row->uuid . '<br />';
-                    $output .= '<strong>Major Number</strong>: ' . $row->major_num . '<br />';
-                    $output .= '<strong>Minor Number</strong>: ' . $row->minor_num . '<br />';
-                    $output .= '<strong>Stops</strong>: ' . '<br />';
+                    $output = '<p><strong>UUID:</strong> ' . $row->uuid . '<br />';
+                    $output .= '<strong>Major Number:</strong> ' . $row->major_num . '<br />';
+                    $output .= '<strong>Minor Number:</strong> ' . $row->minor_num . '<br />';
+                    $output .= '<strong>Stops associated to this beacon:</strong> <br />';
 
                     $stops = tap_beacons_get_stops_as_links($row->beacon_id);
 

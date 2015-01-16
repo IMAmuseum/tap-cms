@@ -205,6 +205,9 @@ function tap_beacons_get_beacons(){
     return $table;
 }
 
+/**
+* Function to get stops based on beacon id and creating links to those stop pages
+*/
 function tap_beacons_get_stops_as_links($beacon_id){
 
     // Query stop data to create links back to related stops
@@ -222,9 +225,9 @@ function tap_beacons_get_stops_as_links($beacon_id){
     foreach ($stop_result as $stop_row) {
         $stop_url = url('node/' . $stop_row->stop_nid);
         $stop_link[] = '<a href="' . $stop_url . '">' . $stop_row->title . '</a>';
-
     }
 
+    // Return all stops as links
     return $stop_link;
 }
 
