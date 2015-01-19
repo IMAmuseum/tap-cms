@@ -122,6 +122,7 @@ function tap_beacons_theme() {
 
     $beacons_table = tap_beacons_get_beacons();
     $beacons_data = tap_beacons_fetch_beacon_data();
+    $stop_data = tap_beacons_fetch_stop_data();
 
     $items = array(
         'tap_beacons_admin_content' => array(
@@ -138,7 +139,7 @@ function tap_beacons_theme() {
         ),
         'tap_beacons_content_events' => array(
             'variables' => array(
-                'beacons_data' => $beacons_data,
+                'stop_data' => $stop_data,
             ),
             'template'  => 'templates/tap_beacons_content_events_template',
         ),
@@ -212,29 +213,42 @@ function tap_beacons_get_beacons(){
 }
 
 /**
+* Function to fetch stops from DB
+*/
+function tap_beacons_fetch_stop_data($beacon_id = null){
+    $query = db_select('tap_beacons_stop_beacon', 's');
+    $query->join('node', 'n', 'n.nid = s.stop_nid');
+    $query->fields('n', array('title'))
+        ->fields('s', array('stop_nid'));
+    $query->groupBy('n.title');
+
+    if ($beacon_id != null){
+        $query->condition('s.beacon_id', $beacon_id, '=');
+    }
+
+    $result = $query->execute()->fetchAll();
+
+    return $result;
+}
+
+/**
 * Function to get stops based on beacon id and creating links to those stop pages
 */
-function tap_beacons_get_stops_as_links($beacon_id){
+function tap_beacons_get_stops_as_links($beacon_id = null){
 
-    // Query stop data to create links back to related stops
-    $stop_query = db_select('tap_beacons_stop_beacon', 's');
-    $stop_query->join('node', 'n', 'n.nid = s.stop_nid');
-    $stop_query->fields('s', array('stop_nid'))
-        ->fields('n', array('title'));
-    $stop_query->condition('s.beacon_id', $beacon_id, '=');
-    $stop_result = $stop_query->execute();
+    $result = tap_beacons_fetch_stop_data($beacon_id);
 
     // Create stop link array
-    $stop_link = array();
+    $link = array();
 
     // Loop through those stops and create their links
-    foreach ($stop_result as $stop_row) {
-        $stop_url = url('node/' . $stop_row->stop_nid);
-        $stop_link[] = '<a href="' . $stop_url . '">' . $stop_row->title . '</a>';
+    foreach ($result as $row) {
+        $url = url('node/' . $row->stop_nid);
+        $link[] = '<a href="' . $url . '">' . $row->title . '</a>';
     }
 
     // Return all stops as links
-    return $stop_link;
+    return $link;
 }
 
 /**

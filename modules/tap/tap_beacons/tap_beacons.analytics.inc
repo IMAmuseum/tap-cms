@@ -141,6 +141,12 @@ function tap_beacons_analytics_content_events() {
     $query->limit($per_page)
         ->orderByHeader($header);
 
+    if(isset($_GET['stop']) && $_GET['stop'] != ""){
+        $stop = $_GET['stop'];
+
+        $query->condition('i.stop_nid', $stop, '=');
+    }
+
     // Execute the query
     $results = $query->execute()->fetchAll();
 

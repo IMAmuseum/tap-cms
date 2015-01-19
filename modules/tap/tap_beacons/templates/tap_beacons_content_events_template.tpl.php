@@ -3,14 +3,14 @@
         <form action="<?php print url("admin/tap/beacons/events/content") ?>" method="get" id="tap-beacons-select-form" class="tap-beacons-add-beacon-form">
             <label>
                 Choose a Stop to reduce the results.<br />
-                <select name="beacon" id="beacon-select" class="form-select">
+                <select name="stop" id="beacon-select" class="form-select">
                     <option value="">All Stops</option>
                     <?php
-                        foreach ($variables['beacons_data'] as $row) {
-                            if(isset($_GET['beacon']) && ($_GET['beacon'] == $row->beacon_id)){
-                                echo '<option value="' . $row->beacon_id . '" selected="selected">' . $row->name . '</option>';
+                        foreach ($variables['stop_data'] as $row) {
+                            if(isset($_GET['stop']) && ($_GET['stop'] == $row->stop_nid)){
+                                echo '<option value="' . $row->stop_nid . '" selected="selected">' . $row->title . '</option>';
                             } else {
-                                echo '<option value="' . $row->beacon_id . '">' . $row->name . '</option>';
+                                echo '<option value="' . $row->stop_nid . '">' . $row->title . '</option>';
                             }
                         }
                     ?>
