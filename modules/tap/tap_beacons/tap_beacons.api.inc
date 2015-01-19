@@ -112,16 +112,24 @@ function tap_beacons_api_chart_data(){
 
     // Check the type being called and use the appropriate function
     switch ($_GET['type']) {
-    case 'ranges':
-        $data = tap_beacons_build_ranges_json();
+    case 'beacon-ranges':
+        $data = tap_beacons_build_beacon_ranges_json();
         break;
 
-    case 'devices':
-        $data = tap_beacons_build_devices_json();
+    case 'beacon-devices':
+        $data = tap_beacons_build_beacon_devices_json();
         break;
 
-    case 'events':
-        $data = tap_beacons_build_events_json();
+    case 'beacon-events':
+        $data = tap_beacons_build_beacon_events_json();
+        break;
+
+    case 'content-events':
+        $data = tap_beacons_build_content_events_json();
+        break;
+
+    case 'content-devices':
+        $data = tap_beacons_build_content_devices_json();
         break;
     }
 
@@ -132,7 +140,7 @@ function tap_beacons_api_chart_data(){
 /**
 * Function to build ranged JSON
 */
-function tap_beacons_build_ranges_json(){
+function tap_beacons_build_beacon_ranges_json(){
 
     // Build query
     $query = db_select('tap_beacons_beacon_status', 's');
@@ -167,7 +175,7 @@ function tap_beacons_build_ranges_json(){
 /**
 * Function to build devices JSON
 */
-function tap_beacons_build_devices_json(){
+function tap_beacons_build_beacon_devices_json(){
 
     // Build query
     $query = db_select('tap_beacons_beacon_event', 'e');
@@ -201,7 +209,7 @@ function tap_beacons_build_devices_json(){
 /**
 * Function to build events JSON
 */
-function tap_beacons_build_events_json(){
+function tap_beacons_build_beacon_events_json(){
 
     // Build query
     $query = db_select('tap_beacons_beacon_event', 'e');
@@ -228,6 +236,78 @@ function tap_beacons_build_events_json(){
     $rows = array();
     foreach ($results as $row) {
         $data .= '{"c":[{"v":"' . ucwords($row->event) . '"},{"v":' . $row->mobile_device_count .'}]},';
+    }
+
+    $data = rtrim($data, ",") . ']}';
+
+    return $data;
+}
+
+/**
+* Function to build events JSON
+*/
+function tap_beacons_build_content_events_json(){
+
+    // Build query
+    $query = db_select('tap_beacons_interaction_event', 'e');
+    $query->fields('e', array('event'));
+    $query->addExpression('COUNT(DISTINCT e.stop_nid)', 'stop_count');
+    $query->groupBy('e.event');
+
+    if(isset($_GET['stop']) && ($_GET['stop'] != "")){
+        $query->condition('e.stop_nid', $_GET['stop'], '=');
+    }
+
+    $results = $query->execute();
+
+    $data = '{
+        "cols": [
+            {"label":"Events","type":"string"},
+            {"label":"Stops","type":"string"}
+        ],
+        "rows": [';
+
+    // Configure the table rows
+    $rows = array();
+    foreach ($results as $row) {
+        $data .= '{"c":[{"v":"' . ucwords($row->event) . '"},{"v":' . $row->stop_count .'}]},';
+    }
+
+    $data = rtrim($data, ",") . ']}';
+
+    return $data;
+}
+
+/**
+* Function to build events JSON
+*/
+function tap_beacons_build_content_devices_json(){
+
+    // Build query
+    $query = db_select('tap_beacons_interaction_event', 'e');
+    $query->join('node', 'n', 'n.nid = e.stop_nid');
+    $query->fields('e', array('stop_nid'))
+        ->fields('n', array('title'));
+    $query->addExpression('COUNT(DISTINCT e.mobile_device_id)', 'mobile_device_count');
+    $query->groupBy('e.stop_nid');
+
+    if(isset($_GET['stop']) && ($_GET['stop'] != "")){
+        $query->condition('e.stop_nid', $_GET['stop'], '=');
+    }
+
+    $results = $query->execute();
+
+    $data = '{
+        "cols": [
+            {"label":"Stops","type":"string"},
+            {"label":"Devices","type":"string"}
+        ],
+        "rows": [';
+
+    // Configure the table rows
+    $rows = array();
+    foreach ($results as $row) {
+        $data .= '{"c":[{"v":"' . ucwords($row->title) . '"},{"v":' . $row->mobile_device_count .'}]},';
     }
 
     $data = rtrim($data, ",") . ']}';

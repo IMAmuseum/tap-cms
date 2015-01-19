@@ -6,7 +6,7 @@ jQuery(function($) {
 
         // Add validation to form.
         $(".tap-beacons-error-message").html("");
-        $(".has-error").removeClass("has-error");
+        $(".tap-beacons-has-error").removeClass("tap-beacons-has-error");
         var hasError = false;
 
         // Check if required fields are filled in
@@ -16,14 +16,14 @@ jQuery(function($) {
 
             if( !$this.val() ){
                 $this.siblings(".tap-beacons-error-message").html('Please fill out this field.');
-                $this.addClass("has-error");
+                $this.addClass("tap-beacons-has-error");
                 hasError = true;
             }
         });
 
         // Return false if any errors exist
         if(hasError == true) {
-            $('.has-error').first().focus();
+            $('.tap-beacons-has-error').first().focus();
             return false;
         }
 

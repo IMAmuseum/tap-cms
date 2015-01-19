@@ -5,7 +5,7 @@
  */
 
 /**
- * Function to create admin section for beacons
+ * Function to create admin section for beacon events
  */
 function tap_beacons_events_beacon() {
 
@@ -16,7 +16,7 @@ function tap_beacons_events_beacon() {
     drupal_add_css(drupal_get_path('module', 'tap_beacons') . '/css/tap_beacons_style.css');
     drupal_add_js(drupal_get_path('module', 'tap_beacons') . '/js/tap_beacons_charts.js');
 
-    return theme('tap_beacons_analytics_content');
+    return theme('tap_beacons_beacon_events');
 }
 
 /**
@@ -100,9 +100,24 @@ function tap_beacons_analytics_beacon_events() {
 }
 
 /**
- * Function to create admin section for interaction events
+ * Function to create admin section for beacon events
  */
 function tap_beacons_events_content() {
+
+    // Add Google charts API script
+    drupal_add_js('https://www.google.com/jsapi');
+
+    // Set up styles and JS file to be used on beacon admin pages
+    drupal_add_css(drupal_get_path('module', 'tap_beacons') . '/css/tap_beacons_style.css');
+    drupal_add_js(drupal_get_path('module', 'tap_beacons') . '/js/tap_beacons_charts.js');
+
+    return theme('tap_beacons_content_events');
+}
+
+/**
+ * Function to create admin section for interaction events
+ */
+function tap_beacons_analytics_content_events() {
 
     // Set number of display items
     $per_page = 50;

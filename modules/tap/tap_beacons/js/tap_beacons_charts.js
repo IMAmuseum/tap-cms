@@ -8,24 +8,28 @@ jQuery(function($) {
     Charting Scripts
 *********************/
 google.load("visualization", "1", {packages:["corechart"]});
-google.setOnLoadCallback(getChart);
+google.setOnLoadCallback(getCharts);
 
-function getChart() {
-
-    drawPie("events", "Events");
-    drawPie("ranges", "Ranges");
-    drawPie("devices", "Devices Per Beacon");
-
+function getCharts() {
+    if (document.getElementById('tap-beacons-beacon-events') != null){
+        drawPie("beacon-events", "Events");
+        drawPie("beacon-ranges", "Ranges");
+        drawPie("beacon-devices", "Devices Per Beacon");
+    }
+    if (document.getElementById('tap-beacons-content-events') != null){
+        drawPie("content-events", "Events");
+        drawPie("content-devices", "Devices Per Stop");
+    }
 }
 
-function drawPie(types, title) {
-    var action = Drupal.settings.basePath + 'beacons/api/charts?type=' + types + '&' + window.location.search.substring(1);
+function drawPie(type, title) {
+    var action = Drupal.settings.basePath + 'beacons/api/charts?type=' + type + '&' + window.location.search.substring(1);
 
     var jsonData = jQuery.ajax({
-              url: action,
-              dataType:"json",
-              async: false
-              }).responseText;
+                url: action,
+                dataType:"json",
+                async: false
+            }).responseText;
 
     var data = new google.visualization.DataTable(jsonData);
 
@@ -34,7 +38,7 @@ function drawPie(types, title) {
         is3D: true
     };
 
-    var chart = new google.visualization.PieChart(document.getElementById(types + '_pie_chart'));
+    var chart = new google.visualization.PieChart(document.getElementById(type + '-pie-chart'));
 
     chart.draw(data, options);
 }

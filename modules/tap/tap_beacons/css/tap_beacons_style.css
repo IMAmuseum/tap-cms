@@ -26,13 +26,20 @@ table.tap-beacons-table td {
     color: #c00;
 }
 
-.has-error {
+.tap-beacons-has-error {
     border-color: #c00 !important;
 }
 
 .tap-beacons-charts{
     float: left;
     height: 250px;
+}
+
+.tap-beacons-col-2{
+    width: 50%;
+}
+
+.tap-beacons-col-3{
     width: 33.3%;
 }
 

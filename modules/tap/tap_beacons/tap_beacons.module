@@ -130,11 +130,17 @@ function tap_beacons_theme() {
             ),
             'template'  => 'templates/tap_beacons_template',
         ),
-        'tap_beacons_analytics_content' => array(
+        'tap_beacons_beacon_events' => array(
             'variables' => array(
                 'beacons_data' => $beacons_data,
             ),
-            'template'  => 'templates/tap_beacons_analytics_template',
+            'template'  => 'templates/tap_beacons_beacon_events_template',
+        ),
+        'tap_beacons_content_events' => array(
+            'variables' => array(
+                'beacons_data' => $beacons_data,
+            ),
+            'template'  => 'templates/tap_beacons_content_events_template',
         ),
     );
 

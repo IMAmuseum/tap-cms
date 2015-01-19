@@ -1,4 +1,4 @@
-<div class="tap-beacons-admin">
+<div class="tap-beacons-admin" id="tap-beacons-beacon-events">
     <div>
         <form action="<?php print url("admin/tap/beacons/events/beacon") ?>" method="get" id="tap-beacons-select-form" class="tap-beacons-add-beacon-form">
             <label>
@@ -24,11 +24,11 @@
                     $output = '<p><strong>UUID:</strong> ' . $row->uuid . '<br />';
                     $output .= '<strong>Major Number:</strong> ' . $row->major_num . '<br />';
                     $output .= '<strong>Minor Number:</strong> ' . $row->minor_num . '<br />';
-                    $output .= '<strong>Stops associated to this beacon:</strong> <br />';
+                    $output .= '<strong>Content associated to this beacon:</strong> ';
 
                     $stops = tap_beacons_get_stops_as_links($row->beacon_id);
 
-                    $output .= implode('<br />', $stops) . '<br />';
+                    $output .= implode(', ', $stops);
 
                     $output .= '</p>';
                     print $output;
@@ -36,9 +36,9 @@
             }
         ?>
 
-        <div id="events_pie_chart" class="tap-beacons-charts"></div>
-        <div id="devices_pie_chart" class="tap-beacons-charts"></div>
-        <div id="ranges_pie_chart" class="tap-beacons-charts"></div>
+        <div id="beacon-events-pie-chart" class="tap-beacons-charts tap-beacons-col-3"></div>
+        <div id="beacon-devices-pie-chart" class="tap-beacons-charts tap-beacons-col-3"></div>
+        <div id="beacon-ranges-pie-chart" class="tap-beacons-charts tap-beacons-col-3"></div>
     </div>
 
     <?php
