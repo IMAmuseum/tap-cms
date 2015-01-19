@@ -1,9 +1,13 @@
 <div class="tap-beacons-admin" id="tap-beacons-beacon-events">
-    <div>
-        <form action="<?php print url("admin/tap/beacons/events/beacon") ?>" method="get" id="tap-beacons-select-form" class="tap-beacons-add-beacon-form">
-            <label>
-                Choose a beacon to reduce the results.<br />
-                <select name="beacon" id="beacon-select" class="form-select">
+    <form action="<?php print url("admin/tap/beacons/events/beacon") ?>" method="get" id="tap-beacons-select-form" class="tap-beacons-add-beacon-form">
+        <fieldset class="tap-beacons-fieldset">
+            <legend>Filter Results</legend>
+
+            <div class="tap-beacons-form-item">
+                <label for="tap-beacons-select">
+                    Select a Beacon
+                </label>
+                <select name="beacon" id="tap-beacons-select" class="form-select">
                     <option value="">All Beacons</option>
                     <?php
                         foreach ($variables['beacons_data'] as $row) {
@@ -15,31 +19,45 @@
                         }
                     ?>
                 </select>
-            </label>
-        </form>
+            </div>
 
-        <?php
-            foreach ($variables['beacons_data'] as $row) {
-                if(isset($_GET['beacon']) && ($_GET['beacon'] == $row->beacon_id)){
-                    $output = '<p><strong>UUID:</strong> ' . $row->uuid . '<br />';
-                    $output .= '<strong>Major Number:</strong> ' . $row->major_num . '<br />';
-                    $output .= '<strong>Minor Number:</strong> ' . $row->minor_num . '<br />';
-                    $output .= '<strong>Content associated to this beacon:</strong> ';
+            <div class="tap-beacons-form-item">
+                <label for="start-date">Start Date</label>
+                <input type="text" class="datepicker form-text" id="start-date" name="startdate" value="<?php if(isset($_GET['startdate'])) print $_GET['startdate']; ?>" />
+            </div>
 
-                    $stops = tap_beacons_get_stops_as_links($row->beacon_id);
+            <div class="tap-beacons-form-item">
+                <label for="end-date">End Date</label>
+                <input type="text" class="datepicker form-text" id="end-date" name="enddate" value="<?php if(isset($_GET['enddate'])) print $_GET['enddate']; ?>" />
+            </div>
 
-                    $output .= implode(', ', $stops);
+            <div class="tap-beacons-form-item">
+                <input type="submit" value="Update" class="form-submit" />
+            </div>
+        </fieldset>
+    </form>
 
-                    $output .= '</p>';
-                    print $output;
-                }
+    <?php
+        foreach ($variables['beacons_data'] as $row) {
+            if(isset($_GET['beacon']) && ($_GET['beacon'] == $row->beacon_id)){
+                $output = '<p><strong>UUID:</strong> ' . $row->uuid . '<br />';
+                $output .= '<strong>Major Number:</strong> ' . $row->major_num . '<br />';
+                $output .= '<strong>Minor Number:</strong> ' . $row->minor_num . '<br />';
+                $output .= '<strong>Content associated to this beacon:</strong> ';
+
+                $stops = tap_beacons_get_stops_as_links($row->beacon_id);
+
+                $output .= implode(', ', $stops);
+
+                $output .= '</p>';
+                print $output;
             }
-        ?>
+        }
+    ?>
 
-        <div id="beacon-events-pie-chart" class="tap-beacons-charts tap-beacons-col-3"></div>
-        <div id="beacon-devices-pie-chart" class="tap-beacons-charts tap-beacons-col-3"></div>
-        <div id="beacon-ranges-pie-chart" class="tap-beacons-charts tap-beacons-col-3"></div>
-    </div>
+    <div id="beacon-events-pie-chart" class="tap-beacons-charts tap-beacons-col-3"></div>
+    <div id="beacon-devices-pie-chart" class="tap-beacons-charts tap-beacons-col-3"></div>
+    <div id="beacon-ranges-pie-chart" class="tap-beacons-charts tap-beacons-col-3"></div>
 
     <?php
         $event = tap_beacons_analytics_beacon_events();

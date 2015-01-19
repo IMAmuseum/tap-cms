@@ -143,13 +143,23 @@ function tap_beacons_api_chart_data(){
 function tap_beacons_build_beacon_ranges_json(){
 
     // Build query
-    $query = db_select('tap_beacons_beacon_status', 's');
+    $query = db_select('tap_beacons_beacon_event', 'e');
+    $query->join('tap_beacons_beacon_event_beacon_status', 'j', 'e.beacon_event_id = j.beacon_event_id');
+    $query->join('tap_beacons_beacon_status', 's', 's.beacon_status_id = j.beacon_status_id');
     $query->fields('s', array('beacon_range'));
     $query->addExpression('COUNT(s.beacon_range)', 'beacon_range_count');
     $query->groupBy('s.beacon_range');
 
     if(isset($_GET['beacon']) && ($_GET['beacon'] != "")){
         $query->condition('s.beacon_id', $_GET['beacon'], '=');
+    }
+
+    if($_GET['startdate'] != ""){
+        $query->condition('e.timestamp', strtotime(urldecode($_GET['startdate'])), '>');
+    }
+
+    if($_GET['enddate'] != ""){
+        $query->condition('e.timestamp', strtotime(urldecode($_GET['enddate']) . " 23:59"), '<=');
     }
 
     $results = $query->execute();
@@ -186,6 +196,18 @@ function tap_beacons_build_beacon_devices_json(){
     $query->addExpression('COUNT(DISTINCT e.mobile_device_id)', 'mobile_device_count');
     $query->groupBy('s.beacon_id');
 
+    if(isset($_GET['beacon']) && $_GET['beacon'] != ""){
+        $query->condition('s.beacon_id', $_GET['beacon'], '=');
+    }
+
+    if($_GET['startdate'] != ""){
+        $query->condition('e.timestamp', strtotime(urldecode($_GET['startdate'])), '>');
+    }
+
+    if($_GET['enddate'] != ""){
+        $query->condition('e.timestamp', strtotime(urldecode($_GET['enddate']) . " 23:59"), '<=');
+    }
+
     $results = $query->execute();
 
     $data = '{
@@ -219,8 +241,16 @@ function tap_beacons_build_beacon_events_json(){
     $query->addExpression('COUNT(DISTINCT e.mobile_device_id)', 'mobile_device_count');
     $query->groupBy('e.event');
 
-    if(isset($_GET['beacon']) && ($_GET['beacon'] != "")){
+    if(isset($_GET['beacon']) && $_GET['beacon'] != ""){
         $query->condition('s.beacon_id', $_GET['beacon'], '=');
+    }
+
+    if($_GET['startdate'] != ""){
+        $query->condition('e.timestamp', strtotime(urldecode($_GET['startdate'])), '>');
+    }
+
+    if($_GET['enddate'] != ""){
+        $query->condition('e.timestamp', strtotime(urldecode($_GET['enddate']) . " 23:59"), '<=');
     }
 
     $results = $query->execute();
@@ -258,6 +288,14 @@ function tap_beacons_build_content_events_json(){
         $query->condition('e.stop_nid', $_GET['stop'], '=');
     }
 
+    if($_GET['startdate'] != ""){
+        $query->condition('e.timestamp', strtotime(urldecode($_GET['startdate'])), '>');
+    }
+
+    if($_GET['enddate'] != ""){
+        $query->condition('e.timestamp', strtotime(urldecode($_GET['enddate']) . " 23:59"), '<=');
+    }
+
     $results = $query->execute();
 
     $data = '{
@@ -286,13 +324,21 @@ function tap_beacons_build_content_devices_json(){
     // Build query
     $query = db_select('tap_beacons_interaction_event', 'e');
     $query->join('node', 'n', 'n.nid = e.stop_nid');
-    $query->fields('e', array('stop_nid'))
+    $query->fields('e', array('stop_nid', 'timestamp'))
         ->fields('n', array('title'));
     $query->addExpression('COUNT(DISTINCT e.mobile_device_id)', 'mobile_device_count');
     $query->groupBy('e.stop_nid');
 
     if(isset($_GET['stop']) && ($_GET['stop'] != "")){
         $query->condition('e.stop_nid', $_GET['stop'], '=');
+    }
+
+    if($_GET['startdate'] != ""){
+        $query->condition('e.timestamp', strtotime(urldecode($_GET['startdate'])), '>');
+    }
+
+    if($_GET['enddate'] != ""){
+        $query->condition('e.timestamp', strtotime(urldecode($_GET['enddate']) . " 23:59"), '<=');
     }
 
     $results = $query->execute();

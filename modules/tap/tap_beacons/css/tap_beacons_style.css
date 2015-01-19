@@ -1,12 +1,28 @@
 .tap-beacons-admin {
 }
 
-.tap-beacons-add-beacon-form {
-    margin-bottom: 1em;
+/* Layout */
+.tap-beacons-charts{
+    float: left;
+    height: 250px;
 }
 
+.tap-beacons-col-2{
+    width: 50%;
+}
+
+.tap-beacons-col-3{
+    width: 33.3%;
+}
+
+/* Tables */
 table.tap-beacons-table td {
     vertical-align: top !important;
+}
+
+/* Form Elements */
+.tap-beacons-add-beacon-form {
+    margin-bottom: 1em;
 }
 
 .tap-beacons-table-input {
@@ -22,6 +38,26 @@ table.tap-beacons-table td {
     margin: 0 !important;
 }
 
+.tap-beacons-fieldset {
+    padding: 10px 10px 0;
+    margin: 0;
+}
+
+.tap-beacons-form-item{
+    float: left;
+    padding-right: 20px;
+}
+
+.tap-beacons-form-item label{
+    float: left;
+    padding-right: 5px;
+}
+
+.page-admin-tap-beacons .ui-datepicker{
+    border: 1px solid #ccc;
+}
+
+/* Validation */
 .tap-beacons-error-message {
     color: #c00;
 }
@@ -29,17 +65,3 @@ table.tap-beacons-table td {
 .tap-beacons-has-error {
     border-color: #c00 !important;
 }
-
-.tap-beacons-charts{
-    float: left;
-    height: 250px;
-}
-
-.tap-beacons-col-2{
-    width: 50%;
-}
-
-.tap-beacons-col-3{
-    width: 33.3%;
-}
-
