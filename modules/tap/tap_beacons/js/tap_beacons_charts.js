@@ -1,5 +1,7 @@
 jQuery(function($) {
-    $('.datepicker').datepicker({ maxDate: (0) });
+    $('.datepicker').datetimepicker({
+        maxDate: 0
+    });
 });
 
 /********************

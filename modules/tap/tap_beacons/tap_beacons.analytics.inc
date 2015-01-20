@@ -14,8 +14,9 @@ function tap_beacons_events_beacon() {
 
     // Set up styles and JS file to be used on beacon admin pages
     drupal_add_css(drupal_get_path('module', 'tap_beacons') . '/css/tap_beacons_style.css');
-    drupal_add_js(drupal_get_path('module', 'tap_beacons') . '/js/tap_beacons_charts.js');
     drupal_add_library('system', 'ui.datepicker');
+    drupal_add_js(drupal_get_path('module', 'tap_beacons') . '/js/jquery-ui-timepicker.js');
+    drupal_add_js(drupal_get_path('module', 'tap_beacons') . '/js/tap_beacons_charts.js');
 
     return theme('tap_beacons_beacon_events');
 }
@@ -59,11 +60,11 @@ function tap_beacons_analytics_beacon_events() {
     }
 
     if(isset($_GET['startdate']) && $_GET['startdate'] != ""){
-        $query->condition('e.timestamp', strtotime(urldecode($_GET['startdate'])), '>=');
+        $query->condition('e.timestamp', strtotime(urldecode($_GET['startdate'])), '>');
     }
 
     if(isset($_GET['enddate']) && $_GET['enddate'] != ""){
-        $query->condition('e.timestamp', strtotime(urldecode($_GET['enddate']) . " 23:00"), '<=');
+        $query->condition('e.timestamp', strtotime(urldecode($_GET['enddate'])), '<=');
     }
 
     // Execute the query
@@ -116,8 +117,9 @@ function tap_beacons_events_content() {
 
     // Set up styles and JS file to be used on beacon admin pages
     drupal_add_css(drupal_get_path('module', 'tap_beacons') . '/css/tap_beacons_style.css');
-    drupal_add_js(drupal_get_path('module', 'tap_beacons') . '/js/tap_beacons_charts.js');
     drupal_add_library('system', 'ui.datepicker');
+    drupal_add_js(drupal_get_path('module', 'tap_beacons') . '/js/jquery-ui-timepicker.js');
+    drupal_add_js(drupal_get_path('module', 'tap_beacons') . '/js/tap_beacons_charts.js');
 
     return theme('tap_beacons_content_events');
 }

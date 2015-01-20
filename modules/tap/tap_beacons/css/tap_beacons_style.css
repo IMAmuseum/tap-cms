@@ -1,71 +1,45 @@
-.tap-beacons-admin {
-}
+.tap-beacons-admin {}
 
 /* Layout */
-.tap-beacons-charts{
-    float: left;
-    height: 250px;
-}
-
-.tap-beacons-col-2{
-    width: 50%;
-}
-
-.tap-beacons-col-3{
-    width: 33.3%;
-}
+.tap-beacons-charts { float: left; height: 250px; }
+.tap-beacons-col-2 { width: 50%; }
+.tap-beacons-col-3 { width: 33.3%; }
 
 /* Tables */
-table.tap-beacons-table td {
-    vertical-align: top !important;
-}
+table.tap-beacons-table td { vertical-align: top !important; }
 
 /* Form Elements */
-.tap-beacons-add-beacon-form {
-    margin-bottom: 1em;
-}
+.tap-beacons-add-beacon-form { margin-bottom: 1em; }
 
-.tap-beacons-table-input {
-    font-size: 12px;
-    width: 100%;
-}
+.tap-beacons-table-input { font-size: 12px; width: 100%; }
 
-.tap-beacons-add-submit{
-    margin-top: .5em;
-}
+.tap-beacons-add-submit { margin-top: .5em; }
+.tap-beacons-update-submit { margin: 0 !important; }
 
-.tap-beacons-update-submit{
-    margin: 0 !important;
-}
+.tap-beacons-fieldset { padding: 10px 10px 0; margin: 0; }
 
-.tap-beacons-fieldset {
-    padding: 10px 10px 0;
-    margin: 0;
-}
+.tap-beacons-form-item { float: left; padding-right: 20px; }
+.tap-beacons-form-item label { float: left; padding-right: 5px; }
+.tap-beacons-form-item input[type="submit"] { margin-top: -3px; }
 
-.tap-beacons-form-item{
-    float: left;
-    padding-right: 20px;
-}
+.page-admin-tap-beacons .ui-datepicker { border: 1px solid #ccc; }
 
-.tap-beacons-form-item label{
-    float: left;
-    padding-right: 5px;
-}
-
-.tap-beacons-form-item input[type="submit"]{
-    margin-top: -3px;
-}
-
-.page-admin-tap-beacons .ui-datepicker{
-    border: 1px solid #ccc;
-}
+.page-node-analytics .tap-beacons-form-item { width: 100%; }
+.page-node-analytics .tap-beacons-form-item label { width:  20%; }
 
 /* Validation */
-.tap-beacons-error-message {
-    color: #c00;
-}
+.tap-beacons-error-message { color: #c00; }
+.tap-beacons-has-error { border-color: #c00 !important; }
 
-.tap-beacons-has-error {
-    border-color: #c00 !important;
-}
+/* css for timepicker */
+.ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
+.ui-timepicker-div dl { text-align: left; }
+.ui-timepicker-div dl dt { float: left; clear:left; padding: 0 0 0 5px; }
+.ui-timepicker-div dl dd { margin: 0 10px 10px 45%; }
+.ui-timepicker-div td { font-size: 90%; }
+.ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
+
+.ui-timepicker-rtl{ direction: rtl; }
+.ui-timepicker-rtl dl { text-align: right; padding: 0 5px 0 0; }
+.ui-timepicker-rtl dl dt{ float: right; clear: right; }
+.ui-timepicker-rtl dl dd { margin: 0 45% 10px 10px; }

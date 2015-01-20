@@ -244,7 +244,7 @@ function tap_beacons_build_json($query){
     }
 
     if(isset($_GET['enddate']) && $_GET['enddate'] != ""){
-        $query->condition('e.timestamp', strtotime(urldecode($_GET['enddate']) . " 23:59"), '<=');
+        $query->condition('e.timestamp', strtotime(urldecode($_GET['enddate'])), '<=');
     }
 
     $results = $query->execute();
