@@ -1,7 +1,7 @@
 <div class="tap-beacons-admin">
     <form action="<?php print url("admin/tap/beacons/add"); ?>" method="post" id="tap-beacons-add-beacon-form" class="tap-beacons-add-beacon-form">
         <fieldset class="tap-beacons-fieldset">
-            <legend><a href="#addbeacon" id="tap-beacons-add-beacon-btn">Add a Beacon</a></legend>
+            <legend><a href="#addbeacon" id="tap-beacons-add-beacon-btn">Add a Beacon <span>+</span></a></legend>
 
             <div id="tap-beacons-add-beacon-fields" class="tap-beacons-hidden">
                 <div class="general-errors"></div>

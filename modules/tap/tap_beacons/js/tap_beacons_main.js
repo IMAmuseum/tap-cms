@@ -7,8 +7,10 @@ jQuery(function($) {
 
         if( $fields.is(':visible') ){
             $fields.slideUp();
+            $(this).find('span').html('+');
         }else{
             $fields.slideDown();
+            $(this).find('span').html('-');
         }
     });
 
