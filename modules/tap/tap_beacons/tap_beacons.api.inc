@@ -201,7 +201,7 @@ function tap_beacons_build_content_events_json(){
     // Build query
     $query = db_select('tap_beacons_interaction_event', 'e');
     $query->addField('e', 'event', 'keyItem');
-    $query->addExpression('COUNT(DISTINCT e.stop_nid)', 'value');
+    $query->addExpression('COUNT(DISTINCT e.mobile_device_id)', 'value');
     $query->groupBy('e.event');
 
     $data = tap_beacons_build_json($query);
@@ -253,7 +253,7 @@ function tap_beacons_build_json($query){
         "cols": [
             {"label":"Key","type":"string"},
             {"label":"Value","type":"string"}
-            ],
+        ],
         "rows": [';
 
     // Configure the table rows
