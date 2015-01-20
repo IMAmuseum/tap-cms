@@ -146,38 +146,12 @@ function tap_beacons_build_beacon_ranges_json(){
     $query = db_select('tap_beacons_beacon_event', 'e');
     $query->join('tap_beacons_beacon_event_beacon_status', 'j', 'e.beacon_event_id = j.beacon_event_id');
     $query->join('tap_beacons_beacon_status', 's', 's.beacon_status_id = j.beacon_status_id');
-    $query->fields('s', array('beacon_range'));
-    $query->addExpression('COUNT(s.beacon_range)', 'beacon_range_count');
+    $query->addField('s', 'beacon_range', 'keyItem');
+    $query->addExpression('COUNT(s.beacon_range)', 'value');
     $query->groupBy('s.beacon_range');
+    $query->condition('e.event', 'ranged', '=');
 
-    if(isset($_GET['beacon']) && ($_GET['beacon'] != "")){
-        $query->condition('s.beacon_id', $_GET['beacon'], '=');
-    }
-
-    if($_GET['startdate'] != ""){
-        $query->condition('e.timestamp', strtotime(urldecode($_GET['startdate'])), '>');
-    }
-
-    if($_GET['enddate'] != ""){
-        $query->condition('e.timestamp', strtotime(urldecode($_GET['enddate']) . " 23:59"), '<=');
-    }
-
-    $results = $query->execute();
-
-    $data = '{
-        "cols": [
-            {"label":"Ranges","type":"string"},
-            {"label":"Beacons","type":"string"}
-            ],
-        "rows": [';
-
-    // Configure the table rows
-    $rows = array();
-    foreach ($results as $row) {
-        $data .= '{"c":[{"v":"' . ucwords($row->beacon_range) . '"},{"v":' . $row->beacon_range_count .'}]},';
-    }
-
-    $data = rtrim($data, ",") . ']}';
+    $data = tap_beacons_build_json($query);
 
     return $data;
 }
@@ -192,38 +166,11 @@ function tap_beacons_build_beacon_devices_json(){
     $query->join('tap_beacons_beacon_event_beacon_status', 'j', 'e.beacon_event_id = j.beacon_event_id');
     $query->join('tap_beacons_beacon_status', 's', 's.beacon_status_id = j.beacon_status_id');
     $query->join('tap_beacons', 'b', 'b.beacon_id = s.beacon_id');
-    $query->fields('b', array('name'));
-    $query->addExpression('COUNT(DISTINCT e.mobile_device_id)', 'mobile_device_count');
+    $query->addField('b', 'name', 'keyItem');
+    $query->addExpression('COUNT(DISTINCT e.mobile_device_id)', 'value');
     $query->groupBy('s.beacon_id');
 
-    if(isset($_GET['beacon']) && $_GET['beacon'] != ""){
-        $query->condition('s.beacon_id', $_GET['beacon'], '=');
-    }
-
-    if($_GET['startdate'] != ""){
-        $query->condition('e.timestamp', strtotime(urldecode($_GET['startdate'])), '>');
-    }
-
-    if($_GET['enddate'] != ""){
-        $query->condition('e.timestamp', strtotime(urldecode($_GET['enddate']) . " 23:59"), '<=');
-    }
-
-    $results = $query->execute();
-
-    $data = '{
-        "cols": [
-            {"label":"Beacons","type":"string"},
-            {"label":"Devices","type":"string"}
-        ],
-        "rows": [';
-
-    // Configure the table rows
-    $rows = array();
-    foreach ($results as $row) {
-        $data .= '{"c":[{"v":"' . ucwords($row->name) . '"},{"v":' . $row->mobile_device_count .'}]},';
-    }
-
-    $data = rtrim($data, ",") . ']}';
+    $data = tap_beacons_build_json($query);
 
     return $data;
 }
@@ -237,38 +184,11 @@ function tap_beacons_build_beacon_events_json(){
     $query = db_select('tap_beacons_beacon_event', 'e');
     $query->join('tap_beacons_beacon_event_beacon_status', 'j', 'e.beacon_event_id = j.beacon_event_id');
     $query->join('tap_beacons_beacon_status', 's', 's.beacon_status_id = j.beacon_status_id');
-    $query->fields('e', array('event'));
-    $query->addExpression('COUNT(DISTINCT e.mobile_device_id)', 'mobile_device_count');
+    $query->addField('e', 'event', 'keyItem');
+    $query->addExpression('COUNT(DISTINCT e.mobile_device_id)', 'value');
     $query->groupBy('e.event');
 
-    if(isset($_GET['beacon']) && $_GET['beacon'] != ""){
-        $query->condition('s.beacon_id', $_GET['beacon'], '=');
-    }
-
-    if($_GET['startdate'] != ""){
-        $query->condition('e.timestamp', strtotime(urldecode($_GET['startdate'])), '>');
-    }
-
-    if($_GET['enddate'] != ""){
-        $query->condition('e.timestamp', strtotime(urldecode($_GET['enddate']) . " 23:59"), '<=');
-    }
-
-    $results = $query->execute();
-
-    $data = '{
-        "cols": [
-            {"label":"Beacons","type":"string"},
-            {"label":"Devices","type":"string"}
-        ],
-        "rows": [';
-
-    // Configure the table rows
-    $rows = array();
-    foreach ($results as $row) {
-        $data .= '{"c":[{"v":"' . ucwords($row->event) . '"},{"v":' . $row->mobile_device_count .'}]},';
-    }
-
-    $data = rtrim($data, ",") . ']}';
+    $data = tap_beacons_build_json($query);
 
     return $data;
 }
@@ -280,38 +200,28 @@ function tap_beacons_build_content_events_json(){
 
     // Build query
     $query = db_select('tap_beacons_interaction_event', 'e');
-    $query->fields('e', array('event'));
-    $query->addExpression('COUNT(DISTINCT e.stop_nid)', 'stop_count');
+    $query->addField('e', 'event', 'keyItem');
+    $query->addExpression('COUNT(DISTINCT e.stop_nid)', 'value');
     $query->groupBy('e.event');
 
-    if(isset($_GET['stop']) && ($_GET['stop'] != "")){
-        $query->condition('e.stop_nid', $_GET['stop'], '=');
-    }
+    $data = tap_beacons_build_json($query);
 
-    if($_GET['startdate'] != ""){
-        $query->condition('e.timestamp', strtotime(urldecode($_GET['startdate'])), '>');
-    }
+    return $data;
+}
 
-    if($_GET['enddate'] != ""){
-        $query->condition('e.timestamp', strtotime(urldecode($_GET['enddate']) . " 23:59"), '<=');
-    }
+/**
+* Function to build query for content devices JSON
+*/
+function tap_beacons_build_content_devices_json(){
 
-    $results = $query->execute();
+    // Build query
+    $query = db_select('tap_beacons_interaction_event', 'e');
+    $query->join('node', 'n', 'n.nid = e.stop_nid');
+    $query->addField('n', 'title', 'keyItem');
+    $query->addExpression('COUNT(DISTINCT e.mobile_device_id)', 'value');
+    $query->groupBy('e.stop_nid');
 
-    $data = '{
-        "cols": [
-            {"label":"Events","type":"string"},
-            {"label":"Stops","type":"string"}
-        ],
-        "rows": [';
-
-    // Configure the table rows
-    $rows = array();
-    foreach ($results as $row) {
-        $data .= '{"c":[{"v":"' . ucwords($row->event) . '"},{"v":' . $row->stop_count .'}]},';
-    }
-
-    $data = rtrim($data, ",") . ']}';
+    $data = tap_beacons_build_json($query);
 
     return $data;
 }
@@ -319,25 +229,17 @@ function tap_beacons_build_content_events_json(){
 /**
 * Function to build events JSON
 */
-function tap_beacons_build_content_devices_json(){
+function tap_beacons_build_json($query){
 
-    // Build query
-    $query = db_select('tap_beacons_interaction_event', 'e');
-    $query->join('node', 'n', 'n.nid = e.stop_nid');
-    $query->fields('e', array('stop_nid', 'timestamp'))
-        ->fields('n', array('title'));
-    $query->addExpression('COUNT(DISTINCT e.mobile_device_id)', 'mobile_device_count');
-    $query->groupBy('e.stop_nid');
-
-    if(isset($_GET['stop']) && ($_GET['stop'] != "")){
-        $query->condition('e.stop_nid', $_GET['stop'], '=');
+    if(isset($_GET['beacon']) && $_GET['beacon'] != ""){
+        $query->condition('s.beacon_id', $_GET['beacon'], '=');
     }
 
-    if($_GET['startdate'] != ""){
+    if(isset($_GET['startdate']) && $_GET['startdate'] != ""){
         $query->condition('e.timestamp', strtotime(urldecode($_GET['startdate'])), '>');
     }
 
-    if($_GET['enddate'] != ""){
+    if(isset($_GET['enddate']) && $_GET['enddate'] != ""){
         $query->condition('e.timestamp', strtotime(urldecode($_GET['enddate']) . " 23:59"), '<=');
     }
 
@@ -345,19 +247,18 @@ function tap_beacons_build_content_devices_json(){
 
     $data = '{
         "cols": [
-            {"label":"Stops","type":"string"},
-            {"label":"Devices","type":"string"}
-        ],
+            {"label":"Key","type":"string"},
+            {"label":"Value","type":"string"}
+            ],
         "rows": [';
 
     // Configure the table rows
     $rows = array();
     foreach ($results as $row) {
-        $data .= '{"c":[{"v":"' . ucwords($row->title) . '"},{"v":' . $row->mobile_device_count .'}]},';
+        $data .= '{"c":[{"v":"' . ucwords($row->keyItem) . '"},{"v":' . $row->value .'}]},';
     }
 
     $data = rtrim($data, ",") . ']}';
 
     return $data;
 }
-
