@@ -156,11 +156,11 @@ function tap_beacons_analytics_content_events() {
     }
 
     if(isset($_GET['startdate']) && $_GET['startdate'] != ""){
-        $query->condition('i.timestamp', strtotime(urldecode($_GET['startdate'])), '>=');
+        $query->condition('i.timestamp', strtotime(urldecode($_GET['startdate'])), '>');
     }
 
     if(isset($_GET['enddate']) && $_GET['enddate'] != ""){
-        $query->condition('i.timestamp', strtotime(urldecode($_GET['enddate']) . " 23:00"), '<=');
+        $query->condition('i.timestamp', strtotime(urldecode($_GET['enddate'])), '<=');
     }
 
     // Execute the query
