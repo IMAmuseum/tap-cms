@@ -1,5 +1,17 @@
 jQuery(function($) {
 
+    $('#tap-beacons-add-beacon-btn').click(function(e){
+        e.preventDefault();
+
+        var $fields = $('#tap-beacons-add-beacon-fields');
+
+        if( $fields.is(':visible') ){
+            $fields.slideUp();
+        }else{
+            $fields.slideDown();
+        }
+    });
+
     // Add data to DB
     $('#tap-beacons-add-beacon-form, #tap-beacons-add-token-form').submit(function(e){
         e.preventDefault();

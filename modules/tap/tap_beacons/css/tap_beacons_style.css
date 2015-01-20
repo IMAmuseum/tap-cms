@@ -5,6 +5,8 @@
 .tap-beacons-col-2 { width: 50%; }
 .tap-beacons-col-3 { width: 33.3%; }
 
+.tap-beacons-hidden { display: none; }
+
 /* Tables */
 table.tap-beacons-table td { vertical-align: top !important; }
 
@@ -17,6 +19,7 @@ table.tap-beacons-table td { vertical-align: top !important; }
 .tap-beacons-update-submit { margin: 0 !important; }
 
 .tap-beacons-fieldset { padding: 10px 10px 0; margin: 0; }
+.tap-beacons-fieldset p { margin-top: 0; }
 
 .tap-beacons-form-item { float: left; padding-right: 20px; }
 .tap-beacons-form-item label { float: left; padding-right: 5px; }
