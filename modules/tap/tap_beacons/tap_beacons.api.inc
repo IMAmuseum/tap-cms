@@ -138,7 +138,7 @@ function tap_beacons_api_chart_data(){
 }
 
 /**
-* Function to build ranged JSON
+* Function to build query for beacon ranges JSON
 */
 function tap_beacons_build_beacon_ranges_json(){
 
@@ -157,7 +157,7 @@ function tap_beacons_build_beacon_ranges_json(){
 }
 
 /**
-* Function to build devices JSON
+* Function to build query for beacon devices JSON
 */
 function tap_beacons_build_beacon_devices_json(){
 
@@ -176,7 +176,7 @@ function tap_beacons_build_beacon_devices_json(){
 }
 
 /**
-* Function to build events JSON
+* Function to build query for beacon events JSON
 */
 function tap_beacons_build_beacon_events_json(){
 
@@ -194,7 +194,7 @@ function tap_beacons_build_beacon_events_json(){
 }
 
 /**
-* Function to build events JSON
+* Function to build query for content events JSON
 */
 function tap_beacons_build_content_events_json(){
 
@@ -233,6 +233,10 @@ function tap_beacons_build_json($query){
 
     if(isset($_GET['beacon']) && $_GET['beacon'] != ""){
         $query->condition('s.beacon_id', $_GET['beacon'], '=');
+    }
+
+    if(isset($_GET['stop']) && $_GET['stop'] != ""){
+        $query->condition('e.stop_nid', $_GET['stop'], '=');
     }
 
     if(isset($_GET['startdate']) && $_GET['startdate'] != ""){

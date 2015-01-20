@@ -10,13 +10,13 @@ google.setOnLoadCallback(getCharts);
 
 function getCharts() {
     if (document.getElementById('tap-beacons-beacon-events') != null){
-        drawPie("beacon-events", "Events");
-        drawPie("beacon-ranges", "Ranges");
-        drawPie("beacon-devices", "Devices Per Beacon");
+        drawPie("beacon-events", "Number of Devices Per Event");
+        drawPie("beacon-ranges", "Number of Ranges Executed");
+        drawPie("beacon-devices", "Number of Devices Per Beacon");
     }
     if (document.getElementById('tap-beacons-content-events') != null){
-        drawPie("content-events", "Events");
-        drawPie("content-devices", "Devices Per Stop");
+        drawPie("content-events", "Number of Devices Per Event");
+        drawPie("content-devices", "Number of Devices Per Stop");
     }
 }
 
