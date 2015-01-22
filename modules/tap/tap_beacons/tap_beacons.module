@@ -116,7 +116,8 @@ function tap_beacons_menu() {
         'title' => 'Events',
         'page callback' => 'tap_beacons_events_stops',
         'page arguments' => array(1),
-        'access arguments' => array('administer tap'),
+        'access arguments' => array(1),
+        'access callback' => 'tap_beacons_access_check',
         'type' => MENU_LOCAL_TASK,
         'file' => 'tap_beacons.analytics.inc',
     );
@@ -456,4 +457,19 @@ function tap_beacons_tourml_stop_meta_alter(&$node){
             $i++;
         }
     }
+}
+
+/**
+* Function to alter access based on content type
+*/
+function tap_beacons_access_check($node) {
+
+    // Loop through set content types and check it node type matches a set content type
+    foreach (variable_get('tap_beacons_content_types') as $types => $type){
+        if ($node->type === $type) {
+            return TRUE;
+        }
+    }
+
+    return FALSE;
 }
