@@ -30,10 +30,6 @@ function drawPie(type, title) {
 
     var action = Drupal.settings.basePath + 'beacons/api/charts?type=' + type + '&' + window.location.search.substring(1);
 
-    if (jQuery('input[name="stop"]').val() != "") {
-        action = action + '&stop=' + jQuery('input[name="stop"]').val();
-    }
-
     var jsonData = jQuery.ajax({
                 url: action,
                 dataType:"json",
