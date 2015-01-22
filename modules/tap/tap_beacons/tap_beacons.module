@@ -59,15 +59,6 @@ function tap_beacons_menu() {
         'weight'            => 10
     );
 
-    // Token
-    $items['admin/tap/beacons/tokens'] = array(
-        'title'             => 'Beacons Token',
-        'page callback'     => 'tap_beacons_admin_set_token',
-        'access arguments'  => array('administer tap'),
-        'type'              => MENU_CALLBACK,
-        'file'              => 'tap_beacons.admin.inc',
-    );
-
     // API
     $items['beacons/api/beacons'] = array(
         'title'             => 'Get Beacon Events',

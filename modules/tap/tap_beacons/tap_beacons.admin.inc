@@ -135,26 +135,3 @@ function tap_beacons_admin_settings_form($form, &$form_state) {
 
     return system_settings_form($form, $form_state);
 }
-
-/**
-* Function to set token for API.
-*/
-function tap_beacons_admin_set_token() {
-
-    // Store query string values
-    $token = $_POST['token'];
-    $token_id = $_POST['token_id'];
-
-    // Create delete query to remove items
-    $query = db_merge('tap_beacons_tokens')
-        ->key(array('token_id' => $token_id))
-        ->fields(array(
-            'token' => $token,
-    ));
-
-    // Set message to be used for action
-    $message = 'The token has been added.';
-
-    // Call function to execute query
-    tap_beacons_admin_query_execute($query, $message);
-}
