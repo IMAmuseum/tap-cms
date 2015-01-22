@@ -9,6 +9,44 @@
  */
 function tap_beacons_events_beacon() {
 
+    tap_beacons_analytics_get_assets();
+
+    $beacons_data = tap_beacons_fetch_beacon_data();
+    $beacon_table = tap_beacons_analytics_beacon_events();
+
+    return theme('tap_beacons_beacon_events', array('beacon_table' => $beacon_table, 'beacons_data' => $beacons_data));
+}
+
+/**
+ * Function to create admin section for beacon events
+ */
+function tap_beacons_events_content() {
+
+    tap_beacons_analytics_get_assets();
+
+    $stop_data = tap_beacons_fetch_stop_data();
+    $content_table = tap_beacons_analytics_content_events();
+
+    return theme('tap_beacons_content_events', array('content_table' => $content_table, 'stop_data' => $stop_data));
+}
+
+/**
+ * Function to create admin section for beacon events
+ */
+function tap_beacons_events_stops($node) {
+
+    tap_beacons_analytics_get_assets();
+
+    $stop_table = tap_beacons_analytics_stop_events($node);
+
+    return theme('tap_beacons_stop_events', array('node' => $node, 'stop_table' => $stop_table));
+}
+
+/**
+* Function to get assets for analytics pages
+**/
+function tap_beacons_analytics_get_assets() {
+
     // Add Google charts API script
     drupal_add_js('https://www.google.com/jsapi');
 
@@ -17,8 +55,6 @@ function tap_beacons_events_beacon() {
     drupal_add_library('system', 'ui.datepicker');
     drupal_add_js(drupal_get_path('module', 'tap_beacons') . '/js/jquery-ui-timepicker.js');
     drupal_add_js(drupal_get_path('module', 'tap_beacons') . '/js/tap_beacons_charts.js');
-
-    return theme('tap_beacons_beacon_events');
 }
 
 /**
@@ -88,40 +124,9 @@ function tap_beacons_analytics_beacon_events() {
         );
     }
 
-    // Set up output as table
-    $output['table']  = array(
-        '#theme' => 'table',
-        '#header' => $header,
-        '#rows' => $rows,
-        '#empty' => t('No data found'),
-        '#attributes' => array(
-            'class' => array('tap-beacons-table')
-        )
-    );
-
-    // Add the pager
-    $output['pager'] = array(
-        '#theme' => 'pager',
-    );
+    $output = tap_beacons_analytics_build_table($header, $rows);
 
     return $output;
-}
-
-/**
- * Function to create admin section for beacon events
- */
-function tap_beacons_events_content() {
-
-    // Add Google charts API script
-    drupal_add_js('https://www.google.com/jsapi');
-
-    // Set up styles and JS file to be used on beacon admin pages
-    drupal_add_css(drupal_get_path('module', 'tap_beacons') . '/css/tap_beacons_style.css');
-    drupal_add_library('system', 'ui.datepicker');
-    drupal_add_js(drupal_get_path('module', 'tap_beacons') . '/js/jquery-ui-timepicker.js');
-    drupal_add_js(drupal_get_path('module', 'tap_beacons') . '/js/tap_beacons_charts.js');
-
-    return theme('tap_beacons_content_events');
 }
 
 /**
@@ -180,6 +185,68 @@ function tap_beacons_analytics_content_events() {
         );
     }
 
+    $output = tap_beacons_analytics_build_table($header, $rows);
+
+    return $output;
+}
+
+/**
+ * Function to create admin section for interaction events
+ */
+function tap_beacons_analytics_stop_events($node) {
+
+    // Set number of display items
+    $per_page = 50;
+
+    // Configure the table header columns
+    $header = array(
+        array('data' => 'Event ID',         'field' => 'event_id',          'sort' => 'DESC'),
+        array('data' => 'Event',            'field' => 'event',             'sort' => 'DESC'),
+        array('data' => 'Mobile Device ID', 'field' => 'mobile_device_id',  'sort' => 'DESC'),
+        array('data' => 'Timestamp',        'field' => 'timestamp',         'sort' => 'DESC'),
+    );
+
+    // Build query
+    $query = db_select('tap_beacons_interaction_event', 'i')
+        ->extend('PagerDefault')
+        ->extend('TableSort');
+    $query->fields('i', array('event_id','event','mobile_device_id','timestamp'));
+    $query->limit($per_page)
+        ->orderByHeader($header);
+
+    // Use the second segment, which is the node id, and use it in the query
+    $query->condition('i.stop_nid', $node->nid, '=');
+
+    if(isset($_GET['startdate']) && $_GET['startdate'] != ""){
+        $query->condition('i.timestamp', strtotime(urldecode($_GET['startdate'])), '>');
+    }
+
+    if(isset($_GET['enddate']) && $_GET['enddate'] != ""){
+        $query->condition('i.timestamp', strtotime(urldecode($_GET['enddate'])), '<=');
+    }
+
+    // Execute the query
+    $results = $query->execute()->fetchAll();
+
+    // Configure the table rows
+    $rows = array();
+    foreach ($results as $row) {
+        $timestamp = format_date($row->timestamp, 'custom', 'm/d/Y H:i:s');
+
+        $rows[] = array(
+            $row->event_id,
+            $row->event,
+            $row->mobile_device_id,
+            $timestamp
+        );
+    }
+
+    $output = tap_beacons_analytics_build_table($header, $rows);
+
+    return $output;
+}
+
+function tap_beacons_analytics_build_table($header, $rows){
     // Set up output as table
     $output['table']  = array(
         '#theme' => 'table',

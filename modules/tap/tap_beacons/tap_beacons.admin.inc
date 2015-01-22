@@ -9,14 +9,13 @@
  */
 function tap_beacons_admin_section() {
 
-    // Clear cache so new data will appear automatically
-    cache_clear_all('theme_registry', 'cache', TRUE);
-
     // Set up styles and JS file to be used on beacon admin pages
     drupal_add_css(drupal_get_path('module', 'tap_beacons') . '/css/tap_beacons_style.css');
     drupal_add_js(drupal_get_path('module', 'tap_beacons') . '/js/tap_beacons_main.js');
 
-    return theme('tap_beacons_admin_content');
+    $beacons_table = tap_beacons_get_beacons();
+
+    return theme('tap_beacons_admin_content', array('beacons_table' => $beacons_table));
 }
 
 /**
@@ -42,7 +41,7 @@ function tap_beacons_admin_add(){
     $message = 'The beacon has been added.';
 
     // Call function to execute query
-    tap_beacons_query_execute($query, $message);
+    tap_beacons_admin_query_execute($query, $message);
 }
 
 /**
@@ -65,7 +64,7 @@ function tap_beacons_admin_delete(){
     $message = 'The beacon has been deleted.';
 
     // Call function to execute query
-    tap_beacons_query_execute($query, $message);
+    tap_beacons_admin_query_execute($query, $message);
 }
 
 /**
@@ -93,13 +92,13 @@ function tap_beacons_admin_update(){
     $message = 'The beacon has been updated.';
 
     // Call function to execute query
-    tap_beacons_query_execute($query, $message);
+    tap_beacons_admin_query_execute($query, $message);
 }
 
 /**
 * Function to execute queries.
 */
-function tap_beacons_query_execute($query, $message){
+function tap_beacons_admin_query_execute($query, $message){
 
     // Check for errors on query submissions
     if ($success = $query->execute()) {
@@ -114,7 +113,7 @@ function tap_beacons_query_execute($query, $message){
 /**
 * Function to set beacon references to certain content types.
 */
-function tap_beacons_settings_form($form, &$form_state) {
+function tap_beacons_admin_settings_form($form, &$form_state) {
 
     // Get content types
     $form['tap_beacons_token'] = array(
@@ -157,5 +156,5 @@ function tap_beacons_admin_set_token() {
     $message = 'The token has been added.';
 
     // Call function to execute query
-    tap_beacons_query_execute($query, $message);
+    tap_beacons_admin_query_execute($query, $message);
 }

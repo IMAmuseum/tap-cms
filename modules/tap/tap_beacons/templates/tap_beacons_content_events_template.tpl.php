@@ -10,7 +10,7 @@
                 <select name="stop" id="beacon-select" class="form-select">
                     <option value="">All Stops</option>
                     <?php
-                        foreach ($variables['stop_data'] as $row) {
+                        foreach ($stop_data as $row) {
                             if(isset($_GET['stop']) && ($_GET['stop'] == $row->stop_nid)){
                                 echo '<option value="' . $row->stop_nid . '" selected="selected">' . $row->title . '</option>';
                             } else {
@@ -41,8 +41,7 @@
     <div id="content-devices-pie-chart" class="tap-beacons-charts tap-beacons-col-2"></div>
 
     <?php
-        $event = tap_beacons_analytics_content_events();
-        print render($event);
+        print render($content_table);
     ?>
 
 </div>

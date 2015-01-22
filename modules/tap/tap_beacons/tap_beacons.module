@@ -52,7 +52,7 @@ function tap_beacons_menu() {
     $items['admin/tap/beacons/settings'] = array(
         'title'             => 'Settings',
         'page callback'     => 'drupal_get_form',
-        'page arguments'    => array('tap_beacons_settings_form'),
+        'page arguments'    => array('tap_beacons_admin_settings_form'),
         'access arguments'  => array('administer tap'),
         'type'              => MENU_LOCAL_TASK,
         'file'              => 'tap_beacons.admin.inc',
@@ -89,7 +89,6 @@ function tap_beacons_menu() {
         'title'             => 'Get Chart Data',
         'page callback'     => 'tap_beacons_api_chart_data',
         'access arguments'  => array('access content'),
-        'type'              => MENU_CALLBACK,
         'file'              => 'tap_beacons.api.inc',
     );
 
@@ -112,6 +111,15 @@ function tap_beacons_menu() {
         'weight'            => 4
     );
 
+    $items['node/%node/events'] = array(
+        'title' => 'Events',
+        'page callback' => 'tap_beacons_events_stops',
+        'page arguments' => array(1),
+        'access arguments' => array('administer tap'),
+        'type' => MENU_LOCAL_TASK,
+        'file' => 'tap_beacons.analytics.inc',
+    );
+
     return $items;
 }
 
@@ -120,28 +128,18 @@ function tap_beacons_menu() {
  */
 function tap_beacons_theme() {
 
-    $beacons_table = tap_beacons_get_beacons();
-    $beacons_data = tap_beacons_fetch_beacon_data();
-    $stop_data = tap_beacons_fetch_stop_data();
-
     $items = array(
         'tap_beacons_admin_content' => array(
-            'variables' => array(
-                'beacons_table' => $beacons_table,
-            ),
             'template'  => 'templates/tap_beacons_template',
         ),
         'tap_beacons_beacon_events' => array(
-            'variables' => array(
-                'beacons_data' => $beacons_data,
-            ),
             'template'  => 'templates/tap_beacons_beacon_events_template',
         ),
         'tap_beacons_content_events' => array(
-            'variables' => array(
-                'stop_data' => $stop_data,
-            ),
             'template'  => 'templates/tap_beacons_content_events_template',
+        ),
+        'tap_beacons_stop_events' => array(
+            'template'  => 'templates/tap_beacons_stop_events_template',
         ),
     );
 

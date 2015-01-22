@@ -10,7 +10,7 @@
                 <select name="beacon" id="tap-beacons-select" class="form-select">
                     <option value="">All Beacons</option>
                     <?php
-                        foreach ($variables['beacons_data'] as $row) {
+                        foreach ($beacons_data as $row) {
                             if(isset($_GET['beacon']) && ($_GET['beacon'] == $row->beacon_id)){
                                 echo '<option value="' . $row->beacon_id . '" selected="selected">' . $row->name . '</option>';
                             } else {
@@ -38,7 +38,7 @@
     </form>
 
     <?php
-        foreach ($variables['beacons_data'] as $row) {
+        foreach ($beacons_data as $row) {
             if(isset($_GET['beacon']) && ($_GET['beacon'] == $row->beacon_id)){
                 $output = '<p><strong>UUID:</strong> ' . $row->uuid . '<br />';
                 $output .= '<strong>Major Number:</strong> ' . $row->major_num . '<br />';
@@ -60,8 +60,7 @@
     <div id="beacon-ranges-pie-chart" class="tap-beacons-charts tap-beacons-col-3"></div>
 
     <?php
-        $event = tap_beacons_analytics_beacon_events();
-        print render($event);
+        print render($beacon_table);
     ?>
 
 </div>

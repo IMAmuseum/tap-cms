@@ -20,10 +20,19 @@ function getCharts() {
         drawPie("content-events", "Number of Devices Per Event");
         drawPie("content-devices", "Number of Devices Per Stop");
     }
+    if (document.getElementById('tap-beacons-stop-events') != null){
+        drawPie("content-events", "Number of Devices Per Event");
+        drawPie("content-devices", "Number of Devices");
+    }
 }
 
 function drawPie(type, title) {
+
     var action = Drupal.settings.basePath + 'beacons/api/charts?type=' + type + '&' + window.location.search.substring(1);
+
+    if (jQuery('input[name="stop"]').val() != "") {
+        action = action + '&stop=' + jQuery('input[name="stop"]').val();
+    }
 
     var jsonData = jQuery.ajax({
                 url: action,
