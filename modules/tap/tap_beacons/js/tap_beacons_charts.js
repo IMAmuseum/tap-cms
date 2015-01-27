@@ -83,10 +83,10 @@ function drawLineChart(type, title) {
             gridlines: {
                 count: -1,
                 units: {
-                    months: {format: ["dd MMM yy"]},
-                    days: {format: ["MMM dd, yyyy"]},
-                    hours: {format: ["HH:mm"]},
-                    minutes: {format: [":mm "]}
+                    months: {format: ["MM/dd/yy"]},
+                    days: {format: ["MM/dd/yyyy"]},
+                    hours: {format: ["h:mm a"]},
+                    minutes: {format: [":mm"]}
                 }
             },
             minorGridlines: {
