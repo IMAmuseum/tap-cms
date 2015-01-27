@@ -282,7 +282,7 @@ function tap_beacons_build_beacon_line_chart(){
     $query->join('tap_beacons', 'b', 'b.beacon_id = s.beacon_id');
     $query->fields('e', array('timestamp)'));
     $query->addExpression('COUNT(DISTINCT e.mobile_device_id)', 'mobile_device_count');
-    $query->groupBy('ROUND(FROM_UNIXTIME(e.timestamp)/(5 * 60))');
+    $query->groupBy('ROUND(e.timestamp/60) * (5 * 60)');
     $query->orderBy('e.timestamp', 'ASC');
 
     if(isset($_GET['beacon']) && $_GET['beacon'] != ""){
@@ -312,16 +312,30 @@ function tap_beacons_build_beacon_line_chart(){
 
     $data_rows = '"rows": [';
 
-    foreach ($results as $row) {
+    $last_entry_date = 0;
 
+    foreach ($results as $row) {
         // Split the date because Google starts months from 0 and PHP doesn't
         $year = date("Y", $row->timestamp);
         $month = date("n", $row->timestamp) - 1;
-        $day = date("j,H,i", $row->timestamp);
+        $day = date("j", $row->timestamp);
+        $hour = date("H", $row->timestamp);
+        $minute = date("i", $row->timestamp);
 
-        $data_rows .= '{"c":[{"v":"Date(' . $year . "," . $month . "," . $day . ')"},';
+        $data_rows .= '{"c":[{"v":"Date(' . $year . ',' . $month . ',' . $day . ',' . $hour . ',' . $minute . ')"},';
         $data_rows .= '{"v":"'.$row->mobile_device_count.'"}';
         $data_rows .= ']},';
+
+
+        if ($last_entry_date >= ($row->timestamp - (5 * 60))) {
+            $added_minutes = $minute + 1;
+
+            $data_rows .= '{"c":[{"v":"Date(' . $year . ',' . $month . ',' . $day . ',' . $hour . ',' . $added_minutes . ')"},';
+            $data_rows .= '{"v":"0"}';
+            $data_rows .= ']},';
+        }
+
+        $last_entry_date = $row->timestamp;
     }
 
     $data = rtrim($data_cols, ",") . '],' . rtrim($data_rows, ",") . ']}';
