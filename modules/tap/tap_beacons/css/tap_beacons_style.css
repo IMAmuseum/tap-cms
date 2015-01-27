@@ -26,11 +26,13 @@ table.tap-beacons-table td { vertical-align: top !important; }
 
 .tap-beacons-form-item { float: left; padding-right: 20px; }
 .tap-beacons-form-item label { float: left; padding-right: 5px; }
-.tap-beacons-form-item input[type="submit"] { margin-top: -3px; }
+.tap-beacons-form-item input[type="submit"],
+.tap-beacons-form-item input[type="reset"] { margin-top: -3px; }
 
 .tap-beacons-fieldset-stops { padding-top: 30px; }
 .tap-beacons-fieldset-stops .tap-beacons-form-item label { line-height: 2.25; vertical-align: bottom; }
-.tap-beacons-fieldset-stops .tap-beacons-form-item input[type="submit"] { margin-top: 0; }
+.tap-beacons-fieldset-stops .tap-beacons-form-item input[type="submit"],
+.tap-beacons-fieldset-stops .tap-beacons-form-item input[type="reset"] { margin-top: 0; }
 
 
 .page-admin-tap-beacons .ui-datepicker { border: 1px solid #ccc; }

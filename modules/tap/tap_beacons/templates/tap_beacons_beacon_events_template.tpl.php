@@ -34,6 +34,10 @@
             <div class="tap-beacons-form-item">
                 <input type="submit" value="Update" class="form-submit" />
             </div>
+
+            <div class="tap-beacons-form-item">
+                <input type="reset" value="Reset" class="form-submit" />
+            </div>
         </fieldset>
     </form>
 
