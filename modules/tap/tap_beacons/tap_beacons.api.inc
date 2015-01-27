@@ -307,27 +307,22 @@ function tap_beacons_build_beacon_line_chart(){
 
     $results = $query->execute();
 
+    // Create initial cols for chart
     $data_cols = '{"cols": [{"label":"Time","type":"datetime"},';
     $data_cols .= '{"label":"Beacons","type":"number"},';
 
     $data_rows = '"rows": [';
 
+    // Set last entry variable to work with
     $last_entry_date = 0;
 
     foreach ($results as $row) {
-        // Split the date because Google starts months from 0 and PHP doesn't
-        $year = date("Y", $row->timestamp);
-        $month = date("n", $row->timestamp) - 1;
-        $day = date("j", $row->timestamp);
-        $hour = date("H", $row->timestamp);
-        $minute = date("i", $row->timestamp);
 
-        $data_rows .= '{"c":[{"v":"Date(' . $year . ',' . $month . ',' . $day . ',' . $hour . ',' . $minute . ')"},';
-        $data_rows .= '{"v":"'.$row->mobile_device_count.'"}';
-        $data_rows .= ']},';
+        // Find the difference between the current timestamp and the last entries timestamp
+        $timestamp_diff = $row->timestamp - $last_entry_date;
 
-
-        if ($last_entry_date >= ($row->timestamp - (5 * 60))) {
+        // If the difference is above 15 minutes, lets add a zero value to make the data a bit more accurate
+        if ($timestamp_diff > 900 && $last_entry_date != 0) {
             $added_minutes = $minute + 1;
 
             $data_rows .= '{"c":[{"v":"Date(' . $year . ',' . $month . ',' . $day . ',' . $hour . ',' . $added_minutes . ')"},';
@@ -335,6 +330,19 @@ function tap_beacons_build_beacon_line_chart(){
             $data_rows .= ']},';
         }
 
+        // Split the date because Google starts months from 0 and PHP doesn't
+        $year = date("Y", $row->timestamp);
+        $month = date("n", $row->timestamp) - 1;
+        $day = date("j", $row->timestamp);
+        $hour = date("H", $row->timestamp);
+        $minute = date("i", $row->timestamp);
+
+        // Create this data rows value in the JSON
+        $data_rows .= '{"c":[{"v":"Date(' . $year . ',' . $month . ',' . $day . ',' . $hour . ',' . $minute . ')"},';
+        $data_rows .= '{"v":"'.$row->mobile_device_count.'"}';
+        $data_rows .= ']},';
+
+        // Store this timestamp in the last entry variable
         $last_entry_date = $row->timestamp;
     }
 
