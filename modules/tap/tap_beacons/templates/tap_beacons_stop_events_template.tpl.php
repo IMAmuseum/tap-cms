@@ -1,5 +1,5 @@
 <div class="tap-beacons-admin" id="tap-beacons-stop-events">
-    <form action="<?php print url("node/" . $node->nid . "/events") ?>" method="get" id="tap-beacons-select-form" class="tap-beacons-add-beacon-form">
+    <form action="<?php print url("node/" . $node->nid . "/events") ?>" method="get" id="tap-beacons-filter-form" class="tap-beacons-add-beacon-form">
         <fieldset class="tap-beacons-fieldset tap-beacons-fieldset-stops">
             <legend>Filter Results</legend>
 
@@ -20,7 +20,7 @@
             </div>
 
             <div class="tap-beacons-form-item">
-                <input type="reset" value="Reset" class="form-submit" />
+                <a href="#clear" class="tap-beacons-clear-fields">Clear Fields</a>
             </div>
         </fieldset>
     </form>

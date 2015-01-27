@@ -2,6 +2,12 @@ jQuery(function($) {
     $('.datepicker').datetimepicker({
         maxDate: 0
     });
+
+    $('.tap-beacons-clear-fields').click(function(e){
+        e.preventDefault();
+
+        $('#tap-beacons-filter-form').find('input[type=text], select').val('');
+    });
 });
 
 /********************
