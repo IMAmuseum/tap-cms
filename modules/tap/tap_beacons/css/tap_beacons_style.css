@@ -2,6 +2,8 @@
 
 /* Layout */
 .tap-beacons-charts { float: left; height: 250px; }
+.tap-beacons-line-charts { margin-bottom: 20px; }
+.tap-beacons-col-1 { width: 100%; }
 .tap-beacons-col-2 { width: 50%; }
 .tap-beacons-col-3 { width: 33.3%; }
 
