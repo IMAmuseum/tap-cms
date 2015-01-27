@@ -70,6 +70,7 @@ function drawLineChart(type, title) {
 
     var options = {
         title: title,
+        pointSize: 4,
         hAxis: {
             title: 'Time',
             gridlines: {
