@@ -282,7 +282,7 @@ function tap_beacons_build_beacon_line_chart(){
     $query->join('tap_beacons', 'b', 'b.beacon_id = s.beacon_id');
     $query->fields('e', array('timestamp)'));
     $query->addExpression('COUNT(DISTINCT e.mobile_device_id)', 'mobile_device_count');
-    $query->groupBy('MINUTE(FROM_UNIXTIME(e.timestamp))');
+    $query->groupBy('ROUND(FROM_UNIXTIME(e.timestamp)/(15 * 60))');
     $query->orderBy('e.timestamp', 'ASC');
 
     if(isset($_GET['beacon']) && $_GET['beacon'] != ""){
