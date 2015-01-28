@@ -32,7 +32,12 @@ class TourML {
         $node = node_load($this->nid);
 
         switch ($node->type) {
-            case 'tour':
+            case 'tour_set':
+                $this->processTourSet();
+                $this->tourml = theme('tap_tourml_tour_set', array('tour_set' => $this));
+                break;
+
+            default:
                 $stopNodes = $this->loadStopNodes();
 
                 $this->processStops($stopNodes);
@@ -41,12 +46,6 @@ class TourML {
                 $this->processAssets();
 
                 $this->tourml = theme('tap_tourml_tour', array('tour' => $this));
-                break;
-
-            case 'tour_set':
-                $this->processTourSet();
-                $this->tourml = theme('tap_tourml_tour_set', array('tour_set' => $this));
-                break;
         }
 
         return $this->tourml;
