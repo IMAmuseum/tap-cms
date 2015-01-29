@@ -318,17 +318,17 @@ function tap_beacons_build_beacon_line_chart(){
 
     foreach ($results as $row) {
 
-        // Find the difference between the current timestamp and the last entries timestamp
-        $timestamp_diff = $row->timestamp - $last_entry_date;
+        // // Find the difference between the current timestamp and the last entries timestamp
+        // $timestamp_diff = $row->timestamp - $last_entry_date;
 
-        // If the difference is above 15 minutes, lets add a zero value to make the data a bit more accurate
-        if ($timestamp_diff > 900 && $last_entry_date != 0) {
-            $added_minutes = $minute + 1;
+        // // If the difference is above 15 minutes, lets add a zero value to make the data a bit more accurate
+        // if ($timestamp_diff > 900 && $last_entry_date != 0) {
+        //     $added_minutes = $minute + 1;
 
-            $data_rows .= '{"c":[{"v":"Date(' . $year . ',' . $month . ',' . $day . ',' . $hour . ',' . $added_minutes . ')"},';
-            $data_rows .= '{"v":"0"}';
-            $data_rows .= ']},';
-        }
+        //     $data_rows .= '{"c":[{"v":"Date(' . $year . ',' . $month . ',' . $day . ',' . $hour . ',' . $added_minutes . ')"},';
+        //     $data_rows .= '{"v":"0"}';
+        //     $data_rows .= ']},';
+        // }
 
         // Split the date because Google starts months from 0 and PHP doesn't
         $year = date("Y", $row->timestamp);

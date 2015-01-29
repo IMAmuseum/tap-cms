@@ -104,6 +104,6 @@ function drawLineChart(type, title) {
         }
     };
 
-    var chart = new google.visualization.LineChart(document.getElementById(type + '-line-chart'));
+    var chart = new google.visualization.ColumnChart(document.getElementById(type + '-line-chart'));
     chart.draw(data, options);
 }
