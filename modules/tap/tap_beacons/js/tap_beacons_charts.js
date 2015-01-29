@@ -21,7 +21,7 @@ function getCharts() {
         drawPie("beacon-events", "Number of Devices Per Event");
         drawPie("beacon-ranges", "Number of Ranges by Proximity");
         drawPie("beacon-devices", "Number of Devices Per Beacon");
-        drawLineChart("beacon-devices-graph", "Devices by Time");
+        drawColumnChart("beacon-devices-graph", "Devices Over Time");
     }
     if (document.getElementById('tap-beacons-content-events') != null){
         drawPie("content-events", "Number of Devices Per Event");
@@ -58,7 +58,7 @@ function drawPie(type, title) {
     chart.draw(data, options);
 }
 
-function drawLineChart(type, title) {
+function drawColumnChart(type, title) {
 
     var action = Drupal.settings.basePath + 'beacons/api/charts?type=' + type + '&' + window.location.search.substring(1);
 
@@ -76,6 +76,7 @@ function drawLineChart(type, title) {
 
     var options = {
         title: title,
+        legend: { position: 'none' },
         hAxis: {
             title: 'Time',
             gridlines: {

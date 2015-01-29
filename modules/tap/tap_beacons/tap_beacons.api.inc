@@ -290,20 +290,16 @@ function tap_beacons_build_beacon_line_chart(){
         $query->condition('s.beacon_id', $_GET['beacon'], '=');
     }
 
-    if(isset($_GET['stop']) && $_GET['stop'] != ""){
-        $query->condition('e.stop_nid', $_GET['stop'], '=');
-    }
-
     if(isset($_GET['startdate']) && $_GET['startdate'] != ""){
         $query->condition('e.timestamp', strtotime(urldecode($_GET['startdate'])), '>');
     } else {
-        //$query->condition('e.timestamp', strtotime('-1 month',time()), '>');
+        $query->condition('e.timestamp', strtotime('-1 month',time()), '>');
     }
 
     if(isset($_GET['enddate']) && $_GET['enddate'] != ""){
         $query->condition('e.timestamp', strtotime(urldecode($_GET['enddate'])), '<=');
     } else {
-        //$query->condition('e.timestamp', time(), '<=');
+        $query->condition('e.timestamp', time(), '<=');
     }
 
     $results = $query->execute();
@@ -321,18 +317,6 @@ function tap_beacons_build_beacon_line_chart(){
 
     foreach ($results as $row) {
 
-        // // Find the difference between the current timestamp and the last entries timestamp
-        // $timestamp_diff = $row->timestamp - $last_entry_date;
-
-        // // If the difference is above 15 minutes, lets add a zero value to make the data a bit more accurate
-        // if ($timestamp_diff > 900 && $last_entry_date != 0) {
-        //     $added_minutes = $minute + 1;
-
-        //     $data_rows .= '{"c":[{"v":"Date(' . $year . ',' . $month . ',' . $day . ',' . $hour . ',' . $added_minutes . ')"},';
-        //     $data_rows .= '{"v":"0"}';
-        //     $data_rows .= ']},';
-        // }
-
         // Split the date because Google starts months from 0 and PHP doesn't
         $year = date("Y", $row->timestamp);
         $month = date("n", $row->timestamp) - 1;
@@ -341,6 +325,7 @@ function tap_beacons_build_beacon_line_chart(){
         $minute = date("i", $row->timestamp);
 
         // Create this data rows value in the JSON
+        // $data_rows .= '{"c":[{"v":"Date(' . $year . ',' . $month . ',' . $day . ',' . $hour . ',' . $minute . ')"},';
         $data_rows .= '{"c":[{"v":"Date(' . $year . ',' . $month . ',' . $day . ')"},';
         $data_rows .= '{"v":"'.$row->mobile_device_count.'"}';
         $data_rows .= ']},';
