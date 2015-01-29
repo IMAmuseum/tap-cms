@@ -312,7 +312,7 @@ function tap_beacons_build_beacon_line_chart(){
 
     // Create initial cols for chart
     $data_cols = '{"cols": [{"label":"Time","type":"date"},';
-    $data_cols .= '{"label":"Beacons","type":"number"},';
+    $data_cols .= '{"label":"Devices","type":"number"},';
 
     $data_rows = '"rows": [';
 
