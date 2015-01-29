@@ -19,9 +19,9 @@ google.setOnLoadCallback(getCharts);
 function getCharts() {
     if (document.getElementById('tap-beacons-beacon-events') != null){
         drawPie("beacon-events", "Number of Devices Per Event");
-        drawPie("beacon-ranges", "Number of Ranges Executed");
+        drawPie("beacon-ranges", "Number of Ranges by Proximity");
         drawPie("beacon-devices", "Number of Devices Per Beacon");
-        drawLineChart("beacon-devices-graph", "Devices to Beacons");
+        drawLineChart("beacon-devices-graph", "Devices by Time");
     }
     if (document.getElementById('tap-beacons-content-events') != null){
         drawPie("content-events", "Number of Devices Per Event");
@@ -76,23 +76,12 @@ function drawLineChart(type, title) {
 
     var options = {
         title: title,
-        // curveType: 'function',
-        pointSize: 4,
         hAxis: {
             title: 'Time',
             gridlines: {
-                count: -1,
                 units: {
                     months: {format: ["MM/dd/yy"]},
                     days: {format: ["MM/dd/yyyy"]},
-                    hours: {format: ["h:mm a"]},
-                    minutes: {format: [":mm"]}
-                }
-            },
-            minorGridlines: {
-                units: {
-                    months: {format: ["dd MMM yy"]},
-                    days: {format: ["dd MMM yyyy"]},
                     hours: {format: ["h:mm a"]},
                     minutes: {format: [":mm"]}
                 }
