@@ -334,9 +334,9 @@ function tap_beacons_build_beacon_line_chart(){
     foreach ($results as $row) {
 
         // Split the date because Google starts months from 0 and PHP doesn't
-        $year = date("Y", $row->timestamp);
-        $month = date("n", $row->timestamp) - 1;
-        $day = date("j", $row->timestamp);
+        $year = gmdate("Y", $row->timestamp);
+        $month = gmdate("n", $row->timestamp) - 1;
+        $day = gmdate("j", $row->timestamp);
         $hour = date("H", $row->timestamp);
         $minute = date("i", $row->timestamp);
 
