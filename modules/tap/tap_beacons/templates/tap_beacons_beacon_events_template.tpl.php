@@ -3,6 +3,8 @@
         <fieldset class="tap-beacons-fieldset">
             <legend>Filter Results</legend>
 
+            <div class="errors general-errors"></div>
+
             <div class="tap-beacons-form-item">
                 <label for="tap-beacons-select">
                     Select a Beacon

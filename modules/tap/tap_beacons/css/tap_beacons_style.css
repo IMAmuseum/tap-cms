@@ -41,7 +41,7 @@ table.tap-beacons-table td { vertical-align: top !important; }
 .page-node-analytics .tap-beacons-form-item label { width:  20%; }
 
 /* Validation */
-.tap-beacons-error-message { color: #c00; }
+.tap-beacons-error-message { color: #c00; background: #F2DEDE; padding: 2px; margin: 5px 0; display: none; }
 .tap-beacons-has-error { border-color: #c00 !important; }
 
 /* css for timepicker */

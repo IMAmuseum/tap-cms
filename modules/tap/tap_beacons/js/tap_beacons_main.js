@@ -19,7 +19,7 @@ jQuery(function($) {
         e.preventDefault();
 
         // Add validation to form.
-        $(".tap-beacons-error-message").html("");
+        $(".tap-beacons-error-message").html("").hide();
         $(".tap-beacons-has-error").removeClass("tap-beacons-has-error");
         var hasError = false;
 
@@ -29,7 +29,7 @@ jQuery(function($) {
             $this = $(this);
 
             if( !$this.val() ){
-                $this.siblings(".tap-beacons-error-message").html('Please fill out this field.');
+                $this.siblings(".tap-beacons-error-message").show().html('Please fill out this field.');
                 $this.addClass("tap-beacons-has-error");
                 hasError = true;
             }
