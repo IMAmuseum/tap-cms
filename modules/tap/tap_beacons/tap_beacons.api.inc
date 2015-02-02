@@ -283,7 +283,7 @@ function tap_beacons_build_beacon_line_chart(){
 
         $start_date = strtotime(urldecode($_GET['startdate']));
         $end_date = strtotime(urldecode($_GET['enddate']));
-        $diff = $enddate - $startdate;
+        $diff = $end_date - $start_date;
 
         if ($diff <= 172800){
             $time_diff = 3600;
