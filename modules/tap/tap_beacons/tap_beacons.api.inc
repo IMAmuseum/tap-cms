@@ -287,9 +287,9 @@ function tap_beacons_build_beacon_line_chart(){
             $query->join('tap_beacons_beacon_event_beacon_status', 'j', 'e.beacon_event_id = j.beacon_event_id');
             $query->join('tap_beacons_beacon_status', 's', 's.beacon_status_id = j.beacon_status_id');
             $query->join('tap_beacons', 'b', 'b.beacon_id = s.beacon_id');
-            $query->addExpression('e.timestamp - (e.timestamp % 1440)', 'timestamp');
+            $query->addExpression('e.timestamp - (e.timestamp % 3600)', 'timestamp');
             $query->addExpression('COUNT(DISTINCT e.mobile_device_id)', 'mobile_device_count');
-            $query->groupBy('e.timestamp - (e.timestamp % 1440)');
+            $query->groupBy('e.timestamp - (e.timestamp % 3600)');
             $query->orderBy('e.timestamp', 'ASC');
 
             // Create initial cols for chart
