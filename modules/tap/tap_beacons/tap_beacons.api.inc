@@ -277,6 +277,7 @@ function tap_beacons_build_json($query){
 function tap_beacons_build_beacon_line_chart(){
 
     $time_diff = 86400;
+    $diff = 172801;
     $date_type = 'date';
 
     if((isset($_GET['startdate']) && $_GET['startdate'] != "") && (isset($_GET['enddate']) && $_GET['enddate'] != "")){
@@ -333,12 +334,21 @@ function tap_beacons_build_beacon_line_chart(){
 
     foreach ($results as $row) {
 
-        // Split the date because Google starts months from 0 and PHP doesn't
-        $year = gmdate("Y", $row->timestamp);
-        $month = gmdate("n", $row->timestamp) - 1;
-        $day = gmdate("j", $row->timestamp);
-        $hour = gmdate("H", $row->timestamp);
-        $minute = gmdate("i", $row->timestamp);
+        if ($diff <= 172800){
+            // Split the date because Google starts months from 0 and PHP doesn't
+            $year = date("Y", $row->timestamp);
+            $month = date("n", $row->timestamp) - 1;
+            $day = date("j", $row->timestamp);
+            $hour = date("H", $row->timestamp);
+            $minute = date("i", $row->timestamp);
+        } else {
+            // Split the date because Google starts months from 0 and PHP doesn't
+            $year = gmdate("Y", $row->timestamp);
+            $month = gmdate("n", $row->timestamp) - 1;
+            $day = gmdate("j", $row->timestamp);
+            $hour = gmdate("H", $row->timestamp);
+            $minute = gmdate("i", $row->timestamp);
+        }
 
         // Create this data rows value in the JSON
         $data_rows .= '{"c":[{"v":"Date(' . $year . ',' . $month . ',' . $day . ',' . $hour . ',' . $minute . ')"},';
