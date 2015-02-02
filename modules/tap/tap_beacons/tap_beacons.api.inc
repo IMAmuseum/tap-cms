@@ -276,38 +276,76 @@ function tap_beacons_build_json($query){
 */
 function tap_beacons_build_beacon_line_chart(){
 
-    $query = db_select('tap_beacons_beacon_event', 'e');
-    $query->join('tap_beacons_beacon_event_beacon_status', 'j', 'e.beacon_event_id = j.beacon_event_id');
-    $query->join('tap_beacons_beacon_status', 's', 's.beacon_status_id = j.beacon_status_id');
-    $query->join('tap_beacons', 'b', 'b.beacon_id = s.beacon_id');
-    $query->addExpression('e.timestamp - (e.timestamp % 86400)', 'timestamp');
-    $query->addExpression('COUNT(DISTINCT e.mobile_device_id)', 'mobile_device_count');
-    $query->groupBy('e.timestamp - (e.timestamp % 86400)');
-    $query->orderBy('e.timestamp', 'ASC');
+    if((isset($_GET['startdate']) && $_GET['startdate'] != "") && (isset($_GET['enddate']) && $_GET['enddate'] != "")){
 
+        $startdate = strtotime(urldecode($_GET['startdate']));
+        $enddate = strtotime(urldecode($_GET['enddate']));
+        $diff = $enddate - $startdate;
+
+        if ($diff <= 86400){
+            $query = db_select('tap_beacons_beacon_event', 'e');
+            $query->join('tap_beacons_beacon_event_beacon_status', 'j', 'e.beacon_event_id = j.beacon_event_id');
+            $query->join('tap_beacons_beacon_status', 's', 's.beacon_status_id = j.beacon_status_id');
+            $query->join('tap_beacons', 'b', 'b.beacon_id = s.beacon_id');
+            $query->addExpression('e.timestamp - (e.timestamp % 1440)', 'timestamp');
+            $query->addExpression('COUNT(DISTINCT e.mobile_device_id)', 'mobile_device_count');
+            $query->groupBy('e.timestamp - (e.timestamp % 1440)');
+            $query->orderBy('e.timestamp', 'ASC');
+
+            // Create initial cols for chart
+            $data_cols = '{"cols": [{"label":"Time","type":"datetime"},';
+        } else {
+            $query = db_select('tap_beacons_beacon_event', 'e');
+            $query->join('tap_beacons_beacon_event_beacon_status', 'j', 'e.beacon_event_id = j.beacon_event_id');
+            $query->join('tap_beacons_beacon_status', 's', 's.beacon_status_id = j.beacon_status_id');
+            $query->join('tap_beacons', 'b', 'b.beacon_id = s.beacon_id');
+            $query->addExpression('e.timestamp - (e.timestamp % 86400)', 'timestamp');
+            $query->addExpression('COUNT(DISTINCT e.mobile_device_id)', 'mobile_device_count');
+            $query->groupBy('e.timestamp - (e.timestamp % 86400)');
+            $query->orderBy('e.timestamp', 'ASC');
+
+            // Create initial cols for chart
+            $data_cols = '{"cols": [{"label":"Time","type":"date"},';
+        }
+
+        $query->condition('e.timestamp', $startdate, '>');
+        $query->condition('e.timestamp', $enddate, '<=');
+
+    } else {
+
+        $query = db_select('tap_beacons_beacon_event', 'e');
+        $query->join('tap_beacons_beacon_event_beacon_status', 'j', 'e.beacon_event_id = j.beacon_event_id');
+        $query->join('tap_beacons_beacon_status', 's', 's.beacon_status_id = j.beacon_status_id');
+        $query->join('tap_beacons', 'b', 'b.beacon_id = s.beacon_id');
+        $query->addExpression('e.timestamp - (e.timestamp % 86400)', 'timestamp');
+        $query->addExpression('COUNT(DISTINCT e.mobile_device_id)', 'mobile_device_count');
+        $query->groupBy('e.timestamp - (e.timestamp % 86400)');
+        $query->orderBy('e.timestamp', 'ASC');
+
+        if(isset($_GET['startdate']) && $_GET['startdate'] != ""){
+            $query->condition('e.timestamp', strtotime(urldecode($_GET['startdate'])), '>');
+        } else {
+            $query->condition('e.timestamp', strtotime('-1 month',time()), '>');
+        }
+
+        if(isset($_GET['enddate']) && $_GET['enddate'] != ""){
+            $query->condition('e.timestamp', strtotime(urldecode($_GET['enddate'])), '<=');
+        } else {
+            $query->condition('e.timestamp', time(), '<=');
+        }
+
+        // Create initial cols for chart
+        $data_cols = '{"cols": [{"label":"Time","type":"date"},';
+    }
 
     if(isset($_GET['beacon']) && $_GET['beacon'] != ""){
         $query->condition('s.beacon_id', $_GET['beacon'], '=');
-    }
-
-    if(isset($_GET['startdate']) && $_GET['startdate'] != ""){
-        $query->condition('e.timestamp', strtotime(urldecode($_GET['startdate'])), '>');
-    } else {
-        $query->condition('e.timestamp', strtotime('-1 month',time()), '>');
-    }
-
-    if(isset($_GET['enddate']) && $_GET['enddate'] != ""){
-        $query->condition('e.timestamp', strtotime(urldecode($_GET['enddate'])), '<=');
-    } else {
-        $query->condition('e.timestamp', time(), '<=');
     }
 
     $results = $query->execute();
 
     //print_r($results);
 
-    // Create initial cols for chart
-    $data_cols = '{"cols": [{"label":"Time","type":"date"},';
     $data_cols .= '{"label":"Devices","type":"number"},';
 
     $data_rows = '"rows": [';
@@ -318,15 +356,16 @@ function tap_beacons_build_beacon_line_chart(){
     foreach ($results as $row) {
 
         // Split the date because Google starts months from 0 and PHP doesn't
-        $year = date("Y", $row->timestamp);
-        $month = date("n", $row->timestamp) - 1;
-        $day = date("j", $row->timestamp) + 1;
-        $hour = date("H", $row->timestamp);
-        $minute = date("i", $row->timestamp);
+        $year = gmdate("Y", $row->timestamp);
+        $month = gmdate("n", $row->timestamp) - 1;
+        $day = gmdate("j", $row->timestamp);
+        $hour = gmdate("H", $row->timestamp);
+        $minute = gmdate("i", $row->timestamp);
 
         // Create this data rows value in the JSON
-        // $data_rows .= '{"c":[{"v":"Date(' . $year . ',' . $month . ',' . $day . ',' . $hour . ',' . $minute . ')"},';
-        $data_rows .= '{"c":[{"v":"Date(' . $year . ',' . $month . ',' . $day . ')"},';
+        $data_rows .= '{"c":[{"v":"Date(' . $year . ',' . $month . ',' . $day . ',' . $hour . ',' . $minute . ')"},';
+        //$data_rows .= '{"c":[{"v":"Date(' . $year . ',' . $month . ',' . $day . ')"},';
+
         $data_rows .= '{"v":"'.$row->mobile_device_count.'"}';
         $data_rows .= ']},';
 
