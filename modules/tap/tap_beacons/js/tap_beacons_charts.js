@@ -87,6 +87,8 @@ function drawColumnChart(type, title) {
             },
             minorGridlines: {
                 units: {
+                    months: {format: ["MM/dd/yy"]},
+                    days: {format: ["MM/dd/yyyy"]},
                     hours: {format: ["h:mm a"]},
                     minutes: {format: [":mm"]}
                 }

@@ -337,8 +337,8 @@ function tap_beacons_build_beacon_line_chart(){
         $year = gmdate("Y", $row->timestamp);
         $month = gmdate("n", $row->timestamp) - 1;
         $day = gmdate("j", $row->timestamp);
-        $hour = gmdate("H", $row->timestamp);
-        $minute = gmdate("i", $row->timestamp);
+        $hour = date("H", $row->timestamp);
+        $minute = date("i", $row->timestamp);
 
         // Create this data rows value in the JSON
         $data_rows .= '{"c":[{"v":"Date(' . $year . ',' . $month . ',' . $day . ',' . $hour . ',' . $minute . ')"},';
