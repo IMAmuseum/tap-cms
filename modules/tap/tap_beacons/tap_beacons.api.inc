@@ -276,40 +276,34 @@ function tap_beacons_build_json($query){
 */
 function tap_beacons_build_beacon_line_chart(){
 
+    // Set up defaults
     $time_diff = 86400;
-    $diff = 172801;
+    $diff = 172800;
     $date_type = 'date';
 
-    if((isset($_GET['startdate']) && $_GET['startdate'] != "") && (isset($_GET['enddate']) && $_GET['enddate'] != "")){
-
+    // Store start date
+    if (isset($_GET['startdate']) && $_GET['startdate'] != ""){
         $start_date = strtotime(urldecode($_GET['startdate']));
-        $end_date = strtotime(urldecode($_GET['enddate']));
-        $diff = $end_date - $start_date;
-
-        if ($diff <= 172800){
-            $time_diff = 3600;
-            $date_type = 'datetime';
-        }
-
     } else {
-
-        if (isset($_GET['startdate']) && $_GET['startdate'] != ""){
-            $start_date = strtotime(urldecode($_GET['startdate']));
-        } else {
-            $start_date = strtotime('-1 month',time());
-        }
-
-        if (isset($_GET['enddate']) && $_GET['enddate'] != ""){
-            $end_date = strtotime(urldecode($_GET['enddate']));
-        } else {
-            $end_date = time();
-        }
+        $start_date = strtotime('-1 month',time());
     }
 
-    if(isset($_GET['beacon']) && $_GET['beacon'] != ""){
-        $query->condition('s.beacon_id', $_GET['beacon'], '=');
+    // Store end date
+    if (isset($_GET['enddate']) && $_GET['enddate'] != ""){
+        $end_date = strtotime(urldecode($_GET['enddate']));
+    } else {
+        $end_date = time();
     }
 
+    // Get difference between dates
+    $diff = $end_date - $start_date;
+
+    if ($diff < 172800) {
+        $time_diff = 3600;
+        $date_type = 'datetime';
+    }
+
+    // Build query
     $query = db_select('tap_beacons_beacon_event', 'e');
     $query->join('tap_beacons_beacon_event_beacon_status', 'j', 'e.beacon_event_id = j.beacon_event_id');
     $query->join('tap_beacons_beacon_status', 's', 's.beacon_status_id = j.beacon_status_id');
@@ -321,20 +315,27 @@ function tap_beacons_build_beacon_line_chart(){
     $query->groupBy('e.timestamp - (e.timestamp % ' . $time_diff . ')');
     $query->orderBy('e.timestamp', 'ASC');
 
+    if(isset($_GET['beacon']) && $_GET['beacon'] != ""){
+        $query->condition('s.beacon_id', $_GET['beacon'], '=');
+    }
+
+    // Execute query
     $results = $query->execute();
 
-    // Create initial cols for chart
+    // Create cols for chart
     $data_cols = '{"cols": [{"label":"Time","type":"'. $date_type .'"},';
     $data_cols .= '{"label":"Devices","type":"number"},';
 
+    // Create rows for chart
     $data_rows = '"rows": [';
 
     // Set last entry variable to work with
     $last_entry_date = 0;
 
+    // Loop through to build each row of data
     foreach ($results as $row) {
 
-        if ($diff <= 172800){
+        if ($diff < 172800){
             // Split the date because Google starts months from 0 and PHP doesn't
             $year = date("Y", $row->timestamp);
             $month = date("n", $row->timestamp) - 1;
@@ -342,7 +343,6 @@ function tap_beacons_build_beacon_line_chart(){
             $hour = date("H", $row->timestamp);
             $minute = date("i", $row->timestamp);
         } else {
-            // Split the date because Google starts months from 0 and PHP doesn't
             $year = gmdate("Y", $row->timestamp);
             $month = gmdate("n", $row->timestamp) - 1;
             $day = gmdate("j", $row->timestamp);
@@ -359,6 +359,7 @@ function tap_beacons_build_beacon_line_chart(){
         $last_entry_date = $row->timestamp;
     }
 
+    // Add end of JSON and trim off any extra commas
     $data = rtrim($data_cols, ",") . '],' . rtrim($data_rows, ",") . ']}';
 
     return $data;
