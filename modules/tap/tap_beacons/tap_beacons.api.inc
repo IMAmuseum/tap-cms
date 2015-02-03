@@ -260,7 +260,7 @@ function tap_beacons_build_json($query){
         ],
         "rows": [';
 
-    // Configure the table rows
+    // Loop through to build each row of data
     $rows = array();
     foreach ($results as $row) {
         $data .= '{"c":[{"v":"' . ucwords($row->keyItem) . '"},{"v":' . $row->value .'}]},';
@@ -315,6 +315,7 @@ function tap_beacons_build_beacon_line_chart(){
     $query->groupBy('e.timestamp - (e.timestamp % ' . $time_diff . ')');
     $query->orderBy('e.timestamp', 'ASC');
 
+    // If a single beacon is selected, add a condition for it
     if(isset($_GET['beacon']) && $_GET['beacon'] != ""){
         $query->condition('s.beacon_id', $_GET['beacon'], '=');
     }

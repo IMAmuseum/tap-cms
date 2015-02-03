@@ -5,6 +5,8 @@
 
             <input type="hidden" name="stop" id="tap-beacon-stop-input" value="<?php print $node->nid ?>" />
 
+            <div class="errors general-errors"></div>
+
             <div class="tap-beacons-form-item">
                 <label for="start-date">Start Date</label>
                 <input type="text" class="datepicker form-text" id="start-date" name="startdate" value="<?php if(isset($_GET['startdate'])) print $_GET['startdate']; ?>" />
