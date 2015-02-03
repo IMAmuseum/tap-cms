@@ -33,7 +33,7 @@ jQuery(function($) {
 
         // If the end date is a time prior to the start date, let them know this is wrong
         if (endComp < startComp) {
-            $('.general-errors').addClass('tap-beacons-error-message').show().html('The start date must be prior to the end date.');
+            $('.general-errors').addClass('tap-beacons-error-message').show().html('The start date must be before the end date.');
             start.addClass('tap-beacons-has-error');
             end.addClass('tap-beacons-has-error');
             return false;
