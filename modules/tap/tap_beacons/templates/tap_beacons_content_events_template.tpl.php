@@ -43,8 +43,8 @@
         </fieldset>
     </form>
 
-    <div id="content-events-pie-chart" class="tap-beacons-charts tap-beacons-col-2"></div>
-    <div id="content-devices-pie-chart" class="tap-beacons-charts tap-beacons-col-2"></div>
+    <div id="content_events_pie_chart" class="tap-beacons-charts tap-beacons-col-2"></div>
+    <div id="content_devices_pie_chart" class="tap-beacons-charts tap-beacons-col-2"></div>
 
     <?php
         print render($content_table);

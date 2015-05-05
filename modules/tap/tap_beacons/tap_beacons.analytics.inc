@@ -47,8 +47,10 @@ function tap_beacons_events_stops($node) {
 **/
 function tap_beacons_analytics_get_assets() {
 
-    // Add Google charts API script
-    drupal_add_js('https://www.google.com/jsapi');
+    // Add D3 and C3 libraries for chart implementation
+    drupal_add_css(drupal_get_path('module', 'tap_beacons') . '/css/c3.min.css');
+    drupal_add_js(drupal_get_path('module', 'tap_beacons') . '/js/d3.v3.min.js');
+    drupal_add_js(drupal_get_path('module', 'tap_beacons') . '/js/c3.min.js');
 
     // Set up styles and JS file to be used on beacon admin pages
     drupal_add_css(drupal_get_path('module', 'tap_beacons') . '/css/tap_beacons_style.css');

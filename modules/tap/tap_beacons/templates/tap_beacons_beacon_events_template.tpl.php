@@ -61,10 +61,10 @@
         }
     ?>
 
-    <div id="beacon-events-pie-chart" class="tap-beacons-charts tap-beacons-col-3"></div>
-    <div id="beacon-devices-pie-chart" class="tap-beacons-charts tap-beacons-col-3"></div>
-    <div id="beacon-ranges-pie-chart" class="tap-beacons-charts tap-beacons-col-3"></div>
-    <div id="beacon-devices-graph-line-chart" class="tap-beacons-charts tap-beacons-line-charts tap-beacons-col-1" ></div>
+    <div id="beacon_events_pie_chart" class="tap-beacons-charts tap-beacons-col-3"></div>
+    <div id="beacon_devices_pie_chart" class="tap-beacons-charts tap-beacons-col-3"></div>
+    <div id="beacon_ranges_pie_chart" class="tap-beacons-charts tap-beacons-col-3"></div>
+    <div id="beacon_devices_graph_bar_chart" class="tap-beacons-charts tap-beacons-bar-charts tap-beacons-col-1" ></div>
 
     <?php
         print render($beacon_table);

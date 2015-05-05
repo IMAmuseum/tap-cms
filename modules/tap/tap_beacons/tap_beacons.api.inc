@@ -112,27 +112,27 @@ function tap_beacons_api_chart_data(){
 
     // Check the type being called and use the appropriate function
     switch ($_GET['type']) {
-    case 'beacon-ranges':
+    case 'beacon_ranges':
         $data = tap_beacons_build_beacon_ranges_json();
         break;
 
-    case 'beacon-devices':
+    case 'beacon_devices':
         $data = tap_beacons_build_beacon_devices_json();
         break;
 
-    case 'beacon-devices-graph':
-        $data = tap_beacons_build_beacon_line_chart();
+    case 'beacon_devices_graph':
+        $data = tap_beacons_build_beacon_bar_chart();
         break;
 
-    case 'beacon-events':
+    case 'beacon_events':
         $data = tap_beacons_build_beacon_events_json();
         break;
 
-    case 'content-events':
+    case 'content_events':
         $data = tap_beacons_build_content_events_json();
         break;
 
-    case 'content-devices':
+    case 'content_devices':
         $data = tap_beacons_build_content_devices_json();
         break;
     }
@@ -253,20 +253,15 @@ function tap_beacons_build_json($query){
 
     $results = $query->execute();
 
-    $data = '{
-        "cols": [
-            {"label":"Key","type":"string"},
-            {"label":"Value","type":"string"}
-        ],
-        "rows": [';
+    $data = '[';
 
     // Loop through to build each row of data
     $rows = array();
     foreach ($results as $row) {
-        $data .= '{"c":[{"v":"' . ucwords($row->keyItem) . '"},{"v":' . $row->value .'}]},';
+        $data .= '["'.ucwords($row->keyItem).'",' . $row->value .'],';
     }
 
-    $data = rtrim($data, ",") . ']}';
+    $data = rtrim($data, ",") . ']';
 
     return $data;
 }
@@ -274,7 +269,7 @@ function tap_beacons_build_json($query){
 /**
 * Function to build events JSON
 */
-function tap_beacons_build_beacon_line_chart(){
+function tap_beacons_build_beacon_bar_chart(){
 
     // Set up defaults
     $time_diff = 86400;
@@ -316,53 +311,45 @@ function tap_beacons_build_beacon_line_chart(){
     $query->orderBy('e.timestamp', 'ASC');
 
     // If a single beacon is selected, add a condition for it
-    if(isset($_GET['beacon']) && $_GET['beacon'] != ""){
+    if(isset($_GET['beacon']) && $_GET['beacon'] != "") {
         $query->condition('s.beacon_id', $_GET['beacon'], '=');
     }
 
     // Execute query
     $results = $query->execute();
 
-    // Create cols for chart
-    $data_cols = '{"cols": [{"label":"Time","type":"'. $date_type .'"},';
-    $data_cols .= '{"label":"Devices","type":"number"},';
-
-    // Create rows for chart
-    $data_rows = '"rows": [';
-
-    // Set last entry variable to work with
-    $last_entry_date = 0;
+    // Create cols and rows variables
+    $data_cols = '';
+    $data_rows = '["Device Connections",';
 
     // Loop through to build each row of data
     foreach ($results as $row) {
 
         if ($diff < 172800){
-            // Split the date because Google starts months from 0 and PHP doesn't
             $year = date("Y", $row->timestamp);
-            $month = date("n", $row->timestamp) - 1;
+            $month = date("n", $row->timestamp);
             $day = date("j", $row->timestamp);
             $hour = date("H", $row->timestamp);
             $minute = date("i", $row->timestamp);
+            $data_cols .= '"' . $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $minute . '",';
         } else {
             $year = gmdate("Y", $row->timestamp);
-            $month = gmdate("n", $row->timestamp) - 1;
+            $month = gmdate("n", $row->timestamp);
             $day = gmdate("j", $row->timestamp);
             $hour = gmdate("H", $row->timestamp);
             $minute = gmdate("i", $row->timestamp);
+            $data_cols .= '"' . $year . '-' . $month . '-' . $day . '",';
         }
 
         // Create this data rows value in the JSON
-        $data_rows .= '{"c":[{"v":"Date(' . $year . ',' . $month . ',' . $day . ',' . $hour . ',' . $minute . ')"},';
-        $data_rows .= '{"v":"'.$row->mobile_device_count.'"}';
-        $data_rows .= ']},';
-
-        // Store this timestamp in the last entry variable
-        $last_entry_date = $row->timestamp;
+        $data_rows .= $row->mobile_device_count . ',';
     }
 
+    $data_cols = '["Date/Time",' . rtrim($data_cols, ",") . ']';
+    $data_rows = rtrim($data_rows, ",") . ']';
+
     // Add end of JSON and trim off any extra commas
-    $data = rtrim($data_cols, ",") . '],' . rtrim($data_rows, ",") . ']}';
+    $data = '[' . $data_cols . ',' . $data_rows . ']';
 
     return $data;
 }
-

@@ -1,8 +1,9 @@
 .tap-beacons-admin {}
 
 /* Layout */
-.tap-beacons-charts { float: left; height: 250px; }
-.tap-beacons-line-charts { margin-bottom: 20px; }
+.tap-beacons-charts { float: left; margin: 0 auto 30px; min-width: 350px; height: 250px; }
+.page-node .tap-beacons-charts { min-width: inherit; }
+.tap-beacons-bar-charts { height: auto; }
 .tap-beacons-col-1 { width: 100%; }
 .tap-beacons-col-2 { width: 50%; }
 .tap-beacons-col-3 { width: 33.3%; }
