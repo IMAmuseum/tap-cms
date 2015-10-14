@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="http://tapintomuseums.org/TourML" version="1.0.0"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tourml="http://tapintomuseums.org/TourML"
+	xmlns:xml="http://www.w3.org/XML/1998/namespace" attributeFormDefault="qualified" elementFormDefault="qualified">
+
+	<xsd:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/03/xml.xsd" />
+
+	<!-- Element declarations -->
+
+	<xsd:element name="Tour">
+		<xsd:annotation>
+			<xsd:documentation>
+				The Tour element is used to describe all content related to a tour. Either Tour or TourSet must appear
+				as the top-level element of a TourML instance.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="TourMetadata" type="tourml:TourMetadataType" minOccurs="0" maxOccurs="1">
+					<xsd:annotation>
+						<xsd:documentation>
+							A container element for metadata describing the tour as a whole.
+						</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="Stop" type="tourml:StopType" minOccurs="0" maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation>
+							A collection of assets experienced together compose a Stop in TourML. Stops represent the
+							nodes of the tour graph.
+						</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="Asset" type="tourml:AssetType" minOccurs="0" maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation>
+							A general asset for a tour. This element is used to refer to media assets that occur in a
+							tour.
+						</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="Connection" type="tourml:ConnectionType" minOccurs="0" maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation>
+							A connection from one stop to another. Connections are used to let a user move from one
+							stop to another. Connections can be thought of as a directional edge in the tour graph.
+							Bi-directional connections should be represented by repeating this element.
+						</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:attribute ref="tourml:id" use="required" />
+			<xsd:attribute ref="tourml:lastModified" use="optional" />
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="TourSet">
+		<xsd:annotation>
+			<xsd:documentation>
+				A TourSet element may be used as the top-level element of a TourML instance in order to represent one
+				or more tours. The complete content of the tours can be placed under this element or a set of TourMLRef
+				elements, which can be used to refer to other TourML instances by URI.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:choice>
+				<xsd:element ref="tourml:Tour" minOccurs="1" maxOccurs="unbounded" />
+				<xsd:element name="TourMLRef" type="tourml:TourMLRefType" minOccurs="1" maxOccurs="unbounded" />
+			</xsd:choice>
+			<xsd:attribute ref="tourml:lastModified" use="optional" />
+		</xsd:complexType>
+	</xsd:element>
+
+	<!-- Type declarations -->
+
+	<xsd:complexType name="TourMetadataType">
+		<xsd:sequence>
+			<xsd:element name="Title" type="tourml:TitleType" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element name="Description" type="tourml:DescriptionType" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element name="Author" type="xsd:string" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>The author(s) of the tour.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="RootStopRef" type="tourml:StopRefType" minOccurs="0" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>
+						Optionally specify the root stop for the tour. This is useful for tours that have a
+						well-defined starting point.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="AppResource" type="tourml:AssetRefType" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>
+						You can optionally specify application wide resources and their intended usage. This could be
+						used for the application icon and splash image for example.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PropertySet" type="tourml:PropertySetType" minOccurs="0" maxOccurs="1" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="TourMLRefType">
+		<xsd:annotation>
+			<xsd:documentation>
+				The TourMLRef type should provide a URI to an external TourML instance. This allows for the aggregation
+				of many TourML tours together in one TourML instance.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:attribute ref="tourml:uri" use="required" />
+		<xsd:attribute ref="tourml:lastModified" use="optional" />
+	</xsd:complexType>
+
+	<xsd:complexType name="AssetType">
+		<xsd:sequence>
+			<xsd:choice minOccurs="1" maxOccurs="unbounded">
+				<xsd:element name="Source" type="tourml:AssetSourceType" />
+				<xsd:element name="Content" type="tourml:AssetContentType" />
+			</xsd:choice>
+			<xsd:element name="PropertySet" type="tourml:PropertySetType" minOccurs="0" maxOccurs="1" />
+		</xsd:sequence>
+		<xsd:attribute ref="tourml:id" use="required" />
+		<xsd:attribute ref="tourml:type" use="optional" />
+	</xsd:complexType>
+
+	<xsd:complexType name="StopType">
+		<xsd:sequence>
+			<xsd:element name="Title" type="tourml:TitleType" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element name="Description" type="tourml:DescriptionType" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element name="AssetRef" type="tourml:AssetRefType" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>
+						An asset reference is used to refer to a specific usage of an asset. For example, an
+						ImageAssetType can be referred to as the primary image to be viewed for an image stop of a
+						tour.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PropertySet" type="tourml:PropertySetType" minOccurs="0" maxOccurs="1" />
+		</xsd:sequence>
+		<xsd:attribute ref="tourml:id" use="required" />
+		<xsd:attribute ref="tourml:view" use="required" />
+	</xsd:complexType>
+
+	<xsd:complexType name="ConnectionType">
+		<xsd:attribute ref="tourml:srcId" use="required" />
+		<xsd:attribute ref="tourml:destId" use="required" />
+		<xsd:attribute ref="tourml:priority" use="optional" />
+		<xsd:attribute ref="tourml:usage" use="optional" />
+	</xsd:complexType>
+
+	<xsd:complexType name="AssetSourceType">
+		<xsd:sequence>
+			<xsd:element name="Rights" type="tourml:RightsType" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="PropertySet" type="tourml:PropertySetType" minOccurs="0" maxOccurs="1" />
+		</xsd:sequence>
+		<xsd:attribute ref="tourml:uri" use="required" />
+		<xsd:attribute ref="xml:lang" use="optional" />
+		<xsd:attribute ref="tourml:format" use="optional" />
+		<xsd:attribute ref="tourml:lastModified" use="optional" />
+		<xsd:attribute ref="tourml:part" use="optional" />
+	</xsd:complexType>
+
+	<xsd:complexType name="AssetContentType">
+		<xsd:sequence>
+			<xsd:element name="Data" type="xsd:anyType" minOccurs="1" maxOccurs="1" />
+			<xsd:element name="Rights" type="tourml:RightsType" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="PropertySet" type="tourml:PropertySetType" minOccurs="0" maxOccurs="1" />
+		</xsd:sequence>
+		<xsd:attribute ref="xml:lang" use="optional" />
+		<xsd:attribute ref="tourml:format" use="optional" />
+		<xsd:attribute ref="tourml:lastModified" use="optional" />
+		<xsd:attribute ref="tourml:part" use="optional" />
+	</xsd:complexType>
+
+	<xsd:complexType name="RightsType">
+		<xsd:sequence>
+			<xsd:element name="Copyright" type="xsd:string" minOccurs="0" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>
+						A display string for a copyright.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="CreditLine" type="xsd:string" minOccurs="0" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>
+						A simple credit line string.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Expiration" type="xsd:date" minOccurs="0" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>
+						When the copyright expires.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute ref="tourml:uri" use="optional" />
+	</xsd:complexType>
+
+	<xsd:complexType name="StopRefType">
+		<xsd:attribute ref="tourml:id" use="required" />
+	</xsd:complexType>
+
+	<xsd:complexType name="AssetRefType">
+		<xsd:attribute ref="tourml:id" use="required" />
+		<xsd:attribute ref="tourml:usage" use="optional" />
+	</xsd:complexType>
+
+	<xsd:complexType name="TitleType">
+		<xsd:annotation>
+			<xsd:documentation>
+				A type for providing localized titles.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute ref="xml:lang" use="optional" />
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="DescriptionType">
+		<xsd:annotation>
+			<xsd:documentation>
+				A type for providing localized descriptions.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute ref="xml:lang" use="optional" />
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="PropertySetType">
+		<xsd:annotation>
+			<xsd:documentation>
+				Property sets allow for the addition of application specific metadata to various elements.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="Property" minOccurs="1" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="xsd:anyType">
+							<xsd:attribute ref="tourml:name" use="required" />
+							<xsd:attribute ref="xml:lang" use="optional" />
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- Attribute declarations -->
+	<xsd:attribute name="id" type="xsd:string" />
+	<xsd:attribute name="uri" type="xsd:anyURI" />
+	<xsd:attribute name="lastModified" type="xsd:dateTime" />
+	<xsd:attribute name="format" type="xsd:string" />
+	<xsd:attribute name="view" type="xsd:string" />
+	<xsd:attribute name="srcId" type="xsd:string" />
+	<xsd:attribute name="destId" type="xsd:string" />
+	<xsd:attribute name="priority" type="xsd:float" />
+	<xsd:attribute name="usage" type="xsd:string" />
+	<xsd:attribute name="name" type="xsd:string" />
+	<xsd:attribute name="part" type="xsd:string" />
+	<xsd:attribute name="type" type="xsd:string" />
+
+</xsd:schema>
